@@ -12,6 +12,7 @@ runs:
   steps:
     - name: Testing
       run: echo $PROJECT $SERVICE
+      shell: bash
       env:
         PROJECT: ${{ inputs.project }}
         SERVICE: ${{ inputs.service }}
