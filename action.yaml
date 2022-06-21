@@ -1,0 +1,17 @@
+name: "Ansible Playbook"
+description: "Run Ansible Playbooks"
+inputs:
+  project:
+    required: true
+    description: "Environment services"
+  service:
+    required: true
+    description: "Service name"
+runs:
+  using: "composite"
+  steps:
+    - name: Testing
+      run: echo $PROJECT $SERVICE
+      env:
+        PROJECT: ${{ inputs.project }}
+        SERVICE: ${{ inputs.service }}
