@@ -16,3 +16,10 @@ runs:
       env:
         PROJECT: ${{ inputs.project }}
         SERVICE: ${{ inputs.service }}
+
+    - name: Testing2
+      shell: bash
+      run: echo $PROJECT $SERVICE
+      env:
+        PROJECT: ${{ inputs.project }}
+        SERVICE: ${{ inputs.service }}
