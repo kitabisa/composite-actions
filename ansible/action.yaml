@@ -30,6 +30,4 @@ runs:
         key: ${{ inputs.ssh_private_key }}
         requirements: requirements.yaml
         vault_password: ${{ inputs.vault_password }}
-        inventory: |
-          [openvpn-engineer]
-          34.101.252.165
+        options: --inventory inventory.ini
