@@ -7,23 +7,14 @@ inputs:
   ssh_private_key:
     required: true
     description: "SSH Private key"
-  # vault_password:
-  #   required: false
-  #   description: "Vault password"
+  vault_password:
+    required: false
+    description: "Vault password"
 runs:
   using: "composite"
   steps:
     - name: Checkout
       uses: actions/checkout@v2
-
-    # - name: Testing2
-    #   shell: bash
-    #   run: |
-    #     echo $DIRECTORY
-    #     echo $SSH_PRIVATE_KEY
-    #   env:
-    #     DIRECTORY: ${{ inputs.path }}
-    #     SSH_PRIVATE_KEY: ${{ inputs.ssh_private_key }}
 
     - name: Provisioning User & Databases
       uses: dawidd6/action-ansible-playbook@v2
@@ -31,12 +22,8 @@ runs:
         playbook: main.yaml
         directory: ${{ inputs.path }}
         key: ${{ inputs.ssh_private_key }}
-        # requirements: requirements.yaml
-        # vault_password: $VAULT_PASSWORD
+        requirements: requirements.yaml
+        vault_password: ${{ inputs.vault_password }}
         inventory: |
           [openvpn-engineer]
           34.101.252.165
-      # env:
-      #   DIRECTORY: ${{ inputs.path }}
-      #   SSH_PRIVATE_KEY: ${{ inputs.ssh_private_key }}
-        # VAULT_PASSWORD: ${{ inputs.vault_password }}
