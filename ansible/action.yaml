@@ -35,7 +35,7 @@ runs:
         # vault_password: $VAULT_PASSWORD
         inventory: |
           [openvpn-engineer]
-          34.101.252.165s
+          34.101.252.165
       # env:
       #   DIRECTORY: ${{ inputs.path }}
       #   SSH_PRIVATE_KEY: ${{ inputs.ssh_private_key }}
