@@ -18,7 +18,9 @@ runs:
 
     - name: Testing2
       shell: bash
-      run: echo $PROJECT $SERVICE
+      run: |
+        echo $DIRECTORY
+        echo $SSH_PRIVATE_KEY
       env:
         DIRECTORY: ${{ inputs.path }}
         SSH_PRIVATE_KEY: ${{ inputs.ssh_private_key }}
