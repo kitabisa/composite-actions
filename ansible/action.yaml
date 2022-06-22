@@ -29,14 +29,14 @@ runs:
       uses: dawidd6/action-ansible-playbook@v2
       with:
         playbook: main.yaml
-        directory: $DIRECTORY
-        key: $SSH_PRIVATE_KEY
+        directory: ${{ inputs.path }}
+        key: ${{ inputs.ssh_private_key }}
         # requirements: requirements.yaml
         # vault_password: $VAULT_PASSWORD
         inventory: |
           [openvpn-engineer]
           34.101.252.165s
-      env:
-        DIRECTORY: ${{ inputs.path }}
-        SSH_PRIVATE_KEY: ${{ inputs.ssh_private_key }}
+      # env:
+      #   DIRECTORY: ${{ inputs.path }}
+      #   SSH_PRIVATE_KEY: ${{ inputs.ssh_private_key }}
         # VAULT_PASSWORD: ${{ inputs.vault_password }}
