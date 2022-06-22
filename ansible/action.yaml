@@ -11,8 +11,8 @@ runs:
   using: "composite"
   steps:
     - name: Testing
-      run: echo $PROJECT $SERVICE
       shell: bash
+      run: echo $PROJECT $SERVICE
       env:
         PROJECT: ${{ inputs.project }}
         SERVICE: ${{ inputs.service }}
