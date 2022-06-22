@@ -1,25 +1,37 @@
 name: "Ansible Playbook"
 description: "Run Ansible Playbooks"
 inputs:
-  project:
+  env_name:
     required: true
-    description: "Environment services"
-  service:
+    description: "Environment resources"
+  instance:
     required: true
-    description: "Service name"
+    description: "Instances name"
+  ssh_private_key:
+    required: true
+    description: "SSH Private key"
+  vault_password:
+    required: false
+    description: "Vault password"
 runs:
   using: "composite"
   steps:
-    - name: Testing
-      shell: bash
-      run: echo $PROJECT $SERVICE
-      env:
-        PROJECT: ${{ inputs.project }}
-        SERVICE: ${{ inputs.service }}
+    - name: Checkout
+      uses: actions/checkout@v2
 
-    - name: Testing2
-      shell: bash
-      run: echo $PROJECT $SERVICE
+    - name: Provisioning User & Databases
+      uses: dawidd6/action-ansible-playbook@v2
+      with:
+        playbook: main.yaml
+        directory: ./ansible/$ENV_NAME/$INSTANCE/
+        key: $SSH_PRIVATE_KEY
+        requirements: requirements.yaml
+        vault_password: $VAULT_PASSWORD
+        inventory: |
+          [openvpn-engineer]
+          34.101.252.165s
       env:
-        PROJECT: ${{ inputs.project }}
-        SERVICE: ${{ inputs.service }}
+        ENV_NAME: ${{ inputs.env_name }}
+        INSTANCE: ${{ inputs.instance }}
+        SSH_PRIVATE_KEY: ${{ inputs.ssh_private_key }}
+        VAULT_PASSWORD: ${{ inputs.vault_password }}
