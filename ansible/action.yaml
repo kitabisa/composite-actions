@@ -1,3 +1,9 @@
+# Noted:
+# This action required requirements even if your module doesn't need requirement.yaml
+# Please create requirement.yaml in your playbooks with value below.
+# ---
+# collections: []
+
 name: "Ansible Playbook"
 description: "Run Ansible Playbooks"
 inputs:
