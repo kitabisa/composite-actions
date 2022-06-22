@@ -1,18 +1,15 @@
 name: "Ansible Playbook"
 description: "Run Ansible Playbooks"
 inputs:
-  env_name:
+  path:
     required: true
-    description: "Environment resources"
-  instance:
-    required: true
-    description: "Instances name"
-  ssh_private_key:
-    required: true
-    description: "SSH Private key"
-  vault_password:
-    required: false
-    description: "Vault password"
+    description: "Ansible playbook path."
+  # ssh_private_key:
+  #   required: true
+  #   description: "SSH Private key"
+  # vault_password:
+  #   required: false
+  #   description: "Vault password"
 runs:
   using: "composite"
   steps:
@@ -23,15 +20,14 @@ runs:
       uses: dawidd6/action-ansible-playbook@v2
       with:
         playbook: main.yaml
-        directory: ./ansible/$ENV_NAME/$INSTANCE/
-        key: $SSH_PRIVATE_KEY
-        requirements: requirements.yaml
-        vault_password: $VAULT_PASSWORD
+        directory: $PATH
+        # key: $SSH_PRIVATE_KEY
+        # requirements: requirements.yaml
+        # vault_password: $VAULT_PASSWORD
         inventory: |
           [openvpn-engineer]
           34.101.252.165s
       env:
-        ENV_NAME: ${{ inputs.env_name }}
-        INSTANCE: ${{ inputs.instance }}
-        SSH_PRIVATE_KEY: ${{ inputs.ssh_private_key }}
-        VAULT_PASSWORD: ${{ inputs.vault_password }}
+        PATH: ${{ inputs.path }}
+        # SSH_PRIVATE_KEY: ${{ inputs.ssh_private_key }}
+        # VAULT_PASSWORD: ${{ inputs.vault_password }}
