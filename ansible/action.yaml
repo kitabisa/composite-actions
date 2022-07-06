@@ -6,6 +6,7 @@
 
 name: "Ansible Playbook"
 description: "Run Ansible Playbooks"
+
 inputs:
   path:
     required: true
@@ -16,13 +17,14 @@ inputs:
   vault_password:
     required: false
     description: "Vault password"
+
 runs:
   using: "composite"
   steps:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Provisioning User & Databases
+    - name: Provisioning Server
       uses: dawidd6/action-ansible-playbook@v2
       with:
         playbook: main.yaml
@@ -30,4 +32,3 @@ runs:
         key: ${{ inputs.ssh_private_key }}
         requirements: requirements.yaml
         vault_password: ${{ inputs.vault_password }}
-        options: --inventory inventory.ini
