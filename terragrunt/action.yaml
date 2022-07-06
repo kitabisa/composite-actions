@@ -1,0 +1,83 @@
+name: "Terragrunt"
+description: "Run Terragrunt Plan & Apply"
+inputs:
+  path:
+    required: true
+    description: "Terragrunt path"
+  git_user:
+    required: true
+    description: "Git login user"
+  git_token:
+    required: true
+    description: "Git token access"
+runs:
+  using: "composite"
+  steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure Git for private modules
+        shell: bash
+        run: git config --global url."https://${{ inputs.git_user }}:${{ inputs.git_token }}@github.com".insteadOf "https://github.com"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.7
+          terraform_wrapper: false
+
+      - name: Setup Terragrunt
+        uses: autero1/action-terragrunt@v1.1.1
+        with:
+          terragrunt_version: 0.32.4
+
+      - name: Terragrunt Validate
+        id: validate
+        shell: bash
+        run: |
+          cd ${{ inputs.path }}
+          terragrunt run-all validate --terragrunt-non-interactive
+
+      - name: Terragrunt Plan
+        id: plan
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          cd ${{ inputs.path }}
+          terragrunt run-all plan --terragrunt-non-interactive -no-color > /tmp/stdout-plan.log
+
+      - name: Update Pull Request
+        uses: actions/github-script@v3
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ inputs.git_token }}
+          script: |
+            const execSync = require('child_process').execSync;
+            const stdout = execSync('cat /tmp/stdout-plan.log');
+            const output = `
+            <details>
+            <summary>Show Plan - ${{ inputs.path }}</summary>
+
+
+            \`\`\`
+            ${stdout}
+            \`\`\`
+
+
+            </details>
+            `;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      - name: Terragrunt Apply
+        id: apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        shell: bash
+        run: |
+          cd ${{ inputs.path }}
+          terragrunt run-all apply --terragrunt-non-interactive
