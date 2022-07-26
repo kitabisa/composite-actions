@@ -1,6 +1,14 @@
 name: "Terragrunt"
 description: "Run Terragrunt Plan & Apply"
 inputs:
+  project:
+    required: false
+    description: "GCP project"
+    default: kitabisa-infra
+  gcp_credentials:
+    required: false
+    description: "GCP credentials"
+    default: ""
   path:
     required: true
     description: "Terragrunt path"
@@ -19,6 +27,18 @@ runs:
       - name: Configure Git for private modules
         shell: bash
         run: git config --global url."https://${{ inputs.git_user }}:${{ inputs.git_token }}@github.com".insteadOf "https://github.com"
+
+      - name: Authenticate to Google Cloud
+        if: ${{ github.event.inputs[gcp_credentials] != "" }}
+        uses: google-github-actions/auth@v0
+        with:
+          project_id: ${{ inputs.project }}
+          credentials_json: ${{ inputs.gcp_credentials }}
+
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@v1
+        with:
+          version: v3.7.3
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
