@@ -1,14 +1,7 @@
 name: "Terragrunt"
 description: "Run Terragrunt Plan & Apply"
+
 inputs:
-  project:
-    required: false
-    description: "GCP project"
-    default: kitabisa-infra
-  gcp_credentials:
-    required: false
-    description: "GCP credentials"
-    default: ""
   path:
     required: true
     description: "Terragrunt path"
@@ -18,6 +11,11 @@ inputs:
   git_token:
     required: true
     description: "Git token access"
+  gcp_credentials:
+    required: false
+    description: "GCP credentials"
+    default: ""
+
 runs:
   using: "composite"
   steps:
@@ -32,7 +30,6 @@ runs:
         if: ${{ github.event.inputs[gcp_credentials] != "" }}
         uses: google-github-actions/auth@v0
         with:
-          project_id: ${{ inputs.project }}
           credentials_json: ${{ inputs.gcp_credentials }}
 
       - name: Sops Binary Installer
