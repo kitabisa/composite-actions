@@ -27,7 +27,7 @@ runs:
         run: git config --global url."https://${{ inputs.git_user }}:${{ inputs.git_token }}@github.com".insteadOf "https://github.com"
 
       - name: Authenticate to Google Cloud
-        if: ${{ github.event.inputs[gcp_credentials] != "" }}
+        if: ${{ inputs.gcp_credentials }} != ""
         uses: google-github-actions/auth@v0
         with:
           credentials_json: ${{ inputs.gcp_credentials }}
