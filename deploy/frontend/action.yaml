@@ -1,0 +1,98 @@
+name: "Frontend build"
+description: "Frontend composite deployment"
+
+inputs:
+  project_id:
+    required: true
+    description: "GCP project id"
+
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+
+  gcr_host:
+    required: true
+    description: "GCP container registry host"
+
+  chartmuseum_host:
+    required: true
+    description: "ChartMuseum host"
+
+  chartmuseum_user:
+    required: true
+    description: "ChartMuseum user"
+
+  chartmuseum_pass:
+    required: true
+    description: "ChartMuseum password"
+
+  gke_cluster_name:
+    required: true
+    description: "gke cluster name"
+
+  gke_cluster_zone:
+    required: true
+    description: "gke cluster location zone"
+
+  rancher_host:
+    required: true
+    description: "rancher host"
+
+  rancher_access_key:
+    required: true
+    description: "rancher access key"
+
+  rancher_secret_key:
+    required: true
+    description: "rancher secret key"
+
+  rancher_cluster_id:
+    required: true
+    description: "rancher cluster id"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v2
+
+    - name: Setup gcloud
+      uses: kitabisa/composite-action/packages/gcloud@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v1
+
+    - name: Get GKE credential
+      uses: google-github-actions/get-gke-credentials@main
+      with:
+        cluster_name: ${{ inputs.gke_cluster_name }}
+        location: ${{ inputs.gke_cluster_zone }}
+        project_id: ${{ inputs.project_id }}
+
+    - name: Setup helm
+      uses: azure/setup-helm@v1
+
+    - name: Setup helmfile
+      uses: kitabisa/actions/setup-helmfile@master
+
+    - name: Deploy & Prune
+      uses: kitabisa/composite-action/packages/makefile@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        gcr_host: ${{ inputs.gcr_host }}
+        chartmuesum_host: ${{ inputs.chartmuseum_host }}
+        chartmuesum_user: ${{ inputs.chartmuseum_user }}
+        chartmuesum_pass: ${{ inputs.chartmuseum_pass }}
+        deploy: true
+        prune: true
+
+    - name: Rancher ns mover
+      uses: kitabisa/composite-action/packages/rancher@main
+      with:
+        rancher_host: ${{ inputs.rancher_host }}
+        rancher_access_key: ${{ inputs.rancher_access_key }}
+        rancher_secret_key: ${{ inputs.rancher_secret_key }}
+        rancher_cluster_id: ${{ inputs.rancher_cluster_id }}

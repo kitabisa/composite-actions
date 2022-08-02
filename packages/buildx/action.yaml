@@ -1,0 +1,33 @@
+name: "Setup Docker buildx"
+description: "Setup Docker buildx credentials & cache"
+
+inputs:
+  project_id:
+    required: true
+    description: "GCP project id"
+
+  gcr_host:
+    required: true
+    description: "GCP container registry host"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup docker buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Register gcloud as a docker credential helper
+      shell: bash
+      env:
+        DOCKER_REGISTRY: ${{ inputs.gcr_host }}
+        GCP_PROJECT_ID: ${{ inputs.project_id }}
+      run: |-
+        gcloud auth configure-docker "$DOCKER_REGISTRY" --project "$GCP_PROJECT_ID" --quiet
+
+    - name: Cache docker layers
+      uses: actions/cache@v2
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ hashFiles('**/Dockerfile') }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-

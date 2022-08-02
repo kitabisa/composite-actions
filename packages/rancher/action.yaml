@@ -23,6 +23,7 @@ runs:
   steps:
     - name: Get business unit & app name values
       id: app-meta
+      shell: bash
       run: |-
         echo "::set-output name=app-name::$(make get-app-name)"
         echo "::set-output name=business-unit::$(make get-business-unit)"
