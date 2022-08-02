@@ -11,9 +11,11 @@ inputs:
   path:
     required: true
     description: "Ansible playbook path."
+
   ssh_private_key:
     required: true
     description: "SSH Private key"
+
   vault_password:
     required: false
     description: "Vault password"

@@ -1,0 +1,111 @@
+name: "Frontend workflow"
+description: "Frontend composite deployment"
+
+inputs:
+  project_id:
+    required: true
+    description: "gcp project id"
+
+  credentials_json:
+    required: true
+    description: "gcp credentials services account"
+
+  gcr_host:
+    required: true
+    description: "gcp container registry host"
+
+  gke_cluster_name:
+    required: true
+    description: "gke cluster name"
+
+  gke_cluster_zone:
+    required: true
+    description: "gke cluster location zone"
+
+  setup_pnpm:
+    required: false
+    description: "setup pnpm and cache modules"
+    default: false
+    type: boolean
+
+  setup_yarn:
+    required: false
+    description: "setup yarn and cache modules"
+    default: false
+    type: boolean
+
+  chartmuesum_host:
+    required: true
+    description: "chartmuesum host"
+
+  chartmuesum_user:
+    required: true
+    description: "chartmuesum user"
+
+  chartmuesum_pass:
+    required: true
+    description: "chartmuesum password"
+
+  rancher_host:
+    required: true
+    description: "rancher host"
+
+  rancher_access_key:
+    required: true
+    description: "rancher access key"
+
+  rancher_secret_key:
+    required: true
+    description: "rancher secret key"
+
+  rancher_cluster_id:
+    required: true
+    description: "rancher cluster id"
+
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v2
+
+    - name: Setup node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version-file: ".nvmrc"
+
+    - name: Pre-deploy setup
+      uses: kitabisa/composite-action/pre-deploy-setup@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Setup yarn
+      if: "${{ inputs.setup_yarn == 'true' }}"
+      uses: kitabisa/composite-action/yarn@main
+
+    - name: Setup pnpm
+      if: "${{ inputs.setup_pnpm == 'true' }}"
+      uses: kitabisa/composite-action/yarn@main
+
+    - name: Build push deploy
+      uses: kitabisa/composite-action/makefile@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        gcr_host: ${{ inputs.gcr_host }}
+        chartmuesum_host: ${{ inputs.chartmuesum_host }}
+        chartmuesum_user: ${{ inputs.chartmuesum_user }}
+        chartmuesum_pass: ${{ inputs.chartmuesum_pass }}
+        install: true
+        config: true
+
+    - name: Remove unused docker images
+      uses: kitabisa/composite-action/yarn@main
+
+    - name: Configure namespace-project mapping in rancher
+      uses: kitabisa/composite-action/rancher-ns@main
+      with:
+        rancher_host: ${{ inputs.rancher_host }}
+        rancher_access_key: ${{ inputs.rancher_access_key }}
+        rancher_secret_key: ${{ inputs.rancher_secret_key }}
+        rancher_cluster_id: ${{ inputs.rancher_cluster_id }}

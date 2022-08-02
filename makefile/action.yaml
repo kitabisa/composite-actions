@@ -1,0 +1,93 @@
+name: "Makefile build push deploy"
+description: "Makefile build push deploy"
+
+inputs:
+  project_id:
+    required: true
+    description: "gcp project id"
+
+  gcr_host:
+    required: true
+    description: "gcp container registry host"
+
+  chartmuesum_host:
+    required: true
+    description: "chartmuesum host"
+
+  chartmuesum_user:
+    required: true
+    description: "chartmuesum user"
+
+  chartmuesum_pass:
+    required: true
+    description: "chartmuesum password"
+
+  install:
+    required: false
+    description: "make install"
+    default: false
+    type: boolean
+
+  config:
+    required: false
+    description: "make config"
+    default: false
+    type: boolean
+
+  build:
+    required: true
+    description: "make build"
+    default: true
+    type: boolean
+
+  package:
+    required: true
+    description: "make package"
+    default: true
+    type: boolean
+
+  deploy:
+    required: true
+    description: "make deploy"
+    default: true
+    type: boolean
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install dependencies
+      if: "${{ inputs.install == 'true' }}"
+      run: |-
+        make install
+
+    - name: Generate config for build time
+      if: "${{ inputs.config == 'true' }}"
+      env:
+        CHARTMUSEUM_HOST: ${{ inputs.chartmuesum_host }}
+        CHARTMUSEUM_USER: ${{ inputs.chartmuesum_user }}
+        CHARTMUSEUM_PASS: ${{ inputs.chartmuesum_pass }}
+        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+      run: |-
+        make config
+
+    - name: Build application
+      if: "${{ inputs.build == 'true' }}"
+      run: |-
+        make build
+
+    - name: Build, tag, and push Docker image
+      if: "${{ inputs.package == 'true' }}"
+      env:
+        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+      run: |-
+        make package
+
+    - name: Deploy via Helmfile
+      if: "${{ inputs.deploy == 'true' }}"
+      env:
+        CHARTMUSEUM_HOST: ${{ inputs.chartmuesum_host }}
+        CHARTMUSEUM_USER: ${{ inputs.chartmuesum_user }}
+        CHARTMUSEUM_PASS: ${{ inputs.chartmuesum_pass }}
+        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+      run: |-
+        make deploy

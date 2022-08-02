@@ -5,12 +5,15 @@ inputs:
   path:
     required: true
     description: "Terragrunt path"
+
   git_user:
     required: true
     description: "Git login user"
+
   git_token:
     required: true
     description: "Git token access"
+
   gcp_credentials:
     required: false
     description: "GCP credentials"
