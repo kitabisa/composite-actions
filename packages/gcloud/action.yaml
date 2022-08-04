@@ -1,0 +1,23 @@
+name: "Frontend build"
+description: "Frontend composite deployment"
+
+inputs:
+  project_id:
+    required: true
+    description: "GCP project id"
+
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v0
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Setup gcloud
+      uses: google-github-actions/setup-gcloud@v0

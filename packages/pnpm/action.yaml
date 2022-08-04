@@ -1,0 +1,20 @@
+name: "Setup pnpm"
+description: "Setup pnpm & cache modules"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2.2.2
+      with:
+        version: 6.32.25
+
+    - name: Cache Next.js
+      uses: actions/cache@v3
+      with:
+        path: ${{ github.workspace }}/.next/cache
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-
+
+

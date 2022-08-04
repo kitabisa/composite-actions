@@ -1,0 +1,141 @@
+name: "Makefile build push deploy"
+description: "Makefile build push deploy"
+
+inputs:
+  project_id:
+    required: true
+    description: "gcp project id"
+
+  gcr_host:
+    required: true
+    description: "gcp container registry host"
+
+  chartmuseum_host:
+    required: true
+    description: "chartmuesum host"
+
+  chartmuseum_user:
+    required: true
+    description: "chartmuesum user"
+
+  chartmuseum_pass:
+    required: true
+    description: "chartmuesum password"
+
+  install:
+    required: false
+    description: "make install"
+    default: false
+    type: boolean
+
+  config:
+    required: false
+    description: "make config"
+    default: false
+    type: boolean
+
+  build:
+    required: false
+    description: "make build"
+    default: false
+    type: boolean
+
+  package:
+    required: false
+    description: "make package"
+    default: false
+    type: boolean
+
+  deploy:
+    required: false
+    description: "make deploy"
+    default: false
+    type: boolean
+
+  prune:
+    required: false
+    description: "make prune"
+    default: false
+    type: boolean
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup yq
+      uses: chrisdickinson/setup-yq@latest
+      with:
+        yq-version: v4.11.2
+
+    - name: Install dependencies
+      if: "${{ inputs.install == 'true' }}"
+      shell: bash
+      run: |-
+        make install
+
+    - name: Generate config for build time
+      if: "${{ inputs.config == 'true' }}"
+      shell: bash
+      env:
+        CHARTMUSEUM_HOST: ${{ inputs.chartmuseum_host }}
+        CHARTMUSEUM_USER: ${{ inputs.chartmuseum_user }}
+        CHARTMUSEUM_PASS: ${{ inputs.chartmuseum_pass }}
+        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+      run: |-
+        make config
+
+    - name: Build application
+      if: "${{ inputs.build == 'true' }}"
+      shell: bash
+      run: |-
+        make build
+
+    - name: Build and push docker image
+      if: "${{ inputs.package == 'true' }}"
+      shell: bash
+      env:
+        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+      run: |-
+        make package
+
+    - name: Deploy via helmfile
+      if: "${{ inputs.deploy == 'true' }}"
+      shell: bash
+      env:
+        CHARTMUSEUM_HOST: ${{ inputs.chartmuseum_host }}
+        CHARTMUSEUM_USER: ${{ inputs.chartmuseum_user }}
+        CHARTMUSEUM_PASS: ${{ inputs.chartmuseum_pass }}
+        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+      run: |-
+        make deploy
+
+    - name: Get Helm history
+      if: "${{ inputs.prune == 'true' }}"
+      shell: bash
+      id: helm-history
+      run: |-
+        echo "::set-output name=length::$(make helm-history-length)"
+
+    - name: Get Helm revision
+      if: "${{ (inputs.prune == 'true') && (steps.helm-history.outputs.length >= 10) }}"
+      shell: bash
+      id: helm-revision
+      run: |-
+        echo "::set-output name=oldest::$(make helm-oldest-revision)"
+
+    - name: Get Helm values
+      if: "${{ (inputs.prune == 'true') && (steps.helm-revision.outputs.oldest != 0) }}"
+      shell: bash
+      id: helm-values
+      env:
+        REVISION: ${{ steps.helm-revision.outputs.oldest }}
+      run: |-
+        echo "::set-output name=image-tag::$(make helm-image-tag)"
+
+    - name: Remove unused Docker images
+      if: "${{ (inputs.prune == 'true') && (steps.helm-values.outputs.image-tag != 0) }}"
+      shell: bash
+      env:
+        DOCKER_REPOSITORY: ${{ secrets.GCR_HOST }}/${{ secrets.GCP_PROJECT_ID_STG }}
+        IMAGE_TAG: ${{ steps.helm-values.outputs.image-tag }}
+      run: |-
+        make prune || true

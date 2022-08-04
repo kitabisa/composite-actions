@@ -1,0 +1,83 @@
+name: "Frontend build"
+description: "Frontend composite deployment"
+
+inputs:
+  project_id:
+    required: true
+    description: "GCP project id"
+
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+
+  gcr_host:
+    required: true
+    description: "GCP container registry host"
+
+  setup_pnpm:
+    required: false
+    description: "Setup pnpm and cache modules"
+    default: false
+    type: boolean
+
+  setup_yarn:
+    required: false
+    description: "Setup yarn and cache modules"
+    default: false
+    type: boolean
+
+  chartmuseum_host:
+    required: true
+    description: "ChartMuseum host"
+
+  chartmuseum_user:
+    required: true
+    description: "ChartMuseum user"
+
+  chartmuseum_pass:
+    required: true
+    description: "ChartMuseum password"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v2
+
+    - name: Setup node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version-file: ".nvmrc"
+
+    - name: Setup docker buildx
+      uses: kitabisa/composite-actions/packages/buildx@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        gcr_host: ${{ inputs.gcr_host }}
+
+    - name: Setup gcloud
+      uses: kitabisa/composite-actions/packages/gcloud@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Setup yarn
+      if: "${{ inputs.setup_yarn == 'true' }}"
+      uses: kitabisa/composite-actions/packages/yarn@main
+
+    - name: Setup pnpm
+      if: "${{ inputs.setup_pnpm == 'true' }}"
+      uses: kitabisa/composite-actions/packages/pnpm@main
+
+    - name: Build push
+      uses: kitabisa/composite-actions/packages/makefile@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        gcr_host: ${{ inputs.gcr_host }}
+        chartmuesum_host: ${{ inputs.chartmuseum_host }}
+        chartmuesum_user: ${{ inputs.chartmuseum_user }}
+        chartmuesum_pass: ${{ inputs.chartmuseum_pass }}
+        install: true
+        config: true
+        build: true
+        package: true

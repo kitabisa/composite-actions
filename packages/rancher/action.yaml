@@ -1,0 +1,39 @@
+name: "Rancher ns mover"
+description: "configure namespace location on rancher project"
+
+inputs:
+  rancher_host:
+    required: true
+    description: "rancher host"
+
+  rancher_access_key:
+    required: true
+    description: "rancher access key"
+
+  rancher_secret_key:
+    required: true
+    description: "rancher secret key"
+
+  rancher_cluster_id:
+    required: true
+    description: "rancher cluster id"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get business unit & app name values
+      id: app-meta
+      shell: bash
+      run: |-
+        echo "::set-output name=app-name::$(make get-app-name)"
+        echo "::set-output name=business-unit::$(make get-business-unit)"
+
+    - name: Configure namespace-project mapping in rancher
+      uses: kitabisa/actions/rancher-ns-mover@master
+      with:
+        rancher-host: ${{ inputs.rancher_host }}
+        rancher-access-key: ${{ inputs.rancher_access_key }}
+        rancher-secret-key: ${{ inputs.rancher_secret_key }}
+        cluster-id: ${{ inputs.rancher_cluster_id }}
+        project-name: ${{ steps.app-meta.outputs.business-unit }}
+        namespace: ${{ steps.app-meta.outputs.app-name }}
