@@ -57,7 +57,7 @@ runs:
       uses: actions/checkout@v2
 
     - name: Setup gcloud
-      uses: kitabisa/composite-action/packages/gcloud@main
+      uses: kitabisa/composite-actions/packages/gcloud@main
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
@@ -79,7 +79,7 @@ runs:
       uses: kitabisa/actions/setup-helmfile@master
 
     - name: Deploy & Prune
-      uses: kitabisa/composite-action/packages/makefile@main
+      uses: kitabisa/composite-actions/packages/makefile@main
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
@@ -90,7 +90,7 @@ runs:
         prune: true
 
     - name: Rancher ns mover
-      uses: kitabisa/composite-action/packages/rancher@main
+      uses: kitabisa/composite-actions/packages/rancher@main
       with:
         rancher_host: ${{ inputs.rancher_host }}
         rancher_access_key: ${{ inputs.rancher_access_key }}
