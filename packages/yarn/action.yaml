@@ -5,6 +5,7 @@ runs:
   using: "composite"
   steps:
     - name: Setup yarn
+      shell: bash
       run: npm install -g yarn
 
     - name: Cache yarn modules
