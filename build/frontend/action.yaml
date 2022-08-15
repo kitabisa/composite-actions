@@ -74,9 +74,9 @@ runs:
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
-        chartmuesum_host: ${{ inputs.chartmuseum_host }}
-        chartmuesum_user: ${{ inputs.chartmuseum_user }}
-        chartmuesum_pass: ${{ inputs.chartmuseum_pass }}
+        chartmuseum_host: ${{ inputs.chartmuseum_host }}
+        chartmuseum_user: ${{ inputs.chartmuseum_user }}
+        chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
         install: true
         config: true
         build: true
