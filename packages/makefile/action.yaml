@@ -66,6 +66,12 @@ runs:
       with:
         yq-version: v4.11.2
 
+    - name: Setup Helm
+      uses: azure/setup-helm@v1
+
+    - name: Setup Helmfile
+      uses: kitabisa/actions/setup-helmfile@master
+
     - name: Install dependencies
       if: "${{ inputs.install == 'true' }}"
       shell: bash
