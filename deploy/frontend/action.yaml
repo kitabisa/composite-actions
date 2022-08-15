@@ -72,12 +72,6 @@ runs:
         location: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
-    - name: Setup helm
-      uses: azure/setup-helm@v1
-
-    - name: Setup helmfile
-      uses: kitabisa/actions/setup-helmfile@master
-
     - name: Deploy & Prune
       uses: kitabisa/composite-actions/packages/makefile@main
       with:
