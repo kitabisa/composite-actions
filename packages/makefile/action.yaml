@@ -135,7 +135,7 @@ runs:
       if: "${{ (inputs.prune == 'true') && (steps.helm-values.outputs.image-tag != 0) }}"
       shell: bash
       env:
-        DOCKER_REPOSITORY: ${{ secrets.GCR_HOST }}/${{ secrets.GCP_PROJECT_ID_STG }}
+        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
         IMAGE_TAG: ${{ steps.helm-values.outputs.image-tag }}
       run: |-
         make prune || true
