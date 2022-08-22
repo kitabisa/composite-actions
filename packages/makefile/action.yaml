@@ -108,7 +108,8 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       run: |-
-        echo ${{ github.workspace }}
+        echo "hello world"
+        echo "${{ github.workspace }}"
         make install
 
     - name: Generate config for build time
