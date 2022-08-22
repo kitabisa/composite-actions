@@ -38,6 +38,16 @@ inputs:
     required: true
     description: "ChartMuseum password"
 
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ${{ inputs.working_directory }}
+
 runs:
   using: "composite"
   steps:
