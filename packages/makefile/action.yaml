@@ -100,6 +100,8 @@ runs:
       shell: bash
       working-directory: ./packages/storybook
       run: |-
+        pwd
+        ls -lah
         make install
 
     - name: Generate config for build time
