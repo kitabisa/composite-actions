@@ -6,6 +6,11 @@ inputs:
     required: true
     description: "gcp project id"
 
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+
   gcr_host:
     required: true
     description: "gcp container registry host"
@@ -75,6 +80,7 @@ runs:
     - name: Get Helm history
       if: "${{ inputs.prune == 'true' }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       id: helm-history
       run: |-
         echo "::set-output name=length::$(make helm-history-length)"
@@ -82,6 +88,7 @@ runs:
     - name: Get Helm revision
       if: "${{ (inputs.prune == 'true') && (steps.helm-history.outputs.length >= 10) }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       id: helm-revision
       run: |-
         echo "::set-output name=oldest::$(make helm-oldest-revision)"
@@ -89,6 +96,7 @@ runs:
     - name: Get Helm values
       if: "${{ (inputs.prune == 'true') && (steps.helm-revision.outputs.oldest != 0) }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       id: helm-values
       env:
         REVISION: ${{ steps.helm-revision.outputs.oldest }}
@@ -98,12 +106,14 @@ runs:
     - name: Install dependencies
       if: "${{ inputs.install == 'true' }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       run: |-
         make install
 
     - name: Generate config for build time
       if: "${{ inputs.config == 'true' }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       env:
         CHARTMUSEUM_HOST: ${{ inputs.chartmuseum_host }}
         CHARTMUSEUM_USER: ${{ inputs.chartmuseum_user }}
@@ -115,12 +125,14 @@ runs:
     - name: Build application
       if: "${{ inputs.build == 'true' }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       run: |-
         make build
 
     - name: Build and push docker image
       if: "${{ inputs.package == 'true' }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       env:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
       run: |-
@@ -129,6 +141,7 @@ runs:
     - name: Deploy via helmfile
       if: "${{ inputs.deploy == 'true' }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       env:
         CHARTMUSEUM_HOST: ${{ inputs.chartmuseum_host }}
         CHARTMUSEUM_USER: ${{ inputs.chartmuseum_user }}
@@ -140,6 +153,7 @@ runs:
     - name: Remove unused Docker images
       if: "${{ (inputs.prune == 'true') && (steps.helm-values.outputs.image-tag != 0) }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       env:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
         IMAGE_TAG: ${{ steps.helm-values.outputs.image-tag }}
