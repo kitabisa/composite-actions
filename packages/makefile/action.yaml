@@ -72,9 +72,33 @@ runs:
     - name: Setup Helmfile
       uses: kitabisa/actions/setup-helmfile@master
 
+    - name: Get Helm history
+      if: "${{ inputs.prune == 'true' }}"
+      shell: bash
+      id: helm-history
+      run: |-
+        echo "::set-output name=length::$(make helm-history-length)"
+
+    - name: Get Helm revision
+      if: "${{ (inputs.prune == 'true') && (steps.helm-history.outputs.length >= 10) }}"
+      shell: bash
+      id: helm-revision
+      run: |-
+        echo "::set-output name=oldest::$(make helm-oldest-revision)"
+
+    - name: Get Helm values
+      if: "${{ (inputs.prune == 'true') && (steps.helm-revision.outputs.oldest != 0) }}"
+      shell: bash
+      id: helm-values
+      env:
+        REVISION: ${{ steps.helm-revision.outputs.oldest }}
+      run: |-
+        echo "::set-output name=image-tag::$(make helm-image-tag)"
+
     - name: Install dependencies
       if: "${{ inputs.install == 'true' }}"
       shell: bash
+      working-directory: ./packages/storybook
       run: |-
         make install
 
@@ -113,29 +137,6 @@ runs:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
       run: |-
         make deploy
-
-    - name: Get Helm history
-      if: "${{ inputs.prune == 'true' }}"
-      shell: bash
-      id: helm-history
-      run: |-
-        echo "::set-output name=length::$(make helm-history-length)"
-
-    - name: Get Helm revision
-      if: "${{ (inputs.prune == 'true') && (steps.helm-history.outputs.length >= 10) }}"
-      shell: bash
-      id: helm-revision
-      run: |-
-        echo "::set-output name=oldest::$(make helm-oldest-revision)"
-
-    - name: Get Helm values
-      if: "${{ (inputs.prune == 'true') && (steps.helm-revision.outputs.oldest != 0) }}"
-      shell: bash
-      id: helm-values
-      env:
-        REVISION: ${{ steps.helm-revision.outputs.oldest }}
-      run: |-
-        echo "::set-output name=image-tag::$(make helm-image-tag)"
 
     - name: Remove unused Docker images
       if: "${{ (inputs.prune == 'true') && (steps.helm-values.outputs.image-tag != 0) }}"
