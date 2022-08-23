@@ -50,6 +50,16 @@ inputs:
     required: true
     description: "rancher cluster id"
 
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+
+  preview_url:
+    required: false
+    description: "Set preview url"
+    default: ""
+
 runs:
   using: "composite"
   steps:
@@ -73,8 +83,10 @@ runs:
         project_id: ${{ inputs.project_id }}
 
     - name: Deploy & Prune
-      uses: kitabisa/composite-actions/packages/makefile@main
+      uses: kitabisa/composite-actions/packages/makefile@prune-step
       with:
+        working_directory: ${{ inputs.working_directory }}
+        preview_url: ${{ inputs.preview_url }}
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
         chartmuseum_host: ${{ inputs.chartmuseum_host }}
