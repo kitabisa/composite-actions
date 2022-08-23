@@ -98,6 +98,7 @@ runs:
     - name: Rancher ns mover
       uses: kitabisa/composite-actions/packages/rancher@main
       with:
+        working_directory: ${{ inputs.working_directory }}
         rancher_host: ${{ inputs.rancher_host }}
         rancher_access_key: ${{ inputs.rancher_access_key }}
         rancher_secret_key: ${{ inputs.rancher_secret_key }}
