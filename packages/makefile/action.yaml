@@ -166,7 +166,7 @@ runs:
         make prune || true
 
     - name: Comment preview url
-      if: "${{ inputs.preview_url !== '' }}"
+      if: "${{ inputs.preview_url != '' }}"
       uses: KeisukeYamashita/create-comment@v1
       with:
         comment: "Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})"
