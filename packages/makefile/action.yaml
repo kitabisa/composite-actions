@@ -58,6 +58,16 @@ inputs:
     default: false
     type: boolean
 
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+
+  preview_url:
+    required: false
+    description: "Set preview url"
+    default: ""
+
 runs:
   using: "composite"
   steps:
@@ -72,15 +82,43 @@ runs:
     - name: Setup Helmfile
       uses: kitabisa/actions/setup-helmfile@master
 
+    - name: Get Helm history
+      if: "${{ inputs.prune == 'true' }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      id: helm-history
+      run: |-
+        echo "::set-output name=length::$(make helm-history-length)"
+
+    - name: Get Helm revision
+      if: "${{ (inputs.prune == 'true') && (steps.helm-history.outputs.length >= 10) }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      id: helm-revision
+      run: |-
+        echo "::set-output name=oldest::$(make helm-oldest-revision)"
+
+    - name: Get Helm values
+      if: "${{ (inputs.prune == 'true') && (steps.helm-revision.outputs.oldest != 0) }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      id: helm-values
+      env:
+        REVISION: ${{ steps.helm-revision.outputs.oldest }}
+      run: |-
+        echo "::set-output name=image-tag::$(make helm-image-tag)"
+
     - name: Install dependencies
       if: "${{ inputs.install == 'true' }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       run: |-
         make install
 
     - name: Generate config for build time
       if: "${{ inputs.config == 'true' }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       env:
         CHARTMUSEUM_HOST: ${{ inputs.chartmuseum_host }}
         CHARTMUSEUM_USER: ${{ inputs.chartmuseum_user }}
@@ -92,12 +130,14 @@ runs:
     - name: Build application
       if: "${{ inputs.build == 'true' }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       run: |-
         make build
 
     - name: Build and push docker image
       if: "${{ inputs.package == 'true' }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       env:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
       run: |-
@@ -106,6 +146,7 @@ runs:
     - name: Deploy via helmfile
       if: "${{ inputs.deploy == 'true' }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       env:
         CHARTMUSEUM_HOST: ${{ inputs.chartmuseum_host }}
         CHARTMUSEUM_USER: ${{ inputs.chartmuseum_user }}
@@ -114,34 +155,18 @@ runs:
       run: |-
         make deploy
 
-    - name: Get Helm history
-      if: "${{ inputs.prune == 'true' }}"
-      shell: bash
-      id: helm-history
-      run: |-
-        echo "::set-output name=length::$(make helm-history-length)"
-
-    - name: Get Helm revision
-      if: "${{ (inputs.prune == 'true') && (steps.helm-history.outputs.length >= 10) }}"
-      shell: bash
-      id: helm-revision
-      run: |-
-        echo "::set-output name=oldest::$(make helm-oldest-revision)"
-
-    - name: Get Helm values
-      if: "${{ (inputs.prune == 'true') && (steps.helm-revision.outputs.oldest != 0) }}"
-      shell: bash
-      id: helm-values
-      env:
-        REVISION: ${{ steps.helm-revision.outputs.oldest }}
-      run: |-
-        echo "::set-output name=image-tag::$(make helm-image-tag)"
-
     - name: Remove unused Docker images
       if: "${{ (inputs.prune == 'true') && (steps.helm-values.outputs.image-tag != 0) }}"
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       env:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
         IMAGE_TAG: ${{ steps.helm-values.outputs.image-tag }}
       run: |-
         make prune || true
+
+    - name: Comment preview url
+      if: "${{ inputs.preview_url != '' }}"
+      uses: KeisukeYamashita/create-comment@v1
+      with:
+        comment: "Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})"

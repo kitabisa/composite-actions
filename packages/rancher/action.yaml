@@ -18,12 +18,18 @@ inputs:
     required: true
     description: "rancher cluster id"
 
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+
 runs:
   using: "composite"
   steps:
     - name: Get business unit & app name values
       id: app-meta
       shell: bash
+      working-directory: ${{ inputs.working_directory }}
       run: |-
         echo "::set-output name=app-name::$(make get-app-name)"
         echo "::set-output name=business-unit::$(make get-business-unit)"
