@@ -75,7 +75,7 @@ runs:
       uses: kitabisa/composite-actions/packages/pnpm@main
 
     - name: Build push
-      uses: kitabisa/composite-actions/packages/makefile@prune-step
+      uses: kitabisa/composite-actions/packages/makefile@main
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
