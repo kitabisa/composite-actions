@@ -96,7 +96,7 @@ runs:
         prune: true
 
     - name: Rancher ns mover
-      uses: kitabisa/composite-actions/packages/rancher@main
+      uses: kitabisa/composite-actions/packages/rancher@prune-step
       with:
         working_directory: ${{ inputs.working_directory }}
         rancher_host: ${{ inputs.rancher_host }}
