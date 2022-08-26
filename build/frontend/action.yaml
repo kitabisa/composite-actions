@@ -43,16 +43,22 @@ inputs:
     description: "Set working directory"
     default: "."
 
+  using_nextjs:
+    required: false
+    description: "Setup next.js cache modules"
+    default: false
+    type: boolean
+
 runs:
   using: "composite"
   steps:
     - name: Checking out repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Setup node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version-file: ".nvmrc"
+        node-version-file: "${{ inputs.working_directory }}/.nvmrc"
 
     - name: Setup gcloud
       uses: kitabisa/composite-actions/packages/gcloud@main
@@ -69,10 +75,16 @@ runs:
     - name: Setup yarn
       if: "${{ inputs.setup_yarn == 'true' }}"
       uses: kitabisa/composite-actions/packages/yarn@main
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        using_nextjs: ${{ inputs.working_directory }}
 
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
       uses: kitabisa/composite-actions/packages/pnpm@main
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        using_nextjs: ${{ inputs.working_directory }}
 
     - name: Build push
       uses: kitabisa/composite-actions/packages/makefile@main
