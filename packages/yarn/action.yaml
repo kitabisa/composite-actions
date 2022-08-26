@@ -1,28 +1,39 @@
 name: "Setup yarn"
 description: "Setup yarn & cache modules"
 
+inputs:
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+
+  using_nextjs:
+    required: false
+    description: "Setup next.js cache modules"
+    default: false
+    type: boolean
+
 runs:
   using: "composite"
   steps:
-    - name: Setup yarn
-      shell: bash
-      run: npm install -g yarn
+    - name: Get Yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
 
-    - name: Cache yarn modules
-      uses: actions/setup-node@v2
+    - name: Cache Yarn packages
+      uses: actions/cache@v3
       with:
-        node-version: "16"
-        cache: yarn
-        path: ~/.yarn-store
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn-lock.yaml') }}
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
 
     - name: Cache Next.js
-      uses: actions/cache@v2
+      if: "${{ inputs.using_nextjs == 'true' }}"
+      uses: actions/cache@v3
       with:
-        path: ${{ github.workspace }}/.next/cache
-        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn-lock.yaml') }}
+        path: ${{ github.workspace }}/${{ inputs.working_directory }}/.next/cache
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-nextjs-
 
