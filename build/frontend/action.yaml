@@ -58,7 +58,7 @@ runs:
     - name: Setup node.js
       uses: actions/setup-node@v3
       with:
-        node-version-file: ".nvmrc"
+        node-version-file: "${{ inputs.working_directory }}/.nvmrc"
 
     - name: Setup gcloud
       uses: kitabisa/composite-actions/packages/gcloud@main
