@@ -16,6 +16,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Setup yarn
+      shell: bash
+      run: npm install -g yarn
+
     - name: Get Yarn cache directory path
       id: yarn-cache-dir-path
       shell: bash
