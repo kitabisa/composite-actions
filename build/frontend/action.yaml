@@ -49,6 +49,12 @@ inputs:
     default: false
     type: boolean
 
+  pnpm_version:
+    required: false
+    description: "Setup pnpm version"
+    default: "latest"
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -85,6 +91,7 @@ runs:
       with:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.working_directory }}
+        pnpm_version: ${{ inputs.pnpm_version }}
 
     - name: Build push
       uses: kitabisa/composite-actions/packages/makefile@main
