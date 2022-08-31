@@ -83,14 +83,14 @@ runs:
       uses: kitabisa/composite-actions/packages/yarn@main
       with:
         working_directory: ${{ inputs.working_directory }}
-        using_nextjs: ${{ inputs.working_directory }}
+        using_nextjs: ${{ inputs.using_nextjs }}
 
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
       uses: kitabisa/composite-actions/packages/pnpm@main
       with:
         working_directory: ${{ inputs.working_directory }}
-        using_nextjs: ${{ inputs.working_directory }}
+        using_nextjs: ${{ inputs.using_nextjs }}
         pnpm_version: ${{ inputs.pnpm_version }}
 
     - name: Build push
