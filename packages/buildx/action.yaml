@@ -25,7 +25,7 @@ runs:
         gcloud auth configure-docker "$DOCKER_REGISTRY" --project "$GCP_PROJECT_ID" --quiet
 
     - name: Cache docker layers
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: /tmp/.buildx-cache
         key: ${{ runner.os }}-buildx-${{ hashFiles('**/Dockerfile') }}

@@ -13,6 +13,11 @@ inputs:
     default: false
     type: boolean
 
+  pnpm_version:
+    required: true
+    description: "Setup pnpm version"
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -27,7 +32,7 @@ runs:
     - name: Setup pnpm
       uses: pnpm/action-setup@v2.2.2
       with:
-        version: 6.32.25
+        version: ${{ inputs.pnpm_version }}
 
     - name: Cache Next.js
       if: "${{ inputs.using_nextjs == 'true' }}"
