@@ -52,7 +52,7 @@ inputs:
   pnpm_version:
     required: false
     description: "Setup pnpm version"
-    default: ""
+    default: "latest"
     type: string
 
 runs:

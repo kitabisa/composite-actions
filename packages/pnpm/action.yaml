@@ -14,8 +14,9 @@ inputs:
     type: boolean
 
   pnpm_version:
-    required: true
+    required: false
     description: "Setup pnpm version"
+    default: "latest"
     type: string
 
 runs:
