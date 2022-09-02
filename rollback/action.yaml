@@ -1,0 +1,55 @@
+name: "Rollback deployment"
+description: "Rollback release deployment"
+
+inputs:
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+
+  gke_cluster_name:
+    required: true
+    description: "gke cluster name"
+
+  gke_cluster_zone:
+    required: true
+    description: "gke cluster location zone"
+
+  project_id:
+    required: true
+    description: "GCP project id"
+
+  rollback_release:
+    required: false
+    description: "rollback release"
+
+  rollback_revision:
+    required: false
+    description: "rollback revision"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v3
+
+    - name: Setup gcloud
+      uses: ./packages/gcloud/action.yaml
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Setup gke credential
+      uses: ./packages/gke-credential/action.yaml
+      with:
+        cluster_name: ${{ inputs.gke_cluster_name }}
+        location: ${{ inputs.gke_cluster_zone }}
+        project_id: ${{ inputs.project_id }}
+
+    - name: Build push
+      uses: ./packages/makefile/action.yaml
+      with:
+        project_id: ${{ inputs.project_id }}
+        rollback: true
+        rollback_release: ${{ inputs.rollback_release }}
+        rollback_revision: ${{ inputs.rollback_revision }}
+

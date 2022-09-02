@@ -72,11 +72,8 @@ runs:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
-    - name: Setup kubectl
-      uses: azure/setup-kubectl@v3
-
-    - name: Get GKE credential
-      uses: google-github-actions/get-gke-credentials@main
+    - name: Setup gke credential
+      uses: kitabisa/composite-actions/packages/gke-credential@main
       with:
         cluster_name: ${{ inputs.gke_cluster_name }}
         location: ${{ inputs.gke_cluster_zone }}
