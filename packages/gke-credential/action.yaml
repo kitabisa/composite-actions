@@ -1,0 +1,28 @@
+name: "Get GKE Credential"
+description: "Get GKE Credential"
+
+inputs:
+  project_id:
+    required: true
+    description: "GCP project id"
+
+  gke_cluster_name:
+    required: true
+    description: "gke cluster name"
+
+  gke_cluster_zone:
+    required: true
+    description: "gke cluster location zone"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v3
+
+    - name: Get GKE credential
+      uses: google-github-actions/get-gke-credentials@main
+      with:
+        cluster_name: ${{ inputs.gke_cluster_name }}
+        location: ${{ inputs.gke_cluster_zone }}
+        project_id: ${{ inputs.project_id }}

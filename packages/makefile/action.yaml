@@ -7,19 +7,19 @@ inputs:
     description: "gcp project id"
 
   gcr_host:
-    required: true
+    required: false
     description: "gcp container registry host"
 
   chartmuseum_host:
-    required: true
+    required: false
     description: "chartmuesum host"
 
   chartmuseum_user:
-    required: true
+    required: false
     description: "chartmuesum user"
 
   chartmuseum_pass:
-    required: true
+    required: false
     description: "chartmuesum password"
 
   install:
@@ -51,6 +51,20 @@ inputs:
     description: "make deploy"
     default: false
     type: boolean
+
+  rollback:
+    required: false
+    description: "make rollback"
+    default: false
+    type: boolean
+
+  rollback_release:
+    required: false
+    description: "rollback release"
+
+  rollback_revision:
+    required: false
+    description: "rollback revision"
 
   prune:
     required: false
@@ -154,6 +168,16 @@ runs:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
       run: |-
         make deploy
+
+    - name: Rollback deployment
+      if: "${{ inputs.rollback == 'true' }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      env:
+        RELEASE: ${{ github.event.inputs.rollback_release }}
+        REVISION: ${{ github.event.inputs.rollback_revision }}
+      run: |-
+        make rollback
 
     - name: Remove unused Docker images
       if: "${{ (inputs.prune == 'true') && (steps.helm-values.outputs.image-tag != 0) }}"
