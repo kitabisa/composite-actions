@@ -36,7 +36,16 @@ runs:
         version: ${{ inputs.pnpm_version }}
 
     - name: Cache Next.js
-      if: "${{ inputs.using_nextjs == 'true' }}"
+      if: "${{ (inputs.using_nextjs == 'true') && (inputs.working_directory == '.') }}"
+      uses: actions/cache@v3
+      with:
+        path: ${{ github.workspace }}/.next/cache
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-
+
+    - name: Cache Next.js with working directory
+      if: "${{ (inputs.using_nextjs == 'true') && (inputs.working_directory != '.') }}"
       uses: actions/cache@v3
       with:
         path: ${{ github.workspace }}/${{ inputs.working_directory }}/.next/cache
