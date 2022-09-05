@@ -42,7 +42,7 @@ runs:
       uses: kitabisa/composite-actions/packages/gke-credential@main
       with:
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
-        location: ${{ inputs.gke_cluster_zone }}
+        gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
     - name: Build push
