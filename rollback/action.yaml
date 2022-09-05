@@ -45,7 +45,7 @@ runs:
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
-    - name: Build push
+    - name: Rollback release
       uses: kitabisa/composite-actions/packages/makefile@main
       with:
         project_id: ${{ inputs.project_id }}

@@ -174,8 +174,8 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        RELEASE: ${{ github.event.inputs.rollback_release }}
-        REVISION: ${{ github.event.inputs.rollback_revision }}
+        RELEASE: ${{ inputs.rollback_release }}
+        REVISION: ${{ inputs.rollback_revision }}
       run: |-
         make rollback
 
