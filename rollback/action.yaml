@@ -33,20 +33,20 @@ runs:
       uses: actions/checkout@v3
 
     - name: Setup gcloud
-      uses: ./packages/gcloud/action.yaml
+      uses: kitabisa/composite-actions/packages/gcloud@main
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup gke credential
-      uses: ./packages/gke-credential/action.yaml
+      uses: kitabisa/composite-actions/packages/gke-credential@main
       with:
         cluster_name: ${{ inputs.gke_cluster_name }}
         location: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
     - name: Build push
-      uses: ./packages/makefile/action.yaml
+      uses: kitabisa/composite-actions/packages/makefile@main
       with:
         project_id: ${{ inputs.project_id }}
         rollback: true
