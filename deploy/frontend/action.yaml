@@ -90,7 +90,6 @@ runs:
         chartmuseum_user: ${{ inputs.chartmuseum_user }}
         chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
         deploy: true
-        prune: true
 
     - name: Rancher ns mover
       uses: kitabisa/composite-actions/packages/rancher@main
