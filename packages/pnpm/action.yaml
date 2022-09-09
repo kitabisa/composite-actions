@@ -37,7 +37,7 @@ runs:
         version: ${{ inputs.pnpm_version }}
 
     - name: Cache Next.js with working directory
-      if: "${{ (inputs.using_nextjs == 'true') && (inputs.working_directory != '.') }}"
+      if: "${{ inputs.using_nextjs == 'true' }}"
       uses: actions/cache@v3
       with:
         path: ${{ inputs.working_directory }}/.next/cache
