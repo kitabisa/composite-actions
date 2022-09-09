@@ -35,7 +35,7 @@ inputs:
   working_directory:
     required: false
     description: "Set working directory"
-    default: "${{ github.workspace }}"
+    default: "."
     type: string
 
 runs:
