@@ -47,7 +47,6 @@ inputs:
   working_directory:
     required: false
     description: "Set working directory"
-    default: "${{ github.workspace }}"
     type: string
 
   using_nextjs:
