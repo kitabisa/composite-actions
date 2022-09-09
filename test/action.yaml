@@ -14,6 +14,7 @@ runs:
       uses: actions/checkout@v3
 
     - name: Get business unit & app name values
+      shell: bash
       id: path
       run: |-
         if [ ${{ inputs.working_directory }} == "." ]
