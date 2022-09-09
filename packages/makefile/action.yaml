@@ -12,15 +12,15 @@ inputs:
 
   chartmuseum_host:
     required: false
-    description: "chartmuesum host"
+    description: "Chart Museum host"
 
   chartmuseum_user:
     required: false
-    description: "chartmuesum user"
+    description: "Chart Museum user"
 
   chartmuseum_pass:
     required: false
-    description: "chartmuesum password"
+    description: "Chart Museum password"
 
   install:
     required: false
