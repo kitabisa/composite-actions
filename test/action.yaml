@@ -1,0 +1,20 @@
+name: "testing"
+description: "Rollback release deployment"
+
+inputs:
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v3
+
+    - name: Build application
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |-
+        echo ${{ inputs.working_directory }}
