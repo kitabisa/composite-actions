@@ -5,19 +5,23 @@ inputs:
   path:
     required: true
     description: "Terragrunt path"
+    type: string
 
   git_user:
     required: true
     description: "Git login user"
+    type: string
 
   git_token:
     required: true
     description: "Git token access"
+    type: string
 
   gcp_credentials:
     required: false
     description: "GCP credentials"
-    default: ''
+    default: ""
+    type: string
 
 runs:
   using: "composite"

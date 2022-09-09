@@ -5,10 +5,12 @@ inputs:
   project_id:
     required: true
     description: "GCP project id"
+    type: string
 
   credentials_json:
     required: true
     description: "GCP credentials services account"
+    type: string
 
 runs:
   using: "composite"

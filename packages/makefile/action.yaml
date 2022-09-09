@@ -4,23 +4,28 @@ description: "Makefile build push deploy"
 inputs:
   project_id:
     required: true
-    description: "gcp project id"
+    description: "GCP project id"
+    type: string
 
   gcr_host:
     required: false
-    description: "gcp container registry host"
+    description: "GCP container registry host"
+    type: string
 
   chartmuseum_host:
     required: false
-    description: "Chart Museum host"
+    description: "ChartMuseum host"
+    type: string
 
   chartmuseum_user:
     required: false
-    description: "Chart Museum user"
+    description: "ChartMuseum user"
+    type: string
 
   chartmuseum_pass:
     required: false
-    description: "Chart Museum password"
+    description: "ChartMuseum password"
+    type: string
 
   install:
     required: false
@@ -61,10 +66,12 @@ inputs:
   rollback_release:
     required: false
     description: "rollback release"
+    type: string
 
   rollback_revision:
     required: false
     description: "rollback revision"
+    type: string
 
   prune:
     required: false
@@ -75,12 +82,14 @@ inputs:
   working_directory:
     required: false
     description: "Set working directory"
-    default: "."
+    default: "${{ github.workspace }}"
+    type: string
 
   preview_url:
     required: false
     description: "Set preview url"
     default: ""
+    type: string
 
 runs:
   using: "composite"

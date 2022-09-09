@@ -5,10 +5,12 @@ inputs:
   project_id:
     required: true
     description: "GCP project id"
+    type: string
 
   gcr_host:
     required: true
     description: "GCP container registry host"
+    type: string
 
 runs:
   using: "composite"
