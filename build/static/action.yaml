@@ -5,31 +5,38 @@ inputs:
   project_id:
     required: true
     description: "GCP project id"
+    type: string
 
   credentials_json:
     required: true
     description: "GCP credentials services account"
+    type: string
 
   gcr_host:
     required: true
     description: "GCP container registry host"
+    type: string
 
   chartmuseum_host:
     required: true
-    description: "Chart Museum host"
+    description: "ChartMuseum host"
+    type: string
 
   chartmuseum_user:
     required: true
-    description: "Chart Museum user"
+    description: "ChartMuseum user"
+    type: string
 
   chartmuseum_pass:
     required: true
-    description: "Chart Museum password"
+    description: "ChartMuseum password"
+    type: string
 
   working_directory:
     required: false
     description: "Set working directory"
-    default: "."
+    default: "${{ github.workspace }}"
+    type: string
 
 runs:
   using: "composite"

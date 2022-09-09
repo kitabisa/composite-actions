@@ -4,24 +4,29 @@ description: "configure namespace location on rancher project"
 inputs:
   rancher_host:
     required: true
-    description: "rancher host"
+    description: "Rancher host"
+    type: string
 
   rancher_access_key:
     required: true
-    description: "rancher access key"
+    description: "Rancher access key"
+    type: string
 
   rancher_secret_key:
     required: true
-    description: "rancher secret key"
+    description: "Rancher secret key"
+    type: string
 
   rancher_cluster_id:
     required: true
-    description: "rancher cluster id"
+    description: "Rancher cluster id"
+    type: string
 
   working_directory:
     required: false
     description: "Set working directory"
-    default: "."
+    default: "${{ github.workspace }}"
+    type: string
 
 runs:
   using: "composite"

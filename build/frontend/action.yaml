@@ -5,14 +5,17 @@ inputs:
   project_id:
     required: true
     description: "GCP project id"
+    type: string
 
   credentials_json:
     required: true
     description: "GCP credentials services account"
+    type: string
 
   gcr_host:
     required: true
     description: "GCP container registry host"
+    type: string
 
   setup_pnpm:
     required: false
@@ -29,19 +32,23 @@ inputs:
   chartmuseum_host:
     required: true
     description: "ChartMuseum host"
+    type: string
 
   chartmuseum_user:
     required: true
     description: "ChartMuseum user"
+    type: string
 
   chartmuseum_pass:
     required: true
     description: "ChartMuseum password"
+    type: string
 
   working_directory:
     required: false
     description: "Set working directory"
-    default: "."
+    default: "${{ github.workspace }}"
+    type: string
 
   using_nextjs:
     required: false

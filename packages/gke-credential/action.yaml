@@ -5,14 +5,17 @@ inputs:
   project_id:
     required: true
     description: "GCP project id"
+    type: string
 
   gke_cluster_name:
     required: true
-    description: "gke cluster name"
+    description: "GKE cluster name"
+    type: string
 
   gke_cluster_zone:
     required: true
-    description: "gke cluster location zone"
+    description: "GKE cluster location zone"
+    type: string
 
 runs:
   using: "composite"

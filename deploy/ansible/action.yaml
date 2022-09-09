@@ -10,15 +10,18 @@ description: "Run Ansible Playbooks"
 inputs:
   path:
     required: true
-    description: "Ansible playbook path."
+    description: "Ansible Playbook path"
+    type: string
 
   ssh_private_key:
     required: true
-    description: "SSH Private key"
+    description: "SSH Private Key"
+    type: string
 
   vault_password:
     required: false
     description: "Vault password"
+    type: string
 
 runs:
   using: "composite"

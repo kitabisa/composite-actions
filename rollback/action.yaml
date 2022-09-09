@@ -5,26 +5,32 @@ inputs:
   credentials_json:
     required: true
     description: "GCP credentials services account"
+    type: string
 
   gke_cluster_name:
     required: true
-    description: "gke cluster name"
+    description: "GKE cluster name"
+    type: string
 
   gke_cluster_zone:
     required: true
-    description: "gke cluster location zone"
+    description: "GKE cluster location zone"
+    type: string
 
   project_id:
     required: true
     description: "GCP project id"
+    type: string
 
   rollback_release:
     required: false
     description: "rollback release"
+    type: string
 
   rollback_revision:
     required: false
     description: "rollback revision"
+    type: string
 
 runs:
   using: "composite"
