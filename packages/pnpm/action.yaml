@@ -36,18 +36,17 @@ runs:
       with:
         version: ${{ inputs.pnpm_version }}
 
-    - name: Set path cache
+    - name: Set cache path Next.js
+      if: "${{ inputs.using_nextjs == 'true' }}"
       shell: bash
       id: path
       run: |-
-        if [ ${{ inputs.working_directory }} == "." ]
-        then
-          echo "::set-output name=cache-path::${{ github.workspace }}/.next/cache"
-        else
-          echo "::set-output name=cache-path::${{ inputs.working_directory }}/.next/cache"
-        fi
+        prefix="."
+        string=${{ inputs.working_directory }}
+        cache_path=${string#"$prefix"}
+        echo "::set-output name=cache-path::${{ github.workspace }}$cache_path/.next/cache"
 
-    - name: Cache Next.js with working directory
+    - name: Cache Next.js
       if: "${{ inputs.using_nextjs == 'true' }}"
       uses: actions/cache@v3
       with:
