@@ -1,0 +1,53 @@
+name: "Purge unuse"
+description: "Rollback release deployment"
+
+inputs:
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  gke_cluster_name:
+    required: true
+    description: "GKE cluster name"
+    type: string
+
+  gke_cluster_zone:
+    required: true
+    description: "GKE cluster location zone"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  rollback_release:
+    required: false
+    description: "rollback release"
+    type: string
+
+  rollback_revision:
+    required: false
+    description: "rollback revision"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v3
+
+    - name: Setup gcloud
+      uses: kitabisa/composite-actions/packages/gcloud@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Prune images
+      uses: kitabisa/composite-actions/packages/makefile@purge
+      with:
+        project_id: ${{ inputs.project_id }}
+        gcr_host: ${{ inputs.gcr_host }}
+        prune: true
+
