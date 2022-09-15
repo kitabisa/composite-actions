@@ -142,16 +142,6 @@ runs:
       run: |-
         echo "::set-output name=image-timestamp::$(make helm-image-timestamp)"
 
-    - name: Remove unused Docker images
-      if: "${{ (inputs.prune == 'true') && (steps.helm-values.outputs.image-timestamp != '') }}"
-      shell: bash
-      working-directory: ${{ inputs.working_directory }}
-      env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
-        REVISION_TIMESTAMP: ${{ steps.helm-timestamp.outputs.image-timestamp }}
-      run: |-
-        make prune || true
-
     - name: Install dependencies
       if: "${{ inputs.install == 'true' }}"
       shell: bash
@@ -198,6 +188,16 @@ runs:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
       run: |-
         make deploy
+
+    - name: Remove unused Docker images
+      if: "${{ (inputs.prune == 'true') && (steps.helm-timestamp.outputs.image-timestamp != '') }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      env:
+        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        REVISION_TIMESTAMP: ${{ steps.helm-timestamp.outputs.image-timestamp }}
+      run: |-
+        make prune || true
 
     - name: Rollback deployment
       if: "${{ inputs.rollback == 'true' }}"
