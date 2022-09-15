@@ -197,7 +197,6 @@ runs:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
         REVISION_TIMESTAMP: ${{ steps.helm-timestamp.outputs.image-timestamp }}
       run: |-
-        echo $REVISION_TIMESTAMP
         make prune || true
 
     - name: Rollback deployment
