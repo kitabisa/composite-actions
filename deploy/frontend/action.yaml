@@ -97,7 +97,6 @@ runs:
       uses: kitabisa/composite-actions/packages/makefile@main
       with:
         working_directory: ${{ inputs.working_directory }}
-        preview_url: ${{ inputs.preview_url }}
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
         chartmuseum_host: ${{ inputs.chartmuseum_host }}
@@ -114,3 +113,9 @@ runs:
         rancher_access_key: ${{ inputs.rancher_access_key }}
         rancher_secret_key: ${{ inputs.rancher_secret_key }}
         rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
+
+    - name: Comment preview url
+      if: "${{ inputs.preview_url != '' }}"
+      uses: KeisukeYamashita/create-comment@v1
+      with:
+        comment: "Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})"

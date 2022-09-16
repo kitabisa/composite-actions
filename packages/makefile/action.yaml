@@ -85,12 +85,6 @@ inputs:
     default: "."
     type: string
 
-  preview_url:
-    required: false
-    description: "Set preview url"
-    default: ""
-    type: string
-
 runs:
   using: "composite"
   steps:
@@ -208,9 +202,3 @@ runs:
         REVISION: ${{ inputs.rollback_revision }}
       run: |-
         make rollback
-
-    - name: Comment preview url
-      if: "${{ inputs.preview_url != '' }}"
-      uses: KeisukeYamashita/create-comment@v1
-      with:
-        comment: "Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})"
