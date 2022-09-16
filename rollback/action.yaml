@@ -55,7 +55,6 @@ runs:
       uses: kitabisa/composite-actions/packages/makefile@main
       with:
         project_id: ${{ inputs.project_id }}
-        rollback: true
         rollback_release: ${{ inputs.rollback_release }}
         rollback_revision: ${{ inputs.rollback_revision }}
-
+        rollback: true

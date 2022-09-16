@@ -94,7 +94,7 @@ runs:
         project_id: ${{ inputs.project_id }}
 
     - name: Deploy & Prune
-      uses: kitabisa/composite-actions/packages/makefile@purge
+      uses: kitabisa/composite-actions/packages/makefile@main
       with:
         working_directory: ${{ inputs.working_directory }}
         preview_url: ${{ inputs.preview_url }}
