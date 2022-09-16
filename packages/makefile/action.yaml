@@ -3,7 +3,7 @@ description: "Makefile build push deploy"
 
 inputs:
   project_id:
-    required: true
+    required: false
     description: "GCP project id"
     type: string
 
@@ -76,6 +76,12 @@ inputs:
   prune:
     required: false
     description: "make prune"
+    default: false
+    type: boolean
+
+  destroy:
+    required: false
+    description: "make destroy"
     default: false
     type: boolean
 
@@ -202,3 +208,10 @@ runs:
         REVISION: ${{ inputs.rollback_revision }}
       run: |-
         make rollback
+
+    - name: Destroy deployment
+      if: "${{ inputs.destroy == 'true' }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |-
+        make destroy || true
