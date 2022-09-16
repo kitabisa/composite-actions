@@ -1,5 +1,5 @@
-name: "Rollback deployment"
-description: "Rollback release deployment"
+name: "Destroy deployment"
+description: "Destroy release deployment"
 
 inputs:
   credentials_json:
@@ -22,16 +22,6 @@ inputs:
     description: "GCP project id"
     type: string
 
-  rollback_release:
-    required: false
-    description: "rollback release"
-    type: string
-
-  rollback_revision:
-    required: false
-    description: "rollback revision"
-    type: string
-
 runs:
   using: "composite"
   steps:
@@ -51,9 +41,7 @@ runs:
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
-    - name: Rollback release
+    - name: Destroy release
       uses: kitabisa/composite-actions/packages/makefile@main
       with:
-        rollback_release: ${{ inputs.rollback_release }}
-        rollback_revision: ${{ inputs.rollback_revision }}
-        rollback: true
+        destroy: true
