@@ -91,11 +91,18 @@ inputs:
     default: "."
     type: string
 
+  app_custom_version_skip:
+    required: false
+    description: "Set app custom version skip"
+    default: "0"
+    type: string
+
 runs:
   using: "composite"
   outputs:
     app-name: ${{ steps.app-meta.outputs.app-name }}
     app-version: ${{ steps.app-meta.outputs.app-version }}
+    app-custom-version: ${{ steps.app-meta-custom.outputs.app-custom-version }}
   steps:
     - name: Setup yq
       uses: chrisdickinson/setup-yq@latest
@@ -226,3 +233,12 @@ runs:
       run: |-
         echo "::set-output name=app-name::$(make get-app-name)"
         echo "::set-output name=app-version::$(make get-app-version || echo 'latest')"
+
+    - name: Get app custom version
+      id: app-meta-custom
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      env:
+        SKIP_VERSION: ${{ inputs.app_custom_version_skip }}
+      run: |-
+        echo "::set-output name=app-custom-version::$(make get-app-version || echo 'latest')"

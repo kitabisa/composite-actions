@@ -152,6 +152,7 @@ runs:
         chartmuseum_host: ${{ inputs.chartmuseum_host }}
         chartmuseum_user: ${{ inputs.chartmuseum_user }}
         chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
+        app_custom_version_skip: 2
         install: true
         config: true
         build: true
@@ -169,3 +170,15 @@ runs:
         AWS_REGION: ${{ inputs.cdn_aws_region }}
         SOURCE_DIR: ${{ inputs.cdn_source_dir }}
         DEST_DIR: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-version }}/${{ inputs.cdn_dest_dir }}
+
+    - name: Delete unused version static assets on CDN
+      if: "${{ inputs.using_cdn == 'true' }}"
+      uses: vitorsgomes/s3-rm-action@master
+      with:
+        args: --recursive
+      env:
+        AWS_S3_BUCKET: ${{ inputs.cdn_aws_s3_bucket }}
+        AWS_ACCESS_KEY_ID: ${{ inputs.cdn_aws_access_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.cdn_aws_secret_access_key }}
+        AWS_REGION: ${{ inputs.cdn_aws_region }}
+        PATH_TO_DELETE: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-custom-version }}
