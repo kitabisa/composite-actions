@@ -50,16 +50,58 @@ inputs:
     default: "."
     type: string
 
+  pnpm_version:
+    required: false
+    description: "Setup pnpm version"
+    default: "latest"
+    type: string
+
   using_nextjs:
     required: false
     description: "Setup next.js cache modules"
     default: false
     type: boolean
 
-  pnpm_version:
+  using_cdn:
     required: false
-    description: "Setup pnpm version"
-    default: "latest"
+    description: "Setup cdn for static assets"
+    default: false
+    type: boolean
+
+  cdn_aws_s3_bucket:
+    required: false
+    description: "CDN aws s3 bucket"
+    default: ""
+    type: string
+
+  cdn_aws_access_key_id:
+    required: false
+    description: "CDN aws access key id"
+    default: ""
+    type: string
+
+  cdn_aws_secret_access_key:
+    required: false
+    description: "CDN aws secret access key"
+    default: ""
+    type: string
+
+  cdn_aws_region:
+    required: false
+    description: "CDN aws region"
+    default: ""
+    type: string
+
+  cdn_source_dir:
+    required: false
+    description: "CDN source dir"
+    default: ""
+    type: string
+
+  cdn_dest_dir:
+    required: false
+    description: "CDN dest dir"
+    default: ""
     type: string
 
 runs:
@@ -101,6 +143,7 @@ runs:
         pnpm_version: ${{ inputs.pnpm_version }}
 
     - name: Build push
+      id: build-push
       uses: kitabisa/composite-actions/packages/makefile@main
       with:
         working_directory: ${{ inputs.working_directory }}
@@ -109,7 +152,33 @@ runs:
         chartmuseum_host: ${{ inputs.chartmuseum_host }}
         chartmuseum_user: ${{ inputs.chartmuseum_user }}
         chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
+        app_custom_version_skip: 2
         install: true
         config: true
         build: true
         package: true
+
+    - name: Upload static assets to CDN
+      if: "${{ inputs.using_cdn == 'true' }}"
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --follow-symlinks --delete --cache-control max-age=86400
+      env:
+        AWS_S3_BUCKET: ${{ inputs.cdn_aws_s3_bucket }}
+        AWS_ACCESS_KEY_ID: ${{ inputs.cdn_aws_access_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.cdn_aws_secret_access_key }}
+        AWS_REGION: ${{ inputs.cdn_aws_region }}
+        SOURCE_DIR: ${{ inputs.cdn_source_dir }}
+        DEST_DIR: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-version }}/${{ inputs.cdn_dest_dir }}
+
+    - name: Delete unused version static assets on CDN
+      if: "${{ inputs.using_cdn == 'true' }}"
+      uses: vitorsgomes/s3-rm-action@master
+      with:
+        args: --recursive
+      env:
+        AWS_S3_BUCKET: ${{ inputs.cdn_aws_s3_bucket }}
+        AWS_ACCESS_KEY_ID: ${{ inputs.cdn_aws_access_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.cdn_aws_secret_access_key }}
+        AWS_REGION: ${{ inputs.cdn_aws_region }}
+        PATH_TO_DELETE: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-custom-version }}
