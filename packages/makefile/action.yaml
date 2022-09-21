@@ -97,12 +97,21 @@ inputs:
     default: "0"
     type: string
 
+outputs:
+  app-name:
+    description: "Define app name"
+    value: ${{ steps.app-meta.outputs.app-name }}
+
+  app-version:
+    description: "Define app version"
+    value: ${{ steps.app-meta.outputs.app-version }}
+
+  app-custom-version:
+    description: "Define app custom version"
+    value: ${{ steps.app-meta-custom.outputs.app-custom-version }}
+
 runs:
   using: "composite"
-  outputs:
-    app-name: ${{ steps.app-meta.outputs.app-name }}
-    app-version: ${{ steps.app-meta.outputs.app-version }}
-    app-custom-version: ${{ steps.app-meta-custom.outputs.app-custom-version }}
   steps:
     - name: Setup yq
       uses: chrisdickinson/setup-yq@latest
