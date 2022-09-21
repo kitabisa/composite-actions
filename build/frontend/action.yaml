@@ -172,7 +172,7 @@ runs:
         DEST_DIR: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-version }}/${{ inputs.cdn_dest_dir }}
 
     - name: Delete unused version static assets on CDN
-      if: "${{ inputs.using_cdn == 'true' }}"
+      if: "${{ (inputs.using_cdn == 'true') && (steps.build-push.outputs.app-version != steps.build-push.outputs.app-custom-version) }}"
       uses: vitorsgomes/s3-rm-action@master
       with:
         args: --recursive
