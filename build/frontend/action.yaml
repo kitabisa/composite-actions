@@ -50,16 +50,46 @@ inputs:
     default: "."
     type: string
 
+  pnpm_version:
+    required: false
+    description: "Setup pnpm version"
+    default: "latest"
+    type: string
+
   using_nextjs:
     required: false
     description: "Setup next.js cache modules"
     default: false
     type: boolean
 
-  pnpm_version:
+  using_cdn:
     required: false
-    description: "Setup pnpm version"
-    default: "latest"
+    description: "Setup cdn for static assets"
+    default: false
+    type: boolean
+
+  cdn_aws_access_key_id:
+    required: false
+    description: "CDN aws access key id"
+    default: ""
+    type: string
+
+  cdn_aws_secret_access_key:
+    required: false
+    description: "CDN aws secret access key"
+    default: ""
+    type: string
+
+  cdn_aws_source_dir:
+    required: false
+    description: "CDN aws source dir"
+    default: ""
+    type: string
+
+  cdn_aws_dest_dir:
+    required: false
+    description: "CDN aws destionation dir"
+    default: ""
     type: string
 
 runs:
@@ -101,6 +131,7 @@ runs:
         pnpm_version: ${{ inputs.pnpm_version }}
 
     - name: Build push
+      id: build-push
       uses: kitabisa/composite-actions/packages/makefile@main
       with:
         working_directory: ${{ inputs.working_directory }}
@@ -113,3 +144,16 @@ runs:
         config: true
         build: true
         package: true
+
+    - name: Upload static assets to CDN
+      if: "${{ inputs.using_cdn == 'true' }}"
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --follow-symlinks --delete --cache-control max-age=86400
+      env:
+        AWS_S3_BUCKET: cdn-kitabisa-cc
+        AWS_ACCESS_KEY_ID: ${{ inputs.cdn_aws_access_key_id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.cdn_aws_secret_access_key }}
+        AWS_REGION: ap-southeast-1
+        SOURCE_DIR: ${{ inputs.cdn_aws_source_dir }}
+        DEST_DIR: ${{ steps.build-push.outputs.cdn-prefix-path }}/${{ inputs.cdn_aws_dest_dir }}
