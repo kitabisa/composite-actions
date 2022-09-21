@@ -94,7 +94,8 @@ inputs:
 runs:
   using: "composite"
   outputs:
-    cdn-prefix-path: ${{ steps.app-meta.outputs.app-name }}/${{ steps.app-meta.outputs.app-version }}
+    app-name: ${{ steps.app-meta.outputs.app-name }}
+    app-version: ${{ steps.app-meta.outputs.app-version }}
   steps:
     - name: Setup yq
       uses: chrisdickinson/setup-yq@latest
@@ -224,4 +225,4 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         echo "::set-output name=app-name::$(make get-app-name)"
-        echo "::set-output name=app-version::$(make get-app-version || 'latest')"
+        echo "::set-output name=app-version::$(make get-app-version || echo 'latest')"
