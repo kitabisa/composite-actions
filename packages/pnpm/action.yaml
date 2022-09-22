@@ -40,9 +40,11 @@ runs:
       if: "${{ inputs.using_nextjs == 'true' }}"
       shell: bash
       id: path
+      env:
+        INPUT_DIRECTORY: ${{ inputs.working_directory }}
       run: |-
         prefix="."
-        string=${{ inputs.working_directory }}
+        string=$INPUT_DIRECTORY
         cache_path=${string#"$prefix"}
         echo "::set-output name=cache-path::${{ github.workspace }}$cache_path/.next/cache"
 
