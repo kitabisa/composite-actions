@@ -26,6 +26,12 @@ inputs:
     default: true
     type: boolean
 
+  cache:
+    required: false
+    description: "Run action cache"
+    default: true
+    type: boolean
+
   project_id:
     required: true
     description: "GCP project id"
@@ -152,6 +158,7 @@ runs:
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
+        cache: ${{ inputs.cache }}
 
     - name: Setup yarn
       if: "${{ inputs.setup_yarn == 'true' }}"
@@ -159,6 +166,7 @@ runs:
       with:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
+        cache: ${{ inputs.cache }}
 
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
@@ -167,6 +175,7 @@ runs:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
         pnpm_version: ${{ inputs.pnpm_version }}
+        cache: ${{ inputs.cache }}
 
     - name: Build push
       id: build-push

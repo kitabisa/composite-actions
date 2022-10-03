@@ -14,6 +14,12 @@ inputs:
     default: false
     type: boolean
 
+  cache:
+    required: false
+    description: "Run action cache"
+    default: true
+    type: boolean
+
 runs:
   using: "composite"
   steps:
@@ -27,6 +33,7 @@ runs:
       run: echo "::set-output name=dir::$(yarn cache dir)"
 
     - name: Cache Yarn packages
+      if: "${{ inputs.cache == 'true' }}"
       uses: actions/cache@v3
       with:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -47,7 +54,7 @@ runs:
         echo "::set-output name=cache-path::${{ github.workspace }}$cache_path/.next/cache"
 
     - name: Cache Next.js
-      if: "${{ inputs.using_nextjs == 'true' }}"
+      if: "${{ (inputs.using_nextjs == 'true' && inputs.cache == 'true') }}"
       uses: actions/cache@v3
       with:
         path: ${{ steps.path.outputs.cache-path }}
