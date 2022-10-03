@@ -140,12 +140,14 @@ runs:
         node-version-file: "${{ inputs.working_directory }}/.nvmrc"
 
     - name: Setup gcloud
+      if: "${{ inputs.config == 'true' }}"
       uses: kitabisa/composite-actions/packages/gcloud@main
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup docker buildx
+      if: "${{ inputs.build == 'true' }}"
       uses: kitabisa/composite-actions/packages/buildx@main
       with:
         project_id: ${{ inputs.project_id }}
