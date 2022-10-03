@@ -2,6 +2,30 @@ name: "Frontend build"
 description: "Frontend composite deployment"
 
 inputs:
+  install:
+    required: false
+    description: "Run make install"
+    default: true
+    type: boolean
+
+  config:
+    required: false
+    description: "Run make config"
+    default: true
+    type: boolean
+
+  build:
+    required: false
+    description: "Run make build"
+    default: true
+    type: boolean
+
+  package:
+    required: false
+    description: "Run make package"
+    default: true
+    type: boolean
+
   project_id:
     required: true
     description: "GCP project id"
@@ -153,10 +177,10 @@ runs:
         chartmuseum_user: ${{ inputs.chartmuseum_user }}
         chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
         app_custom_version_skip: 2
-        install: true
-        config: true
-        build: true
-        package: true
+        install: ${{ inputs.install }}
+        config: ${{ inputs.config }}
+        build: ${{ inputs.build }}
+        package: ${{ inputs.package }}
 
     - name: Upload static assets to CDN
       if: "${{ inputs.using_cdn == 'true' }}"
