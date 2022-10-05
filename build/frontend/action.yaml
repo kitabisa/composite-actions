@@ -152,7 +152,7 @@ runs:
     - name: Setup gcloud
       if: "${{ inputs.config == 'true' }}"
       # uses: kitabisa/composite-actions/packages/gcloud@main
-      uses: packages/gcloud/action.yaml
+      uses: ../../packages/gcloud/action.yaml
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
