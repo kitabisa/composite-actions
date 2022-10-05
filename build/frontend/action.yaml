@@ -138,7 +138,7 @@ runs:
   using: "composite"
   steps:
     - name: Set action path
-      run: echo "${{ github.action_path }}"
+      run: echo "$(dirname $(dirname '${{ github.action_path }}'))"
       shell: bash
 
     - name: Checking out repository
@@ -152,7 +152,7 @@ runs:
     - name: Setup gcloud
       if: "${{ inputs.config == 'true' }}"
       # uses: kitabisa/composite-actions/packages/gcloud@main
-      uses: ${{ $(dirname $(dirname '${{ github.action_path }}')) }}/packages/gcloud/action.yaml
+      uses: ${{ echo "$(dirname $(dirname '${{ github.action_path }}'))" }}/packages/gcloud/action.yaml
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
