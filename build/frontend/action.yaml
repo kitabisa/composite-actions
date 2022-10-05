@@ -159,8 +159,7 @@ runs:
 
     - name: Setup docker buildx
       if: "${{ inputs.build == 'true' }}"
-      # uses: kitabisa/composite-actions/packages/buildx@main
-      uses: ./../../packages/buildx/action.yaml
+      uses: kitabisa/composite-actions/packages/buildx@main
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
@@ -168,8 +167,7 @@ runs:
 
     - name: Setup yarn
       if: "${{ inputs.setup_yarn == 'true' }}"
-      # uses: kitabisa/composite-actions/packages/yarn@main
-      uses: ./../../packages/yarn/action.yaml
+      uses: kitabisa/composite-actions/packages/yarn@main
       with:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
@@ -177,8 +175,7 @@ runs:
 
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
-      # uses: kitabisa/composite-actions/packages/pnpm@main
-      uses: ./../../packages/pnpm/action.yaml
+      uses: kitabisa/composite-actions/packages/pnpm@main
       with:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
@@ -187,8 +184,7 @@ runs:
 
     - name: Build push
       id: build-push
-      # uses: kitabisa/composite-actions/packages/makefile@main
-      uses: ./../../packages/makefile/action.yaml
+      uses: kitabisa/composite-actions/packages/makefile@main
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
