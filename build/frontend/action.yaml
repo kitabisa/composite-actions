@@ -168,6 +168,10 @@ runs:
         using_nextjs: ${{ inputs.using_nextjs }}
         cache: ${{ inputs.cache }}
 
+    - name: Testing github.action_path
+      run: echo "${{ github.action_path }}"
+      shell: bash
+
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
       uses: kitabisa/composite-actions/packages/pnpm@main
