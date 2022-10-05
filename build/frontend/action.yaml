@@ -137,6 +137,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Set composite action path
+      run: echo "COMPOSITE_ACTIONS_PATH=$(dirname $(dirname ${{ github.action_path }}))" >> $GITHUB_ENV
+      shell: bash
+
     - name: Checking out repository
       uses: actions/checkout@v3
 
@@ -147,14 +151,16 @@ runs:
 
     - name: Setup gcloud
       if: "${{ inputs.config == 'true' }}"
-      uses: kitabisa/composite-actions/packages/gcloud@main
+      # uses: kitabisa/composite-actions/packages/gcloud@main
+      uses: ${{ env.COMPOSITE_ACTIONS_PATH }}/packages/gcloud/action.yaml
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup docker buildx
       if: "${{ inputs.build == 'true' }}"
-      uses: kitabisa/composite-actions/packages/buildx@main
+      # uses: kitabisa/composite-actions/packages/buildx@main
+      uses: ${{ env.COMPOSITE_ACTIONS_PATH }}/packages/buildx/action.yaml
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
@@ -162,19 +168,17 @@ runs:
 
     - name: Setup yarn
       if: "${{ inputs.setup_yarn == 'true' }}"
-      uses: kitabisa/composite-actions/packages/yarn@main
+      # uses: kitabisa/composite-actions/packages/yarn@main
+      uses: ${{ env.COMPOSITE_ACTIONS_PATH }}/packages/yarn/action.yaml
       with:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
         cache: ${{ inputs.cache }}
 
-    - name: Testing github.action_path
-      run: echo "${{ github.action_path }}"
-      shell: bash
-
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
-      uses: kitabisa/composite-actions/packages/pnpm@main
+      # uses: kitabisa/composite-actions/packages/pnpm@main
+      uses: ${{ env.COMPOSITE_ACTIONS_PATH }}/packages/pnpm/action.yaml
       with:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
@@ -183,7 +187,8 @@ runs:
 
     - name: Build push
       id: build-push
-      uses: kitabisa/composite-actions/packages/makefile@main
+      # uses: kitabisa/composite-actions/packages/makefile@main
+      uses: ${{ env.COMPOSITE_ACTIONS_PATH }}/packages/makefile/action.yaml
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
