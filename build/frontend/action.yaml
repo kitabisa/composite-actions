@@ -137,11 +137,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set github path
-      # run: echo "$(dirname $(dirname '${{ github.action_path }}'))" >> $GITHUB_PATH
-      run: echo "${{ github.action_path }}" >> $GITHUB_PATH
-      shell: bash
-
     - name: Checking out repository
       uses: actions/checkout@v3
 
@@ -152,8 +147,7 @@ runs:
 
     - name: Setup gcloud
       if: "${{ inputs.config == 'true' }}"
-      # uses: kitabisa/composite-actions/packages/gcloud@main
-      uses: ./packages/gcloud/action.yaml
+      uses: kitabisa/composite-actions/packages/gcloud@main
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
@@ -176,8 +170,7 @@ runs:
 
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
-      # uses: kitabisa/composite-actions/packages/pnpm@main
-      uses: ./packages/pnpm/action.yaml
+      uses: kitabisa/composite-actions/packages/pnpm@main
       with:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
@@ -202,7 +195,7 @@ runs:
 
     - name: Manage CDN static
       if: "${{ inputs.using_cdn == 'true' }}"
-      uses: kitabisa/composite-actions/packages/cdn@ci/configurable-makefile-on-build-action
+      uses: kitabisa/composite-actions/packages/cdn@main
       with:
         cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
         cdn_aws_access_key_id: ${{ inputs.cdn_aws_access_key_id }}
