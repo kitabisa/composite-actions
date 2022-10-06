@@ -210,5 +210,5 @@ runs:
         cdn_source_dir: ${{ inputs.cdn_source_dir }}
         upload: true
         upload_path: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-version }}/${{ inputs.cdn_dest_dir }}
-        delete: ${{ steps.build-push.outputs.app-version != steps.build-push.outputs.app-custom-version) }}
+        delete: ${{ steps.build-push.outputs.app-version != steps.build-push.outputs.app-custom-version }}
         delete_path: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-custom-version }}
