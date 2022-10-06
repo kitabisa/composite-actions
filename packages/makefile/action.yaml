@@ -79,6 +79,12 @@ inputs:
     default: false
     type: boolean
 
+  prune_all:
+    required: false
+    description: "make prune-all"
+    default: false
+    type: boolean
+
   destroy:
     required: false
     description: "make destroy"
@@ -234,6 +240,15 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         make destroy || true
+
+    - name: Remove all unused Docker images
+      if: "${{ inputs.prune_all == 'true' }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      env:
+        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+      run: |-
+        make prune-all || true
 
     - name: Get app name & app version
       id: app-meta

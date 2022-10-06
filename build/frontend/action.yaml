@@ -2,6 +2,36 @@ name: "Frontend build"
 description: "Frontend composite deployment"
 
 inputs:
+  install:
+    required: false
+    description: "Run make install"
+    default: true
+    type: boolean
+
+  config:
+    required: false
+    description: "Run make config"
+    default: true
+    type: boolean
+
+  build:
+    required: false
+    description: "Run make build"
+    default: true
+    type: boolean
+
+  package:
+    required: false
+    description: "Run make package"
+    default: true
+    type: boolean
+
+  cache:
+    required: false
+    description: "Run action cache"
+    default: true
+    type: boolean
+
   project_id:
     required: true
     description: "GCP project id"
@@ -116,16 +146,19 @@ runs:
         node-version-file: "${{ inputs.working_directory }}/.nvmrc"
 
     - name: Setup gcloud
+      if: "${{ inputs.config == 'true' }}"
       uses: kitabisa/composite-actions/packages/gcloud@main
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup docker buildx
+      if: "${{ inputs.build == 'true' }}"
       uses: kitabisa/composite-actions/packages/buildx@main
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
+        cache: ${{ inputs.cache }}
 
     - name: Setup yarn
       if: "${{ inputs.setup_yarn == 'true' }}"
@@ -133,6 +166,7 @@ runs:
       with:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
+        cache: ${{ inputs.cache }}
 
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
@@ -141,6 +175,7 @@ runs:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
         pnpm_version: ${{ inputs.pnpm_version }}
+        cache: ${{ inputs.cache }}
 
     - name: Build push
       id: build-push
@@ -153,32 +188,21 @@ runs:
         chartmuseum_user: ${{ inputs.chartmuseum_user }}
         chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
         app_custom_version_skip: 2
-        install: true
-        config: true
-        build: true
-        package: true
+        install: ${{ inputs.install }}
+        config: ${{ inputs.config }}
+        build: ${{ inputs.build }}
+        package: ${{ inputs.package }}
 
-    - name: Upload static assets to CDN
+    - name: Manage CDN static
       if: "${{ inputs.using_cdn == 'true' }}"
-      uses: jakejarvis/s3-sync-action@master
+      uses: kitabisa/composite-actions/packages/cdn@main
       with:
-        args: --acl public-read --follow-symlinks --delete --cache-control max-age=86400
-      env:
-        AWS_S3_BUCKET: ${{ inputs.cdn_aws_s3_bucket }}
-        AWS_ACCESS_KEY_ID: ${{ inputs.cdn_aws_access_key_id }}
-        AWS_SECRET_ACCESS_KEY: ${{ inputs.cdn_aws_secret_access_key }}
-        AWS_REGION: ${{ inputs.cdn_aws_region }}
-        SOURCE_DIR: ${{ inputs.cdn_source_dir }}
-        DEST_DIR: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-version }}/${{ inputs.cdn_dest_dir }}
-
-    - name: Delete unused version static assets on CDN
-      if: "${{ (inputs.using_cdn == 'true') && (steps.build-push.outputs.app-version != steps.build-push.outputs.app-custom-version) }}"
-      uses: vitorsgomes/s3-rm-action@master
-      with:
-        args: --recursive
-      env:
-        AWS_S3_BUCKET: ${{ inputs.cdn_aws_s3_bucket }}
-        AWS_ACCESS_KEY_ID: ${{ inputs.cdn_aws_access_key_id }}
-        AWS_SECRET_ACCESS_KEY: ${{ inputs.cdn_aws_secret_access_key }}
-        AWS_REGION: ${{ inputs.cdn_aws_region }}
-        PATH_TO_DELETE: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-custom-version }}
+        cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
+        cdn_aws_access_key_id: ${{ inputs.cdn_aws_access_key_id }}
+        cdn_aws_secret_access_key: ${{ inputs.cdn_aws_secret_access_key }}
+        cdn_aws_region: ${{ inputs.cdn_aws_region }}
+        cdn_source_dir: ${{ inputs.cdn_source_dir }}
+        upload: true
+        upload_path: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-version }}/${{ inputs.cdn_dest_dir }}
+        delete: ${{ steps.build-push.outputs.app-version != steps.build-push.outputs.app-custom-version }}
+        delete_path: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-custom-version }}

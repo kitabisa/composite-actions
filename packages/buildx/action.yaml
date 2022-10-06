@@ -12,6 +12,12 @@ inputs:
     description: "GCP container registry host"
     type: string
 
+  cache:
+    required: false
+    description: "Run action cache"
+    default: true
+    type: boolean
+
 runs:
   using: "composite"
   steps:
@@ -27,6 +33,7 @@ runs:
         gcloud auth configure-docker "$DOCKER_REGISTRY" --project "$GCP_PROJECT_ID" --quiet
 
     - name: Cache docker layers
+      if: "${{ inputs.cache == 'true' }}"
       uses: actions/cache@v3
       with:
         path: /tmp/.buildx-cache

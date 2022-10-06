@@ -20,10 +20,17 @@ inputs:
     default: "latest"
     type: string
 
+  cache:
+    required: false
+    description: "Run action cache"
+    default: true
+    type: boolean
+
 runs:
   using: "composite"
   steps:
     - name: Cache pnpm modules
+      if: "${{ inputs.cache == 'true' }}"
       uses: actions/cache@v3
       with:
         path: ~/.pnpm-store
@@ -49,7 +56,7 @@ runs:
         echo "::set-output name=cache-path::${{ github.workspace }}$cache_path/.next/cache"
 
     - name: Cache Next.js
-      if: "${{ inputs.using_nextjs == 'true' }}"
+      if: "${{ (inputs.using_nextjs == 'true' && inputs.cache == 'true') }}"
       uses: actions/cache@v3
       with:
         path: ${{ steps.path.outputs.cache-path }}
