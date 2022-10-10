@@ -177,6 +177,23 @@ runs:
       run: |-
         make deploy
 
+    - name: Destroy via helmfile
+      if: "${{ inputs.destroy == 'true' }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |-
+        make destroy || true
+
+    - name: Rollback deployment
+      if: "${{ inputs.rollback == 'true' }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      env:
+        RELEASE: ${{ inputs.rollback_release }}
+        REVISION: ${{ inputs.rollback_revision }}
+      run: |-
+        make rollback
+
     - name: Get Helm history
       if: "${{ inputs.prune == 'true' }}"
       shell: bash
@@ -186,7 +203,7 @@ runs:
         echo "::set-output name=length::$(make helm-history-length)"
 
     - name: Get Helm revision
-      if: "${{ (inputs.prune == 'true') && (steps.helm-history.outputs.length >= 10) }}"
+      if: "${{ inputs.prune == 'true' }}"
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       id: helm-revision
@@ -221,25 +238,9 @@ runs:
       env:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
         REVISION_TIMESTAMP: ${{ steps.helm-timestamp.outputs.image-timestamp }}
+        IMAGE_TAG: ${{ steps.helm-values.outputs.image-tag }}
       run: |-
         make prune || true
-
-    - name: Rollback deployment
-      if: "${{ inputs.rollback == 'true' }}"
-      shell: bash
-      working-directory: ${{ inputs.working_directory }}
-      env:
-        RELEASE: ${{ inputs.rollback_release }}
-        REVISION: ${{ inputs.rollback_revision }}
-      run: |-
-        make rollback
-
-    - name: Destroy deployment
-      if: "${{ inputs.destroy == 'true' }}"
-      shell: bash
-      working-directory: ${{ inputs.working_directory }}
-      run: |-
-        make destroy || true
 
     - name: Remove all unused Docker images
       if: "${{ inputs.prune_all == 'true' }}"

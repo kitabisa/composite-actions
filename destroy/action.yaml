@@ -17,6 +17,11 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
+  gcr_host:
+    required: true
+    description: "GCP container registry host"
+    type: string
+
   project_id:
     required: true
     description: "GCP project id"
@@ -50,5 +55,7 @@ runs:
     - name: Destroy release
       uses: kitabisa/composite-actions/packages/makefile@main
       with:
+        project_id: ${{ inputs.project_id }}
+        gcr_host: ${{ inputs.gcr_host }}
         destroy: true
         prune_all: ${{ inputs.prune_all }}
