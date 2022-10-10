@@ -45,19 +45,19 @@ runs:
       uses: actions/checkout@v3
 
     - name: Setup gcloud
-      uses: kitabisa/composite-actions/packages/gcloud@purging_img
+      uses: kitabisa/composite-actions/packages/gcloud@main
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup docker buildx
-      uses: kitabisa/composite-actions/packages/buildx@purging_img
+      uses: kitabisa/composite-actions/packages/buildx@main
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
 
     - name: Build push
-      uses: kitabisa/composite-actions/packages/makefile@purging_img
+      uses: kitabisa/composite-actions/packages/makefile@main
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}

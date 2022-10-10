@@ -39,20 +39,20 @@ runs:
       uses: actions/checkout@v3
 
     - name: Setup gcloud
-      uses: kitabisa/composite-actions/packages/gcloud@purging_img
+      uses: kitabisa/composite-actions/packages/gcloud@main
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup gke credential
-      uses: kitabisa/composite-actions/packages/gke-credential@purging_img
+      uses: kitabisa/composite-actions/packages/gke-credential@main
       with:
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
     - name: Rollback release
-      uses: kitabisa/composite-actions/packages/makefile@purging_img
+      uses: kitabisa/composite-actions/packages/makefile@main
       with:
         rollback_release: ${{ inputs.rollback_release }}
         rollback_revision: ${{ inputs.rollback_revision }}

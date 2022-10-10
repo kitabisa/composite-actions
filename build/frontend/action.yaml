@@ -147,14 +147,14 @@ runs:
 
     - name: Setup gcloud
       if: "${{ inputs.config == 'true' }}"
-      uses: kitabisa/composite-actions/packages/gcloud@purging_img
+      uses: kitabisa/composite-actions/packages/gcloud@main
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup docker buildx
       if: "${{ inputs.build == 'true' }}"
-      uses: kitabisa/composite-actions/packages/buildx@purging_img
+      uses: kitabisa/composite-actions/packages/buildx@main
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
@@ -162,7 +162,7 @@ runs:
 
     - name: Setup yarn
       if: "${{ inputs.setup_yarn == 'true' }}"
-      uses: kitabisa/composite-actions/packages/yarn@purging_img
+      uses: kitabisa/composite-actions/packages/yarn@main
       with:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
@@ -170,7 +170,7 @@ runs:
 
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
-      uses: kitabisa/composite-actions/packages/pnpm@purging_img
+      uses: kitabisa/composite-actions/packages/pnpm@main
       with:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
@@ -179,7 +179,7 @@ runs:
 
     - name: Build push
       id: build-push
-      uses: kitabisa/composite-actions/packages/makefile@purging_img
+      uses: kitabisa/composite-actions/packages/makefile@main
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
@@ -195,7 +195,7 @@ runs:
 
     - name: Manage CDN static
       if: "${{ inputs.using_cdn == 'true' }}"
-      uses: kitabisa/composite-actions/packages/cdn@purging_img
+      uses: kitabisa/composite-actions/packages/cdn@main
       with:
         cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
         cdn_aws_access_key_id: ${{ inputs.cdn_aws_access_key_id }}
