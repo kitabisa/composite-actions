@@ -74,6 +74,18 @@ inputs:
     default: ""
     type: string
 
+  prune:
+    required: false
+    description: "Run make prune"
+    default: true
+    type: boolean
+
+  prune_all:
+    required: false
+    description: "Run make prune all"
+    default: false
+    type: boolean
+
 runs:
   using: "composite"
   steps:
@@ -103,7 +115,8 @@ runs:
         chartmuseum_user: ${{ inputs.chartmuseum_user }}
         chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
         deploy: true
-        prune: true
+        prune: ${{ inputs.prune }}
+        prune_all: ${{ inputs.prune_all }}
 
     - name: Rancher ns mover
       uses: kitabisa/composite-actions/packages/rancher@purging_img
