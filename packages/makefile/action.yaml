@@ -125,7 +125,7 @@ runs:
         yq-version: v4.11.2
 
     - name: Setup Helm
-      uses: azure/setup-helm@v1
+      uses: azure/setup-helm@v2
 
     - name: Setup Helmfile
       uses: kitabisa/actions/setup-helmfile@master
