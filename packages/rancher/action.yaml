@@ -36,8 +36,8 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       run: |-
-        echo "::set-output name=app-name::$(make get-app-name)"
-        echo "::set-output name=business-unit::$(make get-business-unit)"
+        echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
+        echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
 
     - name: Configure namespace-project mapping in rancher
       uses: kitabisa/actions/rancher-ns-mover@master
