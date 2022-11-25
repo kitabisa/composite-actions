@@ -134,6 +134,11 @@ inputs:
     default: ""
     type: string
 
+outputs:
+  build-time:
+    description: "Define build time"
+    value: ${{ steps.build-push.outputs.build-time }}
+
 runs:
   using: "composite"
   steps:

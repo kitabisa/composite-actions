@@ -116,6 +116,10 @@ outputs:
     description: "Define app custom version"
     value: ${{ steps.app-meta-custom.outputs.app-custom-version }}
 
+  build-time:
+    description: "Define build time"
+    value: ${{ steps.build-app.outputs.duration }}
+
 runs:
   using: "composite"
   steps:
@@ -150,11 +154,14 @@ runs:
         make config
 
     - name: Build application
+      id: build-app
       if: "${{ inputs.build == 'true' }}"
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       run: |-
+        start=$(date +%s)
         make build
+        echo "duration=$(($(date +%s)-$start))" >> $GITHUB_OUTPUT
 
     - name: Build and push docker image
       if: "${{ inputs.package == 'true' }}"
