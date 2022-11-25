@@ -39,7 +39,7 @@ runs:
           ${{ runner.os }}-pnpm-
 
     - name: Setup pnpm
-      uses: pnpm/action-setup@v2.2.2
+      uses: pnpm/action-setup@v2
       with:
         version: ${{ inputs.pnpm_version }}
 
@@ -53,7 +53,7 @@ runs:
         prefix="."
         string=$INPUT_DIRECTORY
         cache_path=${string#"$prefix"}
-        echo "::set-output name=cache-path::${{ github.workspace }}$cache_path/.next/cache"
+        echo "cache-path=${{ github.workspace }}$cache_path/.next/cache" >> $GITHUB_OUTPUT
 
     - name: Cache Next.js
       if: "${{ (inputs.using_nextjs == 'true' && inputs.cache == 'true') }}"

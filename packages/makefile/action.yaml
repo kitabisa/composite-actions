@@ -200,7 +200,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       id: helm-history
       run: |-
-        echo "::set-output name=length::$(make helm-history-length)"
+        echo "length=$(make helm-history-length)" >> $GITHUB_OUTPUT
 
     - name: Get Helm revision
       if: "${{ inputs.prune == 'true' }}"
@@ -208,7 +208,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       id: helm-revision
       run: |-
-        echo "::set-output name=oldest::$(make helm-oldest-revision)"
+        echo "oldest=$(make helm-oldest-revision)" >> $GITHUB_OUTPUT
 
     - name: Get Helm values
       if: "${{ (inputs.prune == 'true') && (steps.helm-revision.outputs.oldest != 0) }}"
@@ -218,7 +218,7 @@ runs:
       env:
         REVISION: ${{ steps.helm-revision.outputs.oldest }}
       run: |-
-        echo "::set-output name=image-tag::$(make helm-image-tag)"
+        echo "image-tag=$(make helm-image-tag)" >> $GITHUB_OUTPUT
 
     - name: Get Image timestamp
       if: "${{ (inputs.prune == 'true') && (steps.helm-values.outputs.image-tag != '') }}"
@@ -229,7 +229,7 @@ runs:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
         REVISION_IMAGE: ${{ steps.helm-values.outputs.image-tag }}
       run: |-
-        echo "::set-output name=image-timestamp::$(make helm-image-timestamp)"
+        echo "image-timestamp=$(make helm-image-timestamp)" >> $GITHUB_OUTPUT
 
     - name: Remove unused Docker images
       if: "${{ (inputs.prune == 'true') && (steps.helm-timestamp.outputs.image-timestamp != '') }}"
@@ -256,8 +256,8 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       run: |-
-        echo "::set-output name=app-name::$(make get-app-name)"
-        echo "::set-output name=app-version::$(make get-app-version || echo 'latest')"
+        echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
+        echo "app-version=$(make get-app-version || echo 'latest')" >> $GITHUB_OUTPUT
 
     - name: Get app custom version
       id: app-meta-custom
@@ -266,4 +266,4 @@ runs:
       env:
         SKIP_VERSION: ${{ inputs.app_custom_version_skip }}
       run: |-
-        echo "::set-output name=app-custom-version::$(make get-app-version || echo 'latest')"
+        echo "app-custom-version=$(make get-app-version || echo 'latest')" >> $GITHUB_OUTPUT
