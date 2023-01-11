@@ -149,6 +149,7 @@ runs:
       uses: actions/setup-node@v3
       with:
         node-version-file: "${{ inputs.working_directory }}/.nvmrc"
+        check-latest: true
 
     - name: Setup gcloud
       if: "${{ inputs.config == 'true' }}"
