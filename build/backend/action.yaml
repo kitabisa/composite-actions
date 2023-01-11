@@ -36,15 +36,15 @@ inputs:
     default: "false"
 
   credentials_json:
-    required: true
+    required: false
     description: "GCP credentials services account"
 
   project_id:
-    required: true
+    required: false
     description: "GCP project id"
 
   gcr_host:
-    required: true
+    required: false
     description: "GCP container registry host"
 
 
@@ -83,6 +83,8 @@ runs:
 
     - name: Build application
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.gh-token }}
       run: |-
         make build
 
