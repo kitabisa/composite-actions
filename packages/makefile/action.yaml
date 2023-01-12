@@ -126,7 +126,7 @@ runs:
     - name: Setup yq
       uses: chrisdickinson/setup-yq@latest
       with:
-        yq-version: v4.30.6
+        yq-version: v4.11.2
 
     - name: Setup Helm
       uses: azure/setup-helm@v3
