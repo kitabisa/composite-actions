@@ -77,7 +77,7 @@ inputs:
   prune:
     required: false
     description: "Run make prune"
-    default: true
+    default: false
     type: boolean
 
 runs:
