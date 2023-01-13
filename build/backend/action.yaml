@@ -2,11 +2,6 @@ name: "CI Build"
 description: "Build and push docker image"
 
 inputs:
-  env:
-    required: false
-    description: "environment to deploy to"
-    default: "dev"
-
   gh-user:
     required: true
     description: "gh user"

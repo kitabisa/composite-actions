@@ -2,6 +2,15 @@ name: "CI Build"
 description: "Build and push docker image"
 
 inputs:
+  env:
+    required: true
+    description: "environment to deploy to"
+    default: "dev"
+
+  gh-token:
+    required: true
+    description: "gh token"
+
   project_id:
     required: true
     description: "GCP project id"
@@ -50,6 +59,14 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Create prod deployment
+      uses: chrnorm/deployment-action@v2
+      id: deployment
+      with:
+        token: ${{ inputs.gh-token }}
+        environment: ${{ inputs.env }}
+
+
     - name: Setup gke credential
       uses: kitabisa/composite-actions/packages/gke-credential@main
       with:
@@ -75,3 +92,19 @@ runs:
         rancher_access_key: ${{ inputs.rancher_access_key }}
         rancher_secret_key: ${{ inputs.rancher_secret_key }}
         rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
+
+    - uses: chrnorm/deployment-status@v2
+      if: success()
+      name: Set prod-test deployment success
+      with:
+        token: ${{ inputs.gh-token }}
+        state: "success"
+        deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+
+    - uses: chrnorm/deployment-status@v2
+      if: failure()
+      name: Set prod-test deployment failure
+      with:
+        token: ${{ inputs.gh-token }}
+        state: "failure"
+        deployment-id: ${{ steps.deployment.outputs.deployment_id }}
