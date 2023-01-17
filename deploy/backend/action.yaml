@@ -7,7 +7,7 @@ inputs:
     description: "environment to deploy to"
     default: "dev"
 
-  gh-token:
+  gh_token:
     required: true
     description: "gh token"
 
@@ -79,6 +79,7 @@ runs:
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
+        gh_token: ${{ inputs.gh_token }}
         chartmuseum_host: ${{ inputs.chartmuseum_host }}
         chartmuseum_user: ${{ inputs.chartmuseum_user }}
         chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
