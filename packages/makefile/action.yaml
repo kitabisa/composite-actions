@@ -12,6 +12,10 @@ inputs:
     description: "GCP container registry host"
     type: string
 
+  gh_token:
+    required: true
+    description: "gh token"
+
   chartmuseum_host:
     required: false
     description: "ChartMuseum host"
@@ -130,6 +134,8 @@ runs:
 
     - name: Setup Helm
       uses: azure/setup-helm@v3
+      with:
+        token: ${{ inputs.gh_token }}
 
     - name: Setup Helmfile
       uses: kitabisa/actions/setup-helmfile@master

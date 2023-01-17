@@ -12,6 +12,10 @@ inputs:
     description: "GCP credentials services account"
     type: string
 
+  gh_token:
+    required: true
+    description: "gh token"
+
   gcr_host:
     required: true
     description: "GCP container registry host"
@@ -105,6 +109,7 @@ runs:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
+        gh_token: ${{ inputs.gh_token }}
         chartmuseum_host: ${{ inputs.chartmuseum_host }}
         chartmuseum_user: ${{ inputs.chartmuseum_user }}
         chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
