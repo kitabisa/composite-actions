@@ -7,6 +7,10 @@ inputs:
     description: "GCP credentials services account"
     type: string
 
+  gh_token:
+    required: true
+    description: "gh token"
+
   gke_cluster_name:
     required: true
     description: "GKE cluster name"
@@ -57,5 +61,6 @@ runs:
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
+        gh_token: ${{ inputs.gh_token }}
         destroy: true
         prune_all: ${{ inputs.prune_all }}

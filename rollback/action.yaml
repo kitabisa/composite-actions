@@ -17,6 +17,10 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
+  gh_token:
+    required: true
+    description: "gh token"
+
   project_id:
     required: true
     description: "GCP project id"
@@ -54,6 +58,7 @@ runs:
     - name: Rollback release
       uses: kitabisa/composite-actions/packages/makefile@main
       with:
+        gh_token: ${{ inputs.gh_token }}
         rollback_release: ${{ inputs.rollback_release }}
         rollback_revision: ${{ inputs.rollback_revision }}
         rollback: true
