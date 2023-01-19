@@ -12,6 +12,11 @@ inputs:
     description: "GCP project id"
     type: string
 
+  beta:
+    required: true
+    description: "GCP project id"
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -32,4 +37,4 @@ runs:
 
     - name: Ini v1 beta
       shell: bash
-      run: echo "ini versi beta gaes"
+      run: echo ${{ inputs.beta }}
