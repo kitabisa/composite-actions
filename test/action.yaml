@@ -3,7 +3,12 @@ description: "Testing versioning composite"
 
 inputs:
   name:
-    required: false
+    required: true
+    description: "GCP project id"
+    type: string
+
+  testong:
+    required: true
     description: "GCP project id"
     type: string
 
@@ -20,3 +25,7 @@ runs:
     - name: Build application
       shell: bash
       run: echo ${{ inputs.name }}
+
+    - name: Testong
+      shell: bash
+      run: echo ${{ inputs.testong }}
