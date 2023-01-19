@@ -29,3 +29,7 @@ runs:
     - name: Testong
       shell: bash
       run: echo ${{ inputs.testong }}
+
+    - name: Ini v1 beta
+      shell: bash
+      run: echo "ini versi beta gaes"
