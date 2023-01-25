@@ -80,18 +80,18 @@ runs:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
 
+    - name: Decrypt private key file with SOPS
+      if: "${{ inputs.private_key == 'true' }}"
+      uses: mdgreenwald/mozilla-sops-action@v1.4.1
+      run: |-
+        make decrypt
+
     - name: Build application
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.gh-token }}
       run: |-
         make build
-
-    - name: Decrypt private key file
-      shell: bash
-      if: "${{ inputs.private_key == 'true' }}"
-      run: |-
-        make decrypt
 
     - name: Build, tag, and push Docker image
       shell: bash
