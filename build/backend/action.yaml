@@ -45,6 +45,7 @@ inputs:
   private_key:
     required: false
     description: "API private key"
+    default: "false"
 
 runs:
   using: "composite"
