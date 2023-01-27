@@ -42,9 +42,9 @@ inputs:
     required: false
     description: "GCP container registry host"
 
-  private_key:
+  decrypt_jks_file:
     required: false
-    description: "API private key"
+    description: "Decrypt jks file for API private key"
     default: "false"
 
 runs:
@@ -82,10 +82,10 @@ runs:
 
     - name: Setup SOPS
       uses: mdgreenwald/mozilla-sops-action@v1.4.1
-      if: "${{ inputs.private_key == 'true' }}"
+      if: "${{ inputs.decrypt_jks_file == 'true' }}"
 
     - name: Decrypt private key file
-      if: "${{ inputs.private_key == 'true' }}"
+      if: "${{ inputs.decrypt_jks_file == 'true' }}"
       shell: bash
       run: |-
         make decrypt
