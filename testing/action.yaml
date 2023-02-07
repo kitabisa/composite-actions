@@ -12,6 +12,11 @@ inputs:
     description: "company"
     type: string
 
+  site:
+    required: true
+    description: "site"
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -25,3 +30,7 @@ runs:
     - name: Build application
       shell: bash
       run: echo ${{ inputs.company }}
+
+    - name: Build application
+      shell: bash
+      run: echo ${{ inputs.site }}
