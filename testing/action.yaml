@@ -7,7 +7,7 @@ inputs:
     description: "name"
     type: string
 
-  comapany:
+  company:
     required: true
     description: "company"
     type: string
