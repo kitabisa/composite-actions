@@ -1,0 +1,18 @@
+name: "Testing versioning composite"
+description: "Testing versioning composite"
+
+inputs:
+  name:
+    required: true
+    description: "name"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v3
+
+    - name: Build application
+      shell: bash
+      run: echo ${{ inputs.name }}
