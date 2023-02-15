@@ -1,0 +1,123 @@
+name: "Test Coverage"
+description: "Build and push docker image"
+
+inputs:
+  gh-user:
+    required: true
+    description: "gh user"
+
+  gh-token:
+    required: true
+    description: "gh token"
+
+  cache:
+    required: false
+    description: "enable cache for go modules"
+    default: "true"
+
+  cache-dependency-path:
+    required: false
+    description: "go sum location"
+    default: "go.sum"
+
+  go-version:
+    required: false
+    description: "go version"
+    default: "^1.13.1"
+
+  need-mockery:
+    required: false
+    description: "need mockery"
+    default: "false"
+
+  custom-command-flag:
+    required: false
+    description: "custom command flag"
+    default: "false"
+
+  custom-command:
+    required: false
+    description: "custom command"
+    default: "echo no command"
+
+  unit-test-command:
+    required: false
+    description: "unit test command"
+    default: "go test ./internal/... -coverpkg=./... -coverprofile=coverage.out -covermode=atomic"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v2
+
+    - name: Configure Git for private modules
+      env:
+        USER: ${{ inputs.gh-user }}
+        TOKEN: ${{ inputs.gh-token }}
+      shell: bash
+      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
+
+    - uses: actions/setup-go@v3
+      with:
+        cache: ${{ inputs.cache }}
+        cache-dependency-path: ${{ inputs.cache-dependency-path }}
+        go-version: ${{ inputs.go-version }} # The Go version to download (if necessary) and use.
+
+    - name: Generate Master Coverage
+      id: unit-test-master
+      shell: bash
+      run: |-
+        echo "master_coverage=$(cat coverage-master.txt)" >> $GITHUB_ENV
+
+    - name: Install Mockery
+      if: "${{ inputs.need-mockery == 'true' }}"
+      shell: bash
+      run: go install github.com/vektra/mockery/v2@latest
+
+    - name: Custom Command
+      shell: bash
+      if: "${{ inputs.custom-command-flag == 'true' }}"
+      run: ${{ inputs.custom-command }}
+
+    - name: Run Unit tests
+      id: unit-test-current
+      shell: bash
+      run: |-
+        go install github.com/jandelgado/gcov2lcov@latest
+        ${{ inputs.unit-test-command }}
+        echo "current_coverage=$(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')" >> $GITHUB_ENV
+
+    - name: Comment PR and Set Fail Result
+      if: ${{ env.current_coverage < env.master_coverage }}
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        recreate: true
+        message: |
+          ##  ⚠⚠️ Unit Test Coverage ⚠⚠
+          ```
+          Current branch coverage : ${{ env.current_coverage }}
+          Master branch coverage : ${{ env.master_coverage }}
+          Condition: Current branch coverage must be bigger or equal than master branch coverage.
+          ```
+          <b> PR Blocked ❌. Please fix your unit test coverage </b>
+
+    - name: Coverage below master, Fail PR
+      if: ${{ env.current_coverage < env.master_coverage }}
+      shell: bash
+      run: |
+        echo "::error :: unit test coverage is below master"
+        exit 1
+
+    - name: Comment PR
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        recreate: true
+        message: |
+          ##  ✅✅ Unit Test Coverage ✅✅
+          ```
+          Current branch coverage : ${{ env.current_coverage }}
+          Master branch coverage : ${{ env.master_coverage }}
+          Condition: Current branch coverage must be bigger or equal than master branch coverage.
+          ```
+          PR Coverage check passed.
