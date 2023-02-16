@@ -27,6 +27,6 @@ jobs:
 ```
 
 Parameters that you can configure
-- custom-command-flag: by default is false, set to true if you have custom command for unit test
-- custom-command: custom command that you want to run for executing unit test. For example, our unit test need to use `.env` so we have to copy `.env.sample`
-- need-mockery: by default is false, set to true if you need mockery for unit test (e.g you want to re-generate mock before running UT)
+- custom_command_flag: by default is false, set to true if you have custom command for unit test
+- custom_command: custom command that you want to run for executing unit test. For example, our unit test need to use `.env` so we have to copy `.env.sample`
+- need_mockery: by default is false, set to true if you need mockery for unit test (e.g you want to re-generate mock before running UT)
