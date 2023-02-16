@@ -15,14 +15,14 @@ jobs:
       - name: Test Coverage
         uses: kitabisa/composite-actions/unit_test/backend@878932e5ea13a1db81014c8b27635d21c69f2b96
         with:
-          gh-user: ${{ secrets.GH_USER }}
-          gh-token: ${{ secrets.GH_TOKEN }}
+          gh_user: ${{ secrets.GH_USER }}
+          gh_token: ${{ secrets.GH_TOKEN }}
           cache: true
-          cache-dependency-path: go.sum
-          go-version: 1.19
-          custom-command-flag: true
-          custom-command: "cp ./params/.env.sample ./params/.env"
-          need-mockery: true
+          cache_dependency_path: go.sum
+          go_version: 1.19
+          custom_command_flag: true
+          custom_command: "cp ./params/.env.sample ./params/.env"
+          need_mockery: true
 
 ```
 

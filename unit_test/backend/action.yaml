@@ -2,11 +2,11 @@ name: "Test Coverage"
 description: "Build and push docker image"
 
 inputs:
-  gh-user:
+  gh_user:
     required: true
     description: "gh user"
 
-  gh-token:
+  gh_token:
     required: true
     description: "gh token"
 
@@ -15,32 +15,32 @@ inputs:
     description: "enable cache for go modules"
     default: "true"
 
-  cache-dependency-path:
+  cache_dependency_path:
     required: false
     description: "go sum location"
     default: "go.sum"
 
-  go-version:
+  go_version:
     required: false
     description: "go version"
     default: "^1.13.1"
 
-  need-mockery:
+  need_mockery:
     required: false
     description: "need mockery"
     default: "false"
 
-  custom-command-flag:
+  custom_command_flag:
     required: false
     description: "custom command flag"
     default: "false"
 
-  custom-command:
+  custom_command:
     required: false
     description: "custom command"
     default: "echo no command"
 
-  unit-test-command:
+  unit_test_command:
     required: false
     description: "unit test command"
     default: "go test ./internal/... -coverpkg=./... -coverprofile=coverage.out -covermode=atomic"
@@ -53,16 +53,16 @@ runs:
 
     - name: Configure Git for private modules
       env:
-        USER: ${{ inputs.gh-user }}
-        TOKEN: ${{ inputs.gh-token }}
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
     - uses: actions/setup-go@v3
       with:
         cache: ${{ inputs.cache }}
-        cache-dependency-path: ${{ inputs.cache-dependency-path }}
-        go-version: ${{ inputs.go-version }} # The Go version to download (if necessary) and use.
+        cache-dependency-path: ${{ inputs.cache_dependency_path }}
+        go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
 
     - name: Generate Master Coverage
       id: unit-test-master
@@ -71,21 +71,21 @@ runs:
         echo "master_coverage=$(cat coverage-master.txt)" >> $GITHUB_ENV
 
     - name: Install Mockery
-      if: "${{ inputs.need-mockery == 'true' }}"
+      if: "${{ inputs.need_mockery == 'true' }}"
       shell: bash
       run: go install github.com/vektra/mockery/v2@latest
 
     - name: Custom Command
       shell: bash
-      if: "${{ inputs.custom-command-flag == 'true' }}"
-      run: ${{ inputs.custom-command }}
+      if: "${{ inputs.custom_command_flag == 'true' }}"
+      run: ${{ inputs.custom_command }}
 
     - name: Run Unit tests
       id: unit-test-current
       shell: bash
       run: |-
         go install github.com/jandelgado/gcov2lcov@latest
-        ${{ inputs.unit-test-command }}
+        ${{ inputs.unit_test_command }}
         echo "current_coverage=$(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')" >> $GITHUB_ENV
 
     - name: Comment PR and Set Fail Result
