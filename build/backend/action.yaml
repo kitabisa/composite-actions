@@ -2,11 +2,11 @@ name: "CI Build"
 description: "Build and push docker image"
 
 inputs:
-  gh-user:
+  gh_user:
     required: true
     description: "gh user"
 
-  gh-token:
+  gh_token:
     required: true
     description: "gh token"
 
@@ -15,19 +15,24 @@ inputs:
     description: "enable cache for go modules"
     default: "true"
 
-  cache-dependency-path:
+  cache_dependency_path:
     required: false
     description: "go sum location"
     default: "go.sum"
 
-  go-version:
+  go_version:
     required: false
     description: "go version"
     default: "^1.13.1"
 
-  build-push-image:
+  build_push_image:
     required: false
     description: "build and push image for deployment"
+    default: "false"
+
+  build_push_image_swagger:
+    required: false
+    description: "build and push image for swagger"
     default: "false"
 
   credentials_json:
@@ -51,26 +56,26 @@ runs:
 
     - name: Configure Git for private modules
       env:
-        USER: ${{ inputs.gh-user }}
-        TOKEN: ${{ inputs.gh-token }}
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
     - uses: actions/setup-go@v3
       with:
         cache: ${{ inputs.cache }}
-        cache-dependency-path: ${{ inputs.cache-dependency-path }}
-        go-version: ${{ inputs.go-version }} # The Go version to download (if necessary) and use.
+        cache_dependency_path: ${{ inputs.cache_dependency_path }}
+        go_version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
 
     - name: Setup gcloud
-      if: "${{ inputs.build-push-image == 'true' }}"
+      if: "${{ inputs.build_push_image == 'true' }}"
       uses: kitabisa/composite-actions/packages/gcloud@main
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup docker buildx
-      if: "${{ inputs.build-push-image == 'true' }}"
+      if: "${{ inputs.build_push_image == 'true' }}"
       uses: kitabisa/composite-actions/packages/buildx@main
       with:
         project_id: ${{ inputs.project_id }}
@@ -79,14 +84,23 @@ runs:
     - name: Build application
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ inputs.gh-token }}
+        GITHUB_TOKEN: ${{ inputs.gh_token }}
       run: |-
         make build
 
     - name: Build, tag, and push Docker image
       shell: bash
-      if: "${{ inputs.build-push-image == 'true' }}"
+      if: "${{ inputs.build_push_image == 'true' }}"
       env:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
       run: |-
         make package
+
+
+    - name: Build, tag, and push Docker image Swagger
+      shell: bash
+      if: "${{ inputs.build_push_image_swagger == 'true' }}"
+      env:
+        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+      run: |-
+        make package-swagger
