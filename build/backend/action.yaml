@@ -51,6 +51,10 @@ inputs:
     required: false
     description: "GCP container registry host"
 
+  swagger_script_path:
+    required: false
+    description: "swagger script path"
+
 
 runs:
   using: "composite"
@@ -102,12 +106,14 @@ runs:
 
 
     - name: Build, tag, and push Docker image Swagger
-      shell: bash
       if: "${{ inputs.build_push_image_swagger == 'true' }}"
-      env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
-      run: |-
-        make package-swagger
+      uses: kitabisa/composite-actions/packages/swagger@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        gcr_host: ${{ inputs.gcr_host }}
+        build_push_image_swagger: ${{ inputs.build_push_image_swagger }}
+        swagger_script_path: ${{ inputs.swagger_script_path }}
+
 
     - name: Build, tag, and push Docker image Mockoon
       shell: bash
