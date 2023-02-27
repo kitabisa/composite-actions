@@ -55,6 +55,14 @@ inputs:
     required: false
     description: "swagger script path"
 
+  openapi_input_file:
+    required: false
+    description: "openapi input file"
+
+  openapi_output_file:
+    required: false
+    description: "openapi output file"
+
 
 runs:
   using: "composite"
@@ -111,7 +119,8 @@ runs:
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
-        build_push_image_swagger: ${{ inputs.build_push_image_swagger }}
+        openapi_input_file: ${{ inputs.openapi_input_file }}
+        openapi_output_file: ${{ inputs.openapi_output_file }}
         swagger_script_path: ${{ inputs.swagger_script_path }}
 
 

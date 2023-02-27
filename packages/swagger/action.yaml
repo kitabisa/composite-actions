@@ -6,11 +6,6 @@ inputs:
     required: false
     description: "shell script path and name for swagger env"
 
-  build_push_image_swagger:
-    required: false
-    description: "build and push image for swagger"
-    default: "false"
-
   project_id:
     required: false
     description: "GCP project id"
@@ -18,6 +13,14 @@ inputs:
   gcr_host:
     required: false
     description: "GCP container registry host"
+
+  openapi_input_file:
+    required: false
+    description: "openapi input file"
+
+  openapi_output_file:
+    required: false
+    description: "openapi output file"
 
 runs:
   using: "composite"
@@ -36,8 +39,12 @@ runs:
       shell: bash
       run: |-
         npm i -g @redocly/cli@latest
-        openapi bundle docs/openapi/openapi.yaml -o docs/openapi.yaml
-        cat docs/openapi.yaml
+
+    - name: bundle openapi
+      shell: bash
+      run: |-
+        openapi bundle ${{ inputs.openapi_input_file }} -o {{ inputs.openapi_output_file }}
+        cat {{ inputs.openapi_output_file }}
 
     - name: Build, tag, and push Docker image Swagger
       shell: bash
