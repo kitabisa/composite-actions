@@ -35,6 +35,10 @@ inputs:
     description: "build and push image for swagger"
     default: "false"
 
+  build_push_image_mockoon:
+    required: false
+    description: "build and push image for mockoon"
+
   credentials_json:
     required: false
     description: "GCP credentials services account"
@@ -104,3 +108,11 @@ runs:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
       run: |-
         make package-swagger
+
+    - name: Build, tag, and push Docker image Mockoon
+      shell: bash
+      if: "${{ inputs.build_push_image_mockoon == 'true' }}"
+      env:
+        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+      run: |-
+        make package-mockoon
