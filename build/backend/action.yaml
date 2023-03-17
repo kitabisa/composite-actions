@@ -69,6 +69,9 @@ runs:
   steps:
     - name: Checking out repository
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
 
     - name: Configure Git for private modules
       env:
@@ -80,8 +83,8 @@ runs:
     - uses: actions/setup-go@v3
       with:
         cache: ${{ inputs.cache }}
-        cache_dependency_path: ${{ inputs.cache_dependency_path }}
-        go_version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
+        cache-dependency-path: ${{ inputs.cache_dependency_path }}
+        go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
 
     - name: Setup gcloud
       if: "${{ inputs.build_push_image == 'true' }}"
@@ -115,7 +118,7 @@ runs:
 
     - name: Build, tag, and push Docker image Swagger
       if: "${{ inputs.build_push_image_swagger == 'true' }}"
-      uses: kitabisa/composite-actions/packages/swagger@main
+      uses: kitabisa/composite-actions/packages/swagger@ee2496c4276accecf668b90e34675acd6ec9ea43
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
