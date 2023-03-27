@@ -10,11 +10,6 @@ inputs:
     required: true
     description: "gh token"
 
-  cache:
-    required: false
-    description: "enable cache for go modules"
-    default: "true"
-
   cache-dependency-path:
     required: false
     description: "go sum location"
@@ -58,7 +53,6 @@ runs:
 
     - uses: actions/setup-go@v4
       with:
-        cache: ${{ inputs.cache }}
         cache-dependency-path: ${{ inputs.cache-dependency-path }}
         go-version: ${{ inputs.go-version }} # The Go version to download (if necessary) and use.
 
