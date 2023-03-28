@@ -164,7 +164,7 @@ runs:
         check-latest: true
 
     - name: Setup gcloud
-      if: "${{ inputs.build == 'true' }}"
+      if: "${{ inputs.config == 'true' }}"
       uses: kitabisa/composite-actions/packages/gcloud@main
       with:
         project_id: ${{ inputs.project_id }}
