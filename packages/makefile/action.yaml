@@ -97,28 +97,30 @@ inputs:
     default: "."
     type: string
 
-  app_custom_version_skip:
+  using_cdn:
     required: false
-    description: "Set app custom version skip"
-    default: "0"
+    description: "Setup cdn for static assets"
+    default: false
+    type: boolean
+
+  cdn_keep_latest_version:
+    required: false
+    description: "CDN keep latest version length"
+    default: "2"
     type: string
 
 outputs:
-  app-name:
-    description: "Define app name"
-    value: ${{ steps.app-meta.outputs.app-name }}
-
-  app-version:
-    description: "Define app version"
-    value: ${{ steps.app-meta.outputs.app-version }}
-
-  app-custom-version:
-    description: "Define app custom version"
-    value: ${{ steps.app-meta-custom.outputs.app-custom-version }}
-
   build-time:
     description: "Define build time"
     value: ${{ steps.build-app.outputs.duration }}
+
+  cdn-upload-path:
+    description: "Define cdn upload path"
+    value: ${{ steps.cdn-upload.outputs.path }}
+
+  cdn-delete-path:
+    description: "Define cdn delete path"
+    value: ${{ steps.cdn-delete.outputs.path }}
 
 runs:
   using: "composite"
@@ -258,19 +260,20 @@ runs:
       run: |-
         make prune-all || true
 
-    - name: Get app name & app version
-      id: app-meta
+    - name: Get cdn upload path
+      if: "${{ inputs.using_cdn == 'true' }}"
+      id: cdn-upload
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       run: |-
-        echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
-        echo "app-version=$(make get-app-version || echo 'latest')" >> $GITHUB_OUTPUT
+        echo "path=$(make get-cdn-upload-path)" >> $GITHUB_OUTPUT
 
-    - name: Get app custom version
-      id: app-meta-custom
+    - name: Get cdn delete path
+      if: "${{ inputs.using_cdn == 'true' }}"
+      id: cdn-delete
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        SKIP_VERSION: ${{ inputs.app_custom_version_skip }}
+        SKIP_VERSION: ${{ inputs.cdn_keep_latest_version }}
       run: |-
-        echo "app-custom-version=$(make get-app-version || echo 'latest')" >> $GITHUB_OUTPUT
+        echo "path=$(make get-cdn-delete-path)" >> $GITHUB_OUTPUT
