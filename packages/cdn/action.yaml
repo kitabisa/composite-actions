@@ -16,7 +16,6 @@ inputs:
   cdn_aws_access_key_id:
     required: true
     description: "CDN aws access key id"
-    default: ""
     type: string
 
   cdn_aws_secret_access_key:
