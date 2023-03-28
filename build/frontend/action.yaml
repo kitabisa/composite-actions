@@ -236,5 +236,4 @@ runs:
         cdn_aws_access_key_id: ${{ inputs.cdn_aws_access_key_id }}
         cdn_aws_secret_access_key: ${{ inputs.cdn_aws_secret_access_key }}
         cdn_aws_region: ${{ inputs.cdn_aws_region }}
-        cdn_source_dir: ${{ inputs.cdn_source_dir }}
         delete: ${{ steps.build-push.outputs.cdn-delete-path }}

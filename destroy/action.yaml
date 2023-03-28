@@ -51,6 +51,30 @@ inputs:
     default: true
     type: boolean
 
+  cdn_aws_s3_bucket:
+    required: false
+    description: "CDN aws s3 bucket"
+    default: ""
+    type: string
+
+  cdn_aws_access_key_id:
+    required: false
+    description: "CDN aws access key id"
+    default: ""
+    type: string
+
+  cdn_aws_secret_access_key:
+    required: false
+    description: "CDN aws secret access key"
+    default: ""
+    type: string
+
+  cdn_aws_region:
+    required: false
+    description: "CDN aws region"
+    default: ""
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -90,5 +114,4 @@ runs:
         cdn_aws_access_key_id: ${{ inputs.cdn_aws_access_key_id }}
         cdn_aws_secret_access_key: ${{ inputs.cdn_aws_secret_access_key }}
         cdn_aws_region: ${{ inputs.cdn_aws_region }}
-        cdn_source_dir: ${{ inputs.cdn_source_dir }}
         delete: ${{ steps.destroy-release.outputs.cdn-delete-path }}

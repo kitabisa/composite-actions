@@ -46,14 +46,14 @@ runs:
 
     - name: Download base branch bundle stats
       uses: dawidd6/action-download-artifact@v2
-      if: success() && ${{ inputs.pr_number != '' }}
+      if: success() && inputs.pr_number != ''
       with:
         workflow: ${{ inputs.workflow_name }}
         branch: ${{ inputs.base_branch }}
         path: ${{ inputs.working_directory }}/.next/analyze/base
 
     - name: Compare with base branch bundle
-      if: success() && ${{ inputs.pr_number != '' }}
+      if: success() && inputs.pr_number != ''
       run: |
         ls -laR .next/analyze/base && npx -p nextjs-bundle-analysis compare
         sed -i 's/Next.js Bundle Analysis/${{ inputs.comment_header }}/g' .next/analyze/__bundle_analysis_comment.txt
@@ -62,7 +62,7 @@ runs:
 
     - name: Get comment body
       id: get-comment-body
-      if: success() && ${{ inputs.pr_number != '' }}
+      if: success() && inputs.pr_number != ''
       uses: actions/github-script@v6
       with:
         result-encoding: string
@@ -73,7 +73,7 @@ runs:
 
     - name: Find Comment
       uses: peter-evans/find-comment@v2
-      if: success() && ${{ inputs.pr_number != '' }}
+      if: success() && inputs.pr_number != ''
       id: fc
       with:
         issue-number: ${{ inputs.pr_number }}
@@ -81,14 +81,14 @@ runs:
 
     - name: Create Comment
       uses: peter-evans/create-or-update-comment@v2
-      if: success() && ${{ inputs.pr_number != '' }} && steps.fc.outputs.comment-id == 0
+      if: success() && inputs.pr_number != '' && steps.fc.outputs.comment-id == 0
       with:
         issue-number: ${{ inputs.pr_number }}
         body: ${{ steps.get-comment-body.outputs.body }}
 
     - name: Update Comment
       uses: peter-evans/create-or-update-comment@v2
-      if: success() && ${{ inputs.pr_number != '' }} && steps.fc.outputs.comment-id != 0
+      if: success() && inputs.pr_number != '' && steps.fc.outputs.comment-id != 0
       with:
         issue-number: ${{ inputs.pr_number }}
         body: ${{ steps.get-comment-body.outputs.body }}
