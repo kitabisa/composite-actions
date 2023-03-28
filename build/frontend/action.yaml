@@ -98,6 +98,12 @@ inputs:
     default: false
     type: boolean
 
+  delete_oldest_cdn:
+    required: false
+    description: "Setup delete oldest cdn"
+    default: true
+    type: boolean
+
   cdn_aws_s3_bucket:
     required: false
     description: "CDN aws s3 bucket"
@@ -134,6 +140,12 @@ inputs:
     default: ""
     type: string
 
+  cdn_keep_latest_version:
+    required: false
+    description: "CDN keep latest version length"
+    default: "2"
+    type: string
+
 outputs:
   build-time:
     description: "Define build time"
@@ -152,7 +164,7 @@ runs:
         check-latest: true
 
     - name: Setup gcloud
-      if: "${{ inputs.config == 'true' }}"
+      if: "${{ inputs.build == 'true' }}"
       uses: kitabisa/composite-actions/packages/gcloud@main
       with:
         project_id: ${{ inputs.project_id }}
@@ -193,22 +205,36 @@ runs:
         chartmuseum_host: ${{ inputs.chartmuseum_host }}
         chartmuseum_user: ${{ inputs.chartmuseum_user }}
         chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
-        app_custom_version_skip: 2
         install: ${{ inputs.install }}
         config: ${{ inputs.config }}
         build: ${{ inputs.build }}
         package: ${{ inputs.package }}
+        using_cdn: ${{ inputs.using_cdn }}
+        cdn_keep_latest_version: ${{ inputs.cdn_keep_latest_version }}
 
-    - name: Manage CDN static
+    - name: Upload CDN static
       if: "${{ inputs.using_cdn == 'true' }}"
       uses: kitabisa/composite-actions/packages/cdn@main
       with:
+        working_directory: ${{ inputs.working_directory }}
         cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
         cdn_aws_access_key_id: ${{ inputs.cdn_aws_access_key_id }}
         cdn_aws_secret_access_key: ${{ inputs.cdn_aws_secret_access_key }}
         cdn_aws_region: ${{ inputs.cdn_aws_region }}
         cdn_source_dir: ${{ inputs.cdn_source_dir }}
-        upload: true
-        upload_path: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-version }}/${{ inputs.cdn_dest_dir }}
-        delete: ${{ steps.build-push.outputs.app-version != steps.build-push.outputs.app-custom-version }}
-        delete_path: ${{ steps.build-push.outputs.app-name }}/${{ steps.build-push.outputs.app-custom-version }}
+        upload: ${{ steps.build-push.outputs.cdn-upload-path }}/${{ inputs.cdn_dest_dir }}
+
+    - name: Delete oldest CDN static
+      if: >-
+        inputs.using_cdn == 'true' &&
+        inputs.delete_oldest_cdn == 'true' &&
+        steps.build-push.outputs.cdn-upload-path != steps.build-push.outputs.cdn-delete-path
+      uses: kitabisa/composite-actions/packages/cdn@main
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
+        cdn_aws_access_key_id: ${{ inputs.cdn_aws_access_key_id }}
+        cdn_aws_secret_access_key: ${{ inputs.cdn_aws_secret_access_key }}
+        cdn_aws_region: ${{ inputs.cdn_aws_region }}
+        cdn_source_dir: ${{ inputs.cdn_source_dir }}
+        delete: ${{ steps.build-push.outputs.cdn-delete-path }}

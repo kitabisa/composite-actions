@@ -1,0 +1,96 @@
+name: "Frontend tools nextjs bundle analysis"
+description: "Frontend tools for audit nextjs bundle analysis"
+
+inputs:
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+  comment_header:
+    required: false
+    description: "Set comment header"
+    default: "Next.js Bundle Analysis"
+    type: string
+
+  workflow_name:
+    required: true
+    description: "Set workflow name"
+    type: string
+
+  base_branch:
+    required: true
+    description: "Set base branch"
+    type: string
+
+  pr_number:
+    required: false
+    description: "Set pr number"
+    default: ""
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Analyze bundle
+      run: npx -p nextjs-bundle-analysis report
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+
+    - name: Upload bundle
+      uses: actions/upload-artifact@v3
+      with:
+        name: bundle
+        path: ${{ inputs.working_directory }}/.next/analyze/__bundle_analysis.json
+
+    - name: Download base branch bundle stats
+      uses: dawidd6/action-download-artifact@v2
+      if: success() && ${{ inputs.pr_number != '' }}
+      with:
+        workflow: ${{ inputs.workflow_name }}
+        branch: ${{ inputs.base_branch }}
+        path: ${{ inputs.working_directory }}/.next/analyze/base
+
+    - name: Compare with base branch bundle
+      if: success() && ${{ inputs.pr_number != '' }}
+      run: |
+        ls -laR .next/analyze/base && npx -p nextjs-bundle-analysis compare
+        sed -i 's/Next.js Bundle Analysis/${{ inputs.comment_header }}/g' .next/analyze/__bundle_analysis_comment.txt
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+
+    - name: Get comment body
+      id: get-comment-body
+      if: success() && ${{ inputs.pr_number != '' }}
+      uses: actions/github-script@v6
+      with:
+        result-encoding: string
+        script: |
+          const fs = require('fs')
+          const comment = fs.readFileSync('.next/analyze/__bundle_analysis_comment.txt', 'utf8')
+          core.setOutput('body', comment)
+
+    - name: Find Comment
+      uses: peter-evans/find-comment@v2
+      if: success() && ${{ inputs.pr_number != '' }}
+      id: fc
+      with:
+        issue-number: ${{ inputs.pr_number }}
+        body-includes: "${{ inputs.comment_header }}"
+
+    - name: Create Comment
+      uses: peter-evans/create-or-update-comment@v2
+      if: success() && ${{ inputs.pr_number != '' }} && steps.fc.outputs.comment-id == 0
+      with:
+        issue-number: ${{ inputs.pr_number }}
+        body: ${{ steps.get-comment-body.outputs.body }}
+
+    - name: Update Comment
+      uses: peter-evans/create-or-update-comment@v2
+      if: success() && ${{ inputs.pr_number != '' }} && steps.fc.outputs.comment-id != 0
+      with:
+        issue-number: ${{ inputs.pr_number }}
+        body: ${{ steps.get-comment-body.outputs.body }}
+        comment-id: ${{ steps.fc.outputs.comment-id }}
+        edit-mode: replace
