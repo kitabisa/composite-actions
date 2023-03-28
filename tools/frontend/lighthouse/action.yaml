@@ -1,0 +1,112 @@
+name: "Frontend tools lighthouse"
+description: "Frontend tools for audit lighthouse"
+
+inputs:
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+  urls:
+    required: true
+    description: "Set lighthouse urls"
+    type: string
+
+  budget_path:
+    required: true
+    description: "Set lighthouse budget path"
+    type: string
+
+  config_path:
+    required: true
+    description: "Set lighthouse config path"
+    type: string
+
+  gh_token:
+    required: true
+    description: "Set github token"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v3
+
+    - name: Add comment to PR
+      id: loading_budget_comment_to_pr
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        header: budget
+        message: |
+          ⏱ Running budget checks...
+
+    - name: Setup node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: "${{ inputs.working_directory }}/.nvmrc"
+        check-latest: true
+
+    - name: Setup lib for chrome
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libnss3-dev libxss-dev libasound2
+
+    - name: Setup chrome
+      uses: browser-actions/setup-chrome@latest
+      
+    - name: Get chrome info
+      id: chrome
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        echo "chrome-path=$(which chrome)" >> $GITHUB_OUTPUT
+        chrome --version
+
+    - name: Run Lighthouse and test budgets
+      id: lighthouse_audit
+      uses: treosh/lighthouse-ci-action@v9
+      env:
+        CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        LHCI_GITHUB_TOKEN: ${{ inputs.gh_token }}
+      with:
+        urls: ${{ inputs.urls }}
+        budgetPath: ${{ inputs.budget_path }}
+        configPath: ${{ inputs.config_path }}
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+
+    - name: Format budget result
+      id: budget_result
+      if: ${{ always() }}
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ inputs.gh_token }}
+        script: |
+          const assertions = ${{ steps.lighthouse_audit.outputs.assertionResults }};
+          if (!assertions.length) {
+            core.setOutput("comment", '✅ Budget met, nothing to see here');
+          } else {
+            const comment = assertions.map((result) => {
+              return `
+          ❌ **${result.auditProperty || ''}.${result.auditId}** failure on [${result.url}](${result.url})
+          *${result.auditTitle}* - [docs](${result.auditDocumentationLink})
+          | Actual | Expected |
+          | --- | --- |
+          | ${result.actual} | ${result.operator} ${result.expected} |
+          `;
+            }).join('---');
+            core.setOutput("comment", comment);
+          }
+
+    - name: Add Budget comment to PR
+      id: budget_comment_to_pr
+      if: ${{ always() }}
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        header: budget
+        message: |
+          ${{ steps.budget_result.outputs.comment }}

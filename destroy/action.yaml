@@ -2,6 +2,12 @@ name: "Destroy deployment"
 description: "Destroy release deployment"
 
 inputs:
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
   credentials_json:
     required: true
     description: "GCP credentials services account"
@@ -33,6 +39,18 @@ inputs:
     default: false
     type: boolean
 
+  using_cdn:
+    required: false
+    description: "Setup cdn for static assets"
+    default: false
+    type: boolean
+
+  delete_oldest_cdn:
+    required: false
+    description: "Setup delete oldest cdn"
+    default: true
+    type: boolean
+
 runs:
   using: "composite"
   steps:
@@ -53,9 +71,24 @@ runs:
         project_id: ${{ inputs.project_id }}
 
     - name: Destroy release
+      id: destroy-release
       uses: kitabisa/composite-actions/packages/makefile@main
       with:
+        working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
         destroy: true
         prune_all: ${{ inputs.prune_all }}
+        using_cdn: ${{ inputs.using_cdn }}
+
+    - name: Delete CDN static
+      if: "${{ inputs.using_cdn == 'true' && inputs.delete_oldest_cdn == 'true' }}"
+      uses: kitabisa/composite-actions/packages/cdn@main
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
+        cdn_aws_access_key_id: ${{ inputs.cdn_aws_access_key_id }}
+        cdn_aws_secret_access_key: ${{ inputs.cdn_aws_secret_access_key }}
+        cdn_aws_region: ${{ inputs.cdn_aws_region }}
+        cdn_source_dir: ${{ inputs.cdn_source_dir }}
+        delete: ${{ steps.destroy-release.outputs.cdn-delete-path }}
