@@ -9,27 +9,24 @@ inputs:
     type: string
 
   cdn_aws_s3_bucket:
-    required: false
+    required: true
     description: "CDN aws s3 bucket"
-    default: ""
     type: string
 
   cdn_aws_access_key_id:
-    required: false
+    required: true
     description: "CDN aws access key id"
     default: ""
     type: string
 
   cdn_aws_secret_access_key:
-    required: false
+    required: true
     description: "CDN aws secret access key"
-    default: ""
     type: string
 
   cdn_aws_region:
-    required: false
+    required: true
     description: "CDN aws region"
-    default: ""
     type: string
 
   cdn_source_dir:
