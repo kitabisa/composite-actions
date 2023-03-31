@@ -61,6 +61,12 @@ inputs:
     default: "."
     type: string
 
+  setup_helmfiles:
+    required: false
+    description: "Setup helmfiles"
+    default: false
+    type: boolean
+
 runs:
   using: "composite"
   steps:
@@ -88,7 +94,7 @@ runs:
         chartmuseum_user: ${{ inputs.chartmuseum_user }}
         chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
         deploy: true
-        setup_helmfiles: false
+        setup_helmfiles: ${{ inputs.setup_helmfiles }}
 
     - name: Rancher ns mover
       uses: kitabisa/composite-actions/packages/rancher@main
