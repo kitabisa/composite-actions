@@ -22,18 +22,11 @@ inputs:
     required: false
     description: "openapi output file"
 
-  working_directory:
-    required: false
-    description: "Set working directory"
-    default: "."
-    type: string
-
 runs:
   using: "composite"
   steps:
     - name: Replace env swagger
       shell: bash
-      working-directory: ${{ inputs.working_directory }}
       run: |-
         cd ${{ inputs.swagger_script_path }}
         sh swagger_env.sh
@@ -50,14 +43,12 @@ runs:
 
     - name: bundle openapi
       shell: bash
-      working-directory: ${{ inputs.working_directory }}
       run: |-
         openapi bundle ${{ inputs.openapi_input_file }} -o ${{ inputs.openapi_output_file }}
         cat ${{ inputs.openapi_output_file }}
 
     - name: Build, tag, and push Docker image Swagger
       shell: bash
-      working-directory: ${{ inputs.working_directory }}
       env:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
       run: |-
