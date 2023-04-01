@@ -85,7 +85,7 @@ runs:
         project_id: ${{ inputs.project_id }}
 
     - name: Deploy
-      uses: kitabisa/composite-actions/packages/makefile@91bf3826bd5cbcd7ef1b7b83021068f2193432b2
+      uses: kitabisa/composite-actions/packages/makefile@6ee6a3445675361980c764d6e0266752dd156ada
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
