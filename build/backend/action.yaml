@@ -118,7 +118,7 @@ runs:
 
     - name: Build, tag, and push Docker image Swagger
       if: "${{ inputs.build_push_image_swagger == 'true' }}"
-      uses: kitabisa/composite-actions/packages/swagger@2e5f2f8a0c44e82a72adf2aff32ae0f4ac2abf91
+      uses: kitabisa/composite-actions/packages/swagger@main
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
