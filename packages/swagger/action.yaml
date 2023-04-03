@@ -1,0 +1,55 @@
+name: "Setup Swagger Build"
+description: "Setup Swagger build"
+
+inputs:
+  swagger_script_path:
+    required: false
+    description: "shell script path and name for swagger env"
+
+  project_id:
+    required: false
+    description: "GCP project id"
+
+  gcr_host:
+    required: false
+    description: "GCP container registry host"
+
+  openapi_input_file:
+    required: false
+    description: "openapi input file"
+
+  openapi_output_file:
+    required: false
+    description: "openapi output file"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Replace env swagger
+      shell: bash
+      run: |-
+        cd ${{ inputs.swagger_script_path }}
+        sh swagger_env.sh
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    # then use redoc-cli-github-action to generate your HTML bundle
+    - name: install redoc
+      shell: bash
+      run: |-
+        npm i -g @redocly/cli@latest
+
+    - name: bundle openapi
+      shell: bash
+      run: |-
+        openapi bundle ${{ inputs.openapi_input_file }} -o ${{ inputs.openapi_output_file }}
+        cat ${{ inputs.openapi_output_file }}
+
+    - name: Build, tag, and push Docker image Swagger
+      shell: bash
+      env:
+        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+      run: |-
+        make package-swagger
