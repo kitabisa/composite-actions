@@ -7,7 +7,7 @@ inputs:
     description: "environment to deploy to"
     default: "dev"
 
-  gh-token:
+  gh_token:
     required: true
     description: "gh token"
 
@@ -55,17 +55,27 @@ inputs:
     required: true
     description: "Rancher cluster id"
 
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+  setup_helmfiles:
+    required: false
+    description: "Setup helmfiles"
+    default: false
+    type: boolean
 
 runs:
   using: "composite"
   steps:
-    - name: Create prod deployment
+    - name: Create env deployment
       uses: chrnorm/deployment-action@v2
       id: deployment
       with:
-        token: ${{ inputs.gh-token }}
+        token: ${{ inputs.gh_token }}
         environment: ${{ inputs.env }}
-
 
     - name: Setup gke credential
       uses: kitabisa/composite-actions/packages/gke-credential@main
@@ -77,12 +87,14 @@ runs:
     - name: Deploy
       uses: kitabisa/composite-actions/packages/makefile@main
       with:
+        working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
         chartmuseum_host: ${{ inputs.chartmuseum_host }}
         chartmuseum_user: ${{ inputs.chartmuseum_user }}
         chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
         deploy: true
+        setup_helmfiles: ${{ inputs.setup_helmfiles }}
 
     - name: Rancher ns mover
       uses: kitabisa/composite-actions/packages/rancher@main
@@ -95,16 +107,16 @@ runs:
 
     - uses: chrnorm/deployment-status@v2
       if: success()
-      name: Set prod-test deployment success
+      name: Set env deployment success
       with:
-        token: ${{ inputs.gh-token }}
+        token: ${{ inputs.gh_token }}
         state: "success"
         deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
     - uses: chrnorm/deployment-status@v2
       if: failure()
-      name: Set prod-test deployment failure
+      name: Set env deployment failure
       with:
-        token: ${{ inputs.gh-token }}
+        token: ${{ inputs.gh_token }}
         state: "failure"
         deployment-id: ${{ steps.deployment.outputs.deployment_id }}

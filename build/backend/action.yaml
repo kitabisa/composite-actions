@@ -2,28 +2,43 @@ name: "CI Build"
 description: "Build and push docker image"
 
 inputs:
-  gh-user:
+  gh_user:
     required: true
     description: "gh user"
 
-  gh-token:
+  gh_token:
     required: true
     description: "gh token"
 
-  cache-dependency-path:
+  cache_dependency_path:
     required: false
     description: "go sum location"
     default: "go.sum"
 
-  go-version:
+  go_version:
     required: false
     description: "go version"
     default: "^1.13.1"
 
-  build-push-image:
+  build:
+    required: false
+    description: "Run make build"
+    default: true
+    type: boolean
+
+  build_push_image:
     required: false
     description: "build and push image for deployment"
     default: "false"
+
+  build_push_image_swagger:
+    required: false
+    description: "build and push image for swagger"
+    default: "false"
+
+  build_push_image_mockoon:
+    required: false
+    description: "build and push image for mockoon"
 
   credentials_json:
     required: false
@@ -37,50 +52,85 @@ inputs:
     required: false
     description: "GCP container registry host"
 
+  swagger_script_path:
+    required: false
+    description: "swagger script path"
+
+  openapi_input_file:
+    required: false
+    description: "openapi input file"
+
+  openapi_output_file:
+    required: false
+    description: "openapi output file"
+
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
 
 runs:
   using: "composite"
   steps:
     - name: Checking out repository
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
 
     - name: Configure Git for private modules
       env:
-        USER: ${{ inputs.gh-user }}
-        TOKEN: ${{ inputs.gh-token }}
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
     - uses: actions/setup-go@v4
       with:
-        cache-dependency-path: ${{ inputs.cache-dependency-path }}
-        go-version: ${{ inputs.go-version }} # The Go version to download (if necessary) and use.
+        cache-dependency-path: ${{ inputs.cache_dependency_path }}
+        go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
 
     - name: Setup gcloud
-      if: "${{ inputs.build-push-image == 'true' }}"
+      if: "${{ inputs.build_push_image == 'true' }}"
       uses: kitabisa/composite-actions/packages/gcloud@main
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup docker buildx
-      if: "${{ inputs.build-push-image == 'true' }}"
+      if: "${{ inputs.build_push_image == 'true' }}"
       uses: kitabisa/composite-actions/packages/buildx@main
       with:
         project_id: ${{ inputs.project_id }}
         gcr_host: ${{ inputs.gcr_host }}
 
     - name: Build application
-      shell: bash
-      env:
-        GITHUB_TOKEN: ${{ inputs.gh-token }}
-      run: |-
-        make build
+      id: build-app
+      uses: kitabisa/composite-actions/packages/makefile@main
+      with:
+        build: ${{ inputs.build }}
+        working_directory: ${{ inputs.working_directory }}
+        project_id: ${{ inputs.project_id }}
+        gcr_host: ${{ inputs.gcr_host }}
+        package: ${{ inputs.build_push_image }}
 
-    - name: Build, tag, and push Docker image
+    - name: Build, tag, and push Docker image Swagger
+      if: "${{ inputs.build_push_image_swagger == 'true' }}"
+      uses: kitabisa/composite-actions/packages/swagger@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        gcr_host: ${{ inputs.gcr_host }}
+        openapi_input_file: ${{ inputs.openapi_input_file }}
+        openapi_output_file: ${{ inputs.openapi_output_file }}
+        swagger_script_path: ${{ inputs.swagger_script_path }}
+
+    # if you require to build mockoon image for 3rd party mocking
+    - name: Build, tag, and push Docker image Mockoon
       shell: bash
-      if: "${{ inputs.build-push-image == 'true' }}"
+      if: "${{ inputs.build_push_image_mockoon == 'true' }}"
       env:
         DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
       run: |-
-        make package
+        make package-mockoon
