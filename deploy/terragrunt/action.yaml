@@ -40,7 +40,7 @@ runs:
           credentials_json: ${{ inputs.gcp_credentials }}
 
       - name: Sops Binary Installer
-        uses: mdgreenwald/mozilla-sops-action@v1
+        uses: mdgreenwald/mozilla-sops-action@v1.4.1
         with:
           version: v3.7.3
 
@@ -51,7 +51,7 @@ runs:
           terraform_wrapper: false
 
       - name: Setup Terragrunt
-        uses: autero1/action-terragrunt@v1.1.1
+        uses: autero1/action-terragrunt@v1.2.0
         with:
           terragrunt_version: 0.43.0
 
