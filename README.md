@@ -37,7 +37,7 @@ jobs:
     runs-on: ktbs-infra-k8s-runner
     steps:
       - name: Run build & push
-        uses: kitabisa/composite-actions/build/frontend@main
+        uses: kitabisa/composite-actions/build/frontend@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID_PROD }}
           credentials_json: ${{ secrets.GCP_SA_KEY_PROD }}
@@ -50,7 +50,7 @@ jobs:
     needs: build-push
     steps:
       - name: Run deploy & prune
-        uses: kitabisa/composite-actions/deploy/frontend@main
+        uses: kitabisa/composite-actions/deploy/frontend@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID_PROD }}
           credentials_json: ${{ secrets.GCP_SA_KEY_PROD }}
