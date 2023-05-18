@@ -5,7 +5,6 @@ This is repository of Composite GitHub Actions.
 You can choose 2 option strategy.
 
 Option 1: Single Job
-See Example on Backend [Workflows](https://github.com/kitabisa/sangu/blob/0ceb5ee26f0550ab57201215a41eb79970b45b2f/.github/workflows/build-push-deploy-prod.yaml#L1-L42)
 ```
 jobs:
   build-push-deploy:
@@ -32,7 +31,6 @@ jobs:
 
 
 Option 2: Multiple Job
-See Example on Frontend [Workflows](https://github.com/kitabisa/kanvas/blob/283050e921b632c9bc9dbcaab9e194f23cd9095a/.github/workflows/build-push-deploy-prod.yaml#L1-L56)
 ```
 jobs:
   build-push:
