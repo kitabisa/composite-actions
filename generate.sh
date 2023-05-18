@@ -1,5 +1,6 @@
+pwd=`pwd`
 for i in `find . -name action.yaml | sed 's|/[^/]*$||'`; do
-    cat <<EOF >$i/README.md
+    cat <<EOF >$pwd/$i/README.md
 <!-- action-docs-description -->
 
 <!-- action-docs-inputs -->
@@ -8,4 +9,6 @@ for i in `find . -name action.yaml | sed 's|/[^/]*$||'`; do
 
 <!-- action-docs-runs -->
 EOF
+cd $pwd/$i
+action-docs --action ./action.yaml --update-readme
 done
