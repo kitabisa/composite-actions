@@ -1,8 +1,9 @@
 # Github Action Composite
-This is repository of Composite GitHub Actions.
+This is main of Composite GitHub Actions.
 - build
 - deploy
 - rollback
+- destroy (dev release)
 
 # Basic Usage
 You can choose 2 option strategy.
