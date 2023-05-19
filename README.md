@@ -1,8 +1,8 @@
 # Github Action Composite
 This is repository of Composite GitHub Actions.
 - build
-- Deploy
-
+- deploy
+- rollback
 
 # Basic Usage
 You can choose 2 option strategy.
@@ -11,7 +11,7 @@ Option 1: Single Job
 ```
 jobs:
   build-push-deploy:
-    runs-on: ktbs-infra-k8s-runner
+    runs-on: k8s-runner
 
     steps:
       - name: Build
