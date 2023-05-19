@@ -1,5 +1,8 @@
 # Github Action Composite
 This is repository of Composite GitHub Actions.
+- build
+- Deploy
+
 
 # Basic Usage
 You can choose 2 option strategy.
@@ -34,7 +37,7 @@ Option 2: Multiple Job
 ```
 jobs:
   build-push:
-    runs-on: ktbs-infra-k8s-runner
+    runs-on: k8s-runner
     steps:
       - name: Run build & push
         uses: kitabisa/composite-actions/build/frontend@v1
@@ -46,7 +49,7 @@ jobs:
           <more input parameter>
 
   deploy:
-    runs-on: ktbs-infra-k8s-runner
+    runs-on: k8s-runner
     needs: build-push
     steps:
       - name: Run deploy & prune
