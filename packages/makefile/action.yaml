@@ -133,12 +133,12 @@ runs:
   using: "composite"
   steps:
     - name: Setup yq
-      uses: chrisdickinson/setup-yq@latest
+      uses: frenck/action-setup-yq@v1.0.2
       with:
-        yq-version: v4.30.6
+        version: v4.30.6
 
     - name: Setup Helm
-      uses: azure/setup-helm@v3
+      uses: azure/setup-helm@v2
 
     - name: Setup Helmfile
       if: "${{ inputs.setup_helmfiles == 'true' }}"
