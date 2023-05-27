@@ -1,0 +1,101 @@
+name: "Generate Coverage"
+description: "generate coverage badge for readme"
+
+inputs:
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+  gh_user:
+    required: true
+    description: "gh user"
+
+  gh_token:
+    required: true
+    description: "gh token"
+
+  cache_dependency_path:
+    required: false
+    description: "go sum location"
+    default: "go.sum"
+
+  go_version:
+    required: false
+    description: "go version"
+    default: "^1.13.1"
+
+  badge_path:
+    required: false
+    description: "badge path for coverage"
+    default: ".github/badges/code-coverage.svg"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking current repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
+
+    - name: Configure Git for private modules
+      env:
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
+      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
+
+    - uses: actions/setup-go@v4
+      with:
+        cache-dependency-path: ./${{ inputs.working_directory }}/${{ inputs.cache_dependency_path }}
+        go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
+
+    - name: Generate Master Coverage
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |-
+        echo "current_master_coverage=$(cat coverage-master.txt)" >> $GITHUB_ENV
+
+    - name: Run Unit tests
+      id: unit-test-master
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |-
+        cp ./params/.env.sample ./params/.env
+        go build -v .
+        go test ./internal/... -coverprofile=coverage.out -covermode=atomic
+        echo $(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}') > coverage-master.txt
+        echo "current_coverage=$(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')" >> $GITHUB_ENV
+        sleep 1
+
+    - name: Create destination directory
+      run: mkdir -p "${{ inputs.badge_path }}%/*"
+
+    - name: Generate badge SVG image
+      uses: emibcn/badge-action@v2.0.2
+      id: badge
+      with:
+        label: 'Code coverage'
+        status: ${{ env.current_coverage }}
+        color: 'green'
+        path: ${{ env.path }}
+
+    - name: Upload badge as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: badge
+        path: ${{ env.path }}
+        if-no-files-found: error
+
+    - name: Push coverage master to git
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: 'coverage: updated master coverage [skip ci]'
+        file_pattern: ./service/coverage-master.txt
+
+    - name: Push badge to git
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: 'coverage: updated coverage badge [skip ci]'
+        file_pattern: ${{ inputs.badge_path }}
