@@ -41,6 +41,7 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: Configure Git for private modules
+      shell: bash
       env:
         USER: ${{ inputs.gh_user }}
         TOKEN: ${{ inputs.gh_token }}
@@ -70,6 +71,7 @@ runs:
         sleep 1
 
     - name: Create destination directory
+      shell: bash
       run: mkdir -p "${{ inputs.badge_path }}%/*"
 
     - name: Generate badge SVG image
