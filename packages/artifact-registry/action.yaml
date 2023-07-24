@@ -45,6 +45,7 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: Register gcloud as a Artifact Registry credential helper
+      shell: bash
       run: |-
         gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry_host }}
 
@@ -55,10 +56,12 @@ runs:
         path: ${{ inputs.path }}/
 
     - name: Helm package
+      shell: bash
       run: |-
         helm package ${{ inputs.path }}/
 
     - name: Push chart package to Artifact Registry
+      shell: bash
       env:
         RELEASE_CHART: ${{ steps.chart.outputs.name }}-${{ steps.chart.outputs.version }}.tgz
       run: |-
