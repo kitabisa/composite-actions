@@ -1,0 +1,65 @@
+name: "Helm charts build"
+description: "Helm charts composite"
+
+inputs:
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  artifact_registry_host:
+    required: true
+    description: "GCP container registry host"
+    type: string
+
+  gh_token:
+    required: true
+    description: "gh token"
+
+  path:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v3
+
+    - name: Setup gcloud
+      uses: kitabisa/composite-actions/packages/gcloud@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v3
+      with:
+        token: ${{ inputs.gh_token }}
+
+    - name: Register gcloud as a Artifact Registry credential helper
+      run: |-
+        gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry_host }}
+
+    - name: Read Helm Chart
+      id: chart
+      uses: miraai/read-helm-chart-yaml@v0.1
+      with:
+        path: ${{ inputs.path }}/
+
+    - name: Helm package
+      run: |-
+        helm package ${{ inputs.path }}/
+
+    - name: Push chart package to Artifact Registry
+      env:
+        RELEASE_CHART: ${{ steps.chart.outputs.name }}-${{ steps.chart.outputs.version }}.tgz
+      run: |-
+        helm push "$RELEASE_CHART" oci://${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/charts

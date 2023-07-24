@@ -70,12 +70,11 @@ inputs:
     default: "."
     type: string
 
-
 runs:
   using: "composite"
   steps:
     - name: Checking out repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
