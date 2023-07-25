@@ -1,0 +1,63 @@
+name: "Helm charts build"
+description: "Helm charts composite for ChartMuseum"
+
+inputs:
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  gh_token:
+    required: true
+    description: "gh token"
+
+  gke_cluster_name:
+    required: true
+    description: "GKE cluster name"
+
+  gke_cluster_zone:
+    required: true
+    description: "GKE cluster location zone"
+
+  path:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v3
+
+    - name: Setup gcloud
+      uses: kitabisa/composite-actions/packages/gcloud@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Setup gke credential
+      uses: kitabisa/composite-actions/packages/gke-credential@main
+      with:
+        gke_cluster_name: ${{ inputs.gke_cluster_name }}
+        gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
+        project_id: ${{ inputs.project_id }}
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v3
+      with:
+        token: ${{ inputs.gh_token }}
+
+    - name: Lint chart
+      run: |-
+        helm lint ${{ inputs.path }}
+
+    - name: Simulate an install
+      run: |-
+        helm install ${{ inputs.path }} ${{ inputs.path }}/. -f ${{ inputs.path }}/values-test.yaml -n test --dry-run

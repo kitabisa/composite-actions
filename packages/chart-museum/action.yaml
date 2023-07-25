@@ -1,0 +1,53 @@
+name: "Helm charts build"
+description: "Helm charts composite for ChartMuseum"
+
+inputs:
+  chartmuseum_host:
+    required: true
+    description: "ChartMuseum host"
+    type: string
+
+  chartmuseum_user:
+    required: true
+    description: "ChartMuseum user"
+    type: string
+
+  chartmuseum_pass:
+    required: true
+    description: "ChartMuseum password"
+    type: string
+
+  gh_token:
+    required: true
+    description: "gh token"
+
+  path:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v3
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v3
+      with:
+        token: ${{ inputs.gh_token }}
+
+    - name: Install Helm push plugin
+      shell: bash
+      run: |-
+        helm plugin install https://github.com/chartmuseum/helm-push.git
+
+    - name: Push chart package to ChartMuseum
+      shell: bash
+      env:
+        CHARTMUSEUM_USER: ${{ inputs.chartmuseum_user }}
+        CHARTMUSEUM_PASS: ${{ inputs.chartmuseum_pass }}
+        CHARTMUSEUM_HOST: ${{ inputs.chartmuseum_host }}
+      run: |-
+        helm cm-push ${{ inputs.path }}/ https://"$CHARTMUSEUM_USER":"$CHARTMUSEUM_PASS"@"$CHARTMUSEUM_HOST"
