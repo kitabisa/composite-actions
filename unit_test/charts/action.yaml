@@ -55,9 +55,11 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: Lint chart
+      shell: bash
       run: |-
         helm lint ${{ inputs.path }}
 
     - name: Simulate an install
+      shell: bash
       run: |-
         helm install ${{ inputs.path }} ${{ inputs.path }}/. -f ${{ inputs.path }}/values-test.yaml -n test --dry-run
