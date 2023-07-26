@@ -81,13 +81,13 @@ runs:
         label: 'Code coverage'
         status: ${{ env.current_coverage }}
         color: 'green'
-        path: ${{ env.path }}
+        path: ${{ inputs.badge_path }}
 
     - name: Upload badge as artifact
       uses: actions/upload-artifact@v3
       with:
         name: badge
-        path: ${{ env.path }}
+        path: ${{ inputs.badge_path }}
         if-no-files-found: error
 
     - name: Push coverage master to git

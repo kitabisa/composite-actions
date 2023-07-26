@@ -1,0 +1,17 @@
+on:
+  push:
+    branches:
+      - master
+
+name: release-please
+jobs:
+  release-please:
+    runs-on: ktbs-infra-k8s-runner
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          labels: "autorelease-pending"
+          release-labels: "autorelease-tagged"
+
+
