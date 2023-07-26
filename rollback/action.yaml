@@ -32,6 +32,11 @@ inputs:
     description: "rollback revision"
     type: string
 
+  namespace:
+    required: false
+    description: "tools namespace"
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -56,4 +61,5 @@ runs:
       with:
         rollback_release: ${{ inputs.rollback_release }}
         rollback_revision: ${{ inputs.rollback_revision }}
+        namespace: ${{ inputs.namespace }}
         rollback: true
