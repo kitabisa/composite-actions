@@ -125,6 +125,12 @@ runs:
     - name: Setup Helm
       uses: azure/setup-helm@v2
 
+    - name: Register gcloud as a Artifact Registry credential helper
+      shell: bash
+      run: |-
+        gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry }}
+
+
     - name: Setup Helmfile
       if: "${{ inputs.setup_helmfiles == 'true' }}"
       uses: kitabisa/actions/setup-helmfile@master
