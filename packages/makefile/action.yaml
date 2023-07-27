@@ -139,7 +139,7 @@ runs:
       if: "${{ inputs.setup_helmfiles == 'true' }}"
       uses: kitabisa/actions/setup-helmfile@master
       with:
-        version: v0.155.1
+        version: v0.144.0
 
     - name: Install dependencies
       if: "${{ inputs.install == 'true' }}"
