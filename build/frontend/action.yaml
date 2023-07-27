@@ -165,6 +165,7 @@ runs:
       uses: kitabisa/composite-actions/packages/buildx@v2
       with:
         project_id: ${{ inputs.project_id }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
         cache: ${{ inputs.cache }}
 
     - name: Setup yarn
