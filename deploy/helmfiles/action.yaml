@@ -1,7 +1,12 @@
-name: "Rollback deployment"
-description: "Rollback release deployment"
+name: "Helmfiles"
+description: "Deploy Releases"
 
 inputs:
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
   credentials_json:
     required: true
     description: "GCP credentials services account"
@@ -17,31 +22,26 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
-  project_id:
+  chartmuseum_host:
     required: true
-    description: "GCP project id"
+    description: "ChartMuseum host"
     type: string
 
-  rollback_release:
-    required: false
-    description: "rollback release"
+  chartmuseum_user:
+    required: true
+    description: "ChartMuseum user"
     type: string
 
-  rollback_revision:
-    required: false
-    description: "rollback revision"
-    type: string
-
-  namespace:
-    required: false
-    description: "tools namespace"
+  chartmuseum_pass:
+    required: true
+    description: "ChartMuseum password"
     type: string
 
 runs:
   using: "composite"
   steps:
-    - name: Checking out repository
-      uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v2
 
     - name: Setup gcloud
       uses: kitabisa/composite-actions/packages/gcloud@main
@@ -56,10 +56,11 @@ runs:
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
-    - name: Rollback release
+    - name: Deploy
       uses: kitabisa/composite-actions/packages/makefile@main
       with:
-        rollback_release: ${{ inputs.rollback_release }}
-        rollback_revision: ${{ inputs.rollback_revision }}
-        namespace: ${{ inputs.namespace }}
-        rollback: true
+        project_id: ${{ inputs.project_id }}
+        chartmuseum_host: ${{ inputs.chartmuseum_host }}
+        chartmuseum_user: ${{ inputs.chartmuseum_user }}
+        chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
+        deploy: true
