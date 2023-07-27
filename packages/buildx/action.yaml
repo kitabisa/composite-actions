@@ -2,11 +2,6 @@ name: "Setup Docker buildx"
 description: "Setup Docker buildx credentials & cache"
 
 inputs:
-  artifact_registry:
-    required: true
-    description: "Artifact registry host"
-    type: string
-
   project_id:
     required: true
     description: "GCP project id"

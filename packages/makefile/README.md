@@ -10,7 +10,7 @@ Makefile build push deploy
 | parameter | description | required | default |
 | --- | --- | --- | --- |
 | project_id | GCP project id | `false` |  |
-| artifact_registry | Artifact registry host | `true` |  |
+| artifact_registry_host | Artifact registry host | `true` |  |
 | install | make install | `false` | false |
 | config | make config | `false` | false |
 | build | make build | `false` | false |

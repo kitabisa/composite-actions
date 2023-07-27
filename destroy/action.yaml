@@ -23,7 +23,7 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
-  artifact_registry:
+  artifact_registry_host:
     required: true
     description: "Artifact registry host"
     type: string
@@ -100,7 +100,7 @@ runs:
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
-        artifact_registry: ${{ inputs.artifact_registry }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
         destroy: true
         prune_all: ${{ inputs.prune_all }}
         using_cdn: ${{ inputs.using_cdn }}

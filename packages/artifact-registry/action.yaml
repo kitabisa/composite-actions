@@ -7,7 +7,7 @@ inputs:
     description: "GCP credentials services account"
     type: string
 
-  artifact_registry_host:
+  artifact_registry_host_host:
     required: true
     description: "GCP container registry host"
     type: string
@@ -65,4 +65,4 @@ runs:
       env:
         RELEASE_CHART: ${{ steps.chart.outputs.name }}-${{ steps.chart.outputs.version }}.tgz
       run: |-
-        helm push "$RELEASE_CHART" oci://${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/charts
+        helm push "$RELEASE_CHART" oci://${{ inputs.artifact_registry_host_host }}/${{ inputs.project_id }}/charts

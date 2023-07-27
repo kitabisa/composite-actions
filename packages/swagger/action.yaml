@@ -10,7 +10,7 @@ inputs:
     required: false
     description: "GCP project id"
 
-  artifact_registry:
+  artifact_registry_host:
     required: false
     description: "Artifact registry host"
 
@@ -50,6 +50,6 @@ runs:
     - name: Build, tag, and push Docker image Swagger
       shell: bash
       env:
-        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
         make package-swagger

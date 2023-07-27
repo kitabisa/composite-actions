@@ -19,7 +19,7 @@ Build and push docker image
 | build_push_image_mockoon | build and push image for mockoon | `false` |  |
 | credentials_json | GCP credentials services account | `false` |  |
 | project_id | GCP project id | `false` |  |
-| artifact_registry | GCP container registry host | `false` |  |
+| artifact_registry_host | GCP container registry host | `false` |  |
 | swagger_script_path | swagger script path | `false` |  |
 | openapi_input_file | openapi input file | `false` |  |
 | openapi_output_file | openapi output file | `false` |  |

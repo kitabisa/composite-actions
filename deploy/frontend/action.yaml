@@ -12,7 +12,7 @@ inputs:
     description: "GCP credentials services account"
     type: string
 
-  artifact_registry:
+  artifact_registry_host:
     required: true
     description: "Artifact registry host"
     type: string
@@ -89,7 +89,7 @@ runs:
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
-        artifact_registry: ${{ inputs.artifact_registry }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
         deploy: true
         prune: ${{ inputs.prune }}
 

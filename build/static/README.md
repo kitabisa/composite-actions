@@ -11,7 +11,7 @@ Static web composite deployment
 | --- | --- | --- | --- |
 | project_id | GCP project id | `true` |  |
 | credentials_json | GCP credentials services account | `true` |  |
-| artifact_registry | GCP container registry host | `true` |  |
+| artifact_registry_host | GCP container registry host | `true` |  |
 | chartmuseum_host | ChartMuseum host | `true` |  |
 | chartmuseum_user | ChartMuseum user | `true` |  |
 | chartmuseum_pass | ChartMuseum password | `true` |  |

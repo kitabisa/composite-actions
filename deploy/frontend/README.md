@@ -11,7 +11,7 @@ Frontend composite deployment
 | --- | --- | --- | --- |
 | project_id | GCP project id | `true` |  |
 | credentials_json | GCP credentials services account | `true` |  |
-| artifact_registry | Artifact registry host | `true` |  |
+| artifact_registry_host | Artifact registry host | `true` |  |
 | gke_cluster_name | GKE cluster name | `true` |  |
 | gke_cluster_zone | GKE cluster location zone | `true` |  |
 | rancher_host | Rancher host | `true` |  |

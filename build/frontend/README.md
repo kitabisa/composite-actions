@@ -9,7 +9,7 @@ Frontend composite deployment
 
 | parameter | description | required | default |
 | --- | --- | --- | --- |
-| artifact_registry | Artifact registry host | `true` |  |
+| artifact_registry_host | Artifact registry host | `true` |  |
 | install | Run make install | `false` | true |
 | config | Run make config | `false` | true |
 | build | Run make build | `false` | true |

@@ -7,9 +7,14 @@ inputs:
     description: "GCP project id"
     type: string
 
-  artifact_registry:
+  artifact_registry_host:
     required: true
     description: "Artifact registry host"
+    type: string
+
+  artifact_registry_project_id:
+    required: false
+    description: "Artifact registry project id"
     type: string
 
   install:
@@ -128,8 +133,7 @@ runs:
     - name: Register gcloud as a Artifact Registry credential helper
       shell: bash
       run: |-
-        gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry }}
-
+        gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry_host }}
 
     - name: Setup Helmfile
       if: "${{ inputs.setup_helmfiles == 'true' }}"
@@ -147,7 +151,8 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
+        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
         make config
 
@@ -166,7 +171,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
         make package
 
@@ -175,7 +180,8 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
+        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
         make deploy
 
@@ -228,7 +234,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       id: helm-timestamp
       env:
-        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         REVISION_IMAGE: ${{ steps.helm-values.outputs.image-tag }}
       run: |-
         echo "image-timestamp=$(make helm-image-timestamp)" >> $GITHUB_OUTPUT
@@ -238,7 +244,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         REVISION_TIMESTAMP: ${{ steps.helm-timestamp.outputs.image-timestamp }}
         IMAGE_TAG: ${{ steps.helm-values.outputs.image-tag }}
       run: |-
@@ -249,7 +255,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
         make prune-all || true
 

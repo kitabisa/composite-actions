@@ -12,7 +12,7 @@ Build and push docker image
 | env | environment to deploy to | `true` | dev |
 | gh_token | gh token | `true` |  |
 | project_id | GCP project id | `true` |  |
-| artifact_registry | Artifact registry host | `true` |  |
+| artifact_registry_host | Artifact registry host | `true` |  |
 | gke_cluster_name | GKE cluster name | `true` |  |
 | gke_cluster_zone | GKE cluster location zone | `true` |  |
 | rancher_host | Rancher host | `true` |  |

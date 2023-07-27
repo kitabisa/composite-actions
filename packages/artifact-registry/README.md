@@ -10,7 +10,7 @@ Helm charts composite
 | parameter | description | required | default |
 | --- | --- | --- | --- |
 | credentials_json | GCP credentials services account | `true` |  |
-| artifact_registry_host | GCP container registry host | `true` |  |
+| artifact_registry_host_host | GCP container registry host | `true` |  |
 | gh_token | gh token | `true` |  |
 | path | Set working directory | `false` | . |
 | project_id | GCP project id | `true` |  |

@@ -11,7 +11,7 @@ Setup Swagger build
 | --- | --- | --- | --- |
 | swagger_script_path | shell script path and name for swagger env | `false` |  |
 | project_id | GCP project id | `false` |  |
-| artifact_registry | Artifact registry host | `false` |  |
+| artifact_registry_host | Artifact registry host | `false` |  |
 | openapi_input_file | openapi input file | `false` |  |
 | openapi_output_file | openapi output file | `false` |  |
 <!-- action-docs-inputs -->

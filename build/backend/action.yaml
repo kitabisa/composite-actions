@@ -2,6 +2,15 @@ name: "CI Build"
 description: "Build and push docker image"
 
 inputs:
+  artifact_registry_host:
+    required: true
+    description: "GCP container registry host"
+
+  artifact_registry_project_id:
+    required: true
+    description: "Artifact registry project id"
+    type: string
+
   gh_user:
     required: true
     description: "gh user"
@@ -47,10 +56,6 @@ inputs:
   project_id:
     required: false
     description: "GCP project id"
-
-  artifact_registry:
-    required: false
-    description: "GCP container registry host"
 
   swagger_script_path:
     required: false
@@ -103,7 +108,7 @@ runs:
       uses: kitabisa/composite-actions/packages/buildx@v2
       with:
         project_id: ${{ inputs.project_id }}
-        artifact_registry: ${{ inputs.artifact_registry }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
 
     - name: Build application
       id: build-app
@@ -112,7 +117,8 @@ runs:
         build: ${{ inputs.build }}
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
-        artifact_registry: ${{ inputs.artifact_registry }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         package: ${{ inputs.build_push_image }}
 
     - name: Build, tag, and push Docker image Swagger
@@ -120,7 +126,7 @@ runs:
       uses: kitabisa/composite-actions/packages/swagger@v2
       with:
         project_id: ${{ inputs.project_id }}
-        artifact_registry: ${{ inputs.artifact_registry }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
         openapi_input_file: ${{ inputs.openapi_input_file }}
         openapi_output_file: ${{ inputs.openapi_output_file }}
         swagger_script_path: ${{ inputs.swagger_script_path }}
@@ -130,6 +136,6 @@ runs:
       shell: bash
       if: "${{ inputs.build_push_image_mockoon == 'true' }}"
       env:
-        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
         make package-mockoon
