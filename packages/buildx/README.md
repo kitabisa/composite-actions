@@ -9,8 +9,8 @@ Setup Docker buildx credentials & cache
 
 | parameter | description | required | default |
 | --- | --- | --- | --- |
+| artifact_registry | Artifact registry host | `true` |  |
 | project_id | GCP project id | `true` |  |
-| gcr_host | GCP container registry host | `true` |  |
 | cache | Run action cache | `false` | true |
 <!-- action-docs-inputs -->
 

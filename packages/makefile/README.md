@@ -10,10 +10,7 @@ Makefile build push deploy
 | parameter | description | required | default |
 | --- | --- | --- | --- |
 | project_id | GCP project id | `false` |  |
-| gcr_host | GCP container registry host | `false` |  |
-| chartmuseum_host | ChartMuseum host | `false` |  |
-| chartmuseum_user | ChartMuseum user | `false` |  |
-| chartmuseum_pass | ChartMuseum password | `false` |  |
+| artifact_registry | Artifact registry host | `true` |  |
 | install | make install | `false` | false |
 | config | make config | `false` | false |
 | build | make build | `false` | false |

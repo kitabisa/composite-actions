@@ -1,7 +1,7 @@
 <!-- action-docs-description -->
 ## Description
 
-Rollback release deployment
+Helm charts composite
 <!-- action-docs-description -->
 
 <!-- action-docs-inputs -->
@@ -10,12 +10,10 @@ Rollback release deployment
 | parameter | description | required | default |
 | --- | --- | --- | --- |
 | credentials_json | GCP credentials services account | `true` |  |
-| gke_cluster_name | GKE cluster name | `true` |  |
-| gke_cluster_zone | GKE cluster location zone | `true` |  |
+| artifact_registry_host | GCP container registry host | `true` |  |
+| gh_token | gh token | `true` |  |
+| path | Set working directory | `false` | . |
 | project_id | GCP project id | `true` |  |
-| rollback_release | rollback release | `false` |  |
-| rollback_revision | rollback revision | `false` |  |
-| namespace | tools namespace | `false` |  |
 <!-- action-docs-inputs -->
 
 <!-- action-docs-outputs -->

@@ -9,6 +9,7 @@ Build and push docker image
 
 | parameter | description | required | default |
 | --- | --- | --- | --- |
+| working_directory | Set working directory | `false` | . |
 | gh_user | gh user | `true` |  |
 | gh_token | gh token | `true` |  |
 | cache | enable cache for go modules | `false` | true |
@@ -17,7 +18,7 @@ Build and push docker image
 | need_mockery | need mockery | `false` | false |
 | custom_command_flag | custom command flag | `false` | false |
 | custom_command | custom command | `false` | echo no command |
-| unit_test_command | unit test command | `false` | go test ./internal/... -coverpkg=./... -coverprofile=coverage.out -covermode=atomic |
+| unit_test_command | unit test command | `false` | go test ./internal/... -coverprofile=coverage.out -covermode=atomic |
 <!-- action-docs-inputs -->
 
 <!-- action-docs-outputs -->

@@ -13,7 +13,7 @@ Destroy release deployment
 | credentials_json | GCP credentials services account | `true` |  |
 | gke_cluster_name | GKE cluster name | `true` |  |
 | gke_cluster_zone | GKE cluster location zone | `true` |  |
-| gcr_host | GCP container registry host | `true` |  |
+| artifact_registry | Artifact registry host | `true` |  |
 | project_id | GCP project id | `true` |  |
 | prune_all | make prune-all | `false` | false |
 | using_cdn | Setup cdn for static assets | `false` | false |

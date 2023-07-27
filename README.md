@@ -45,7 +45,7 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID_PROD }}
           credentials_json: ${{ secrets.GCP_SA_KEY_PROD }}
-          gcr_host: ${{ secrets.GCR_HOST }}
+          artifact_registry: ${{ secrets.ARTIFACT_REGISTRY }}
           .....................
           <more input parameter>
 
@@ -58,7 +58,7 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID_PROD }}
           credentials_json: ${{ secrets.GCP_SA_KEY_PROD }}
-          gcr_host: ${{ secrets.GCR_HOST }}
+          artifact_registry: ${{ secrets.ARTIFACT_REGISTRY }}
           .....................
           <more input parameter>
 ```

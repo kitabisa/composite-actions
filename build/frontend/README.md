@@ -9,6 +9,7 @@ Frontend composite deployment
 
 | parameter | description | required | default |
 | --- | --- | --- | --- |
+| artifact_registry | Artifact registry host | `true` |  |
 | install | Run make install | `false` | true |
 | config | Run make config | `false` | true |
 | build | Run make build | `false` | true |
@@ -16,12 +17,8 @@ Frontend composite deployment
 | cache | Run action cache | `false` | true |
 | project_id | GCP project id | `true` |  |
 | credentials_json | GCP credentials services account | `true` |  |
-| gcr_host | GCP container registry host | `true` |  |
 | setup_pnpm | Setup pnpm and cache modules | `false` | false |
 | setup_yarn | Setup yarn and cache modules | `false` | false |
-| chartmuseum_host | ChartMuseum host | `true` |  |
-| chartmuseum_user | ChartMuseum user | `true` |  |
-| chartmuseum_pass | ChartMuseum password | `true` |  |
 | working_directory | Set working directory | `false` | . |
 | pnpm_version | Setup pnpm version | `false` | latest |
 | using_nextjs | Setup next.js cache modules | `false` | false |
