@@ -24,13 +24,10 @@ runs:
     - name: Setup docker buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Register gcloud as a docker credential helper
+    - name: Register gcloud as a Artifact Registry credential helper
       shell: bash
-      env:
-        ARTIFACT_REGISTRY: ${{ inputs.artifact_registry }}
-        GCP_PROJECT_ID: ${{ inputs.project_id }}
       run: |-
-        gcloud auth configure-docker "$ARTIFACT_REGISTRY" --project "$GCP_PROJECT_ID" --quiet
+        gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry }}
 
     - name: Cache docker layers
       if: "${{ inputs.cache == 'true' }}"
