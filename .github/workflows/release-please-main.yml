@@ -10,6 +10,7 @@ jobs:
     steps:
       - uses: google-github-actions/release-please-action@v3
         with:
+          release-type: simple
           labels: "autorelease-pending"
           release-labels: "autorelease-tagged"
 
