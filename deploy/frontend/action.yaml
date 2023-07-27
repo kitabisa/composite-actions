@@ -17,6 +17,11 @@ inputs:
     description: "Artifact registry host"
     type: string
 
+  artifact_registry_project_id:
+    required: true
+    description: "Artifact registry project id"
+    type: string
+
   gke_cluster_name:
     required: true
     description: "GKE cluster name"
@@ -90,6 +95,7 @@ runs:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         deploy: true
         prune: ${{ inputs.prune }}
 
