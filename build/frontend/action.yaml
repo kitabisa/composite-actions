@@ -150,14 +150,14 @@ runs:
 
     - name: Setup gcloud
       if: "${{ inputs.config == 'true' }}"
-      uses: kitabisa/composite-actions/packages/gcloud@main
+      uses: kitabisa/composite-actions/packages/gcloud@v2
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup docker buildx
       if: "${{ inputs.build == 'true' }}"
-      uses: kitabisa/composite-actions/packages/buildx@main
+      uses: kitabisa/composite-actions/packages/buildx@v2
       with:
         project_id: ${{ inputs.project_id }}
         artifact_registry: ${{ inputs.artifact_registry }}
@@ -165,7 +165,7 @@ runs:
 
     - name: Setup yarn
       if: "${{ inputs.setup_yarn == 'true' }}"
-      uses: kitabisa/composite-actions/packages/yarn@main
+      uses: kitabisa/composite-actions/packages/yarn@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
@@ -173,7 +173,7 @@ runs:
 
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
-      uses: kitabisa/composite-actions/packages/pnpm@main
+      uses: kitabisa/composite-actions/packages/pnpm@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
@@ -182,7 +182,7 @@ runs:
 
     - name: Build push
       id: build-push
-      uses: kitabisa/composite-actions/packages/makefile@main
+      uses: kitabisa/composite-actions/packages/makefile@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
@@ -196,7 +196,7 @@ runs:
 
     - name: Upload CDN static
       if: "${{ inputs.using_cdn == 'true' }}"
-      uses: kitabisa/composite-actions/packages/cdn@main
+      uses: kitabisa/composite-actions/packages/cdn@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
@@ -211,7 +211,7 @@ runs:
         inputs.using_cdn == 'true' &&
         inputs.delete_oldest_cdn == 'true' &&
         steps.build-push.outputs.cdn-upload-path != steps.build-push.outputs.cdn-delete-path
-      uses: kitabisa/composite-actions/packages/cdn@main
+      uses: kitabisa/composite-actions/packages/cdn@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}

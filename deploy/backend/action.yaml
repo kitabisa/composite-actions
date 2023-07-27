@@ -66,14 +66,14 @@ runs:
         environment: ${{ inputs.env }}
 
     - name: Setup gke credential
-      uses: kitabisa/composite-actions/packages/gke-credential@main
+      uses: kitabisa/composite-actions/packages/gke-credential@v2
       with:
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
     - name: Deploy
-      uses: kitabisa/composite-actions/packages/makefile@main
+      uses: kitabisa/composite-actions/packages/makefile@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
@@ -82,7 +82,7 @@ runs:
         setup_helmfiles: ${{ inputs.setup_helmfiles }}
 
     - name: Rancher ns mover
-      uses: kitabisa/composite-actions/packages/rancher@main
+      uses: kitabisa/composite-actions/packages/rancher@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         rancher_host: ${{ inputs.rancher_host }}

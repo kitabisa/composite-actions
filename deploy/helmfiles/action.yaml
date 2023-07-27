@@ -44,20 +44,20 @@ runs:
       uses: actions/checkout@v2
 
     - name: Setup gcloud
-      uses: kitabisa/composite-actions/packages/gcloud@main
+      uses: kitabisa/composite-actions/packages/gcloud@v2
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup gke credential
-      uses: kitabisa/composite-actions/packages/gke-credential@main
+      uses: kitabisa/composite-actions/packages/gke-credential@v2
       with:
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
     - name: Deploy
-      uses: kitabisa/composite-actions/packages/makefile@main
+      uses: kitabisa/composite-actions/packages/makefile@v2
       with:
         project_id: ${{ inputs.project_id }}
         chartmuseum_host: ${{ inputs.chartmuseum_host }}

@@ -93,21 +93,21 @@ runs:
 
     - name: Setup gcloud
       if: "${{ inputs.build_push_image == 'true' }}"
-      uses: kitabisa/composite-actions/packages/gcloud@main
+      uses: kitabisa/composite-actions/packages/gcloud@v2
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup docker buildx
       if: "${{ inputs.build_push_image == 'true' }}"
-      uses: kitabisa/composite-actions/packages/buildx@main
+      uses: kitabisa/composite-actions/packages/buildx@v2
       with:
         project_id: ${{ inputs.project_id }}
         artifact_registry: ${{ inputs.artifact_registry }}
 
     - name: Build application
       id: build-app
-      uses: kitabisa/composite-actions/packages/makefile@main
+      uses: kitabisa/composite-actions/packages/makefile@v2
       with:
         build: ${{ inputs.build }}
         working_directory: ${{ inputs.working_directory }}
@@ -117,7 +117,7 @@ runs:
 
     - name: Build, tag, and push Docker image Swagger
       if: "${{ inputs.build_push_image_swagger == 'true' }}"
-      uses: kitabisa/composite-actions/packages/swagger@main
+      uses: kitabisa/composite-actions/packages/swagger@v2
       with:
         project_id: ${{ inputs.project_id }}
         artifact_registry: ${{ inputs.artifact_registry }}
