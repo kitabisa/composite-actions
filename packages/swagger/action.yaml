@@ -10,9 +10,9 @@ inputs:
     required: false
     description: "GCP project id"
 
-  gcr_host:
+  artifact_registry:
     required: false
-    description: "GCP container registry host"
+    description: "Artifact registry host"
 
   openapi_input_file:
     required: false
@@ -50,6 +50,6 @@ runs:
     - name: Build, tag, and push Docker image Swagger
       shell: bash
       env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
       run: |-
         make package-swagger

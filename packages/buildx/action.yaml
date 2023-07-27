@@ -2,14 +2,14 @@ name: "Setup Docker buildx"
 description: "Setup Docker buildx credentials & cache"
 
 inputs:
+  artifact_registry:
+    required: true
+    description: "Artifact registry host"
+    type: string
+
   project_id:
     required: true
     description: "GCP project id"
-    type: string
-
-  gcr_host:
-    required: true
-    description: "GCP container registry host"
     type: string
 
   cache:
@@ -27,10 +27,10 @@ runs:
     - name: Register gcloud as a docker credential helper
       shell: bash
       env:
-        DOCKER_REGISTRY: ${{ inputs.gcr_host }}
+        ARTIFACT_REGISTRY: ${{ inputs.artifact_registry }}
         GCP_PROJECT_ID: ${{ inputs.project_id }}
       run: |-
-        gcloud auth configure-docker "$DOCKER_REGISTRY" --project "$GCP_PROJECT_ID" --quiet
+        gcloud auth configure-docker "$ARTIFACT_REGISTRY" --project "$GCP_PROJECT_ID" --quiet
 
     - name: Cache docker layers
       if: "${{ inputs.cache == 'true' }}"

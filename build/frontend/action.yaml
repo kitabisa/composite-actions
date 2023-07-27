@@ -2,6 +2,11 @@ name: "Frontend build"
 description: "Frontend composite deployment"
 
 inputs:
+  artifact_registry:
+    required: true
+    description: "Artifact registry host"
+    type: string
+
   install:
     required: false
     description: "Run make install"
@@ -42,11 +47,6 @@ inputs:
     description: "GCP credentials services account"
     type: string
 
-  gcr_host:
-    required: true
-    description: "GCP container registry host"
-    type: string
-
   setup_pnpm:
     required: false
     description: "Setup pnpm and cache modules"
@@ -58,21 +58,6 @@ inputs:
     description: "Setup yarn and cache modules"
     default: false
     type: boolean
-
-  chartmuseum_host:
-    required: true
-    description: "ChartMuseum host"
-    type: string
-
-  chartmuseum_user:
-    required: true
-    description: "ChartMuseum user"
-    type: string
-
-  chartmuseum_pass:
-    required: true
-    description: "ChartMuseum password"
-    type: string
 
   working_directory:
     required: false
@@ -175,7 +160,7 @@ runs:
       uses: kitabisa/composite-actions/packages/buildx@main
       with:
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
+        artifact_registry: ${{ inputs.artifact_registry }}
         cache: ${{ inputs.cache }}
 
     - name: Setup yarn
@@ -201,10 +186,7 @@ runs:
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
-        chartmuseum_host: ${{ inputs.chartmuseum_host }}
-        chartmuseum_user: ${{ inputs.chartmuseum_user }}
-        chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
+        artifact_registry: ${{ inputs.artifact_registry }}
         install: ${{ inputs.install }}
         config: ${{ inputs.config }}
         build: ${{ inputs.build }}

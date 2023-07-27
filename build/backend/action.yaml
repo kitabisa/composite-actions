@@ -48,7 +48,7 @@ inputs:
     required: false
     description: "GCP project id"
 
-  gcr_host:
+  artifact_registry:
     required: false
     description: "GCP container registry host"
 
@@ -103,7 +103,7 @@ runs:
       uses: kitabisa/composite-actions/packages/buildx@main
       with:
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
+        artifact_registry: ${{ inputs.artifact_registry }}
 
     - name: Build application
       id: build-app
@@ -112,7 +112,7 @@ runs:
         build: ${{ inputs.build }}
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
+        artifact_registry: ${{ inputs.artifact_registry }}
         package: ${{ inputs.build_push_image }}
 
     - name: Build, tag, and push Docker image Swagger
@@ -120,7 +120,7 @@ runs:
       uses: kitabisa/composite-actions/packages/swagger@main
       with:
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
+        artifact_registry: ${{ inputs.artifact_registry }}
         openapi_input_file: ${{ inputs.openapi_input_file }}
         openapi_output_file: ${{ inputs.openapi_output_file }}
         swagger_script_path: ${{ inputs.swagger_script_path }}
@@ -130,6 +130,6 @@ runs:
       shell: bash
       if: "${{ inputs.build_push_image_mockoon == 'true' }}"
       env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
       run: |-
         make package-mockoon

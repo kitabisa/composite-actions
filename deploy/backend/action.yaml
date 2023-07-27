@@ -15,21 +15,9 @@ inputs:
     required: true
     description: "GCP project id"
 
-  gcr_host:
+  artifact_registry:
     required: true
-    description: "GCP container registry host"
-
-  chartmuseum_host:
-    required: true
-    description: "ChartMuseum host"
-
-  chartmuseum_user:
-    required: true
-    description: "ChartMuseum user"
-
-  chartmuseum_pass:
-    required: true
-    description: "ChartMuseum password"
+    description: "Artifact registry host"
 
   gke_cluster_name:
     required: true
@@ -89,10 +77,7 @@ runs:
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
-        chartmuseum_host: ${{ inputs.chartmuseum_host }}
-        chartmuseum_user: ${{ inputs.chartmuseum_user }}
-        chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
+        artifact_registry: ${{ inputs.artifact_registry }}
         deploy: true
         setup_helmfiles: ${{ inputs.setup_helmfiles }}
 

@@ -7,24 +7,9 @@ inputs:
     description: "GCP project id"
     type: string
 
-  gcr_host:
-    required: false
-    description: "GCP container registry host"
-    type: string
-
-  chartmuseum_host:
-    required: false
-    description: "ChartMuseum host"
-    type: string
-
-  chartmuseum_user:
-    required: false
-    description: "ChartMuseum user"
-    type: string
-
-  chartmuseum_pass:
-    required: false
-    description: "ChartMuseum password"
+  artifact_registry:
+    required: true
+    description: "Artifact registry host"
     type: string
 
   install:
@@ -156,10 +141,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        CHARTMUSEUM_HOST: ${{ inputs.chartmuseum_host }}
-        CHARTMUSEUM_USER: ${{ inputs.chartmuseum_user }}
-        CHARTMUSEUM_PASS: ${{ inputs.chartmuseum_pass }}
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
       run: |-
         make config
 
@@ -178,7 +160,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
       run: |-
         make package
 
@@ -187,10 +169,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        CHARTMUSEUM_HOST: ${{ inputs.chartmuseum_host }}
-        CHARTMUSEUM_USER: ${{ inputs.chartmuseum_user }}
-        CHARTMUSEUM_PASS: ${{ inputs.chartmuseum_pass }}
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
       run: |-
         make deploy
 
@@ -243,7 +222,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       id: helm-timestamp
       env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
         REVISION_IMAGE: ${{ steps.helm-values.outputs.image-tag }}
       run: |-
         echo "image-timestamp=$(make helm-image-timestamp)" >> $GITHUB_OUTPUT
@@ -253,7 +232,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
         REVISION_TIMESTAMP: ${{ steps.helm-timestamp.outputs.image-timestamp }}
         IMAGE_TAG: ${{ steps.helm-values.outputs.image-tag }}
       run: |-
@@ -264,7 +243,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry }}/${{ inputs.project_id }}
       run: |-
         make prune-all || true
 
