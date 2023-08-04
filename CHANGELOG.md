@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/kitabisa/composite-actions/compare/v1.2.0...v1.3.0) (2023-08-04)
+
+
+### Features
+
+* separate build & deploy phase ([#63](https://github.com/kitabisa/composite-actions/issues/63)) ([e818dd7](https://github.com/kitabisa/composite-actions/commit/e818dd75b4d603774bf7d8e1ea44854718537deb))
+
 ## [1.2.0](https://github.com/kitabisa/composite-actions/compare/v1.1.0...v1.2.0) (2023-07-27)
 
 
