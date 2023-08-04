@@ -82,6 +82,9 @@ runs:
         token: ${{ inputs.gh_token }}
         environment: ${{ inputs.env }}
 
+    - name: Checking out repository
+      uses: actions/checkout@v3
+      
     - name: Setup gcloud
       uses: kitabisa/composite-actions/packages/gcloud@main
       with:
