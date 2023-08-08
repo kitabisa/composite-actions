@@ -23,11 +23,12 @@ tasks:
     cmds:
       - echo '[*] Generating config for {{.APP_NAME}} {{.VERSION}}'
       - helmfile --selector tier=config template --output-dir . --output-dir-template '{{.OutputDir}}'
+
       - echo '[*] Parsing config for {{.APP_NAME}} {{.VERSION}}'
       - yq eval '.data."config.env"' .infra/helm/config/templates/configmap.yaml > config.env
-	    - yq eval '.stringData."secret.env"' .infra/helm/config/templates/secret.yaml > secret.env
-	    - cat config.env secret.env > .env
-	    - rm config.env secret.env
+      - yq eval '.stringData."secret.env"' .infra/helm/config/templates/secret.yaml > secret.env
+      - cat config.env secret.env > .env
+      - rm config.env secret.env
 
   build:
     desc: Building apps
