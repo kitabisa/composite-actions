@@ -31,13 +31,13 @@ tasks:
 
   build:
     desc: Building apps
-    env:
-      CI: "true"
-      CI_ENV: "{{.ENV}}"
-      NODE_ENV: production
     cmds:
       - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
-      - yarn build
+      - |
+        CI=true \
+        CI_ENV={{.ENV}} \
+        NODE_ENV=production \
+        yarn build
 
   package:
     desc: Build & push images
