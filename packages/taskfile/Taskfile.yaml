@@ -2,7 +2,7 @@
 
 version: '3'
 
-silent: true
+silent: false
 
 includes:
   frontend: ./frontend/Taskfile.yaml

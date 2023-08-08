@@ -7,8 +7,6 @@ env:
   BUILD_DATE:  {sh: date '+%Y-%m-%d-%H:%M:%S'}
   LATEST_TAG: {sh: bash ./frontend/latest.sh}
 
-silent: false
-
 tasks:
 
   install:
@@ -22,10 +20,10 @@ tasks:
     desc: Generating config
     cmds:
       - echo '[*] Generating config for {{.APP_NAME}} {{.VERSION}}'
-      - helmfile --selector tier=config template --output-dir . --output-dir-template '{{.OutputDir}}'
-
+      - helmfile --selector tier=config template --output-dir . --output-dir-template "'{{.OutputDir}}'"
       - echo '[*] Parsing config for {{.APP_NAME}} {{.VERSION}}'
-      - ls -lah
+      - ls -lah .infra/helm/config/
+      - ls -lah .infra/helm/config/templates/
       - yq eval '.data."config.env"' .infra/helm/config/templates/configmap.yaml > config.env
       - yq eval '.stringData."secret.env"' .infra/helm/config/templates/secret.yaml > secret.env
       - cat config.env secret.env > .env
