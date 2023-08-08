@@ -64,6 +64,10 @@ runs:
       with:
         version: v0.144.0
 
+    - name: ls file
+      shell: bash
+      run: ls -lah ${GITHUB_ACTION_PATH}
+
     - name: CI task for frontend
       if: "${{ inputs.squad == 'frontend' }}"
       working-directory: ${{ inputs.working_directory }}
