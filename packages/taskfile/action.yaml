@@ -33,12 +33,6 @@ inputs:
     default: "."
     type: string
 
-env:
-  APP_NAME: ${{ inputs.app_name }}
-  SQUAD: ${{ inputs.squad }}
-  BUSINESS: ${{ inputs.business }}
-  DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
-
 runs:
   using: "composite"
   steps:
@@ -75,6 +69,11 @@ runs:
       if: "${{ inputs.squad == 'frontend' }}"
       working-directory: ${{ inputs.working_directory }}
       shell: bash
+      env:
+        APP_NAME: ${{ inputs.app_name }}
+        SQUAD: ${{ inputs.squad }}
+        BUSINESS: ${{ inputs.business }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
         task frontend:install
         task frontend:config
