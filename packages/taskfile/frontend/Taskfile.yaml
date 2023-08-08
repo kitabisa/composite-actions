@@ -43,7 +43,6 @@ tasks:
     desc: Build & push images
     cmds:
       - echo '[*] Build, tag, and push Docker image {{.APP_NAME}} {{.VERSION}}'
-      - echo '{{.ENV_NAME}}'
       - |
         docker buildx build \
           --build-arg VERSION={{.VERSION}} \
