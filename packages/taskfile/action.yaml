@@ -66,7 +66,11 @@ runs:
 
     - name: ls file
       shell: bash
-      run: ls -lah ${{ github.action_path }}
+      run: |-
+        cp ${{ github.action_path }}/Taskfile.yaml .
+        cp -r ${{ github.action_path }}/frontend .
+
+        ls -lah .
 
     - name: CI task for frontend
       if: "${{ inputs.squad == 'frontend' }}"
