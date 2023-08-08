@@ -2,9 +2,19 @@ name: "Frontend build"
 description: "Frontend composite deployment"
 
 inputs:
+  app_name:
+    required: true
+    description: "Application name"
+    type: string
+
   artifact_registry_host:
     required: true
     description: "Artifact registry host"
+    type: string
+
+  business:
+    required: true
+    description: "business name"
     type: string
 
   cache:
@@ -13,14 +23,14 @@ inputs:
     default: true
     type: boolean
 
-  project_id:
-    required: true
-    description: "GCP project id"
-    type: string
-
   credentials_json:
     required: true
     description: "GCP credentials services account"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
     type: string
 
   setup_pnpm:
@@ -34,6 +44,11 @@ inputs:
     description: "Setup yarn and cache modules"
     default: false
     type: boolean
+
+  squad:
+    required: true
+    description: "Squad name"
+    type: string
 
   working_directory:
     required: false

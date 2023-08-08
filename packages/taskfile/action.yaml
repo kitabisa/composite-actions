@@ -18,7 +18,7 @@ inputs:
     type: string
 
   project_id:
-    required: false
+    required: true
     description: "GCP project id"
     type: string
 
