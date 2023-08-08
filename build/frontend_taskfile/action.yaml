@@ -85,19 +85,6 @@ runs:
         node-version-file: "${{ inputs.working_directory }}/.nvmrc"
         check-latest: true
 
-    - name: Setup gcloud
-      uses: kitabisa/composite-actions/packages/gcloud@v2
-      with:
-        project_id: ${{ inputs.project_id }}
-        credentials_json: ${{ inputs.credentials_json }}
-
-    - name: Setup docker buildx
-      uses: kitabisa/composite-actions/packages/buildx@v2
-      with:
-        project_id: ${{ inputs.project_id }}
-        artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        cache: ${{ inputs.cache }}
-
     - name: Setup yarn
       if: "${{ inputs.setup_yarn == 'true' }}"
       uses: kitabisa/composite-actions/packages/yarn@v2
@@ -113,6 +100,19 @@ runs:
         working_directory: ${{ inputs.working_directory }}
         using_nextjs: ${{ inputs.using_nextjs }}
         pnpm_version: ${{ inputs.pnpm_version }}
+        cache: ${{ inputs.cache }}
+
+    - name: Setup gcloud
+      uses: kitabisa/composite-actions/packages/gcloud@v2
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Setup docker buildx
+      uses: kitabisa/composite-actions/packages/buildx@v2
+      with:
+        project_id: ${{ inputs.project_id }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
         cache: ${{ inputs.cache }}
 
     - name: Build push
