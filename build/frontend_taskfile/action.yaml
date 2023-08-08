@@ -86,14 +86,12 @@ runs:
         check-latest: true
 
     - name: Setup gcloud
-      if: "${{ inputs.config == 'true' }}"
       uses: kitabisa/composite-actions/packages/gcloud@v2
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup docker buildx
-      if: "${{ inputs.build == 'true' }}"
       uses: kitabisa/composite-actions/packages/buildx@v2
       with:
         project_id: ${{ inputs.project_id }}
