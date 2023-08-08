@@ -44,4 +44,14 @@ tasks:
     cmds:
       - echo '[*] Build, tag, and push Docker image {{.APP_NAME}} {{.VERSION}}'
       - echo '{{.ENV_NAME}}'
-      - echo '{{.DOCKER_REPOSITORY}}'
+      - |
+        docker buildx build \
+          --build-arg VERSION={{.VERSION}} \
+          --build-arg GIT_COMMIT={{.GIT_COMMIT}}{{.GIT_DIRTY}} \
+          --cache-from type=local,src=/tmp/.buildx-cache \
+          --cache-to type=local,dest=/tmp/.buildx-cache \
+          --tag {{.DOCKER_REPOSITORY}}/{{.APP_NAME}}:{{.GIT_COMMIT}} \
+          --tag {{.DOCKER_REPOSITORY}}/{{.APP_NAME}}:{{.VERSION}} \
+          --tag {{.DOCKER_REPOSITORY}}/{{.APP_NAME}}:{{.VERSION}}-{{.ENV_NAME}} \
+          --tag {{.DOCKER_REPOSITORY}}/{{.APP_NAME}}:{{.LATEST_TAG}} \
+          --push .
