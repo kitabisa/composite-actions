@@ -1,6 +1,6 @@
 version: '3'
 
-vars:
+env:
   VERSION: {sh: git describe --always --tags `git rev-list --tags --skip=$SKIP_VERSION --max-count=1`}
   GIT_COMMIT:  {sh: git rev-parse HEAD}
   GIT_DIRTY:  {sh: test -n "`git status --porcelain`" && echo "+CHANGES" || true}
