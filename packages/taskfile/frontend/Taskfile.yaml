@@ -25,6 +25,7 @@ tasks:
       - helmfile --selector tier=config template --output-dir . --output-dir-template '{{.OutputDir}}'
 
       - echo '[*] Parsing config for {{.APP_NAME}} {{.VERSION}}'
+      - ls -lah
       - yq eval '.data."config.env"' .infra/helm/config/templates/configmap.yaml > config.env
       - yq eval '.stringData."secret.env"' .infra/helm/config/templates/secret.yaml > secret.env
       - cat config.env secret.env > .env
