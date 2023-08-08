@@ -42,4 +42,4 @@ tasks:
   package:
     desc: Build & push images
     cmds:
-      - echo '[*] Build, tag, and push Docker image'
+      - echo '[*] Build, tag, and push Docker image {{.APP_NAME}} {{.VERSION}} {{.GIT_COMMIT}}'
