@@ -33,9 +33,9 @@ tasks:
   build:
     desc: Building apps
     env:
-      - CI: true
-      - CI_ENV: {{.ENV}}
-      - NODE_ENV: production
+      CI: "true"
+      CI_ENV: "{{.ENV}}"
+      NODE_ENV: production
     cmds:
       - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
       - |
