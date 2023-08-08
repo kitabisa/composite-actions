@@ -37,10 +37,7 @@ tasks:
       NODE_ENV: production
     cmds:
       - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
-      - |
-        start=$(date +%s)
-        yarn build
-        echo "duration=$(($(date +%s)-$start))" >> $GITHUB_OUTPUT
+      - yarn build
 
   package:
     desc: Build & push images
