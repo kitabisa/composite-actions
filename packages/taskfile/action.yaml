@@ -66,7 +66,7 @@ runs:
 
     - name: ls file
       shell: bash
-      run: ls -lah ${GITHUB_ACTION_PATH}
+      run: ls -lah ${{ github.action_path }}
 
     - name: CI task for frontend
       if: "${{ inputs.squad == 'frontend' }}"
