@@ -20,7 +20,7 @@ tasks:
     desc: Generating config
     cmds:
       - echo '[*] Generating config for {{.APP_NAME}} {{.VERSION}}'
-      - helmfile --selector tier=config template --output-dir . --output-dir-template "'{{.OutputDir}}'"
+      - helmfile --selector tier=config template --output-dir . --output-dir-template "{{.OutputDir}}"
       - echo '[*] Parsing config for {{.APP_NAME}} {{.VERSION}}'
       - ls -lah .infra/helm/config/
       - ls -lah .infra/helm/config/templates/
