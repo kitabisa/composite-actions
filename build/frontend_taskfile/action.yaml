@@ -12,6 +12,11 @@ inputs:
     description: "Artifact registry host"
     type: string
 
+  artifact_registry_project_id:
+    required: true
+    description: "Artifact registry project id"
+    type: string
+
   business:
     required: true
     description: "business name"
@@ -121,6 +126,7 @@ runs:
       with:
         app_name: ${{ inputs.app_name }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ artifact_registry_project_id }}
         business: ${{ inputs.business }}
         project_id: ${{ inputs.project_id }}
         squad: ${{ inputs.squad }}
