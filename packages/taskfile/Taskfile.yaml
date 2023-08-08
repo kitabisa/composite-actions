@@ -1,0 +1,8 @@
+# https://taskfile.dev
+
+version: '3'
+
+silent: true
+
+includes:
+  frontend: ./frontend/Taskfile.yaml

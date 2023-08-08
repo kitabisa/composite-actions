@@ -105,7 +105,6 @@ inputs:
     default: true
     type: boolean
 
-
 outputs:
   build-time:
     description: "Define build time"
