@@ -5,7 +5,7 @@ vars:
   GIT_COMMIT:  {sh: git rev-parse HEAD}
   GIT_DIRTY:  {sh: test -n "`git status --porcelain`" && echo "+CHANGES" || true}
   BUILD_DATE:  {sh: date '+%Y-%m-%d-%H:%M:%S'}
-  LATEST_TAG: {sh: bash latest.sh}
+  LATEST_TAG: {sh: bash ./frontend/latest.sh}
 
 silent: false
 
