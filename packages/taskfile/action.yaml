@@ -73,6 +73,7 @@ runs:
       shell: bash
       run: |-
         cp -r ${{ github.action_path }}/tasks/ .
+        ls -lah
 
     - name: CI task for frontend
       if: "${{ inputs.squad == 'frontend' }}"
