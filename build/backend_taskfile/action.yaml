@@ -112,14 +112,12 @@ runs:
         go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
 
     - name: Setup gcloud
-      if: "${{ inputs.build_push_image == 'true' }}"
       uses: kitabisa/composite-actions/packages/gcloud@v2
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup docker buildx
-      if: "${{ inputs.build_push_image == 'true' }}"
       uses: kitabisa/composite-actions/packages/buildx@v2
       with:
         project_id: ${{ inputs.project_id }}
