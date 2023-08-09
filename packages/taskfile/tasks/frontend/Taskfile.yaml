@@ -12,11 +12,11 @@ tasks:
   install:
     desc: Installing dependencies
     vars:
-      CI=true
+      CI: true
     cmds:
       - echo '[*] Installing dependencies for {{.APP_NAME}} {{.VERSION}}'
       - yarn config set //npm.pkg.github.com/:_authToken={{.NPM_TOKEN}}
-      -  yarn install --frozen-lockfile
+      - yarn install --frozen-lockfile
 
   config:
     desc: Generating config
@@ -34,10 +34,10 @@ tasks:
   build:
     desc: Building apps
     vars:
-      CI=true
-      CI_ENV={{.ENV}}
-      NODE_ENV=production
-      VERSION={{.VERSION}}
+      CI: true
+      CI_ENV: '{{.ENV}}'
+      NODE_ENV: production
+      VERSION: '{{.VERSION}}'
     cmds:
       - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
       - yarn build

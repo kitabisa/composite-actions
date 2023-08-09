@@ -6,3 +6,4 @@ silent: false
 
 includes:
   frontend: ./frontend/Taskfile.yaml
+  backend: ./frontend/Taskfile.yaml

@@ -72,7 +72,7 @@ runs:
     - name: Copy taskfile
       shell: bash
       run: |-
-        cp -r ${{ github.action_path }}/tasks/ .
+        cp -r ${{ github.action_path }}/tasks/* .
         ls -lah
 
     - name: CI task for frontend
