@@ -33,3 +33,9 @@ tasks:
           --tag {{.DOCKER_REPOSITORY}}/{{.APP_NAME}}:{{.VERSION}} \
           --tag {{.DOCKER_REPOSITORY}}/{{.APP_NAME}}:latest \
           --push .
+
+  deploy:
+    desc: Deploy apps
+    cmds:
+      - echo '[*] Deploying {{.APP_NAME}} {{.VERSION}}'
+      - helmfile apply

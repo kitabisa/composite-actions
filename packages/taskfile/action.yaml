@@ -73,7 +73,6 @@ runs:
       shell: bash
       run: |-
         cp -r ${{ github.action_path }}/tasks/* .
-        ls -lah
 
     - name: CI task for frontend
       if: "${{ inputs.squad == 'frontend' }}"
@@ -90,3 +89,17 @@ runs:
         task frontend:config
         task frontend:build
         task frontend:package
+
+    - name: CI task for backend
+      if: "${{ inputs.squad == 'backend' }}"
+      working-directory: ${{ inputs.working_directory }}
+      shell: bash
+      env:
+        APP_NAME: ${{ inputs.app_name }}
+        SQUAD: ${{ inputs.squad }}
+        BUSINESS: ${{ inputs.business }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
+        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
+      run: |-
+        task backend:build
+        task backend:package
