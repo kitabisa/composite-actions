@@ -1,0 +1,26 @@
+version: '3'
+
+silent: false
+
+vars:
+  FILE: release.txt
+  CONTENT:
+    sh: helm ls -n gudang | grep dev | awk '{ print $1, $2 }' > {{.FILE}}
+  RELEASE:
+    sh: cat {{.FILE}} | awk '{ print $1 }'
+
+tasks:
+  destroy-dev:
+    desc: Destroy dev
+    cmds:
+      - for: { var: RELEASE }
+        task: purge
+        vars:
+          RELEASE_DEV: '{{.ITEM}}'
+          RELEASE_NS:
+            sh: cat {{.FILE}} | grep {{.ITEM}} | awk '{ print $2 }'
+
+  purge:
+    cmds:
+      - echo 'helm delete -n {{.RELEASE_NS}} {{.RELEASE_DEV}}'
+      - defer: rm -rf {{.FILE}}
