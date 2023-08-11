@@ -21,6 +21,7 @@ tasks:
             sh: cat {{.FILE}} | grep {{.ITEM}} | awk '{ print $2 }'
 
   purge:
+    desc: Iterate helm release dev
     cmds:
       - echo 'helm delete -n {{.RELEASE_NS}} {{.RELEASE_DEV}}'
       - defer: rm -rf {{.FILE}}
