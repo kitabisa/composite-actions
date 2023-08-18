@@ -135,5 +135,9 @@ runs:
     - name: Copy taskfile
       shell: bash
       run: |-
-        ls -lah ${{ github.action_path }}
-        ls -lah ../${{ github.action_path }}
+        cp -r ${{ github.action_path }}/tasks/* .
+
+    - name: Run destroy dev
+      shell: bash
+      run: |-
+        task destroy-dev
