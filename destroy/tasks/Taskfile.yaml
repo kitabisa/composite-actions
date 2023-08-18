@@ -19,7 +19,7 @@ tasks:
           RELEASE_DEV: '{{.ITEM}}'
           RELEASE_NS:
             sh: cat {{.FILE}} | grep {{.ITEM}} | awk '{ print $2 }'
-      - defer: rm -rf {{.FILE}}
+      # - defer: rm -rf {{.FILE}}
 
   purge:
     desc: Iterate helm release dev
