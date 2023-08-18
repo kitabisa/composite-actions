@@ -24,6 +24,6 @@ tasks:
   purge:
     desc: Iterate helm release dev
     cmds:
-      - echo 'helm delete -n {{.RELEASE_NS}} {{.RELEASE_DEV}}'
-      # - helm delete -n {{.RELEASE_NS}} {{.RELEASE_DEV}}
+      # - echo 'helm delete -n {{.RELEASE_NS}} {{.RELEASE_DEV}}'
+      - helm delete -n {{.RELEASE_NS}} {{.RELEASE_DEV}}
 
