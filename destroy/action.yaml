@@ -109,6 +109,19 @@ runs:
         location: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
+    - name: Install go
+      uses: actions/setup-go@v4
+      with:
+        go-version: 1.17
+
+    - name: Install task
+      uses: arduino/setup-task@v1
+      with:
+        version: 3.x
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v2
+
     - name: Destroy release
       id: destroy-release
       if: "${{ inputs.scheduler_destroy_dev == 'false' }}"
