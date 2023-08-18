@@ -5,7 +5,7 @@ silent: false
 vars:
   FILE: release.txt
   CONTENT:
-    sh: helm ls -n gudang | grep dev | awk '{ print $1, $2 }' > {{.FILE}}
+    sh: helm ls -A | grep "\-dev" | awk '{ print $1, $2 }' > {{.FILE}}
   RELEASE:
     sh: cat {{.FILE}} | awk '{ print $1 }'
 
@@ -19,9 +19,11 @@ tasks:
           RELEASE_DEV: '{{.ITEM}}'
           RELEASE_NS:
             sh: cat {{.FILE}} | grep {{.ITEM}} | awk '{ print $2 }'
+      - defer: rm -rf {{.FILE}}
 
   purge:
     desc: Iterate helm release dev
     cmds:
       - echo 'helm delete -n {{.RELEASE_NS}} {{.RELEASE_DEV}}'
-      - defer: rm -rf {{.FILE}}
+      # - helm delete -n {{.RELEASE_NS}} {{.RELEASE_DEV}}
+
