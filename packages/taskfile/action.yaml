@@ -3,32 +3,32 @@ description: "Taskfile cetralized command executor"
 
 inputs:
   app_name:
-    required: true
+    required: false
     description: "Application name"
     type: string
 
   artifact_registry_host:
-    required: true
+    required: false
     description: "Artifact registry host"
     type: string
 
   artifact_registry_project_id:
-    required: true
+    required: false
     description: "Artifact registry project id"
     type: string
 
   business:
-    required: true
+    required: false
     description: "business name"
     type: string
 
   project_id:
-    required: true
+    required: false
     description: "GCP project id"
     type: string
 
   squad:
-    required: true
+    required: false
     description: "Squad name"
     type: string
 

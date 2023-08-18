@@ -2,12 +2,7 @@ name: "Destroy deployment"
 description: "Destroy release deployment"
 
 inputs:
-  working_directory:
-    required: false
-    description: "Set working directory"
-    default: "."
-    type: string
-
+  # Required
   credentials_json:
     required: true
     description: "GCP credentials services account"
@@ -23,33 +18,16 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
-  artifact_registry_host:
-    required: true
-    description: "Artifact registry host"
-    type: string
-
   project_id:
     required: true
     description: "GCP project id"
     type: string
 
-  prune_all:
+  # Optional
+  artifact_registry_host:
     required: false
-    description: "make prune-all"
-    default: false
-    type: boolean
-
-  using_cdn:
-    required: false
-    description: "Setup cdn for static assets"
-    default: false
-    type: boolean
-
-  delete_oldest_cdn:
-    required: false
-    description: "Setup delete oldest cdn"
-    default: true
-    type: boolean
+    description: "Artifact registry host"
+    type: string
 
   cdn_aws_s3_bucket:
     required: false
@@ -75,27 +53,65 @@ inputs:
     default: ""
     type: string
 
+  delete_oldest_cdn:
+    required: false
+    description: "Setup delete oldest cdn"
+    default: true
+    type: boolean
+
+  prune_all:
+    required: false
+    description: "make prune-all"
+    default: false
+    type: boolean
+
+  scheduler_destroy_dev:
+    required: false
+    description: "Scheduler for destroy dev"
+    default: false
+    type: boolean
+
+  using_cdn:
+    required: false
+    description: "Setup cdn for static assets"
+    default: false
+    type: boolean
+
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+
 runs:
   using: "composite"
   steps:
     - name: Checking out repository
       uses: actions/checkout@v3
 
-    - name: Setup gcloud
-      uses: kitabisa/composite-actions/packages/gcloud@v2
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v0
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
-    - name: Setup gke credential
-      uses: kitabisa/composite-actions/packages/gke-credential@v2
+    - name: Setup gcloud
+      uses: google-github-actions/setup-gcloud@v0
+
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v3
+
+    - name: Get GKE credential
+      uses: google-github-actions/get-gke-credentials@main
       with:
-        gke_cluster_name: ${{ inputs.gke_cluster_name }}
-        gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
+        cluster_name: ${{ inputs.gke_cluster_name }}
+        location: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
     - name: Destroy release
       id: destroy-release
+      if: "${{ inputs.scheduler_destroy_dev == 'false' }}"
       uses: kitabisa/composite-actions/packages/makefile@v2
       with:
         working_directory: ${{ inputs.working_directory }}
@@ -115,3 +131,9 @@ runs:
         cdn_aws_secret_access_key: ${{ inputs.cdn_aws_secret_access_key }}
         cdn_aws_region: ${{ inputs.cdn_aws_region }}
         delete: ${{ steps.destroy-release.outputs.cdn-delete-path }}
+
+    - name: Copy taskfile
+      shell: bash
+      run: |-
+        ls -lah ${{ github.action_path }}
+        ls -lah ../${{ github.action_path }}
