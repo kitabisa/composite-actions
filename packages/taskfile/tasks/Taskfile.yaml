@@ -1,10 +1,24 @@
-# https://taskfile.dev
-
 version: '3'
 
-silent: false
+tasks:
 
-includes:
-  frontend: ./frontend/Taskfile.yaml
-  backend: ./backend/Taskfile.yaml
-  infra: ./infra/Taskfile.yaml
+  install:
+    desc: Installing dependencies
+    cmds:
+      - echo '[*] Installing dependencies'
+
+  config:
+    desc: Generating config
+    cmds:
+      - echo '[*] Generating config'
+
+  build:
+    desc: Building apps
+    cmds:
+      - echo '[*] Building apps'
+      - yarn {{.CLI_ARGS}}
+
+  package:
+    desc: Build & push images
+    cmds:
+      - echo '[*] Build, tag, and push Docker image'

@@ -2,99 +2,21 @@ name: "Taskfile"
 description: "Taskfile cetralized command executor"
 
 inputs:
-  app_name:
+  args:
     required: false
-    description: "Application name"
-    type: string
-
-  artifact_registry_host:
-    required: false
-    description: "Artifact registry host"
-    type: string
-
-  artifact_registry_project_id:
-    required: false
-    description: "Artifact registry project id"
-    type: string
-
-  business:
-    required: false
-    description: "business name"
-    type: string
-
-  project_id:
-    required: false
-    description: "GCP project id"
-    type: string
-
-  squad:
-    required: false
-    description: "Squad name"
-    type: string
-
-  working_directory:
-    required: false
-    description: "Set working directory"
-    default: "."
+    description: "install"
     type: string
 
 runs:
   using: "composite"
   steps:
-    - name: Install task
-      uses: arduino/setup-task@v1
-      with:
-        version: 3.x
-
-    - name: Setup yq
-      uses: frenck/action-setup-yq@v1.0.2
-      with:
-        version: v4.30.6
-
-    - name: Setup Helm
-      uses: azure/setup-helm@v2
-
-    - name: Register gcloud as a Artifact Registry credential helper
-      shell: bash
-      run: |-
-        gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry_host }}
-
-    - name: Setup Helmfile
-      uses: kitabisa/actions/setup-helmfile@master
-      with:
-        version: v0.144.0
-
     - name: Copy taskfile
       shell: bash
       run: |-
         cp -r ${{ github.action_path }}/tasks/* .
 
     - name: CI task for frontend
-      if: "${{ inputs.squad == 'frontend' }}"
-      working-directory: ${{ inputs.working_directory }}
       shell: bash
-      env:
-        APP_NAME: ${{ inputs.app_name }}
-        SQUAD: ${{ inputs.squad }}
-        BUSINESS: ${{ inputs.business }}
-        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
-        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
-        task frontend:install
-        task frontend:config
-        task frontend:build
-        task frontend:package
+        ${{ inputs.args }}
 
-    - name: CI task for backend
-      if: "${{ inputs.squad == 'backend' }}"
-      working-directory: ${{ inputs.working_directory }}
-      shell: bash
-      env:
-        APP_NAME: ${{ inputs.app_name }}
-        SQUAD: ${{ inputs.squad }}
-        BUSINESS: ${{ inputs.business }}
-        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
-        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
-      run: |-
-        task backend:build
-        task backend:package
