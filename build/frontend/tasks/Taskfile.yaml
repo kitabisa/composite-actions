@@ -40,7 +40,7 @@ tasks:
       VERSION: '{{.VERSION}}'
     cmds:
       - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
-      - yarn build
+      - yarn {{.CLI_ARGS}}
 
   package:
     desc: Build & push images
