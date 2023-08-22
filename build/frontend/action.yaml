@@ -33,6 +33,11 @@ inputs:
     description: "GCP project id"
     type: string
 
+  taskfile:
+    required: true
+    description: "Taskfile argument"
+    type: string
+
   # Optional
   cache:
     required: false
@@ -146,7 +151,4 @@ runs:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
-        task frontend:install
-        task frontend:config
-        task frontend:build
-        task frontend:package
+        ${{ inputs.taskfile }}
