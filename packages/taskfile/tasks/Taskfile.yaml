@@ -15,8 +15,7 @@ tasks:
   build:
     desc: Building apps
     cmds:
-      - echo '[*] Building apps'
-      - yarn {{.CLI_ARGS}}
+      - echo '[*] Building apps yarn {{.CLI_ARGS}}'
 
   package:
     desc: Build & push images
