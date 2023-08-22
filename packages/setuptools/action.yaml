@@ -1,0 +1,44 @@
+name: "Setup dependencies tools"
+description: "Setup dependencies tools"
+
+inputs:
+  setup_task:
+    required: false
+    description: "Setup taskfile"
+
+  setup_yq:
+    required: false
+    description: "Setup yq"
+
+  setup_helm:
+    required: false
+    description: "Setup helm"
+
+  setup_helmfile:
+    required: false
+    description: "Setup helmfile"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install task
+      if: "${{ inputs.setup_task == 'true' }}"
+      uses: arduino/setup-task@v1
+      with:
+        version: 3.x
+
+    - name: Setup yq
+      if: "${{ inputs.setup_yq == 'true' }}"
+      uses: frenck/action-setup-yq@v1.0.2
+      with:
+        version: v4.30.6
+
+    - name: Setup Helm
+      if: "${{ inputs.setup_helm == 'true' }}"
+      uses: azure/setup-helm@v2
+
+    - name: Setup Helmfile
+      if: "${{ inputs.setup_helmfile == 'true' }}"
+      uses: kitabisa/actions/setup-helmfile@master
+      with:
+        version: v0.144.0

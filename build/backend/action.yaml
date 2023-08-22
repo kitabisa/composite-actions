@@ -2,6 +2,12 @@ name: "CI Build"
 description: "Build and push docker image"
 
 inputs:
+  # Required
+  app_name:
+    required: true
+    description: "Application name"
+    type: string
+
   artifact_registry_host:
     required: true
     description: "GCP container registry host"
@@ -11,24 +17,29 @@ inputs:
     description: "Artifact registry project id"
     type: string
 
+  business:
+    required: true
+    description: "Business name"
+    type: string
+
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+
   gh_user:
     required: true
-    description: "gh user"
+    description: "Github user"
 
   gh_token:
     required: true
-    description: "gh token"
+    description: "Github token"
 
-  cache_dependency_path:
-    required: false
-    description: "go sum location"
-    default: "go.sum"
+  squad:
+    required: true
+    description: "Squad name"
+    type: string
 
-  go_version:
-    required: false
-    description: "go version"
-    default: "^1.13.1"
-
+  # Optional
   build:
     required: false
     description: "Run make build"
@@ -37,21 +48,35 @@ inputs:
 
   build_push_image:
     required: false
-    description: "build and push image for deployment"
+    description: "Build and push image for deployment"
     default: "false"
 
   build_push_image_swagger:
     required: false
-    description: "build and push image for swagger"
+    description: "Build and push image for swagger"
     default: "false"
 
   build_push_image_mockoon:
     required: false
-    description: "build and push image for mockoon"
+    description: "Build and push image for mockoon"
 
-  credentials_json:
+  cache_dependency_path:
     required: false
-    description: "GCP credentials services account"
+    description: "Go sum location"
+    default: "go.sum"
+
+  go_version:
+    required: false
+    description: "Go version"
+    default: "^1.13.1"
+
+  openapi_input_file:
+    required: false
+    description: "OpenAPI input file"
+
+  openapi_output_file:
+    required: false
+    description: "OpenAPI output file"
 
   project_id:
     required: false
@@ -59,15 +84,7 @@ inputs:
 
   swagger_script_path:
     required: false
-    description: "swagger script path"
-
-  openapi_input_file:
-    required: false
-    description: "openapi input file"
-
-  openapi_output_file:
-    required: false
-    description: "openapi output file"
+    description: "Swagger script path"
 
   working_directory:
     required: false
@@ -97,14 +114,12 @@ runs:
         go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
 
     - name: Setup gcloud
-      if: "${{ inputs.build_push_image == 'true' }}"
       uses: kitabisa/composite-actions/packages/gcloud@v2
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup docker buildx
-      if: "${{ inputs.build_push_image == 'true' }}"
       uses: kitabisa/composite-actions/packages/buildx@v2
       with:
         project_id: ${{ inputs.project_id }}
@@ -112,14 +127,15 @@ runs:
 
     - name: Build application
       id: build-app
-      uses: kitabisa/composite-actions/packages/makefile@v2
+      uses: kitabisa/composite-actions/packages/taskfile@v2
       with:
-        build: ${{ inputs.build }}
-        working_directory: ${{ inputs.working_directory }}
-        project_id: ${{ inputs.project_id }}
+        app_name: ${{ inputs.app_name }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
-        package: ${{ inputs.build_push_image }}
+        business: ${{ inputs.business }}
+        project_id: ${{ inputs.project_id }}
+        squad: ${{ inputs.squad }}
+        working_directory: ${{ inputs.working_directory }}
 
     - name: Build, tag, and push Docker image Swagger
       if: "${{ inputs.build_push_image_swagger == 'true' }}"

@@ -2,6 +2,12 @@ name: "Frontend build"
 description: "Frontend composite deployment"
 
 inputs:
+  # Required
+  app_name:
+    required: true
+    description: "Application name"
+    type: string
+
   artifact_registry_host:
     required: true
     description: "Artifact registry host"
@@ -12,44 +18,32 @@ inputs:
     description: "Artifact registry project id"
     type: string
 
-  install:
-    required: false
-    description: "Run make install"
-    default: true
-    type: boolean
+  business:
+    required: true
+    description: "Business name"
+    type: string
 
-  config:
-    required: false
-    description: "Run make config"
-    default: true
-    type: boolean
-
-  build:
-    required: false
-    description: "Run make build"
-    default: true
-    type: boolean
-
-  package:
-    required: false
-    description: "Run make package"
-    default: true
-    type: boolean
-
-  cache:
-    required: false
-    description: "Run action cache"
-    default: true
-    type: boolean
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
 
   project_id:
     required: true
     description: "GCP project id"
     type: string
 
-  credentials_json:
-    required: true
-    description: "GCP credentials services account"
+  # Optional
+  cache:
+    required: false
+    description: "Run action cache"
+    default: true
+    type: boolean
+
+  pnpm_version:
+    required: false
+    description: "Setup pnpm version"
+    default: "latest"
     type: string
 
   setup_pnpm:
@@ -64,16 +58,9 @@ inputs:
     default: false
     type: boolean
 
-  working_directory:
-    required: false
-    description: "Set working directory"
-    default: "."
-    type: string
-
-  pnpm_version:
-    required: false
-    description: "Setup pnpm version"
-    default: "latest"
+  squad:
+    required: true
+    description: "Squad name"
     type: string
 
   using_nextjs:
@@ -82,58 +69,10 @@ inputs:
     default: false
     type: boolean
 
-  using_cdn:
+  working_directory:
     required: false
-    description: "Setup cdn for static assets"
-    default: false
-    type: boolean
-
-  delete_oldest_cdn:
-    required: false
-    description: "Setup delete oldest cdn"
-    default: true
-    type: boolean
-
-  cdn_aws_s3_bucket:
-    required: false
-    description: "CDN aws s3 bucket"
-    default: ""
-    type: string
-
-  cdn_aws_access_key_id:
-    required: false
-    description: "CDN aws access key id"
-    default: ""
-    type: string
-
-  cdn_aws_secret_access_key:
-    required: false
-    description: "CDN aws secret access key"
-    default: ""
-    type: string
-
-  cdn_aws_region:
-    required: false
-    description: "CDN aws region"
-    default: ""
-    type: string
-
-  cdn_source_dir:
-    required: false
-    description: "CDN source dir"
-    default: ""
-    type: string
-
-  cdn_dest_dir:
-    required: false
-    description: "CDN dest dir"
-    default: ""
-    type: string
-
-  cdn_keep_latest_version:
-    required: false
-    description: "CDN keep latest version length"
-    default: "2"
+    description: "Set working directory"
+    default: "."
     type: string
 
 outputs:
@@ -150,78 +89,64 @@ runs:
     - name: Setup node.js
       uses: actions/setup-node@v3
       with:
-        node-version-file: "${{ inputs.working_directory }}/.nvmrc"
         check-latest: true
-
-    - name: Setup gcloud
-      if: "${{ inputs.config == 'true' }}"
-      uses: kitabisa/composite-actions/packages/gcloud@v2
-      with:
-        project_id: ${{ inputs.project_id }}
-        credentials_json: ${{ inputs.credentials_json }}
-
-    - name: Setup docker buildx
-      if: "${{ inputs.build == 'true' }}"
-      uses: kitabisa/composite-actions/packages/buildx@v2
-      with:
-        project_id: ${{ inputs.project_id }}
-        artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        cache: ${{ inputs.cache }}
+        node-version-file: "${{ inputs.working_directory }}/.nvmrc"
 
     - name: Setup yarn
       if: "${{ inputs.setup_yarn == 'true' }}"
       uses: kitabisa/composite-actions/packages/yarn@v2
       with:
-        working_directory: ${{ inputs.working_directory }}
-        using_nextjs: ${{ inputs.using_nextjs }}
         cache: ${{ inputs.cache }}
+        using_nextjs: ${{ inputs.using_nextjs }}
+        working_directory: ${{ inputs.working_directory }}
 
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
       uses: kitabisa/composite-actions/packages/pnpm@v2
       with:
-        working_directory: ${{ inputs.working_directory }}
-        using_nextjs: ${{ inputs.using_nextjs }}
-        pnpm_version: ${{ inputs.pnpm_version }}
         cache: ${{ inputs.cache }}
-
-    - name: Build push
-      id: build-push
-      uses: kitabisa/composite-actions/packages/makefile@v2
-      with:
+        pnpm_version: ${{ inputs.pnpm_version }}
+        using_nextjs: ${{ inputs.using_nextjs }}
         working_directory: ${{ inputs.working_directory }}
-        project_id: ${{ inputs.project_id }}
+
+    - name: Setuptools
+      uses: kitabisa/composite-actions/packages/setuptools@v2
+      with:
+        setup_task: true
+        setup_yq: true
+        setup_helm: true
+        setup_helmfile: true
+
+    - name: Setup gcloud
+      uses: kitabisa/composite-actions/packages/gcloud@v2
+      with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
-        install: ${{ inputs.install }}
-        config: ${{ inputs.config }}
-        build: ${{ inputs.build }}
-        package: ${{ inputs.package }}
-        using_cdn: ${{ inputs.using_cdn }}
-        cdn_keep_latest_version: ${{ inputs.cdn_keep_latest_version }}
+        credentials_json: ${{ inputs.credentials_json }}
+        project_id: ${{ inputs.project_id }}
 
-    - name: Upload CDN static
-      if: "${{ inputs.using_cdn == 'true' }}"
-      uses: kitabisa/composite-actions/packages/cdn@v2
+    - name: Setup docker buildx
+      uses: kitabisa/composite-actions/packages/buildx@v2
       with:
-        working_directory: ${{ inputs.working_directory }}
-        cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
-        cdn_aws_access_key_id: ${{ inputs.cdn_aws_access_key_id }}
-        cdn_aws_secret_access_key: ${{ inputs.cdn_aws_secret_access_key }}
-        cdn_aws_region: ${{ inputs.cdn_aws_region }}
-        cdn_source_dir: ${{ inputs.cdn_source_dir }}
-        upload: ${{ steps.build-push.outputs.cdn-upload-path }}/${{ inputs.cdn_dest_dir }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        cache: ${{ inputs.cache }}
+        project_id: ${{ inputs.project_id }}
 
-    - name: Delete oldest CDN static
-      if: >-
-        inputs.using_cdn == 'true' &&
-        inputs.delete_oldest_cdn == 'true' &&
-        steps.build-push.outputs.cdn-upload-path != steps.build-push.outputs.cdn-delete-path
-      uses: kitabisa/composite-actions/packages/cdn@v2
-      with:
-        working_directory: ${{ inputs.working_directory }}
-        cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
-        cdn_aws_access_key_id: ${{ inputs.cdn_aws_access_key_id }}
-        cdn_aws_secret_access_key: ${{ inputs.cdn_aws_secret_access_key }}
-        cdn_aws_region: ${{ inputs.cdn_aws_region }}
-        delete: ${{ steps.build-push.outputs.cdn-delete-path }}
+    - name: Copy taskfile
+      shell: bash
+      run: |-
+        cp -r ${{ github.action_path }}/tasks/* .
+
+    - name: CI task
+      working-directory: ${{ inputs.working_directory }}
+      shell: bash
+      env:
+        APP_NAME: ${{ inputs.app_name }}
+        SQUAD: ${{ inputs.squad }}
+        BUSINESS: ${{ inputs.business }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
+        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
+      run: |-
+        task frontend:install
+        task frontend:config
+        task frontend:build
+        task frontend:package

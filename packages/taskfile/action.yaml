@@ -41,11 +41,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install go
-      uses: actions/setup-go@v4
-      with:
-        go-version: 1.17
-
     - name: Install task
       uses: arduino/setup-task@v1
       with:

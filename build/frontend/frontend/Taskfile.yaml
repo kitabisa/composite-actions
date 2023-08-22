@@ -1,0 +1,59 @@
+version: '3'
+
+env:
+  VERSION: {sh: git describe --always --tags `git rev-list --tags --skip=$SKIP_VERSION --max-count=1`}
+  GIT_COMMIT:  {sh: git rev-parse HEAD}
+  GIT_DIRTY:  {sh: test -n "`git status --porcelain`" && echo "+CHANGES" || true}
+  BUILD_DATE:  {sh: date '+%Y-%m-%d-%H:%M:%S'}
+  LATEST_TAG: {sh: bash ./frontend/latest.sh}
+
+tasks:
+
+  install:
+    desc: Installing dependencies
+    vars:
+      CI: true
+    cmds:
+      - echo '[*] Installing dependencies for {{.APP_NAME}} {{.VERSION}}'
+      - yarn config set //npm.pkg.github.com/:_authToken={{.NPM_TOKEN}}
+      - yarn install --frozen-lockfile
+
+  config:
+    desc: Generating config
+    cmds:
+      - echo '[*] Generating config for {{.APP_NAME}} {{.VERSION}}'
+      - helmfile --selector tier=config template --output-dir . --output-dir-template \{\{.OutputDir\}\}
+      - echo '[*] Parsing config for {{.APP_NAME}} {{.VERSION}}'
+      - ls -lah .infra/helm/config/
+      - ls -lah .infra/helm/config/templates/
+      - yq eval '.data."config.env"' .infra/helm/config/templates/configmap.yaml > config.env
+      - yq eval '.stringData."secret.env"' .infra/helm/config/templates/secret.yaml > secret.env
+      - cat config.env secret.env > .env
+      - rm config.env secret.env
+
+  build:
+    desc: Building apps
+    vars:
+      CI: true
+      CI_ENV: '{{.ENV}}'
+      NODE_ENV: production
+      VERSION: '{{.VERSION}}'
+    cmds:
+      - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
+      - yarn build
+
+  package:
+    desc: Build & push images
+    cmds:
+      - echo '[*] Build, tag, and push Docker image {{.APP_NAME}} {{.VERSION}}'
+      - |
+        docker buildx build \
+          --build-arg VERSION={{.VERSION}} \
+          --build-arg GIT_COMMIT={{.GIT_COMMIT}}{{.GIT_DIRTY}} \
+          --cache-from type=local,src=/tmp/.buildx-cache \
+          --cache-to type=local,dest=/tmp/.buildx-cache \
+          --tag {{.DOCKER_REPOSITORY}}/{{.APP_NAME}}:{{.GIT_COMMIT}} \
+          --tag {{.DOCKER_REPOSITORY}}/{{.APP_NAME}}:{{.VERSION}} \
+          --tag {{.DOCKER_REPOSITORY}}/{{.APP_NAME}}:{{.VERSION}}-{{.ENV_NAME}} \
+          --tag {{.DOCKER_REPOSITORY}}/{{.APP_NAME}}:{{.LATEST_TAG}} \
+          --push .

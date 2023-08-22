@@ -2,14 +2,20 @@ name: "Frontend build"
 description: "Frontend composite deployment"
 
 inputs:
-  project_id:
+  # Required
+  artifact_registry_host:
     required: true
-    description: "GCP project id"
+    description: "Artifact registry host"
     type: string
 
   credentials_json:
     required: true
     description: "GCP credentials services account"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
     type: string
 
 runs:
@@ -23,3 +29,8 @@ runs:
 
     - name: Setup gcloud
       uses: google-github-actions/setup-gcloud@v0
+
+    - name: Register gcloud as a Artifact Registry credential helper
+      shell: bash
+      run: |-
+        gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry_host }}
