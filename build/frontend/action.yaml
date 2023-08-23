@@ -3,11 +3,6 @@ description: "Frontend composite deployment"
 
 inputs:
   # Required
-  app_name:
-    required: true
-    description: "Application name"
-    type: string
-
   artifact_registry_host:
     required: true
     description: "Artifact registry host"
@@ -16,11 +11,6 @@ inputs:
   artifact_registry_project_id:
     required: true
     description: "Artifact registry project id"
-    type: string
-
-  business:
-    required: true
-    description: "Business name"
     type: string
 
   credentials_json:
@@ -62,11 +52,6 @@ inputs:
     description: "Setup yarn and cache modules"
     default: false
     type: boolean
-
-  squad:
-    required: true
-    description: "Squad name"
-    type: string
 
   using_nextjs:
     required: false
@@ -137,6 +122,7 @@ runs:
         project_id: ${{ inputs.project_id }}
 
     - name: Copy taskfile
+      working-directory: ${{ inputs.working_directory }}
       shell: bash
       run: |-
         cp -r ${{ github.action_path }}/tasks/* .
@@ -145,9 +131,6 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       shell: bash
       env:
-        APP_NAME: ${{ inputs.app_name }}
-        SQUAD: ${{ inputs.squad }}
-        BUSINESS: ${{ inputs.business }}
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
         TASKFILE: ${{ inputs.taskfile }}

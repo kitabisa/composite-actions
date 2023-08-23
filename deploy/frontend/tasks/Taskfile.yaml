@@ -1,0 +1,23 @@
+version: '3'
+
+env:
+  VERSION: {sh: git describe --always --tags `git rev-list --tags --skip=$SKIP_VERSION --max-count=1`}
+  GIT_COMMIT:  {sh: git rev-parse HEAD}
+  GIT_DIRTY:  {sh: test -n "`git status --porcelain`" && echo "+CHANGES" || true}
+  BUILD_DATE:  {sh: date '+%Y-%m-%d-%H:%M:%S'}
+  LATEST_TAG: {sh: bash ./frontend/latest.sh}
+
+tasks:
+  default:
+    desc: What does task do you want to execute?
+    vars:
+      TASKFILE: '{{.TASKFILE}}'
+    cmds:
+      - for: { var: TASKFILE }
+        task: '{{.ITEM}}'
+
+  deploy:
+    desc: Deploy application
+    cmds:
+      - echo '[*] Deploy application for {{.APP_NAME}} {{.VERSION}}'
+      - helmfile apply

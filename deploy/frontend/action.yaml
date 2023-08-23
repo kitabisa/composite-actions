@@ -53,6 +53,11 @@ inputs:
     description: "Rancher cluster id"
     type: string
 
+  taskfile:
+    required: true
+    description: "Taskfile argument"
+    type: string
+
   # Optional
   preview_url:
     required: false
@@ -92,16 +97,21 @@ runs:
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
-    - name: Deploy
+    - name: Copy taskfile
+      working-directory: ${{ inputs.working_directory }}
+      shell: bash
+      run: |-
+        cp -r ${{ github.action_path }}/tasks/* .
+
+    - name: CD task
+      working-directory: ${{ inputs.working_directory }}
       shell: bash
       env:
-        APP_NAME: ${{ inputs.app_name }}
-        SQUAD: ${{ inputs.squad }}
-        BUSINESS: ${{ inputs.business }}
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
+        TASKFILE: ${{ inputs.taskfile }}
       run: |-
-        helmfile apply
+        task
 
     - name: Rancher ns mover
       uses: kitabisa/composite-actions/packages/rancher@v2
