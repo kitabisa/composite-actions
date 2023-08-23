@@ -60,7 +60,7 @@ tasks:
 
   build:qurban:
     desc: Building apps qurban
-    vars:
+    env:
       CI: true
       CI_ENV: '{{.ENV}}'
       NODE_ENV: production
