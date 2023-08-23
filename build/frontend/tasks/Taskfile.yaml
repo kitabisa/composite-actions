@@ -8,6 +8,13 @@ env:
   LATEST_TAG: {sh: bash ./frontend/latest.sh}
 
 tasks:
+  default:
+    desc: What does task do you want to execute?
+    vars:
+      TASKFILE: '{{.TASKFILE}}'
+    cmds:
+      - for: { var: TASKFILE }
+        task: '{{.ITEM}}'
 
   install:
     desc: Installing dependencies
