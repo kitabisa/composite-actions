@@ -31,8 +31,28 @@ tasks:
       - cat config.env secret.env > .env
       - rm config.env secret.env
 
-  build:
-    desc: Building apps
+  build:yarn:
+    desc: Building apps yarn
+    cmds:
+      - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
+      - yarn build
+
+  build:pnpm:
+    desc: Building apps pnpm
+    cmds:
+      - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
+      - pnpm build
+
+  build:storybook:
+    desc: Building apps storybook
+    vars:
+      NODE_OPTIONS: --max_old_space_size=4096
+    cmds:
+      - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
+      - yarn build-storybook
+
+  build:qurban:
+    desc: Building apps qurban
     vars:
       CI: true
       CI_ENV: '{{.ENV}}'
@@ -40,7 +60,44 @@ tasks:
       VERSION: '{{.VERSION}}'
     cmds:
       - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
-      - yarn {{.CLI_ARGS}}
+      - yarn build
+
+  build:kanvas:
+    desc: Building apps kanvas
+    vars:
+      CI: true
+      CI_ENV: '{{.ENV}}'
+      NODE_ENV: production
+      VERSION: '{{.VERSION}}'
+      SENTRY_AUTH_TOKEN: '{{.SENTRY_AUTH_TOKEN}}'
+      SENTRY_RELEASE: '{{.APP_NAME}}-{{.ENV_NAME}}-{{.VERSION}}'
+    cmds:
+      - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
+      - pnpm build
+
+  build:teras:
+    desc: Building apps teras dashboard
+    vars:
+      SENTRY_RELEASE: '{{.APP_NAME}}-{{.VERSION}}'
+    cmds:
+      - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
+      - yarn build
+
+  build:monorepo:
+    desc: Building apps kitabisa monorepo
+    cmds:
+      - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
+      - |
+        {{if eq .ENV "prod"}}
+          export NODE_ENV="production" && \
+          export BUILD_ENV="production" && \
+          export SENTRY_RELEASE={{.APP_NAME}}-{{.VERSION}} && \
+          export VERSION={{.VERSION}} && \
+          yarn build
+        {{else}}
+          export NODE_ENV="production" && \
+          yarn build
+        {{end}}
 
   package:
     desc: Build & push images
