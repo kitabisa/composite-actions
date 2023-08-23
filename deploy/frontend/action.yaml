@@ -80,6 +80,7 @@ runs:
     - name: Setuptools
       uses: kitabisa/composite-actions/packages/setuptools@v2
       with:
+        setup_task: true
         setup_helm: true
         setup_helmfile: true
 
