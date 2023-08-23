@@ -76,6 +76,12 @@ runs:
     - name: Checking out repository
       uses: actions/checkout@v3
 
+    - name: Setuptools
+      uses: kitabisa/composite-actions/packages/setuptools@v2
+      with:
+        setup_helm: true
+        setup_helmfile: true
+
     - name: Setup gcloud
       uses: kitabisa/composite-actions/packages/gcloud@v2
       with:
@@ -89,15 +95,16 @@ runs:
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
-    - name: Deploy & Prune
-      uses: kitabisa/composite-actions/packages/makefile@v2
-      with:
-        working_directory: ${{ inputs.working_directory }}
-        project_id: ${{ inputs.project_id }}
-        artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
-        deploy: true
-        prune: ${{ inputs.prune }}
+    - name: Deploy
+      shell: bash
+      env:
+        APP_NAME: ${{ inputs.app_name }}
+        SQUAD: ${{ inputs.squad }}
+        BUSINESS: ${{ inputs.business }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
+        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
+      run: |-
+        helmfile apply
 
     - name: Rancher ns mover
       uses: kitabisa/composite-actions/packages/rancher@v2
