@@ -81,6 +81,7 @@ runs:
     - name: Setup gcloud
       uses: kitabisa/composite-actions/packages/gcloud@v2
       with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
