@@ -18,12 +18,12 @@ tasks:
 
   install:
     desc: Installing dependencies
-    vars:
+    env:
       CI: true
     cmds:
       - echo '[*] Installing dependencies for {{.APP_NAME}} {{.VERSION}}'
       - yarn config set //npm.pkg.github.com/:_authToken={{.NPM_TOKEN}}
-      - yarn install --frozen-lockfile
+      - CI=true yarn install --frozen-lockfile
 
   config:
     desc: Generating config
@@ -52,7 +52,7 @@ tasks:
 
   build:storybook:
     desc: Building apps storybook
-    vars:
+    env:
       NODE_OPTIONS: --max_old_space_size=4096
     cmds:
       - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
@@ -60,7 +60,7 @@ tasks:
 
   build:qurban:
     desc: Building apps qurban
-    vars:
+    env:
       CI: true
       CI_ENV: '{{.ENV}}'
       NODE_ENV: production
@@ -71,7 +71,7 @@ tasks:
 
   build:kanvas:
     desc: Building apps kanvas
-    vars:
+    env:
       CI: true
       CI_ENV: '{{.ENV}}'
       NODE_ENV: production
@@ -84,7 +84,7 @@ tasks:
 
   build:teras:
     desc: Building apps teras dashboard
-    vars:
+    env:
       SENTRY_RELEASE: '{{.APP_NAME}}-{{.VERSION}}'
     cmds:
       - echo '[*] Building apps {{.APP_NAME}} {{.VERSION}}'
