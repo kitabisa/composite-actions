@@ -113,14 +113,14 @@ runs:
         deploy: true
         setup_helmfiles: ${{ inputs.setup_helmfiles }}
 
-    - name: Rancher ns mover
-      uses: kitabisa/composite-actions/packages/rancher@main
-      with:
-        working_directory: ${{ inputs.working_directory }}
-        rancher_host: ${{ inputs.rancher_host }}
-        rancher_access_key: ${{ inputs.rancher_access_key }}
-        rancher_secret_key: ${{ inputs.rancher_secret_key }}
-        rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
+    # - name: Rancher ns mover
+    #   uses: kitabisa/composite-actions/packages/rancher@main
+    #   with:
+    #     working_directory: ${{ inputs.working_directory }}
+    #     rancher_host: ${{ inputs.rancher_host }}
+    #     rancher_access_key: ${{ inputs.rancher_access_key }}
+    #     rancher_secret_key: ${{ inputs.rancher_secret_key }}
+    #     rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
 
     - uses: chrnorm/deployment-status@v2
       if: success()
