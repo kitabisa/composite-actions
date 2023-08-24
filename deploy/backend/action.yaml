@@ -84,7 +84,10 @@ runs:
 
     - name: Checking out repository
       uses: actions/checkout@v3
-      
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
+
     - name: Setup gcloud
       uses: kitabisa/composite-actions/packages/gcloud@main
       with:
