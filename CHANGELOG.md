@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0](https://github.com/kitabisa/composite-actions/compare/v1.3.0...v1.4.0) (2023-08-24)
+
+
+### Features
+
+* disable temp for rancher-ns-mover ([30d15b2](https://github.com/kitabisa/composite-actions/commit/30d15b2d997735f93733f43b64097dc8e569a81a))
+
+
+### Bug Fixes
+
+* checkout with token ([363a76a](https://github.com/kitabisa/composite-actions/commit/363a76ac680c76b7c29554c716913f1bf15dff76))
+
 ## [1.3.0](https://github.com/kitabisa/composite-actions/compare/v1.2.0...v1.3.0) (2023-08-04)
 
 
