@@ -1,15 +1,17 @@
 version: '3'
 
-silent: true
+silent: false
 
 vars:
   NAMESPACE:
-    sh: kubectl get ns | grep -v -e maxwell -e NAME | awk '{ print $1 }'
+    sh: kubectl get ns | grep -v -e NAME | grep default | awk '{ print $1 }'
+    # sh: kubectl get ns | grep -v -e maxwell -e NAME | awk '{ print $1 }'
 
 tasks:
   destroy-dev:
     desc: Destroy dev
     cmds:
       - for: { var: NAMESPACE }
-        cmd: helm ls -n {{.ITEM}} | grep "\-dev" | awk '{ print $1 }' | xargs helm delete -n {{.ITEM}}
-        ignore_error: true
+        cmd: helm ls -n {{.ITEM}} | grep "redis" | awk '{ print $1 }' | xargs -I % helm delete -n {{.ITEM}} % 2> /dev/null
+        # cmd: helm ls -n {{.ITEM}} | grep "\-dev" | awk '{ print $1 }' | xargs helm delete -n {{.ITEM}}
+        # ignore_error: true
