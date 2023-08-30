@@ -3,27 +3,12 @@ version: '3'
 silent: false
 
 vars:
-  FILE: release.txt
-  CONTENT:
-    sh: helm ls -A | grep "\-dev" | awk '{ print $1, $2 }' > {{.FILE}}
-  RELEASE:
-    sh: cat {{.FILE}} | awk '{ print $1 }'
+  NAMESPACE:
+    sh: kubectl get ns | grep -v -e maxwell -e NAME | awk '{ print $1 }'
 
 tasks:
   destroy-dev:
     desc: Destroy dev
     cmds:
-      - for: { var: RELEASE }
-        task: purge
-        vars:
-          RELEASE_DEV: '{{.ITEM}}'
-          RELEASE_NS:
-            sh: cat {{.FILE}} | grep {{.ITEM}} | awk '{ print $2 }'
-
-      - defer: rm -rf {{.FILE}}
-
-  purge:
-    desc: Iterate helm release dev
-    cmds:
-      - helm delete -n {{.RELEASE_NS}} {{.RELEASE_DEV}}
-
+      - for: { var: NAMESPACE }
+        cmd: helm ls -n {{.ITEM}} | grep "\-dev" | awk '{ print $1 }' | xargs helm delete -n {{.ITEM}}
