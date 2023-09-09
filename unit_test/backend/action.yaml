@@ -54,8 +54,14 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Set base value
+      shell: bash
+      run: |
+        echo "current_coverage=0" >> $GITHUB_ENV
+        echo "master_coverage=0" >> $GITHUB_ENV
+
     - name: Checking out repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Configure Git for private modules
       env:
@@ -97,7 +103,7 @@ runs:
         echo "current_coverage=$(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')" >> $GITHUB_ENV
 
     - name: Comment PR and Set Fail Result
-      if: ${{ env.current_coverage < env.master_coverage }}
+      if: fromJSON(env.current_coverage) < fromJSON(env.master_coverage)
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         recreate: true
@@ -111,7 +117,7 @@ runs:
           <b> PR Blocked ❌. Please fix your unit test coverage </b>
 
     - name: Coverage below master, Fail PR
-      if: ${{ env.current_coverage < env.master_coverage }}
+      if: fromJSON(env.current_coverage) < fromJSON(env.master_coverage)
       shell: bash
       run: |
         echo "::error :: unit test coverage is below master"
