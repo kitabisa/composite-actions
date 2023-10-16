@@ -62,10 +62,9 @@ inputs:
     type: string
 
   setup_helmfiles:
-    required: false
     description: "Setup helmfiles"
-    default: false
-    type: boolean
+    required: false
+    default: 'true'
 
   credentials_json:
     required: true

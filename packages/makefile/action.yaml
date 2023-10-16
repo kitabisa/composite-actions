@@ -110,10 +110,9 @@ inputs:
     type: string
 
   setup_helmfiles:
-    required: false
     description: "Setup helmfiles"
-    default: true
-    type: boolean
+    required: false
+    default: 'true'
 
 
 outputs:
@@ -142,6 +141,7 @@ runs:
 
     - name: Setup Helmfile
       if: "${{ inputs.setup_helmfiles == 'true' }}"
+      shell: bash
       uses: kitabisa/actions/setup-helmfile@master
 
     - name: Install dependencies
