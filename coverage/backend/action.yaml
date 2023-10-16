@@ -31,6 +31,21 @@ inputs:
     description: "badge path for coverage"
     default: ".github/badges/code-coverage.svg"
 
+  custom_command_flag:
+    required: false
+    description: "custom command flag"
+    default: "false"
+
+  custom_command:
+    required: false
+    description: "custom command"
+    default: "echo no command"
+
+  unit_test_command:
+    required: false
+    description: "unit test command"
+    default: "go test ./internal/... -coverprofile=coverage.out -covermode=atomic"
+
 runs:
   using: "composite"
   steps:
@@ -58,17 +73,19 @@ runs:
       run: |-
         echo "current_master_coverage=$(cat coverage-master.txt)" >> $GITHUB_ENV
 
+    - name: Custom Command
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      if: "${{ inputs.custom_command_flag == 'true' }}"
+      run: ${{ inputs.custom_command }}
+
     - name: Run Unit tests
-      id: unit-test-master
+      id: unit-test-current
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       run: |-
-        cp ./params/.env.sample ./params/.env
-        go build -v .
-        go test ./internal/... -coverprofile=coverage.out -covermode=atomic
-        echo $(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}') > coverage-master.txt
+        ${{ inputs.unit_test_command }}
         echo "current_coverage=$(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')" >> $GITHUB_ENV
-        sleep 1
 
     - name: Create destination directory
       shell: bash
