@@ -112,8 +112,8 @@ inputs:
   setup_helmfiles:
     required: false
     description: "Setup helmfiles"
-    default: true
-    type: boolean
+    default: "true"
+    type: string
 
 
 outputs:
