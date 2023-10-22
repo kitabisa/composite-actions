@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.0](https://github.com/kitabisa/composite-actions/compare/v1.4.0...v1.5.0) (2023-10-16)
+
+
+### Features
+
+* implement proper numeric comparison on unit test ([#67](https://github.com/kitabisa/composite-actions/issues/67)) ([c213407](https://github.com/kitabisa/composite-actions/commit/c2134071364cd1b5c390c2b8afe30c996c7a700e))
+
+
+### Bug Fixes
+
+* default value for setup helmfiles ([#68](https://github.com/kitabisa/composite-actions/issues/68)) ([cefb6ff](https://github.com/kitabisa/composite-actions/commit/cefb6ff34548dc6c698edf81c5bbbb34ee6cd807))
+* revert changes ([#70](https://github.com/kitabisa/composite-actions/issues/70)) ([0752bd2](https://github.com/kitabisa/composite-actions/commit/0752bd2ab901230dd2a29b39aa68c2df86f4f382))
+* setup helmfiles ([#71](https://github.com/kitabisa/composite-actions/issues/71)) ([63e02a1](https://github.com/kitabisa/composite-actions/commit/63e02a1774d5cdf6b9458ee4e8625d0856a6ee5f))
+
 ## [1.4.0](https://github.com/kitabisa/composite-actions/compare/v1.3.0...v1.4.0) (2023-08-24)
 
 
