@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/kitabisa/composite-actions/compare/v1.5.0...v1.5.1) (2023-10-23)
+
+
+### Bug Fixes
+
+* generate coverage path ([#72](https://github.com/kitabisa/composite-actions/issues/72)) ([3a39447](https://github.com/kitabisa/composite-actions/commit/3a39447afa68a3e1c90beb0c6b7fcd5c0881955f))
+
 ## [1.5.0](https://github.com/kitabisa/composite-actions/compare/v1.4.0...v1.5.0) (2023-10-16)
 
 
