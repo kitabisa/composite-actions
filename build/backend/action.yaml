@@ -116,8 +116,9 @@ runs:
     - name: Setup gcloud
       uses: kitabisa/composite-actions/packages/gcloud@v2
       with:
-        project_id: ${{ inputs.project_id }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
         credentials_json: ${{ inputs.credentials_json }}
+        project_id: ${{ inputs.project_id }}
 
     - name: Setup docker buildx
       uses: kitabisa/composite-actions/packages/buildx@v2
