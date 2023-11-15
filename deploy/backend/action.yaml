@@ -19,6 +19,11 @@ inputs:
     required: true
     description: "Artifact registry host"
 
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
   gke_cluster_name:
     required: true
     description: "GKE cluster name"
@@ -64,6 +69,13 @@ runs:
       with:
         token: ${{ inputs.gh_token }}
         environment: ${{ inputs.env }}
+
+    - name: Setup gcloud
+      uses: kitabisa/composite-actions/packages/gcloud@v2
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup gke credential
       uses: kitabisa/composite-actions/packages/gke-credential@v2
