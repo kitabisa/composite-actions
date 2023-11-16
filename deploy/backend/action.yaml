@@ -70,6 +70,12 @@ runs:
         token: ${{ inputs.gh_token }}
         environment: ${{ inputs.env }}
 
+    - name: Setuptools
+      uses: kitabisa/composite-actions/packages/setuptools@v2
+      with:
+        setup_helm: true
+        setup_helmfile: true
+
     - name: Setup gcloud
       uses: kitabisa/composite-actions/packages/gcloud@v2
       with:
