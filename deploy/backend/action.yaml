@@ -70,19 +70,6 @@ runs:
         token: ${{ inputs.gh_token }}
         environment: ${{ inputs.env }}
 
-    - name: Setuptools
-      uses: kitabisa/composite-actions/packages/setuptools@v2
-      with:
-        setup_helm: true
-        setup_helmfile: true
-
-    - name: Setup gcloud
-      uses: kitabisa/composite-actions/packages/gcloud@v2
-      with:
-        artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        project_id: ${{ inputs.project_id }}
-        credentials_json: ${{ inputs.credentials_json }}
-
     - name: Setup gke credential
       uses: kitabisa/composite-actions/packages/gke-credential@v2
       with:
@@ -97,7 +84,6 @@ runs:
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         deploy: true
-        setup_helmfiles: ${{ inputs.setup_helmfiles }}
 
     - name: Rancher ns mover
       uses: kitabisa/composite-actions/packages/rancher@v2
