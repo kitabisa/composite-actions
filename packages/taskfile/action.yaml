@@ -46,24 +46,6 @@ runs:
       with:
         version: 3.x
 
-    - name: Setup yq
-      uses: frenck/action-setup-yq@v1.0.2
-      with:
-        version: v4.30.6
-
-    - name: Setup Helm
-      uses: azure/setup-helm@v2
-
-    - name: Register gcloud as a Artifact Registry credential helper
-      shell: bash
-      run: |-
-        gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry_host }}
-
-    - name: Setup Helmfile
-      uses: kitabisa/actions/setup-helmfile@master
-      with:
-        version: v0.144.0
-
     - name: Copy taskfile
       shell: bash
       run: |-

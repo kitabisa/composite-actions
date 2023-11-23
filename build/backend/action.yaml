@@ -113,6 +113,20 @@ runs:
         cache-dependency-path: ${{ inputs.cache_dependency_path }}
         go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
 
+    - name: Setuptools
+      uses: kitabisa/composite-actions/packages/setuptools@v2
+      with:
+        setup_yq: true
+        setup_helm: true
+        setup_helmfile: true
+
+    - name: Setup gcloud
+      uses: kitabisa/composite-actions/packages/gcloud@v2
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        credentials_json: ${{ inputs.credentials_json }}
+        project_id: ${{ inputs.project_id }}
+
     - name: Setup docker buildx
       uses: kitabisa/composite-actions/packages/buildx@v2
       with:
