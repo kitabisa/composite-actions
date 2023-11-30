@@ -1,0 +1,65 @@
+name: "Rollback deployment"
+description: "Rollback release deployment"
+
+inputs:
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  gke_cluster_name:
+    required: true
+    description: "GKE cluster name"
+    type: string
+
+  gke_cluster_zone:
+    required: true
+    description: "GKE cluster location zone"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  rollback_release:
+    required: false
+    description: "rollback release"
+    type: string
+
+  rollback_revision:
+    required: false
+    description: "rollback revision"
+    type: string
+
+  namespace:
+    required: false
+    description: "tools namespace"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v3
+
+    - name: Setup gcloud
+      uses: kitabisa/composite-actions/packages/gcloud@main
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Setup gke credential
+      uses: kitabisa/composite-actions/packages/gke-credential@main
+      with:
+        gke_cluster_name: ${{ inputs.gke_cluster_name }}
+        gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
+        project_id: ${{ inputs.project_id }}
+
+    - name: Rollback release
+      uses: kitabisa/composite-actions/packages/makefile@main
+      with:
+        rollback_release: ${{ inputs.rollback_release }}
+        rollback_revision: ${{ inputs.rollback_revision }}
+        namespace: ${{ inputs.namespace }}
+        rollback: true
