@@ -2,6 +2,10 @@ name: "Static web build"
 description: "Static web composite deployment"
 
 inputs:
+  token:
+    required: true
+    description: "Github token"
+
   project_id:
     required: true
     description: "GCP project id"
@@ -12,24 +16,10 @@ inputs:
     description: "GCP credentials services account"
     type: string
 
-  gcr_host:
-    required: true
-    description: "GCP container registry host"
-    type: string
-
-  chartmuseum_host:
-    required: true
-    description: "ChartMuseum host"
-    type: string
-
-  chartmuseum_user:
-    required: true
-    description: "ChartMuseum user"
-    type: string
-
-  chartmuseum_pass:
-    required: true
-    description: "ChartMuseum password"
+  cache:
+    required: false
+    description: "Run action cache"
+    default: true
     type: string
 
   working_directory:
@@ -44,25 +34,62 @@ runs:
     - name: Checking out repository
       uses: actions/checkout@v3
 
-    - name: Setup gcloud
-      uses: kitabisa/composite-actions/packages/gcloud@main
+    - name: Setuptools
+      uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
+      with:
+        setup_gcloud: true
+        setup_buildx: true
+        setup_kubectl: true
+        setup_helm: true
+        setup_helmfile: true
+        gh_token: ${{ inputs.token }}
+
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
-    - name: Setup docker buildx
-      uses: kitabisa/composite-actions/packages/buildx@main
+    - name: Cache docker buildx
+      if: "${{ inputs.setup_buildx == 'true' }}"
+      uses: kitabisa/composite-actions/infra/tools/buildx@refactor-composite
       with:
-        project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
+        cache: ${{ inputs.cache }}
 
-    - name: Build push
-      uses: kitabisa/composite-actions/packages/makefile@main
+    - name: Auth GKE credential
+      uses: kitabisa/composite-actions/infra/tools/gke-credential@refactor-composite
+      with:
+        gke_cluster_name: ${{ inputs.gke_cluster_name }}
+        gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
+        project_id: ${{ inputs.project_id }}
+
+    - name: Build and push image
+      id: build-app
+      uses: kitabisa/composite-actions/infra/tools/makefile@v2
+      with:
+        app_name: ${{ inputs.app_name }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
+        business: ${{ inputs.business }}
+        project_id: ${{ inputs.project_id }}
+        squad: ${{ inputs.squad }}
+        working_directory: ${{ inputs.working_directory }}
+
+    # - name: Build push
+    #   uses: kitabisa/composite-actions/packages/makefile@main
+    #   with:
+    #     working_directory: ${{ inputs.working_directory }}
+    #     project_id: ${{ inputs.project_id }}
+    #     gcr_host: ${{ inputs.gcr_host }}
+    #     chartmuseum_host: ${{ inputs.chartmuseum_host }}
+    #     chartmuseum_user: ${{ inputs.chartmuseum_user }}
+    #     chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
+    #     package: true
+
+    - name: Deploy
+      uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
-        chartmuseum_host: ${{ inputs.chartmuseum_host }}
-        chartmuseum_user: ${{ inputs.chartmuseum_user }}
-        chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
-        package: true
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        deploy: true

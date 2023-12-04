@@ -2,9 +2,18 @@ name: "Helmfiles"
 description: "Deploy Releases"
 
 inputs:
+  token:
+    required: true
+    description: "Github token"
+
   project_id:
     required: true
     description: "GCP project id"
+    type: string
+
+  artifact_registry_host:
+    required: true
+    description: "Artifact registry host"
     type: string
 
   credentials_json:
@@ -22,45 +31,38 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
-  chartmuseum_host:
-    required: true
-    description: "ChartMuseum host"
-    type: string
-
-  chartmuseum_user:
-    required: true
-    description: "ChartMuseum user"
-    type: string
-
-  chartmuseum_pass:
-    required: true
-    description: "ChartMuseum password"
-    type: string
-
 runs:
   using: "composite"
   steps:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Setup gcloud
-      uses: kitabisa/composite-actions/packages/gcloud@main
+    - name: Setuptools
+      uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
+      with:
+        setup_gcloud: true
+        setup_kubectl: true
+        setup_helm: true
+        setup_helmfile: true
+        gh_token: ${{ inputs.token }}
+
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
-    - name: Setup gke credential
-      uses: kitabisa/composite-actions/packages/gke-credential@main
+    - name: Auth GKE credential
+      uses: kitabisa/composite-actions/infra/tools/gke-credential@refactor-composite
       with:
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
     - name: Deploy
-      uses: kitabisa/composite-actions/packages/makefile@main
+      uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
       with:
+        # working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
-        chartmuseum_host: ${{ inputs.chartmuseum_host }}
-        chartmuseum_user: ${{ inputs.chartmuseum_user }}
-        chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
         deploy: true

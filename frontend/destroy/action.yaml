@@ -37,19 +37,19 @@ inputs:
     required: false
     description: "make prune-all"
     default: false
-    type: boolean
+    type: string
 
   using_cdn:
     required: false
     description: "Setup cdn for static assets"
     default: false
-    type: boolean
+    type: string
 
   delete_oldest_cdn:
     required: false
     description: "Setup delete oldest cdn"
     default: true
-    type: boolean
+    type: string
 
   cdn_aws_s3_bucket:
     required: false

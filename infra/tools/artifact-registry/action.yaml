@@ -33,21 +33,18 @@ runs:
     - name: Checking out repository
       uses: actions/checkout@v3
 
-    - name: Setup gcloud
-      uses: kitabisa/composite-actions/packages/gcloud@main
+    - name: Setuptools
+      uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
+      with:
+        setup_gcloud: true
+        setup_helm: true
+        gh_token: ${{ inputs.token }}
+
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
-
-    - name: Setup Helm
-      uses: azure/setup-helm@v3
-      with:
-        token: ${{ inputs.gh_token }}
-
-    - name: Register gcloud as a Artifact Registry credential helper
-      shell: bash
-      run: |-
-        gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry_host }}
 
     - name: Read Helm Chart
       id: chart
