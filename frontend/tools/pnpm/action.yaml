@@ -12,7 +12,7 @@ inputs:
     required: false
     description: "Setup next.js cache modules"
     default: false
-    type: boolean
+    type: string
 
   pnpm_version:
     required: false
@@ -24,7 +24,7 @@ inputs:
     required: false
     description: "Run action cache"
     default: true
-    type: boolean
+    type: string
 
 runs:
   using: "composite"

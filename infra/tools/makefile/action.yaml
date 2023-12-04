@@ -31,37 +31,37 @@ inputs:
     required: false
     description: "make install"
     default: false
-    type: boolean
+    type: string
 
   config:
     required: false
     description: "make config"
     default: false
-    type: boolean
+    type: string
 
   build:
     required: false
     description: "make build"
     default: false
-    type: boolean
+    type: string
 
   package:
     required: false
     description: "make package"
     default: false
-    type: boolean
+    type: string
 
   deploy:
     required: false
     description: "make deploy"
     default: false
-    type: boolean
+    type: string
 
   rollback:
     required: false
     description: "make rollback"
     default: false
-    type: boolean
+    type: string
 
   rollback_release:
     required: false
@@ -77,19 +77,19 @@ inputs:
     required: false
     description: "make prune"
     default: false
-    type: boolean
+    type: string
 
   prune_all:
     required: false
     description: "make prune-all"
     default: false
-    type: boolean
+    type: string
 
   destroy:
     required: false
     description: "make destroy"
     default: false
-    type: boolean
+    type: string
 
   working_directory:
     required: false
@@ -101,7 +101,7 @@ inputs:
     required: false
     description: "Setup cdn for static assets"
     default: false
-    type: boolean
+    type: string
 
   cdn_keep_latest_version:
     required: false
@@ -113,7 +113,7 @@ inputs:
     required: false
     description: "Setup helmfiles"
     default: true
-    type: boolean
+    type: string
 
 
 outputs:

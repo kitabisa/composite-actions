@@ -1,5 +1,5 @@
-name: "Frontend build"
-description: "Frontend composite deployment"
+name: "Gcloud Auth"
+description: "Gcloud authentication"
 
 inputs:
   project_id:
@@ -12,6 +12,11 @@ inputs:
     description: "GCP credentials services account"
     type: string
 
+  artifact_registry_host:
+    required: true
+    description: "GCP artifact registry host for image container"
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -21,5 +26,12 @@ runs:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
-    - name: Setup gcloud
-      uses: google-github-actions/setup-gcloud@v0
+    - name: Register gcloud as a docker credential helper
+      shell: bash
+      run: |-
+        gcloud auth configure-docker ${{ inputs.artifact_registry_host }} --project ${{ inputs.project_id }} --quiet
+
+    - name: Register gcloud as a Artifact Registry credential helper
+      shell: bash
+      run: |-
+        gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry_host }}

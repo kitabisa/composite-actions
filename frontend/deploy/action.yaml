@@ -78,7 +78,7 @@ inputs:
     required: false
     description: "Run make prune"
     default: false
-    type: boolean
+    type: string
 
 runs:
   using: "composite"
