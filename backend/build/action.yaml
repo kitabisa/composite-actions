@@ -24,7 +24,7 @@ inputs:
     required: false
     description: "Run make build"
     default: true
-    type: boolean
+    type: string
 
   build_push_image:
     required: false

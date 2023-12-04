@@ -1,0 +1,64 @@
+name: "Setup dependencies tools" # Install & preparation tools
+description: "Setup dependencies tools"
+
+inputs:
+  setup_gcloud:
+    required: false
+    description: "Setup gcloud"
+
+  setup_kubectl:
+    required: false
+    description: "Setup kubectl"
+
+  setup_yq:
+    required: false
+    description: "Setup yq"
+
+  setup_buildx:
+    required: false
+    description: "Setup buildx"
+
+  setup_helm:
+    required: false
+    description: "Setup helm"
+
+  setup_helmfile:
+    required: false
+    description: "Setup helmfile"
+
+  gh_token:
+    required: false
+    description: "gh token"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup gcloud
+      if: "${{ inputs.setup_gcloud == 'true' }}"
+      uses: google-github-actions/setup-gcloud@v0
+
+    - name: Setup kubectl
+      if: "${{ inputs.setup_kubectl == 'true' }}"
+      uses: azure/setup-kubectl@v3
+
+    - name: Setup yq
+      if: "${{ inputs.setup_yq == 'true' }}"
+      uses: frenck/action-setup-yq@v1.0.2
+      with:
+        version: v4.30.6
+
+    - name: Setup docker buildx
+      if: "${{ inputs.setup_buildx == 'true' }}"
+      uses: docker/setup-buildx-action@v2
+
+    - name: Setup Helm
+      if: "${{ inputs.setup_helm == 'true' }}"
+      uses: azure/setup-helm@v3
+      with:
+        token: ${{ inputs.gh_token }}
+
+    - name: Setup Helmfile
+      if: "${{ inputs.setup_helmfile == 'true' }}"
+      uses: kitabisa/actions/setup-helmfile@master
+      with:
+        version: v0.144.0

@@ -6,31 +6,31 @@ inputs:
     required: false
     description: "Run make install"
     default: true
-    type: boolean
+    type: string
 
   config:
     required: false
     description: "Run make config"
     default: true
-    type: boolean
+    type: string
 
   build:
     required: false
     description: "Run make build"
     default: true
-    type: boolean
+    type: string
 
   package:
     required: false
     description: "Run make package"
     default: true
-    type: boolean
+    type: string
 
   cache:
     required: false
     description: "Run action cache"
     default: true
-    type: boolean
+    type: string
 
   project_id:
     required: true
@@ -51,13 +51,13 @@ inputs:
     required: false
     description: "Setup pnpm and cache modules"
     default: false
-    type: boolean
+    type: string
 
   setup_yarn:
     required: false
     description: "Setup yarn and cache modules"
     default: false
-    type: boolean
+    type: string
 
   chartmuseum_host:
     required: true
@@ -90,19 +90,19 @@ inputs:
     required: false
     description: "Setup next.js cache modules"
     default: false
-    type: boolean
+    type: string
 
   using_cdn:
     required: false
     description: "Setup cdn for static assets"
     default: false
-    type: boolean
+    type: string
 
   delete_oldest_cdn:
     required: false
     description: "Setup delete oldest cdn"
     default: true
-    type: boolean
+    type: string
 
   cdn_aws_s3_bucket:
     required: false
