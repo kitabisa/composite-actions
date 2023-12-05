@@ -43,8 +43,9 @@ runs:
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
       with:
-        project_id: ${{ inputs.project_id }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
         credentials_json: ${{ inputs.credentials_json }}
+        project_id: ${{ inputs.project_id }}
 
     - name: Read Helm Chart
       id: chart

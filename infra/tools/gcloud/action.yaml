@@ -13,15 +13,16 @@ inputs:
     type: string
 
   artifact_registry_host:
-    required: true
+    required: false
     description: "GCP artifact registry host for image container"
+    default: "true"
     type: string
 
 runs:
   using: "composite"
   steps:
     - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v0
+      uses: google-github-actions/auth@v2
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}

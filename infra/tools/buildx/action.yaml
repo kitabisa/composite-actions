@@ -5,6 +5,7 @@ inputs:
   cache:
     required: false
     description: "Run action cache"
+    default: "true"
     type: string
 
 runs:

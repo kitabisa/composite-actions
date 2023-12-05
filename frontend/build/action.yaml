@@ -1,7 +1,65 @@
 name: "Frontend build"
-description: "Frontend composite deployment"
+description: "Frontend composite build"
 
 inputs:
+  # Required
+  artifact_registry_host:
+    required: true
+    description: "Artifact registry host"
+    type: string
+
+  artifact_registry_project_id:
+    required: true
+    description: "Artifact registry project id"
+    type: string
+
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  # Optional
+  cache:
+    required: false
+    description: "Run action cache"
+    default: true
+    type: boolean
+
+  pnpm_version:
+    required: false
+    description: "Setup pnpm version"
+    default: "latest"
+    type: string
+
+  setup_pnpm:
+    required: false
+    description: "Setup pnpm and cache modules"
+    default: false
+    type: boolean
+
+  setup_yarn:
+    required: false
+    description: "Setup yarn and cache modules"
+    default: false
+    type: boolean
+
+  using_nextjs:
+    required: false
+    description: "Setup next.js cache modules"
+    default: false
+    type: boolean
+
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
   install:
     required: false
     description: "Run make install"
@@ -24,72 +82,6 @@ inputs:
     required: false
     description: "Run make package"
     default: true
-    type: string
-
-  cache:
-    required: false
-    description: "Run action cache"
-    default: true
-    type: string
-
-  project_id:
-    required: true
-    description: "GCP project id"
-    type: string
-
-  credentials_json:
-    required: true
-    description: "GCP credentials services account"
-    type: string
-
-  gcr_host:
-    required: true
-    description: "GCP container registry host"
-    type: string
-
-  setup_pnpm:
-    required: false
-    description: "Setup pnpm and cache modules"
-    default: false
-    type: string
-
-  setup_yarn:
-    required: false
-    description: "Setup yarn and cache modules"
-    default: false
-    type: string
-
-  chartmuseum_host:
-    required: true
-    description: "ChartMuseum host"
-    type: string
-
-  chartmuseum_user:
-    required: true
-    description: "ChartMuseum user"
-    type: string
-
-  chartmuseum_pass:
-    required: true
-    description: "ChartMuseum password"
-    type: string
-
-  working_directory:
-    required: false
-    description: "Set working directory"
-    default: "."
-    type: string
-
-  pnpm_version:
-    required: false
-    description: "Setup pnpm version"
-    default: "latest"
-    type: string
-
-  using_nextjs:
-    required: false
-    description: "Setup next.js cache modules"
-    default: false
     type: string
 
   using_cdn:
@@ -157,54 +149,37 @@ runs:
     - name: Checking out repository
       uses: actions/checkout@v3
 
-    - name: Setup node.js
-      uses: actions/setup-node@v3
+    - name: Setuptools frontend
+      uses: kitabisa/composite-actions/frontend/tools/setuptools@refactor-composite
       with:
-        node-version-file: "${{ inputs.working_directory }}/.nvmrc"
-        check-latest: true
-
-    - name: Setup gcloud
-      if: "${{ inputs.config == 'true' }}"
-      uses: kitabisa/composite-actions/packages/gcloud@main
-      with:
-        project_id: ${{ inputs.project_id }}
-        credentials_json: ${{ inputs.credentials_json }}
-
-    - name: Setup docker buildx
-      if: "${{ inputs.build == 'true' }}"
-      uses: kitabisa/composite-actions/packages/buildx@main
-      with:
-        project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
-        cache: ${{ inputs.cache }}
-
-    - name: Setup yarn
-      if: "${{ inputs.setup_yarn == 'true' }}"
-      uses: kitabisa/composite-actions/packages/yarn@main
-      with:
-        working_directory: ${{ inputs.working_directory }}
-        using_nextjs: ${{ inputs.using_nextjs }}
-        cache: ${{ inputs.cache }}
-
-    - name: Setup pnpm
-      if: "${{ inputs.setup_pnpm == 'true' }}"
-      uses: kitabisa/composite-actions/packages/pnpm@main
-      with:
-        working_directory: ${{ inputs.working_directory }}
-        using_nextjs: ${{ inputs.using_nextjs }}
+        setup_yarn: ${{ inputs.setup_yarn }}
+        setup_pnpm: ${{ inputs.setup_pnpm }}
         pnpm_version: ${{ inputs.pnpm_version }}
         cache: ${{ inputs.cache }}
+        using_nextjs: ${{ inputs.using_nextjs }}
+        working_directory: ${{ inputs.working_directory }}
 
-    - name: Build push
+    - name: Setuptools infra
+      uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
+      with:
+        setup_gcloud: true
+        setup_buildx: true
+
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        credentials_json: ${{ inputs.credentials_json }}
+        project_id: ${{ inputs.project_id }}
+
+    - name: Build and push image
       id: build-push
-      uses: kitabisa/composite-actions/packages/makefile@main
+      uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
       with:
         working_directory: ${{ inputs.working_directory }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
-        chartmuseum_host: ${{ inputs.chartmuseum_host }}
-        chartmuseum_user: ${{ inputs.chartmuseum_user }}
-        chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
         install: ${{ inputs.install }}
         config: ${{ inputs.config }}
         build: ${{ inputs.build }}
@@ -214,7 +189,7 @@ runs:
 
     - name: Upload CDN static
       if: "${{ inputs.using_cdn == 'true' }}"
-      uses: kitabisa/composite-actions/packages/cdn@main
+      uses: kitabisa/composite-actions/frontend/tools/cdn@refactor-composite
       with:
         working_directory: ${{ inputs.working_directory }}
         cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
@@ -229,7 +204,7 @@ runs:
         inputs.using_cdn == 'true' &&
         inputs.delete_oldest_cdn == 'true' &&
         steps.build-push.outputs.cdn-upload-path != steps.build-push.outputs.cdn-delete-path
-      uses: kitabisa/composite-actions/packages/cdn@main
+      uses: kitabisa/composite-actions/frontend/tools/cdn@refactor-composite
       with:
         working_directory: ${{ inputs.working_directory }}
         cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}

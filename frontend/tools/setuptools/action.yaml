@@ -1,0 +1,61 @@
+name: "Setup dependencies tools" # Install & preparation tools
+description: "Setup dependencies tools"
+
+inputs:
+  setup_yarn:
+    required: false
+    description: "Setup yarn"
+
+  setup_pnpm:
+    required: false
+    description: "Setup pnpm"
+
+  pnpm_version:
+    required: false
+    description: "Setup pnpm version"
+    default: "latest"
+    type: string
+
+  cache:
+    required: false
+    description: "Run action cache"
+    default: true
+    type: string
+
+  using_nextjs:
+    required: false
+    description: "Setup next.js cache modules"
+    default: false
+    type: string
+
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup node.js
+      uses: actions/setup-node@v3
+      with:
+        check-latest: true
+        node-version-file: "${{ inputs.working_directory }}/.nvmrc"
+
+    - name: Setup yarn
+      if: "${{ inputs.setup_yarn == 'true' }}"
+      uses: kitabisa/composite-actions/frontend/tools/yarn@refactor-composite
+      with:
+        cache: ${{ inputs.cache }}
+        using_nextjs: ${{ inputs.using_nextjs }}
+        working_directory: ${{ inputs.working_directory }}
+
+    - name: Setup pnpm
+      if: "${{ inputs.setup_pnpm == 'true' }}"
+      uses: kitabisa/composite-actions/frontend/tools/pnpm@refactor-composite
+      with:
+        cache: ${{ inputs.cache }}
+        pnpm_version: ${{ inputs.pnpm_version }}
+        using_nextjs: ${{ inputs.using_nextjs }}
+        working_directory: ${{ inputs.working_directory }}

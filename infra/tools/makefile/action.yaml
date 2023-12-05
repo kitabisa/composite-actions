@@ -7,24 +7,14 @@ inputs:
     description: "GCP project id"
     type: string
 
-  gcr_host:
-    required: false
-    description: "GCP container registry host"
+  artifact_registry_host:
+    required: true
+    description: "Artifact registry host"
     type: string
 
-  chartmuseum_host:
+  artifact_registry_project_id:
     required: false
-    description: "ChartMuseum host"
-    type: string
-
-  chartmuseum_user:
-    required: false
-    description: "ChartMuseum user"
-    type: string
-
-  chartmuseum_pass:
-    required: false
-    description: "ChartMuseum password"
+    description: "Artifact registry project id"
     type: string
 
   install:
@@ -115,7 +105,6 @@ inputs:
     default: true
     type: string
 
-
 outputs:
   build-time:
     description: "Define build time"
@@ -132,18 +121,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup yq
-      uses: frenck/action-setup-yq@v1.0.2
-      with:
-        version: v4.30.6
-
-    - name: Setup Helm
-      uses: azure/setup-helm@v2
-
-    - name: Setup Helmfile
-      if: "${{ inputs.setup_helmfiles == 'true' }}"
-      uses: kitabisa/actions/setup-helmfile@master
-
     - name: Install dependencies
       if: "${{ inputs.install == 'true' }}"
       shell: bash
@@ -156,10 +133,8 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        CHARTMUSEUM_HOST: ${{ inputs.chartmuseum_host }}
-        CHARTMUSEUM_USER: ${{ inputs.chartmuseum_user }}
-        CHARTMUSEUM_PASS: ${{ inputs.chartmuseum_pass }}
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
+        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
         make config
 
@@ -178,7 +153,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
         make package
 
@@ -187,10 +162,8 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        CHARTMUSEUM_HOST: ${{ inputs.chartmuseum_host }}
-        CHARTMUSEUM_USER: ${{ inputs.chartmuseum_user }}
-        CHARTMUSEUM_PASS: ${{ inputs.chartmuseum_pass }}
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
+        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
         make deploy
 
@@ -243,7 +216,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       id: helm-timestamp
       env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         REVISION_IMAGE: ${{ steps.helm-values.outputs.image-tag }}
       run: |-
         echo "image-timestamp=$(make helm-image-timestamp)" >> $GITHUB_OUTPUT
@@ -253,7 +226,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         REVISION_TIMESTAMP: ${{ steps.helm-timestamp.outputs.image-timestamp }}
         IMAGE_TAG: ${{ steps.helm-values.outputs.image-tag }}
       run: |-
@@ -264,7 +237,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
         make prune-all || true
 
