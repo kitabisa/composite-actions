@@ -16,12 +16,6 @@ inputs:
     description: "GCP credentials services account"
     type: string
 
-  cache:
-    required: false
-    description: "Run action cache"
-    default: true
-    type: string
-
   working_directory:
     required: false
     description: "Set working directory"
@@ -47,14 +41,12 @@ runs:
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
       with:
-        project_id: ${{ inputs.project_id }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
         credentials_json: ${{ inputs.credentials_json }}
+        project_id: ${{ inputs.project_id }}
 
     - name: Cache docker buildx
-      if: "${{ inputs.setup_buildx == 'true' }}"
       uses: kitabisa/composite-actions/infra/tools/buildx@refactor-composite
-      with:
-        cache: ${{ inputs.cache }}
 
     - name: Auth GKE credential
       uses: kitabisa/composite-actions/infra/tools/gke-credential@refactor-composite
@@ -65,14 +57,12 @@ runs:
 
     - name: Build and push image
       id: build-app
-      uses: kitabisa/composite-actions/infra/tools/makefile@v2
+      uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
       with:
         app_name: ${{ inputs.app_name }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
-        business: ${{ inputs.business }}
         project_id: ${{ inputs.project_id }}
-        squad: ${{ inputs.squad }}
         working_directory: ${{ inputs.working_directory }}
 
     # - name: Build push

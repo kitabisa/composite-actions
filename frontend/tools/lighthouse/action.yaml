@@ -57,7 +57,7 @@ runs:
 
     - name: Setup chrome
       uses: browser-actions/setup-chrome@latest
-      
+
     - name: Get chrome info
       id: chrome
       shell: bash
