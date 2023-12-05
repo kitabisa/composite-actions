@@ -2,15 +2,24 @@ name: "Destroy deployment"
 description: "Destroy release deployment"
 
 inputs:
-  working_directory:
-    required: false
-    description: "Set working directory"
-    default: "."
+  # Required
+  token:
+    required: true
+    description: "Github token"
+
+  artifact_registry_host:
+    required: true
+    description: "Artifact registry host"
     type: string
 
   credentials_json:
     required: true
     description: "GCP credentials services account"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
     type: string
 
   gke_cluster_name:
@@ -23,14 +32,10 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
-  gcr_host:
-    required: true
-    description: "GCP container registry host"
-    type: string
-
-  project_id:
-    required: true
-    description: "GCP project id"
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
     type: string
 
   prune_all:
@@ -81,14 +86,24 @@ runs:
     - name: Checking out repository
       uses: actions/checkout@v3
 
-    - name: Setup gcloud
-      uses: kitabisa/composite-actions/packages/gcloud@main
+    - name: Setuptools
+      uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
       with:
-        project_id: ${{ inputs.project_id }}
-        credentials_json: ${{ inputs.credentials_json }}
+        setup_gcloud: true
+        setup_kubectl: true
+        setup_helm: true
+        setup_helmfile: true
+        gh_token: ${{ inputs.token }}
 
-    - name: Setup gke credential
-      uses: kitabisa/composite-actions/packages/gke-credential@main
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        credentials_json: ${{ inputs.credentials_json }}
+        project_id: ${{ inputs.project_id }}
+
+    - name: Auth GKE credential
+      uses: kitabisa/composite-actions/infra/tools/gke-credential@refactor-composite
       with:
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
@@ -96,18 +111,19 @@ runs:
 
     - name: Destroy release
       id: destroy-release
-      uses: kitabisa/composite-actions/packages/makefile@main
+      uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         destroy: true
         prune_all: ${{ inputs.prune_all }}
         using_cdn: ${{ inputs.using_cdn }}
 
     - name: Delete CDN static
       if: "${{ inputs.using_cdn == 'true' && inputs.delete_oldest_cdn == 'true' }}"
-      uses: kitabisa/composite-actions/packages/cdn@main
+      uses: kitabisa/composite-actions/frontend/tools/cdn@refactor-composite
       with:
         working_directory: ${{ inputs.working_directory }}
         cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
