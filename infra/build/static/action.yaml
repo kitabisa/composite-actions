@@ -2,19 +2,30 @@ name: "Static web build"
 description: "Static web composite deployment"
 
 inputs:
-  token:
+  # Required
+  artifact_registry_host:
     required: true
-    description: "Github token"
+    description: "Artifact registry host"
+    type: string
 
-  project_id:
+  artifact_registry_project_id:
     required: true
-    description: "GCP project id"
+    description: "Artifact registry project id"
     type: string
 
   credentials_json:
     required: true
     description: "GCP credentials services account"
     type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  token:
+    required: true
+    description: "Github token"
 
   working_directory:
     required: false
@@ -56,25 +67,13 @@ runs:
         project_id: ${{ inputs.project_id }}
 
     - name: Build and push image
-      id: build-app
       uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
       with:
-        app_name: ${{ inputs.app_name }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         project_id: ${{ inputs.project_id }}
         working_directory: ${{ inputs.working_directory }}
-
-    # - name: Build push
-    #   uses: kitabisa/composite-actions/packages/makefile@main
-    #   with:
-    #     working_directory: ${{ inputs.working_directory }}
-    #     project_id: ${{ inputs.project_id }}
-    #     gcr_host: ${{ inputs.gcr_host }}
-    #     chartmuseum_host: ${{ inputs.chartmuseum_host }}
-    #     chartmuseum_user: ${{ inputs.chartmuseum_user }}
-    #     chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
-    #     package: true
+        package: true
 
     - name: Deploy
       uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
