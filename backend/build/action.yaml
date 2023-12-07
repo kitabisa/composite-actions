@@ -2,13 +2,51 @@ name: "CI Build"
 description: "Build and push docker image"
 
 inputs:
-  gh_user:
+  # Required
+  artifact_registry_host:
     required: true
-    description: "gh user"
+    description: "Artifact registry host"
+    type: string
 
-  gh_token:
+  artifact_registry_project_id:
     required: true
-    description: "gh token"
+    description: "Artifact registry project id"
+    type: string
+
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  # Optional
+  setup_git:
+    required: false
+    description: "Setup git and cache modules"
+    default: false
+    type: string
+
+  setup_go:
+    required: false
+    description: "Setup go and cache modules"
+    default: false
+    type: string
+
+  setup_gcloud:
+    required: false
+    description: "Setup gcloud and cache modules"
+    default: false
+    type: string
+
+  setup_buildx:
+    required: false
+    description: "Setup buildx and cache modules"
+    default: false
+    type: string
 
   cache_dependency_path:
     required: false
@@ -40,18 +78,6 @@ inputs:
     required: false
     description: "build and push image for mockoon"
 
-  credentials_json:
-    required: false
-    description: "GCP credentials services account"
-
-  project_id:
-    required: false
-    description: "GCP project id"
-
-  gcr_host:
-    required: false
-    description: "GCP container registry host"
-
   swagger_script_path:
     required: false
     description: "swagger script path"
@@ -79,48 +105,43 @@ runs:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
-    - name: Configure Git for private modules
-      env:
-        USER: ${{ inputs.gh_user }}
-        TOKEN: ${{ inputs.gh_token }}
-      shell: bash
-      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
-
-    - uses: actions/setup-go@v4
+    - name: Setuptools backend
+      uses: kitabisa/composite-actions/backend/tools/setuptools@refactor-composite
       with:
-        cache-dependency-path: ${{ inputs.cache_dependency_path }}
-        go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
+        setup_git: true
+        setup_go: true
 
-    - name: Setup gcloud
-      if: "${{ inputs.build_push_image == 'true' }}"
-      uses: kitabisa/composite-actions/packages/gcloud@main
+    - name: Setuptools infra
+      uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
       with:
-        project_id: ${{ inputs.project_id }}
+        setup_gcloud: true
+        setup_buildx: true
+
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
         credentials_json: ${{ inputs.credentials_json }}
-
-    - name: Setup docker buildx
-      if: "${{ inputs.build_push_image == 'true' }}"
-      uses: kitabisa/composite-actions/packages/buildx@main
-      with:
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
 
     - name: Build application
       id: build-app
-      uses: kitabisa/composite-actions/packages/makefile@main
+      uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
       with:
         build: ${{ inputs.build }}
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         package: ${{ inputs.build_push_image }}
 
     - name: Build, tag, and push Docker image Swagger
       if: "${{ inputs.build_push_image_swagger == 'true' }}"
-      uses: kitabisa/composite-actions/packages/swagger@main
+      uses: kitabisa/composite-actions/backend/tools/swagger@refactor-composite
       with:
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         openapi_input_file: ${{ inputs.openapi_input_file }}
         openapi_output_file: ${{ inputs.openapi_output_file }}
         swagger_script_path: ${{ inputs.swagger_script_path }}
@@ -130,6 +151,6 @@ runs:
       shell: bash
       if: "${{ inputs.build_push_image_mockoon == 'true' }}"
       env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
         make package-mockoon

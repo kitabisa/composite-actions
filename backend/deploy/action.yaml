@@ -2,74 +2,66 @@ name: "CI Build"
 description: "Build and push docker image"
 
 inputs:
-  env:
+  # Required
+  token:
     required: true
-    description: "environment to deploy to"
-    default: "dev"
+    description: "Github token"
 
-  gh_token:
+  artifact_registry_host:
     required: true
-    description: "gh token"
-
-  project_id:
-    required: true
-    description: "GCP project id"
-
-  gcr_host:
-    required: true
-    description: "GCP container registry host"
-
-  chartmuseum_host:
-    required: true
-    description: "ChartMuseum host"
-
-  chartmuseum_user:
-    required: true
-    description: "ChartMuseum user"
-
-  chartmuseum_pass:
-    required: true
-    description: "ChartMuseum password"
-
-  gke_cluster_name:
-    required: true
-    description: "GKE cluster name"
-
-  gke_cluster_zone:
-    required: true
-    description: "GKE cluster location zone"
-
-  rancher_host:
-    required: true
-    description: "Rancher host"
-
-  rancher_access_key:
-    required: true
-    description: "Rancher access key"
-
-  rancher_secret_key:
-    required: true
-    description: "Rancher secret key"
-
-  rancher_cluster_id:
-    required: true
-    description: "Rancher cluster id"
-
-  working_directory:
-    required: false
-    description: "Set working directory"
-    default: "."
+    description: "Artifact registry host"
     type: string
 
-  setup_helmfiles:
-    required: false
-    description: "Setup helmfiles"
-    default: false
+  artifact_registry_project_id:
+    required: true
+    description: "Artifact registry project id"
     type: string
 
   credentials_json:
     required: true
     description: "GCP credentials services account"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  gke_cluster_name:
+    required: true
+    description: "GKE cluster name"
+    type: string
+
+  gke_cluster_zone:
+    required: true
+    description: "GKE cluster location zone"
+    type: string
+
+  env:
+    required: true
+    description: "environment to deploy to"
+    default: "dev"
+
+  # rancher_host:
+  #   required: true
+  #   description: "Rancher host"
+
+  # rancher_access_key:
+  #   required: true
+  #   description: "Rancher access key"
+
+  # rancher_secret_key:
+  #   required: true
+  #   description: "Rancher secret key"
+
+  # rancher_cluster_id:
+  #   required: true
+  #   description: "Rancher cluster id"
+
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
     type: string
 
 runs:
@@ -79,54 +71,61 @@ runs:
       uses: chrnorm/deployment-action@v2
       id: deployment
       with:
-        token: ${{ inputs.gh_token }}
+        token: ${{ inputs.token }}
         environment: ${{ inputs.env }}
 
     - name: Checking out repository
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
-        token: ${{ inputs.gh_token }}
+        token: ${{ inputs.token }}
 
-    - name: Setup gcloud
-      uses: kitabisa/composite-actions/packages/gcloud@main
+    - name: Setuptools
+      uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
       with:
-        project_id: ${{ inputs.project_id }}
-        credentials_json: ${{ inputs.credentials_json }}
+        setup_gcloud: true
+        setup_kubectl: true
+        setup_helm: true
+        setup_helmfile: true
+        gh_token: ${{ inputs.token }}
 
-    - name: Setup gke credential
-      uses: kitabisa/composite-actions/packages/gke-credential@main
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        credentials_json: ${{ inputs.credentials_json }}
+        project_id: ${{ inputs.project_id }}
+
+    - name: Auth GKE credential
+      uses: kitabisa/composite-actions/infra/tools/gke-credential@refactor-composite
       with:
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
     - name: Deploy
-      uses: kitabisa/composite-actions/packages/makefile@main
+      uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
-        gcr_host: ${{ inputs.gcr_host }}
-        chartmuseum_host: ${{ inputs.chartmuseum_host }}
-        chartmuseum_user: ${{ inputs.chartmuseum_user }}
-        chartmuseum_pass: ${{ inputs.chartmuseum_pass }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         deploy: true
-        setup_helmfiles: ${{ inputs.setup_helmfiles }}
 
-    - name: Rancher ns mover
-      uses: kitabisa/composite-actions/packages/rancher@main
-      with:
-        working_directory: ${{ inputs.working_directory }}
-        rancher_host: ${{ inputs.rancher_host }}
-        rancher_access_key: ${{ inputs.rancher_access_key }}
-        rancher_secret_key: ${{ inputs.rancher_secret_key }}
-        rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
+    # - name: Rancher ns mover
+    #   uses: kitabisa/composite-actions/packages/rancher@main
+    #   with:
+    #     working_directory: ${{ inputs.working_directory }}
+    #     rancher_host: ${{ inputs.rancher_host }}
+    #     rancher_access_key: ${{ inputs.rancher_access_key }}
+    #     rancher_secret_key: ${{ inputs.rancher_secret_key }}
+    #     rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
 
     - uses: chrnorm/deployment-status@v2
       if: success()
       name: Set env deployment success
       with:
-        token: ${{ inputs.gh_token }}
+        token: ${{ inputs.token }}
         state: "success"
         deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
@@ -134,6 +133,6 @@ runs:
       if: failure()
       name: Set env deployment failure
       with:
-        token: ${{ inputs.gh_token }}
+        token: ${{ inputs.token }}
         state: "failure"
         deployment-id: ${{ steps.deployment.outputs.deployment_id }}
