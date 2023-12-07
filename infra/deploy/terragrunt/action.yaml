@@ -70,7 +70,7 @@ runs:
         terragrunt run-all plan --terragrunt-non-interactive -no-color > /tmp/stdout-plan.log
 
     - name: Update Pull Request
-      uses: actions/github-script@v3
+      uses: actions/github-script@v7.0.1
       if: github.event_name == 'pull_request'
       with:
         github-token: ${{ inputs.git_token }}
