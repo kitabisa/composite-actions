@@ -1,0 +1,46 @@
+name: "Setup dependencies tools" # Install & preparation tools
+description: "Setup dependencies tools"
+
+inputs:
+  gh_user:
+    required: true
+    description: "gh user"
+
+  gh_token:
+    required: true
+    description: "gh token"
+
+  setup_git:
+    required: false
+    description: "Setup git"
+
+  setup_go:
+    required: false
+    description: "Setup Go"
+
+  cache_dependency_path:
+    required: false
+    description: "go sum location"
+    default: "go.sum"
+
+  go_version:
+    required: false
+    description: "go version"
+    default: "^1.13.1"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Configure Git for private modules
+      if: "${{ inputs.setup_git == 'true' }}"
+      env:
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
+      shell: bash
+      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
+
+    - uses: actions/setup-go@v4
+      if: "${{ inputs.setup_go == 'true' }}"
+      with:
+        cache-dependency-path: ${{ inputs.cache_dependency_path }}
+        go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.

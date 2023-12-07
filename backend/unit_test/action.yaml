@@ -8,14 +8,6 @@ inputs:
     default: "."
     type: string
 
-  gh_user:
-    required: true
-    description: "gh user"
-
-  gh_token:
-    required: true
-    description: "gh token"
-
   cache:
     required: false
     description: "enable cache for go modules"
@@ -65,17 +57,11 @@ runs:
       with:
         token: ${{ inputs.gh_token }}
 
-    - name: Configure Git for private modules
-      env:
-        USER: ${{ inputs.gh_user }}
-        TOKEN: ${{ inputs.gh_token }}
-      shell: bash
-      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
-
-    - uses: actions/setup-go@v4
+    - name: Setuptools backend
+      uses: kitabisa/composite-actions/backend/tools/setuptools@refactor-composite
       with:
-        cache-dependency-path: ${{ inputs.cache_dependency_path }}
-        go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
+        setup_git: true
+        setup_go: true
 
     - name: Generate Master Coverage
       id: unit-test-master

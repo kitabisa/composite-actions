@@ -2,17 +2,35 @@ name: "Setup Swagger Build"
 description: "Setup Swagger build"
 
 inputs:
+  # Required
+  artifact_registry_host:
+    required: true
+    description: "Artifact registry host"
+    type: string
+
+  artifact_registry_project_id:
+    required: true
+    description: "Artifact registry project id"
+    type: string
+
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  # Optional
   swagger_script_path:
     required: false
     description: "shell script path and name for swagger env"
 
-  project_id:
+  setup_go:
     required: false
-    description: "GCP project id"
-
-  gcr_host:
-    required: false
-    description: "GCP container registry host"
+    description: "Setup Go"
 
   openapi_input_file:
     required: false
@@ -31,9 +49,10 @@ runs:
         cd ${{ inputs.swagger_script_path }}
         sh swagger_env.sh
 
-    - uses: actions/setup-node@v3
+    - name: Setuptools backend
+      uses: kitabisa/composite-actions/backend/tools/setuptools@refactor-composite
       with:
-        node-version: 16
+        setup_go: true
 
     # then use redoc-cli-github-action to generate your HTML bundle
     - name: install redoc
@@ -50,6 +69,6 @@ runs:
     - name: Build, tag, and push Docker image Swagger
       shell: bash
       env:
-        DOCKER_REPOSITORY: ${{ inputs.gcr_host }}/${{ inputs.project_id }}
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
         make package-swagger
