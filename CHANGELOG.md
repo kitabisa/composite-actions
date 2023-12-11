@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.0](https://github.com/kitabisa/composite-actions/compare/v1.5.1...v1.6.0) (2023-12-11)
+
+
+### Features
+
+* disabled rancher mover ([78dc7f6](https://github.com/kitabisa/composite-actions/commit/78dc7f64f2322b30e88b4ee31c37cb39cf95169b))
+* **tools:** update google github actions to v1 ([ef51cd8](https://github.com/kitabisa/composite-actions/commit/ef51cd8f075838f145a797f5674b7ff12def4112))
+
 ## [1.5.1](https://github.com/kitabisa/composite-actions/compare/v1.5.0...v1.5.1) (2023-10-23)
 
 
