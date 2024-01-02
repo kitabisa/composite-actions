@@ -162,6 +162,7 @@ runs:
     - name: Setuptools infra
       uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
       with:
+        setup_yq: true
         setup_gcloud: true
         setup_buildx: true
         setup_helm: true
