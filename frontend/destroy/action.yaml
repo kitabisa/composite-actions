@@ -87,7 +87,7 @@ runs:
       uses: actions/checkout@v3
 
     - name: Setuptools
-      uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
         setup_gcloud: true
         setup_kubectl: true
@@ -96,14 +96,14 @@ runs:
         gh_token: ${{ inputs.token }}
 
     - name: Setup Gcloud credential
-      uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         credentials_json: ${{ inputs.credentials_json }}
         project_id: ${{ inputs.project_id }}
 
     - name: Auth GKE credential
-      uses: kitabisa/composite-actions/infra/tools/gke-credential@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
       with:
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
@@ -111,7 +111,7 @@ runs:
 
     - name: Destroy release
       id: destroy-release
-      uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/makefile@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
@@ -123,7 +123,7 @@ runs:
 
     - name: Delete CDN static
       if: "${{ inputs.using_cdn == 'true' && inputs.delete_oldest_cdn == 'true' }}"
-      uses: kitabisa/composite-actions/frontend/tools/cdn@refactor-composite
+      uses: kitabisa/composite-actions/frontend/tools/cdn@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}

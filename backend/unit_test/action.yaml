@@ -58,7 +58,7 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: Setuptools backend
-      uses: kitabisa/composite-actions/backend/tools/setuptools@refactor-composite
+      uses: kitabisa/composite-actions/backend/tools/setuptools@v2
       with:
         setup_git: true
         setup_go: true

@@ -45,7 +45,7 @@ runs:
 
     - name: Setup yarn
       if: "${{ inputs.setup_yarn == 'true' }}"
-      uses: kitabisa/composite-actions/frontend/tools/yarn@refactor-composite
+      uses: kitabisa/composite-actions/frontend/tools/yarn@v2
       with:
         cache: ${{ inputs.cache }}
         using_nextjs: ${{ inputs.using_nextjs }}
@@ -53,7 +53,7 @@ runs:
 
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
-      uses: kitabisa/composite-actions/frontend/tools/pnpm@refactor-composite
+      uses: kitabisa/composite-actions/frontend/tools/pnpm@v2
       with:
         cache: ${{ inputs.cache }}
         pnpm_version: ${{ inputs.pnpm_version }}

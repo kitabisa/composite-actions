@@ -106,19 +106,19 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: Setuptools backend
-      uses: kitabisa/composite-actions/backend/tools/setuptools@refactor-composite
+      uses: kitabisa/composite-actions/backend/tools/setuptools@v2
       with:
         setup_git: true
         setup_go: true
 
     - name: Setuptools infra
-      uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
         setup_gcloud: true
         setup_buildx: true
 
     - name: Setup Gcloud credential
-      uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         credentials_json: ${{ inputs.credentials_json }}
@@ -126,7 +126,7 @@ runs:
 
     - name: Build application
       id: build-app
-      uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/makefile@v2
       with:
         build: ${{ inputs.build }}
         working_directory: ${{ inputs.working_directory }}
@@ -137,7 +137,7 @@ runs:
 
     - name: Build, tag, and push Docker image Swagger
       if: "${{ inputs.build_push_image_swagger == 'true' }}"
-      uses: kitabisa/composite-actions/backend/tools/swagger@refactor-composite
+      uses: kitabisa/composite-actions/backend/tools/swagger@v2
       with:
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
