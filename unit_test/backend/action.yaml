@@ -62,6 +62,8 @@ runs:
 
     - name: Checking out repository
       uses: actions/checkout@v4
+      with:
+        token: ${{ inputs.gh_token }}
 
     - name: Configure Git for private modules
       env:
