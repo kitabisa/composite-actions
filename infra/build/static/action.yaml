@@ -40,7 +40,7 @@ runs:
       uses: actions/checkout@v3
 
     - name: Setuptools
-      uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
         setup_gcloud: true
         setup_buildx: true
@@ -50,24 +50,24 @@ runs:
         gh_token: ${{ inputs.token }}
 
     - name: Setup Gcloud credential
-      uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         credentials_json: ${{ inputs.credentials_json }}
         project_id: ${{ inputs.project_id }}
 
     - name: Cache docker buildx
-      uses: kitabisa/composite-actions/infra/tools/buildx@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/buildx@v2
 
     - name: Auth GKE credential
-      uses: kitabisa/composite-actions/infra/tools/gke-credential@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
       with:
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
     - name: Build and push image
-      uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/makefile@v2
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
@@ -76,7 +76,7 @@ runs:
         package: true
 
     - name: Deploy
-      uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/makefile@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}

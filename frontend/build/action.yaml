@@ -150,7 +150,7 @@ runs:
       uses: actions/checkout@v3
 
     - name: Setuptools frontend
-      uses: kitabisa/composite-actions/frontend/tools/setuptools@refactor-composite
+      uses: kitabisa/composite-actions/frontend/tools/setuptools@v2
       with:
         setup_yarn: ${{ inputs.setup_yarn }}
         setup_pnpm: ${{ inputs.setup_pnpm }}
@@ -160,7 +160,7 @@ runs:
         working_directory: ${{ inputs.working_directory }}
 
     - name: Setuptools infra
-      uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
         setup_yq: true
         setup_gcloud: true
@@ -169,7 +169,7 @@ runs:
         setup_helmfile: true
 
     - name: Setup Gcloud credential
-      uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         credentials_json: ${{ inputs.credentials_json }}
@@ -177,7 +177,7 @@ runs:
 
     - name: Build and push image
       id: build-push
-      uses: kitabisa/composite-actions/infra/tools/makefile@refactor-composite
+      uses: kitabisa/composite-actions/infra/tools/makefile@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
@@ -192,7 +192,7 @@ runs:
 
     - name: Upload CDN static
       if: "${{ inputs.using_cdn == 'true' }}"
-      uses: kitabisa/composite-actions/frontend/tools/cdn@refactor-composite
+      uses: kitabisa/composite-actions/frontend/tools/cdn@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
@@ -207,7 +207,7 @@ runs:
         inputs.using_cdn == 'true' &&
         inputs.delete_oldest_cdn == 'true' &&
         steps.build-push.outputs.cdn-upload-path != steps.build-push.outputs.cdn-delete-path
-      uses: kitabisa/composite-actions/frontend/tools/cdn@refactor-composite
+      uses: kitabisa/composite-actions/frontend/tools/cdn@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}

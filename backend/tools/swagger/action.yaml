@@ -50,7 +50,7 @@ runs:
         sh swagger_env.sh
 
     - name: Setuptools backend
-      uses: kitabisa/composite-actions/backend/tools/setuptools@refactor-composite
+      uses: kitabisa/composite-actions/backend/tools/setuptools@v2
       with:
         setup_go: true
 
