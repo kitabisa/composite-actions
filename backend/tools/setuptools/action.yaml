@@ -3,11 +3,11 @@ description: "Setup dependencies tools"
 
 inputs:
   gh_user:
-    required: true
+    required: false
     description: "gh user"
 
   gh_token:
-    required: true
+    required: false
     description: "gh token"
 
   setup_git:
@@ -36,8 +36,8 @@ runs:
     - name: Configure Git for private modules
       if: "${{ inputs.setup_git == 'true' }}"
       env:
-        USER: ${{ secrets.GH_USER }}
-        TOKEN: ${{ secrets.GH_TOKEN }}
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
