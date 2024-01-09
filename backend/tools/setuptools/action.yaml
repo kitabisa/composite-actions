@@ -13,10 +13,12 @@ inputs:
   setup_git:
     required: false
     description: "Setup git"
+    default: 'true'
 
   setup_go:
     required: false
     description: "Setup Go"
+    default: 'true'
 
   cache_dependency_path:
     required: false
