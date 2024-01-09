@@ -14,6 +14,10 @@ inputs:
     required: false
     description: "Setup yq"
 
+  setup_task:
+    required: false
+    description: "Setup task"
+
   setup_buildx:
     required: false
     description: "Setup buildx"
@@ -46,6 +50,10 @@ runs:
       uses: frenck/action-setup-yq@v1.0.2
       with:
         version: v4.30.6
+
+    - name: Setup Taskfile
+      if: "${{ inputs.setup_task == 'true' }}"
+      uses: arduino/setup-task@v1.0.3
 
     - name: Setup docker buildx
       if: "${{ inputs.setup_buildx == 'true' }}"
