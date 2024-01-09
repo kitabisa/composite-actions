@@ -36,8 +36,8 @@ runs:
     - name: Configure Git for private modules
       if: "${{ inputs.setup_git == 'true' }}"
       env:
-        USER: ${{ inputs.gh_user }}
-        TOKEN: ${{ inputs.gh_token }}
+        USER: ${{ secrets.GH_USER }}
+        TOKEN: ${{ secrets.GH_TOKEN }}
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
