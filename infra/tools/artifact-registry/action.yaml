@@ -14,7 +14,7 @@ inputs:
 
   gh_token:
     required: true
-    description: "gh token"
+    description: "Github token"
 
   path:
     required: false
@@ -38,7 +38,7 @@ runs:
       with:
         setup_gcloud: true
         setup_helm: true
-        gh_token: ${{ inputs.token }}
+        gh_token: ${{ inputs.gh_token }}
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
