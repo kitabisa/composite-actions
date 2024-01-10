@@ -3,7 +3,7 @@ description: "Destroy release deployment"
 
 inputs:
   # Required
-  token:
+  gh_token:
     required: true
     description: "Github token"
 
@@ -93,7 +93,7 @@ runs:
         setup_kubectl: true
         setup_helm: true
         setup_helmfile: true
-        gh_token: ${{ inputs.token }}
+        gh_token: ${{ inputs.gh_token }}
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
@@ -116,7 +116,6 @@ runs:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         destroy: true
         prune_all: ${{ inputs.prune_all }}
         using_cdn: ${{ inputs.using_cdn }}
