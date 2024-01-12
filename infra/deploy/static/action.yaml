@@ -37,25 +37,25 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
-  rancher_host:
-    required: true
-    description: "Rancher host"
-    type: string
+  # rancher_host:
+  #   required: true
+  #   description: "Rancher host"
+  #   type: string
 
-  rancher_access_key:
-    required: true
-    description: "Rancher access key"
-    type: string
+  # rancher_access_key:
+  #   required: true
+  #   description: "Rancher access key"
+  #   type: string
 
-  rancher_secret_key:
-    required: true
-    description: "Rancher secret key"
-    type: string
+  # rancher_secret_key:
+  #   required: true
+  #   description: "Rancher secret key"
+  #   type: string
 
-  rancher_cluster_id:
-    required: true
-    description: "Rancher cluster id"
-    type: string
+  # rancher_cluster_id:
+  #   required: true
+  #   description: "Rancher cluster id"
+  #   type: string
 
   working_directory:
     required: false
@@ -114,11 +114,11 @@ runs:
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         deploy: true
 
-    - name: Rancher ns mover
-      uses: kitabisa/composite-actions/packages/rancher@main
-      with:
-        working_directory: ${{ inputs.working_directory }}
-        rancher_host: ${{ inputs.rancher_host }}
-        rancher_access_key: ${{ inputs.rancher_access_key }}
-        rancher_secret_key: ${{ inputs.rancher_secret_key }}
-        rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
+    # - name: Rancher ns mover
+    #   uses: kitabisa/composite-actions/packages/rancher@main
+    #   with:
+    #     working_directory: ${{ inputs.working_directory }}
+    #     rancher_host: ${{ inputs.rancher_host }}
+    #     rancher_access_key: ${{ inputs.rancher_access_key }}
+    #     rancher_secret_key: ${{ inputs.rancher_secret_key }}
+    #     rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
