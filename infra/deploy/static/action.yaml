@@ -1,4 +1,4 @@
-name: "Static web build"
+name: "Static web deployment"
 description: "Static web composite deployment"
 
 inputs:
