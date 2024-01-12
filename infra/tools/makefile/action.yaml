@@ -99,12 +99,6 @@ inputs:
     default: "2"
     type: string
 
-  setup_helmfiles:
-    required: false
-    description: "Setup helmfiles"
-    default: true
-    type: string
-
 outputs:
   build-time:
     description: "Define build time"
