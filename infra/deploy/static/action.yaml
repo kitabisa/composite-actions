@@ -82,3 +82,12 @@ runs:
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         deploy: true
+
+    - name: Rancher ns mover
+      uses: kitabisa/composite-actions/packages/rancher@main
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        rancher_host: ${{ inputs.rancher_host }}
+        rancher_access_key: ${{ inputs.rancher_access_key }}
+        rancher_secret_key: ${{ inputs.rancher_secret_key }}
+        rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
