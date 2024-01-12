@@ -3,6 +3,10 @@ description: "Static web composite deployment"
 
 inputs:
   # Required
+  gh_token:
+    required: true
+    description: "Github token"
+
   artifact_registry_host:
     required: true
     description: "Artifact registry host"
@@ -23,9 +27,35 @@ inputs:
     description: "GCP project id"
     type: string
 
-  gh_token:
+  gke_cluster_name:
     required: true
-    description: "Github token"
+    description: "GKE cluster name"
+    type: string
+
+  gke_cluster_zone:
+    required: true
+    description: "GKE cluster location zone"
+    type: string
+
+  rancher_host:
+    required: true
+    description: "Rancher host"
+    type: string
+
+  rancher_access_key:
+    required: true
+    description: "Rancher access key"
+    type: string
+
+  rancher_secret_key:
+    required: true
+    description: "Rancher secret key"
+    type: string
+
+  rancher_cluster_id:
+    required: true
+    description: "Rancher cluster id"
+    type: string
 
   working_directory:
     required: false
@@ -81,6 +111,7 @@ runs:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         deploy: true
 
     - name: Rancher ns mover
