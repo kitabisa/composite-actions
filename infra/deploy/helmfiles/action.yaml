@@ -16,6 +16,11 @@ inputs:
     description: "Artifact registry host"
     type: string
 
+  artifact_registry_project_id:
+    required: false
+    description: "Artifact registry project id"
+    type: string
+
   credentials_json:
     required: true
     description: "GCP credentials services account"
@@ -40,7 +45,6 @@ runs:
     - name: Setuptools
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
-        setup_yq: true
         setup_gcloud: true
         setup_helm: true
         setup_helmfile: true
@@ -65,4 +69,5 @@ runs:
       with:
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_host }}
         deploy: true
