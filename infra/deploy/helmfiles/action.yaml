@@ -40,6 +40,7 @@ runs:
     - name: Setuptools
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
+        setup_yq: true
         setup_gcloud: true
         setup_helm: true
         setup_helmfile: true
