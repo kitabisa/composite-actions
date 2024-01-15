@@ -2,6 +2,16 @@ name: "Setup dependencies tools" # Install & preparation tools
 description: "Setup dependencies tools"
 
 inputs:
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
   setup_gcloud:
     required: false
     description: "Setup gcloud"
@@ -40,6 +50,12 @@ runs:
     - name: Setup gcloud
       if: "${{ inputs.setup_gcloud == 'true' }}"
       uses: google-github-actions/setup-gcloud@v2
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
 
     - name: Setup kubectl
       if: "${{ inputs.setup_kubectl == 'true' }}"
