@@ -159,13 +159,6 @@ runs:
         using_nextjs: ${{ inputs.using_nextjs }}
         working_directory: ${{ inputs.working_directory }}
 
-    - name: Setup Gcloud credential
-      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
-      with:
-        artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        credentials_json: ${{ inputs.credentials_json }}
-        project_id: ${{ inputs.project_id }}
-
     - name: Setuptools infra
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
@@ -174,6 +167,12 @@ runs:
         setup_buildx: true
         setup_helm: true
         setup_helmfile: true
+
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        project_id: ${{ inputs.project_id }}
 
     - name: Build and push image
       id: build-push
