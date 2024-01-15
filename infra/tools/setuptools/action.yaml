@@ -63,7 +63,7 @@ runs:
       if: "${{ inputs.setup_helm == 'true' }}"
       uses: azure/setup-helm@v3
       with:
-        gh_token: ${{ inputs.gh_token }}
+        token: ${{ inputs.gh_token }}
 
     - name: Setup Helmfile
       if: "${{ inputs.setup_helmfile == 'true' }}"
