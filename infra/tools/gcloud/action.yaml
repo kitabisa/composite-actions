@@ -7,21 +7,10 @@ inputs:
     description: "GCP project id"
     type: string
 
-  credentials_json:
-    required: true
-    description: "GCP credentials services account"
-    type: string
-
   artifact_registry_host:
     required: false
     description: "GCP artifact registry host for image container"
     type: string
-
-  auth_gcloud:
-    required: false
-    description: "Authentication gcloud"
-    type: string
-    default: 'true'
 
   docker_creds:
     required: false
@@ -38,13 +27,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Authenticate to Google Cloud
-      if: "${{ inputs.auth_gcloud == 'true' }}"
-      uses: google-github-actions/auth@v2
-      with:
-        project_id: ${{ inputs.project_id }}
-        credentials_json: ${{ inputs.credentials_json }}
-
     - name: Register gcloud as a docker credential helper
       if: "${{ inputs.docker_creds == 'true' }}"
       shell: bash
