@@ -78,7 +78,7 @@ runs:
         make diff > /tmp/stdout-helmfile-diff-stg.log
 
     - name: Print helmfile diff
-      uses: actions/github-script@v3
+      uses: actions/github-script@v7
       with:
         github-token: ${{ inputs.gh_token }}
         script: |
