@@ -166,7 +166,6 @@ runs:
         setup_gcloud: true
         setup_buildx: true
         setup_helm: true
-        setup_helmfile: true
         credentials_json: ${{ inputs.credentials_json }}
         project_id: ${{ inputs.project_id }}
 

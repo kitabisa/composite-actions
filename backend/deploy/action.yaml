@@ -71,14 +71,14 @@ runs:
       uses: chrnorm/deployment-action@v2
       id: deployment
       with:
-        token: ${{ inputs.token }}
+        gh_token: ${{ inputs.gh_token }}
         environment: ${{ inputs.env }}
 
     - name: Checking out repository
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
-        token: ${{ inputs.token }}
+        gh_token: ${{ inputs.gh_token }}
 
     - name: Setuptools
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
@@ -88,12 +88,13 @@ runs:
         setup_helm: true
         setup_helmfile: true
         gh_token: ${{ inputs.gh_token }}
+        credentials_json: ${{ inputs.credentials_json }}
+        project_id: ${{ inputs.project_id }}
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        credentials_json: ${{ inputs.credentials_json }}
         project_id: ${{ inputs.project_id }}
 
     - name: Auth GKE credential
@@ -112,20 +113,20 @@ runs:
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         deploy: true
 
-    - name: Rancher ns mover
-      uses: kitabisa/composite-actions/packages/rancher@main
-      with:
-        working_directory: ${{ inputs.working_directory }}
-        rancher_host: ${{ inputs.rancher_host }}
-        rancher_access_key: ${{ inputs.rancher_access_key }}
-        rancher_secret_key: ${{ inputs.rancher_secret_key }}
-        rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
+    # - name: Rancher ns mover
+    #   uses: kitabisa/composite-actions/packages/rancher@main
+    #   with:
+    #     working_directory: ${{ inputs.working_directory }}
+    #     rancher_host: ${{ inputs.rancher_host }}
+    #     rancher_access_key: ${{ inputs.rancher_access_key }}
+    #     rancher_secret_key: ${{ inputs.rancher_secret_key }}
+    #     rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
 
     - uses: chrnorm/deployment-status@v2
       if: success()
       name: Set env deployment success
       with:
-        token: ${{ inputs.token }}
+        gh_token: ${{ inputs.gh_token }}
         state: "success"
         deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
@@ -133,6 +134,6 @@ runs:
       if: failure()
       name: Set env deployment failure
       with:
-        token: ${{ inputs.token }}
+        gh_token: ${{ inputs.gh_token }}
         state: "failure"
         deployment-id: ${{ steps.deployment.outputs.deployment_id }}

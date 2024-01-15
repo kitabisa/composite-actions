@@ -115,14 +115,14 @@ runs:
         deploy: true
         prune: ${{ inputs.prune }}
 
-    - name: Rancher ns mover
-      uses: kitabisa/composite-actions/packages/rancher@main
-      with:
-        working_directory: ${{ inputs.working_directory }}
-        rancher_host: ${{ inputs.rancher_host }}
-        rancher_access_key: ${{ inputs.rancher_access_key }}
-        rancher_secret_key: ${{ inputs.rancher_secret_key }}
-        rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
+    # - name: Rancher ns mover
+    #   uses: kitabisa/composite-actions/packages/rancher@main
+    #   with:
+    #     working_directory: ${{ inputs.working_directory }}
+    #     rancher_host: ${{ inputs.rancher_host }}
+    #     rancher_access_key: ${{ inputs.rancher_access_key }}
+    #     rancher_secret_key: ${{ inputs.rancher_secret_key }}
+    #     rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
 
     - name: Comment preview url
       if: "${{ inputs.preview_url != '' }}"
