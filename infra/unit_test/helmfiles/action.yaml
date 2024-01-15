@@ -71,6 +71,7 @@ runs:
         project_id: ${{ inputs.project_id }}
 
     - name: Helmfile diff
+      shell: bash
       env:
         CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
       run: |
