@@ -39,7 +39,7 @@ runs:
   steps:
     - name: Setup gcloud
       if: "${{ inputs.setup_gcloud == 'true' }}"
-      uses: google-github-actions/setup-gcloud@v2.0.0
+      uses: google-github-actions/setup-gcloud@v2
 
     - name: Setup kubectl
       if: "${{ inputs.setup_kubectl == 'true' }}"
