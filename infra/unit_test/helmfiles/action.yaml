@@ -1,10 +1,15 @@
-name: "Helm charts build"
-description: "Helm charts composite for ChartMuseum"
+name: "Helmfiles test"
+description: "Composite for testing helmfile"
 
 inputs:
   artifact_registry_host:
     required: true
     description: "GCP container registry host"
+    type: string
+
+  artifact_registry_project_id:
+    required: true
+    description: "Artifact registry project id"
     type: string
 
   credentials_json:
@@ -47,6 +52,7 @@ runs:
         setup_gcloud: true
         setup_kubectl: true
         setup_helm: true
+        setup_helmfile: true
         gh_token: ${{ inputs.gh_token }}
 
     - name: Setup Gcloud credential
@@ -55,6 +61,7 @@ runs:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         credentials_json: ${{ inputs.credentials_json }}
         project_id: ${{ inputs.project_id }}
+        docker_creds: false
 
     - name: Auth GKE credential
       uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
@@ -63,12 +70,35 @@ runs:
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
-    - name: Lint chart
-      shell: bash
-      run: |-
-        helm lint ${{ inputs.path }}
+    - name: Helmfile diff
+      env:
+        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
+      run: |
+        make diff > /tmp/stdout-helmfile-diff-stg.log
 
-    - name: Simulate an install
-      shell: bash
-      run: |-
-        helm install ${{ inputs.path }} ${{ inputs.path }}/. -f ${{ inputs.path }}/values-test.yaml -n test --dry-run
+    - name: Print helmfile diff
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{ inputs.gh_token }}
+        script: |
+          const execSync = require('child_process').execSync;
+          const stdout = execSync('cat /tmp/stdout-helmfile-diff-stg.log');
+          const output = `
+          <details>
+          <summary>Show helmfile diff on stg environment</summary>
+
+
+          \`\`\`
+          ${stdout}
+          \`\`\`
+
+
+          </details>
+          `;
+
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
