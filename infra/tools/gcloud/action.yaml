@@ -32,14 +32,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup gcloud
-      uses: google-github-actions/setup-gcloud@v2
-
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v2
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Setup gcloud
+      uses: google-github-actions/setup-gcloud@v2
 
     - name: Register gcloud as a docker credential helper
       if: "${{ inputs.docker_creds == 'true' }}"
