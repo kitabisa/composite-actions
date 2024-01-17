@@ -71,31 +71,29 @@ runs:
       uses: chrnorm/deployment-action@v2
       id: deployment
       with:
-        gh_token: ${{ inputs.gh_token }}
+        token: ${{ inputs.gh_token }}
         environment: ${{ inputs.env }}
 
     - name: Checking out repository
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
-        gh_token: ${{ inputs.gh_token }}
+        token: ${{ inputs.gh_token }}
 
     - name: Setuptools
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
-        setup_gcloud: true
         setup_kubectl: true
         setup_helm: true
         setup_helmfile: true
         gh_token: ${{ inputs.gh_token }}
-        credentials_json: ${{ inputs.credentials_json }}
-        project_id: ${{ inputs.project_id }}
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
 
     - name: Auth GKE credential
       uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
@@ -126,7 +124,7 @@ runs:
       if: success()
       name: Set env deployment success
       with:
-        gh_token: ${{ inputs.gh_token }}
+        token: ${{ inputs.gh_token }}
         state: "success"
         deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
@@ -134,6 +132,6 @@ runs:
       if: failure()
       name: Set env deployment failure
       with:
-        gh_token: ${{ inputs.gh_token }}
+        token: ${{ inputs.gh_token }}
         state: "failure"
         deployment-id: ${{ steps.deployment.outputs.deployment_id }}
