@@ -67,7 +67,7 @@ runs:
 
     - name: Setup Helmfile
       if: "${{ inputs.setup_helmfile == 'true' }}"
-      uses: kitabisa/actions/setup-helmfile@master
+      uses: kitabisa/actions/setup-helmfile@feat/node-20
       with:
         version: v0.144.0
 

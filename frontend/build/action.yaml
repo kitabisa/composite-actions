@@ -165,7 +165,6 @@ runs:
         setup_yq: true
         setup_buildx: true
         setup_helm: true
-        setup_helmfile: true
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
