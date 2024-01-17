@@ -23,6 +23,14 @@ inputs:
     description: "GCP project id"
     type: string
 
+  gh_user:
+    required: true
+    description: "gh user"
+
+  gh_token:
+    required: true
+    description: "gh token"
+
   # Optional
   cache_dependency_path:
     required: false
@@ -86,6 +94,8 @@ runs:
       with:
         setup_git: true
         setup_go: true
+        gh_user: ${{ inputs.gh_user }}
+        gh_token: ${{ inputs.gh_token }}
 
     - name: Setuptools infra
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
