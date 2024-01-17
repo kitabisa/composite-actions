@@ -72,7 +72,6 @@ runs:
     - name: Setuptools
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
-        setup_gcloud: true
         setup_buildx: true
         setup_kubectl: true
         setup_helm: true

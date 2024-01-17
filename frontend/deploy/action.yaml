@@ -84,19 +84,17 @@ runs:
     - name: Setuptools
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
-        setup_gcloud: true
         setup_kubectl: true
         setup_helm: true
         setup_helmfile: true
         gh_token: ${{ inputs.gh_token }}
-        credentials_json: ${{ inputs.credentials_json }}
-        project_id: ${{ inputs.project_id }}
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
 
     - name: Auth GKE credential
       uses: kitabisa/composite-actions/infra/tools/gke-credential@v2

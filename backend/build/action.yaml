@@ -24,30 +24,6 @@ inputs:
     type: string
 
   # Optional
-  setup_git:
-    required: false
-    description: "Setup git and cache modules"
-    default: false
-    type: string
-
-  setup_go:
-    required: false
-    description: "Setup go and cache modules"
-    default: false
-    type: string
-
-  setup_gcloud:
-    required: false
-    description: "Setup gcloud and cache modules"
-    default: false
-    type: string
-
-  setup_buildx:
-    required: false
-    description: "Setup buildx and cache modules"
-    default: false
-    type: string
-
   cache_dependency_path:
     required: false
     description: "go sum location"
@@ -115,17 +91,15 @@ runs:
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
         setup_yq: true
-        setup_gcloud: true
         setup_buildx: true
         setup_helm: true
-        credentials_json: ${{ inputs.credentials_json }}
-        project_id: ${{ inputs.project_id }}
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
 
     - name: Build application
       id: build-app

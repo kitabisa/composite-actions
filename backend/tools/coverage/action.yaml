@@ -8,14 +8,6 @@ inputs:
     default: "."
     type: string
 
-  setup_git:
-    required: false
-    description: "Setup git"
-
-  setup_go:
-    required: false
-    description: "Setup Go"
-
   cache_dependency_path:
     required: false
     description: "go sum location"

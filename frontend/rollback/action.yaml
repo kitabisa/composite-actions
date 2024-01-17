@@ -55,7 +55,6 @@ runs:
     - name: Setuptools
       uses: kitabisa/composite-actions/infra/tools/setuptools@refactor-composite
       with:
-        setup_gcloud: true
         setup_kubectl: true
         setup_helm: true
         setup_helmfile: true
