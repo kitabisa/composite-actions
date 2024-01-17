@@ -3,11 +3,11 @@ description: "Setup dependencies tools"
 
 inputs:
   gh_user:
-    required: false
+    required: true
     description: "gh user"
 
   gh_token:
-    required: false
+    required: true
     description: "gh token"
 
   setup_git:
