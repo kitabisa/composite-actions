@@ -2,10 +2,6 @@ name: "Setup dependencies tools" # Install & preparation tools
 description: "Setup dependencies tools"
 
 inputs:
-  gh_token:
-    required: false
-    description: "gh token"
-
   setup_kubectl:
     required: false
     description: "Setup kubectl"
@@ -67,7 +63,7 @@ runs:
       if: "${{ inputs.setup_helm == 'true' }}"
       uses: azure/setup-helm@v3
       with:
-        token: ${{ inputs.gh_token }}
+        version: v3.13.3
 
     - name: Setup Helmfile
       if: "${{ inputs.setup_helmfile == 'true' }}"
