@@ -39,20 +39,12 @@ runs:
       with:
         credentials_json: ${{ inputs.gcp_credentials }}
 
-    - name: Sops Binary Installer
-      uses: mdgreenwald/mozilla-sops-action@v1.4.1
+    - name: Setuptools
+      uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
-        version: v3.7.3
-
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3.0.0
-      with:
-        terraform_wrapper: false
-
-    - name: Setup Terragrunt
-      uses: autero1/action-terragrunt@v1.3.2
-      with:
-        terragrunt_version: 0.43.2
+        setup_sops: true
+        setup_terraform: true
+        setup_terragrunt: true
 
     - name: Terragrunt Validate
       id: validate
