@@ -2,6 +2,11 @@ name: "Gcloud Auth"
 description: "Gcloud authentication"
 
 inputs:
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
   project_id:
     required: true
     description: "GCP project id"
@@ -27,6 +32,15 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Setup gcloud
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+
     - name: Register gcloud as a docker credential helper
       if: "${{ inputs.docker_creds == 'true' }}"
       shell: bash
