@@ -23,9 +23,9 @@ inputs:
     description: "GCP project id"
     type: string
 
-  # gh_user:
-  #   required: true
-  #   description: "gh user"
+  gh_user:
+    required: true
+    description: "gh user"
 
   gh_token:
     required: true
@@ -94,7 +94,7 @@ runs:
       with:
         setup_git: true
         setup_go: true
-        # gh_user: ${{ inputs.gh_user }}
+        gh_user: ${{ inputs.gh_user }}
         gh_token: ${{ inputs.gh_token }}
 
     - name: Setuptools infra
