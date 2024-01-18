@@ -37,25 +37,25 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
-  rancher_host:
-    required: true
-    description: "Rancher host"
-    type: string
+  # rancher_host:
+  #   required: true
+  #   description: "Rancher host"
+  #   type: string
 
-  rancher_access_key:
-    required: true
-    description: "Rancher access key"
-    type: string
+  # rancher_access_key:
+  #   required: true
+  #   description: "Rancher access key"
+  #   type: string
 
-  rancher_secret_key:
-    required: true
-    description: "Rancher secret key"
-    type: string
+  # rancher_secret_key:
+  #   required: true
+  #   description: "Rancher secret key"
+  #   type: string
 
-  rancher_cluster_id:
-    required: true
-    description: "Rancher cluster id"
-    type: string
+  # rancher_cluster_id:
+  #   required: true
+  #   description: "Rancher cluster id"
+  #   type: string
 
   working_directory:
     required: false
@@ -92,8 +92,8 @@ runs:
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
+        project_id: ${{ inputs.project_id }}
 
     - name: Auth GKE credential
       uses: kitabisa/composite-actions/infra/tools/gke-credential@v2

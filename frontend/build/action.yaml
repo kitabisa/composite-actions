@@ -27,8 +27,14 @@ inputs:
   cache:
     required: false
     description: "Run action cache"
-    default: true
-    type: boolean
+    default: "true"
+    type: string
+
+  web_static:
+    required: false
+    description: "Build static web"
+    default: "false"
+    type: string
 
   pnpm_version:
     required: false
@@ -39,20 +45,20 @@ inputs:
   setup_pnpm:
     required: false
     description: "Setup pnpm and cache modules"
-    default: false
-    type: boolean
+    default: "false"
+    type: string
 
   setup_yarn:
     required: false
     description: "Setup yarn and cache modules"
-    default: false
-    type: boolean
+    default: "false"
+    type: string
 
   using_nextjs:
     required: false
     description: "Setup next.js cache modules"
-    default: false
-    type: boolean
+    default: "false"
+    type: string
 
   working_directory:
     required: false
@@ -63,37 +69,37 @@ inputs:
   install:
     required: false
     description: "Run make install"
-    default: true
+    default: "true"
     type: string
 
   config:
     required: false
     description: "Run make config"
-    default: true
+    default: "true"
     type: string
 
   build:
     required: false
     description: "Run make build"
-    default: true
+    default: "true"
     type: string
 
   package:
     required: false
     description: "Run make package"
-    default: true
+    default: "true"
     type: string
 
   using_cdn:
     required: false
     description: "Setup cdn for static assets"
-    default: false
+    default: "false"
     type: string
 
   delete_oldest_cdn:
     required: false
     description: "Setup delete oldest cdn"
-    default: true
+    default: "true"
     type: string
 
   cdn_aws_s3_bucket:
@@ -150,6 +156,7 @@ runs:
       uses: actions/checkout@v3
 
     - name: Setuptools frontend
+      if: "${{ inputs.web_static == 'false' }}"
       uses: kitabisa/composite-actions/frontend/tools/setuptools@v2
       with:
         setup_yarn: ${{ inputs.setup_yarn }}
@@ -175,6 +182,7 @@ runs:
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Build and push image
+      if: "${{ inputs.web_static == 'false' }}"
       id: build-push
       uses: kitabisa/composite-actions/infra/tools/makefile@v2
       with:
@@ -188,6 +196,16 @@ runs:
         package: ${{ inputs.package }}
         using_cdn: ${{ inputs.using_cdn }}
         cdn_keep_latest_version: ${{ inputs.cdn_keep_latest_version }}
+
+    - name: Build and push image static
+      if: "${{ inputs.web_static == 'true' }}"
+      uses: kitabisa/composite-actions/infra/tools/makefile@v2
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
+        project_id: ${{ inputs.project_id }}
+        working_directory: ${{ inputs.working_directory }}
+        package: true
 
     - name: Upload CDN static
       if: "${{ inputs.using_cdn == 'true' }}"
