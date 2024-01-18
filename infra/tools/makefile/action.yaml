@@ -47,6 +47,12 @@ inputs:
     default: false
     type: string
 
+  deploy_test:
+    required: false
+    description: "make deploy-test"
+    default: false
+    type: string
+
   rollback:
     required: false
     description: "make rollback"
@@ -160,6 +166,16 @@ runs:
         CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
         make deploy
+
+    - name: Deploy-test via helmfile
+      if: "${{ inputs.deploy_test == 'true' }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      env:
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
+        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
+      run: |-
+        make deploy-test
 
     - name: Destroy via helmfile
       if: "${{ inputs.destroy == 'true' }}"
