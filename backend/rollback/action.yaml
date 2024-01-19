@@ -58,7 +58,6 @@ runs:
         setup_kubectl: true
         setup_helm: true
         setup_helmfile: true
-        gh_token: ${{ inputs.gh_token }}
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2

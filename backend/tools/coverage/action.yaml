@@ -2,6 +2,10 @@ name: "Generate Coverage"
 description: "generate coverage badge for readme"
 
 inputs:
+  gh_token:
+    required: false
+    description: "gh token"
+
   working_directory:
     required: false
     description: "Set working directory"
@@ -45,7 +49,7 @@ runs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
-        token: ${{ inputs.gh_token }}
+        gh_token: ${{ inputs.gh_token }}
 
     - name: Setuptools backend
       uses: kitabisa/composite-actions/backend/tools/setuptools@v2
