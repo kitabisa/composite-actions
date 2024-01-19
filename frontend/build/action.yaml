@@ -156,7 +156,7 @@ runs:
       uses: actions/checkout@v3
 
     - name: Setuptools frontend
-      if: "${{ inputs.web_static == 'false' }}"
+      if: "${{ inputs.web_static != 'true' }}"
       uses: kitabisa/composite-actions/frontend/tools/setuptools@v2
       with:
         setup_yarn: ${{ inputs.setup_yarn }}
@@ -182,7 +182,7 @@ runs:
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Build and push image
-      if: "${{ inputs.web_static == 'false' }}"
+      if: "${{ inputs.web_static != 'true' }}"
       id: build-push
       uses: kitabisa/composite-actions/infra/tools/makefile@v2
       with:
