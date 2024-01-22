@@ -2,10 +2,6 @@ name: "Rollback deployment"
 description: "Rollback release deployment"
 
 inputs:
-  gh_token:
-    required: true
-    description: "Github token"
-
   artifact_registry_host:
     required: true
     description: "Artifact registry host"
@@ -58,7 +54,6 @@ runs:
         setup_kubectl: true
         setup_helm: true
         setup_helmfile: true
-        gh_token: ${{ inputs.gh_token }}
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@refactor-composite
