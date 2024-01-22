@@ -2,15 +2,19 @@ name: "Generate Coverage"
 description: "generate coverage badge for readme"
 
 inputs:
-  gh_token:
-    required: false
-    description: "gh token"
-
   working_directory:
     required: false
     description: "Set working directory"
     default: "."
     type: string
+
+  gh_user:
+    required: true
+    description: "gh user"
+
+  gh_token:
+    required: true
+    description: "gh token"
 
   cache_dependency_path:
     required: false
@@ -49,13 +53,15 @@ runs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
-        gh_token: ${{ inputs.gh_token }}
+        token: ${{ inputs.gh_token }}
 
     - name: Setuptools backend
       uses: kitabisa/composite-actions/backend/tools/setuptools@v2
       with:
         setup_git: true
         setup_go: true
+        gh_user: ${{ inputs.gh_user }}
+        gh_token: ${{ inputs.gh_token }}
 
     - name: Generate Master Coverage
       shell: bash
