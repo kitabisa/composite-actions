@@ -41,12 +41,6 @@ inputs:
     default: false
     type: string
 
-  deploy:
-    required: false
-    description: "make deploy"
-    default: false
-    type: string
-
   deploy_test:
     required: false
     description: "make deploy-test"
@@ -158,7 +152,7 @@ runs:
         make package
 
     - name: Deploy via helmfile
-      if: "${{ inputs.deploy == 'true' }}"
+      if: "${{ inputs.deploy_test == 'false' }}"
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
