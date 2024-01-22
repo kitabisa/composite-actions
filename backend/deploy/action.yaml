@@ -117,7 +117,7 @@ runs:
         deploy_test: ${{ inputs.deploy_test }}
 
     - name: Rancher ns mover
-      uses: kitabisa/composite-actions/packages/rancher@main
+      uses: kitabisa/composite-actions/infra/tools/rancher@v2
       with:
         working_directory: ${{ inputs.working_directory }}
         rancher_host: ${{ inputs.rancher_host }}

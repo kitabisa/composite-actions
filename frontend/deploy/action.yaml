@@ -43,25 +43,25 @@ inputs:
     default: "false"
     type: string
 
-  # rancher_host:
-  #   required: true
-  #   description: "Rancher host"
-  #   type: string
+  rancher_host:
+    required: true
+    description: "Rancher host"
+    type: string
 
-  # rancher_access_key:
-  #   required: true
-  #   description: "Rancher access key"
-  #   type: string
+  rancher_access_key:
+    required: true
+    description: "Rancher access key"
+    type: string
 
-  # rancher_secret_key:
-  #   required: true
-  #   description: "Rancher secret key"
-  #   type: string
+  rancher_secret_key:
+    required: true
+    description: "Rancher secret key"
+    type: string
 
-  # rancher_cluster_id:
-  #   required: true
-  #   description: "Rancher cluster id"
-  #   type: string
+  rancher_cluster_id:
+    required: true
+    description: "Rancher cluster id"
+    type: string
 
   working_directory:
     required: false
@@ -118,14 +118,14 @@ runs:
         deploy_test: ${{ inputs.deploy_test }}
         prune: ${{ inputs.prune }}
 
-    # - name: Rancher ns mover
-    #   uses: kitabisa/composite-actions/packages/rancher@main
-    #   with:
-    #     working_directory: ${{ inputs.working_directory }}
-    #     rancher_host: ${{ inputs.rancher_host }}
-    #     rancher_access_key: ${{ inputs.rancher_access_key }}
-    #     rancher_secret_key: ${{ inputs.rancher_secret_key }}
-    #     rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
+    - name: Rancher ns mover
+      uses: kitabisa/composite-actions/infra/tools/rancher@v2
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        rancher_host: ${{ inputs.rancher_host }}
+        rancher_access_key: ${{ inputs.rancher_access_key }}
+        rancher_secret_key: ${{ inputs.rancher_secret_key }}
+        rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
 
     - name: Comment preview url
       if: "${{ inputs.preview_url != '' }}"
