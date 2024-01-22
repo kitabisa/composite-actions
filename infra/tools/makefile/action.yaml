@@ -152,7 +152,7 @@ runs:
         make package
 
     - name: Deploy via helmfile
-      if: "${{ inputs.deploy_test == 'false' }}"
+      if: "${{ (inputs.deploy == 'true') && (inputs.deploy_test == 'false') }}"
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       env:
