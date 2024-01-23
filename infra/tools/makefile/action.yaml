@@ -41,6 +41,12 @@ inputs:
     default: false
     type: string
 
+  deploy:
+    required: false
+    description: "make deploy"
+    default: true
+    type: string
+
   deploy_test:
     required: false
     description: "make deploy-test"
