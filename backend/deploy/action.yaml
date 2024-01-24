@@ -114,6 +114,7 @@ runs:
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
+        deploy: true
         deploy_test: ${{ inputs.deploy_test }}
 
     - name: Rancher ns mover

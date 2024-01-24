@@ -117,6 +117,7 @@ runs:
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         deploy_test: ${{ inputs.deploy_test }}
         prune: ${{ inputs.prune }}
+        deploy: true
 
     - name: Rancher ns mover
       uses: kitabisa/composite-actions/infra/tools/rancher@v2
