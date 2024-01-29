@@ -39,13 +39,6 @@ runs:
       with:
         credentials_json: ${{ inputs.gcp_credentials }}
 
-    - name: Setuptools
-      uses: kitabisa/composite-actions/infra/tools/setuptools@v2
-      with:
-        setup_sops: true
-        setup_terraform: true
-        setup_terragrunt: true
-
     - name: Terragrunt Validate
       id: validate
       shell: bash

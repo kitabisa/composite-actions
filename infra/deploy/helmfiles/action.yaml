@@ -38,12 +38,6 @@ runs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Setuptools
-      uses: kitabisa/composite-actions/infra/tools/setuptools@v2
-      with:
-        setup_helm: true
-        setup_helmfile: true
-
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
