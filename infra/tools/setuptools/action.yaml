@@ -2,89 +2,13 @@ name: "Setup dependencies tools" # Install & preparation tools
 description: "Setup dependencies tools"
 
 inputs:
-  setup_kubectl:
-    required: false
-    description: "Setup kubectl"
-
-  setup_yq:
-    required: false
-    description: "Setup yq"
-
-  setup_task:
-    required: false
-    description: "Setup task"
-
   setup_buildx:
     required: false
     description: "Setup buildx"
 
-  setup_helm:
-    required: false
-    description: "Setup helm"
-
-  setup_helmfile:
-    required: false
-    description: "Setup helmfile"
-
-  setup_sops:
-    required: false
-    description: "Setup sops"
-
-  setup_terraform:
-    required: false
-    description: "Setup Terraform"
-
-  setup_terragrunt:
-    required: false
-    description: "Setup Terragrunt"
-
 runs:
   using: "composite"
   steps:
-    - name: Setup kubectl
-      if: "${{ inputs.setup_kubectl == 'true' }}"
-      uses: azure/setup-kubectl@v3
-
-    - name: Setup yq
-      if: "${{ inputs.setup_yq == 'true' }}"
-      uses: frenck/action-setup-yq@v1.0.2
-      with:
-        version: v4.30.6
-
-    - name: Setup Taskfile
-      if: "${{ inputs.setup_task == 'true' }}"
-      uses: arduino/setup-task@v1.0.3
-
     - name: Setup docker buildx
       if: "${{ inputs.setup_buildx == 'true' }}"
-      uses: docker/setup-buildx-action@v2
-
-    - name: Setup Helm
-      if: "${{ inputs.setup_helm == 'true' }}"
-      uses: azure/setup-helm@v3
-      with:
-        version: v3.13.3
-
-    - name: Setup Helmfile
-      if: "${{ inputs.setup_helmfile == 'true' }}"
-      uses: kitabisa/actions/setup-helmfile@feat/node-20
-      with:
-        version: v0.144.0
-
-    - name: Sops Binary Installer
-      if: "${{ inputs.setup_sops == 'true' }}"
-      uses: mdgreenwald/mozilla-sops-action@v1.4.1
-      with:
-        version: v3.7.3
-
-    - name: Setup Terraform
-      if: "${{ inputs.setup_terraform == 'true' }}"
-      uses: hashicorp/setup-terraform@v3.0.0
-      with:
-        terraform_wrapper: false
-
-    - name: Setup Terragrunt
-      if: "${{ inputs.setup_terragrunt == 'true' }}"
-      uses: autero1/action-terragrunt@v1.3.2
-      with:
-        terragrunt_version: 0.43.2
+      uses: docker/setup-buildx-action@v3
