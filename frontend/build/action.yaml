@@ -166,11 +166,6 @@ runs:
         using_nextjs: ${{ inputs.using_nextjs }}
         working_directory: ${{ inputs.working_directory }}
 
-    - name: Setuptools infra
-      uses: kitabisa/composite-actions/infra/tools/setuptools@v2
-      with:
-        setup_helm: true
-
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
