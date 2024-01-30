@@ -32,7 +32,7 @@ runs:
   using: "composite"
   steps:
     - name: Checking out repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Add comment to PR
       id: loading_budget_comment_to_pr
@@ -43,7 +43,7 @@ runs:
           ⏱ Running budget checks...
 
     - name: Setup node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version-file: "${{ inputs.working_directory }}/.nvmrc"
         check-latest: true

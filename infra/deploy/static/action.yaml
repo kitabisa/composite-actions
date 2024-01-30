@@ -67,7 +67,7 @@ runs:
   using: "composite"
   steps:
     - name: Checking out repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setuptools
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2

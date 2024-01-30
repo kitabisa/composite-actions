@@ -81,7 +81,7 @@ runs:
         environment: ${{ inputs.env }}
 
     - name: Checking out repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
@@ -90,6 +90,7 @@ runs:
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
         setup_kubectl: true
+        setup_helm: true
         setup_helmfile: true
 
     - name: Setup Gcloud credential

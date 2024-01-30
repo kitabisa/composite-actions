@@ -38,7 +38,7 @@ runs:
   using: "composite"
   steps:
     - name: Setup node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         check-latest: true
         node-version-file: "${{ inputs.working_directory }}/.nvmrc"
