@@ -97,13 +97,6 @@ runs:
         gh_user: ${{ inputs.gh_user }}
         gh_token: ${{ inputs.gh_token }}
 
-    - name: Setuptools infra
-      uses: kitabisa/composite-actions/infra/tools/setuptools@v2
-      with:
-        setup_yq: true
-        setup_buildx: true
-        setup_helm: true
-
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
