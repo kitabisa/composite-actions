@@ -41,7 +41,7 @@ runs:
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
-    - uses: actions/setup-go@v5
+    - uses: actions/setup-go@v4
       if: "${{ inputs.setup_go == 'true' }}"
       with:
         cache: false
