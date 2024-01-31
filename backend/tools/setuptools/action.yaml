@@ -44,5 +44,6 @@ runs:
     - uses: actions/setup-go@v5
       if: "${{ inputs.setup_go == 'true' }}"
       with:
+        cache: false
         cache-dependency-path: ${{ inputs.cache_dependency_path }}
         go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
