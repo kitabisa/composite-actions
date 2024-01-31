@@ -6,9 +6,17 @@ inputs:
     required: false
     description: "Setup buildx"
 
+  setup_task:
+     required: false
+     description: "Setup task"
+
 runs:
   using: "composite"
   steps:
     - name: Setup docker buildx
       if: "${{ inputs.setup_buildx == 'true' }}"
       uses: docker/setup-buildx-action@v3
+
+    - name: Setup Taskfile
+      if: "${{ inputs.setup_task == 'true' }}"
+      uses: arduino/setup-task@v1.0.3
