@@ -7,8 +7,8 @@ inputs:
     description: "Setup buildx"
 
   setup_task:
-     required: false
-     description: "Setup task"
+    required: false
+    description: "Setup task"
 
 runs:
   using: "composite"
