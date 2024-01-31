@@ -88,6 +88,8 @@ runs:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         credentials_json: ${{ inputs.credentials_json }}
         project_id: ${{ inputs.project_id }}
+        docker_creds: false
+        artifact_creds: false
 
     - name: Auth GKE credential
       uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
