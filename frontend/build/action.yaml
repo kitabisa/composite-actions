@@ -36,6 +36,12 @@ inputs:
     default: "false"
     type: string
 
+  setup_nvmrc:
+    required: false
+    description: "Setup node custom by nvmrc"
+    default: "false"
+    type: string
+
   setup_pnpm:
     required: false
     description: "Setup pnpm and cache modules"
@@ -153,6 +159,7 @@ runs:
       if: "${{ inputs.web_static != 'true' }}"
       uses: kitabisa/composite-actions/frontend/tools/setuptools@v2
       with:
+        setup_nvmrc: ${{ inputs.setup_nvmrc }}
         setup_yarn: ${{ inputs.setup_yarn }}
         setup_pnpm: ${{ inputs.setup_pnpm }}
         cache: ${{ inputs.cache }}
