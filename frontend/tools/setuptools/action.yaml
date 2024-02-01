@@ -10,10 +10,10 @@ inputs:
     required: false
     description: "Setup pnpm"
 
-  pnpm_version:
+  setup_nvmrc:
     required: false
-    description: "Setup pnpm version"
-    default: "latest"
+    description: "Setup node custom by nvmrc"
+    default: "false"
     type: string
 
   cache:
@@ -37,7 +37,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup node.js
+    - name: Setup node.js by nvmrc
+      if: "${{ inputs.setup_nvmrc == 'true' }}"
       uses: actions/setup-node@v4
       with:
         check-latest: true
@@ -56,6 +57,5 @@ runs:
       uses: kitabisa/composite-actions/frontend/tools/pnpm@v2
       with:
         cache: ${{ inputs.cache }}
-        pnpm_version: ${{ inputs.pnpm_version }}
         using_nextjs: ${{ inputs.using_nextjs }}
         working_directory: ${{ inputs.working_directory }}

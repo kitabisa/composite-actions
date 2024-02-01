@@ -36,10 +36,10 @@ inputs:
     default: "false"
     type: string
 
-  pnpm_version:
+  setup_nvmrc:
     required: false
-    description: "Setup pnpm version"
-    default: "latest"
+    description: "Setup node custom by nvmrc"
+    default: "false"
     type: string
 
   setup_pnpm:
@@ -159,9 +159,9 @@ runs:
       if: "${{ inputs.web_static != 'true' }}"
       uses: kitabisa/composite-actions/frontend/tools/setuptools@v2
       with:
+        setup_nvmrc: ${{ inputs.setup_nvmrc }}
         setup_yarn: ${{ inputs.setup_yarn }}
         setup_pnpm: ${{ inputs.setup_pnpm }}
-        pnpm_version: ${{ inputs.pnpm_version }}
         cache: ${{ inputs.cache }}
         using_nextjs: ${{ inputs.using_nextjs }}
         working_directory: ${{ inputs.working_directory }}
