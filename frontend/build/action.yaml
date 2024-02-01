@@ -36,12 +36,6 @@ inputs:
     default: "false"
     type: string
 
-  pnpm_version:
-    required: false
-    description: "Setup pnpm version"
-    default: "latest"
-    type: string
-
   setup_pnpm:
     required: false
     description: "Setup pnpm and cache modules"
@@ -161,7 +155,6 @@ runs:
       with:
         setup_yarn: ${{ inputs.setup_yarn }}
         setup_pnpm: ${{ inputs.setup_pnpm }}
-        pnpm_version: ${{ inputs.pnpm_version }}
         cache: ${{ inputs.cache }}
         using_nextjs: ${{ inputs.using_nextjs }}
         working_directory: ${{ inputs.working_directory }}

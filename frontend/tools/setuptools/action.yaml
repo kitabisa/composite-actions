@@ -10,12 +10,6 @@ inputs:
     required: false
     description: "Setup pnpm"
 
-  pnpm_version:
-    required: false
-    description: "Setup pnpm version"
-    default: "latest"
-    type: string
-
   cache:
     required: false
     description: "Run action cache"
@@ -37,12 +31,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup node.js
-      uses: actions/setup-node@v4
-      with:
-        check-latest: true
-        node-version-file: "${{ inputs.working_directory }}/.nvmrc"
-
     - name: Setup yarn
       if: "${{ inputs.setup_yarn == 'true' }}"
       uses: kitabisa/composite-actions/frontend/tools/yarn@v2
@@ -56,6 +44,5 @@ runs:
       uses: kitabisa/composite-actions/frontend/tools/pnpm@v2
       with:
         cache: ${{ inputs.cache }}
-        pnpm_version: ${{ inputs.pnpm_version }}
         using_nextjs: ${{ inputs.using_nextjs }}
         working_directory: ${{ inputs.working_directory }}
