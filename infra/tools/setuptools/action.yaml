@@ -14,21 +14,21 @@ inputs:
      required: false
      description: "Setup helm"
 
-   setup_helmfile:
-     required: false
-     description: "Setup helmfile"
+  setup_helmfile:
+    required: false
+    description: "Setup helmfile"
 
-   setup_sops:
-     required: false
-     description: "Setup sops"
+  setup_sops:
+    required: false
+    description: "Setup sops"
 
-   setup_terraform:
-     required: false
-     description: "Setup Terraform"
+  setup_terraform:
+    required: false
+    description: "Setup Terraform"
 
-   setup_terragrunt:
-     required: false
-     description: "Setup Terragrunt"
+  setup_terragrunt:
+    required: false
+    description: "Setup Terragrunt"
 
 runs:
   using: "composite"
@@ -47,26 +47,26 @@ runs:
        with:
          version: v3.13.3
 
-     - name: Setup Helmfile
-       if: "${{ inputs.setup_helmfile == 'true' }}"
-       uses: kitabisa/actions/setup-helmfile@feat/node-20
-       with:
-         version: v0.144.0
+    - name: Setup Helmfile
+      if: "${{ inputs.setup_helmfile == 'true' }}"
+      uses: kitabisa/actions/setup-helmfile@feat/node-20
+      with:
+        version: v0.144.0
 
-     - name: Sops Binary Installer
-       if: "${{ inputs.setup_sops == 'true' }}"
-       uses: mdgreenwald/mozilla-sops-action@v1.4.1
-       with:
-         version: v3.7.3
+    - name: Sops Binary Installer
+      if: "${{ inputs.setup_sops == 'true' }}"
+      uses: mdgreenwald/mozilla-sops-action@v1.4.1
+      with:
+        version: v3.7.3
 
-     - name: Setup Terraform
-       if: "${{ inputs.setup_terraform == 'true' }}"
-       uses: hashicorp/setup-terraform@v3.0.0
-       with:
-         terraform_wrapper: false
+    - name: Setup Terraform
+      if: "${{ inputs.setup_terraform == 'true' }}"
+      uses: hashicorp/setup-terraform@v3.0.0
+      with:
+        terraform_wrapper: false
 
-     - name: Setup Terragrunt
-       if: "${{ inputs.setup_terragrunt == 'true' }}"
-       uses: autero1/action-terragrunt@v1.3.2
-       with:
-         terragrunt_version: 0.43.2
+    - name: Setup Terragrunt
+      if: "${{ inputs.setup_terragrunt == 'true' }}"
+      uses: autero1/action-terragrunt@v1.3.2
+      with:
+        terragrunt_version: 0.43.2
