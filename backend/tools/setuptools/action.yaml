@@ -30,6 +30,16 @@ inputs:
     description: "go version"
     default: "^1.13.1"
 
+  custom_command_flag:
+    required: false
+    description: "custom command flag"
+    default: "false"
+
+  custom_command:
+    required: false
+    description: "custom command"
+    default: "echo no command"
+
 runs:
   using: "composite"
   steps:
@@ -47,3 +57,9 @@ runs:
         cache: false
         cache-dependency-path: ${{ inputs.cache_dependency_path }}
         go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
+
+    - name: Custom Command
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      if: "${{ inputs.custom_command_flag == 'true' }}"
+      run: ${{ inputs.custom_command }}

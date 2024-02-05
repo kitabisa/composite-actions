@@ -42,6 +42,16 @@ inputs:
     description: "go version"
     default: "^1.13.1"
 
+  custom_command_flag:
+    required: false
+    description: "custom command flag"
+    default: "false"
+
+  custom_command:
+    required: false
+    description: "custom command"
+    default: "echo no command"
+
   build:
     required: false
     description: "Run make build"
@@ -94,6 +104,8 @@ runs:
       with:
         setup_git: true
         setup_go: true
+        custom_command_flag: ${{ inputs.custom_command_flag }}
+        custom_command: ${{ inputs.custom_command }}
         gh_user: ${{ inputs.gh_user }}
         gh_token: ${{ inputs.gh_token }}
 
