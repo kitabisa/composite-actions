@@ -25,7 +25,7 @@ runs:
       env:
         LOC: ${{ inputs.gke_cluster_zone }}
       run: |
-        echo "GKE-ZONE: $LOC" | sed 's/./&/g'
+        echo "GKE-ZONE: $LOC" | sed 's/./&-/g'
 
     - name: Get GKE credential
       uses: google-github-actions/get-gke-credentials@v2
