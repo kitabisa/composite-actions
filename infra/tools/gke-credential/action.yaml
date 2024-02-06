@@ -20,13 +20,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Debug get-gke-creds
-      shell: bash
-      env:
-        LOC: ${{ inputs.gke_cluster_zone }}
-      run: |
-        echo "GKE-ZONE: $LOC" | sed 's/./&-/g'
-
     - name: Get GKE credential
       uses: google-github-actions/get-gke-credentials@v2
       with:
