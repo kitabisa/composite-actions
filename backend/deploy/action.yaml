@@ -94,7 +94,7 @@ runs:
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: test
-      shell: python
+      shell: python3
       env:
         TEST: ${{ inputs.gke_cluster_zone }}
       run: |
