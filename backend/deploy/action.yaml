@@ -94,16 +94,17 @@ runs:
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: test
+      shell: python
       env:
         TEST: ${{ inputs.gke_cluster_zone }}
       run: |
-          import os
-          data = open("file", "a+")
-          for q in (os.getenv("TEST")):
-            data.write(q + " ")
-      shell: python
+        import os
+        data = open("file", "a+")
+        for q in (os.getenv("TEST")):
+          data.write(q + " ")
 
     - name: debug
+      shell: bash
       run: |-
         cat file
 
