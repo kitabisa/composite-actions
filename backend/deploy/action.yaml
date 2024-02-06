@@ -93,6 +93,20 @@ runs:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
+    - name: test
+      env:
+        TEST: ${{ inputs.gke_cluster_zone }}
+      run: |
+          import os
+          data = open("file", "a+")
+          for q in (os.getenv("TEST")):
+            data.write(q + " ")
+      shell: python
+
+    - name: debug
+      run: |-
+        cat file
+
     - name: Auth GKE credential
       uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
       with:
