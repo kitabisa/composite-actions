@@ -94,6 +94,7 @@ runs:
         credentials_json: ${{ inputs.credentials_json }}
 
     - name: Set up secret file
+      shell: bash
       env:
         DEBUG_ZONE: ${{ inputs.gke_cluster_zone }}
       run: |
