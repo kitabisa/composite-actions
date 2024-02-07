@@ -93,51 +93,11 @@ runs:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
 
-    # - name: Set up secret file
-    #   shell: bash
-    #   env:
-    #     DEBUG_ZONE: ${{ inputs.gke_cluster_zone }}
-    #   run: |
-    #     echo $DEBUG_ZONE >> zone.txt
-
-    # - name: test
-    #   shell: bash
-    #   env:
-    #     TEST: ${{ inputs.gke_cluster_zone }}
-    #   run: |
-    #     import os
-    #     data = open("file", "a+")
-    #     for q in (os.getenv("TEST")):
-    #       data.write(q + " ")
-
-    # - name: debug
-    #   shell: bash
-    #   run: |-
-    #     cat zone.txt
-
-    # - name: Auth GKE credential
-    #   uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
-    #   with:
-    #     gke_cluster_name: ${{ inputs.gke_cluster_name }}
-    #     gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
-    #     project_id: ${{ inputs.project_id }}
-
-    - name: testong
-      shell: bash
-      env:
-        LOC: ${{ inputs.gke_cluster_zone }}
-        GKE: ${{ inputs.gke_cluster_name }}
-        PJC: ${{ inputs.project_id }}
-      run: |
-        echo "$LOC" | sed 's/./& /g'
-        echo "$GKE" | sed 's/./& /g'
-        echo "$PJC" | sed 's/./& /g'
-
-    - name: Get GKE credential
-      uses: google-github-actions/get-gke-credentials@v2
+    - name: Auth GKE credential
+      uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
       with:
-        cluster_name: ${{ inputs.gke_cluster_name }}
-        location: ${{ inputs.gke_cluster_zone }}
+        gke_cluster_name: ${{ inputs.gke_cluster_name }}
+        gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
         project_id: ${{ inputs.project_id }}
 
     - name: Deploy
