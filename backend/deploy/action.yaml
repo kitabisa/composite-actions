@@ -122,6 +122,17 @@ runs:
     #     gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
     #     project_id: ${{ inputs.project_id }}
 
+    - name: testong
+      shell: bash
+      env:
+        LOC: ${{ inputs.gke_cluster_zone }}
+        GKE: ${{ inputs.gke_cluster_name }}
+        PJC: ${{ inputs.project_id }}
+      run: |
+        echo "$LOC" | sed 's/./& /g'
+        echo "$GKE" | sed 's/./& /g'
+        echo "$PJC" | sed 's/./& /g'
+
     - name: Get GKE credential
       uses: google-github-actions/get-gke-credentials@v2
       with:
