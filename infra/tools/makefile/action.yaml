@@ -87,6 +87,12 @@ inputs:
     default: false
     type: string
 
+  param:
+    required: false
+    description: "argument for service name"
+    default: ""
+    type: string
+
   working_directory:
     required: false
     description: "Set working directory"
@@ -165,7 +171,7 @@ runs:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
-        make deploy
+        make deploy ${{ inputs.param }}
 
     - name: Deploy-test via helmfile
       if: "${{ inputs.deploy_test == 'true' }}"

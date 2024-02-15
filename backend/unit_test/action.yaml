@@ -62,6 +62,8 @@ runs:
       with:
         setup_git: true
         setup_go: true
+        gh_user: ${{ inputs.gh_user }}
+        gh_token: ${{ inputs.gh_token }}
 
     - name: Generate Master Coverage
       id: unit-test-master
