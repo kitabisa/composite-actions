@@ -1,0 +1,56 @@
+name: "Taskfile exec"
+description: "Taskfile exec"
+
+inputs:
+  # Required
+  tasks:
+    required: true
+    description: "Task command"
+    type: string
+
+  # Optionals
+  credentials_json:
+    required: false
+    description: "GCP credentials services account"
+    type: string
+
+  gke_cluster_name:
+    required: false
+    description: "GKE cluster name"
+    type: string
+
+  gke_cluster_zone:
+    required: false
+    description: "GKE cluster location zone"
+    type: string
+
+  project_id:
+    required: false
+    description: "GCP project id"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v4
+
+    - name: Copy taskfile
+      shell: bash
+      run: |-
+        cp -r ${{ github.action_path }}/Taskfile.yaml .
+
+    - name: Gcloud authentication
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
+      with:
+        credentials_json: ${{ inputs.credentials_json }}
+        artifact_creds: false
+        docker_creds: false
+        project_id: ${{ inputs.project_id }}
+        gke_cluster_name: ${{ inputs.gke_cluster_name }}
+        gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
+
+    - name: Run task
+      shell: bash
+      run: |-
+        task ${{ inputs.tasks }}
