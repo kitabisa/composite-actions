@@ -45,6 +45,8 @@ runs:
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2.0.0-alpha.3
       with:
         credentials_json: ${{ inputs.credentials_json }}
+        artifact_creds: false
+        docker_creds: false
         project_id: ${{ inputs.project_id }}
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
