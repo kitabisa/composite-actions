@@ -45,7 +45,7 @@ inputs:
     required: false
     description: "Authentication gcloud"
     type: string
-    default: 'false'
+    default: 'true'
 
 runs:
   using: "composite"
