@@ -6,8 +6,7 @@ inputs:
   tasks:
     required: true
     description: "Task command"
-    default: false
-    type: boolean
+    type: string
 
   # Optionals
   credentials_json:
