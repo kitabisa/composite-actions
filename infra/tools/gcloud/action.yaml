@@ -2,6 +2,7 @@ name: "Gcloud Auth"
 description: "Gcloud authentication"
 
 inputs:
+  # Required
   credentials_json:
     required: true
     description: "GCP credentials services account"
@@ -12,10 +13,17 @@ inputs:
     description: "GCP project id"
     type: string
 
+  # Optional
   artifact_registry_host:
     required: false
     description: "GCP artifact registry host for image container"
     type: string
+
+  artifact_creds:
+    required: false
+    description: "Authentication gcloud"
+    type: string
+    default: 'true'
 
   docker_creds:
     required: false
@@ -23,11 +31,21 @@ inputs:
     type: string
     default: 'true'
 
-  artifact_creds:
+  gke_cluster_name:
+    required: false
+    description: "GKE cluster name"
+    type: string
+
+  gke_cluster_zone:
+    required: false
+    description: "GKE cluster location zone"
+    type: string
+
+  gke_creds:
     required: false
     description: "Authentication gcloud"
     type: string
-    default: 'true'
+    default: 'false'
 
 runs:
   using: "composite"
@@ -52,3 +70,11 @@ runs:
       shell: bash
       run: |-
         gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry_host }}
+
+    - name: Get GKE credential
+      if: "${{ inputs.gke_creds == 'true' }}"
+      uses: google-github-actions/get-gke-credentials@v2
+      with:
+        cluster_name: ${{ inputs.gke_cluster_name }}
+        location: ${{ inputs.gke_cluster_zone }}
+        project_id: ${{ inputs.project_id }}
