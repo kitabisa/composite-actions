@@ -42,7 +42,7 @@ runs:
 
     - name: Gcloud authentication
       if: "${{ inputs.tasks == 'destroy-dev' }}"
-      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2.0.0-alpha.3
       with:
         credentials_json: ${{ inputs.credentials_json }}
         project_id: ${{ inputs.project_id }}
