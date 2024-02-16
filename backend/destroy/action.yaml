@@ -46,13 +46,8 @@ runs:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         credentials_json: ${{ inputs.credentials_json }}
         project_id: ${{ inputs.project_id }}
-
-    - name: Auth GKE credential
-      uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
-      with:
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
-        project_id: ${{ inputs.project_id }}
 
     - name: Destroy release
       id: destroy-release
