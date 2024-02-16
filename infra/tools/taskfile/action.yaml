@@ -41,8 +41,7 @@ runs:
         cp -r ${{ github.action_path }}/Taskfile.yaml .
 
     - name: Gcloud authentication
-      if: "${{ inputs.tasks == 'destroy-dev' }}"
-      uses: kitabisa/composite-actions/infra/tools/gcloud@v2.0.0-alpha.3
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
         credentials_json: ${{ inputs.credentials_json }}
         artifact_creds: false

@@ -120,6 +120,7 @@ runs:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
+        gke_creds: false
 
     - name: Build application
       id: build-app
