@@ -53,13 +53,7 @@ runs:
         credentials_json: ${{ inputs.credentials_json }}
         project_id: ${{ inputs.project_id }}
         docker_creds: false
-
-    - name: Auth GKE credential
-      uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
-      with:
-        gke_cluster_name: ${{ inputs.gke_cluster_name }}
-        gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
-        project_id: ${{ inputs.project_id }}
+        gke_creds: true
 
     - name: Helmfile diff
       shell: bash
