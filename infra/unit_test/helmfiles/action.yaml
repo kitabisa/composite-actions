@@ -53,7 +53,8 @@ runs:
         credentials_json: ${{ inputs.credentials_json }}
         project_id: ${{ inputs.project_id }}
         docker_creds: false
-        gke_creds: true
+        gke_cluster_name: ${{ inputs.gke_cluster_name }}
+        gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
 
     - name: Helmfile diff
       shell: bash
