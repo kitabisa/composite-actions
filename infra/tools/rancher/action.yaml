@@ -40,7 +40,7 @@ runs:
         echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
 
     - name: Configure namespace-project mapping in rancher
-      uses: kitabisa/actions/rancher-ns-mover@v2
+      uses: kitabisa/actions/rancher-ns-mover@master
       with:
         rancher-host: ${{ inputs.rancher_host }}
         rancher-access-key: ${{ inputs.rancher_access_key }}
