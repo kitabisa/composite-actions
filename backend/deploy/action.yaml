@@ -106,6 +106,7 @@ runs:
         deploy_test: ${{ inputs.deploy_test }}
 
     - name: Rancher ns mover
+      if: "${{ inputs.deploy_test != 'true' }}"
       uses: kitabisa/composite-actions/infra/tools/rancher@v2
       with:
         working_directory: ${{ inputs.working_directory }}
