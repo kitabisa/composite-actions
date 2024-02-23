@@ -105,9 +105,10 @@ runs:
 
     - name: Push coverage master to git
       uses: stefanzweifel/git-auto-commit-action@v4
+      working-directory: ${{ inputs.working_directory }}
       with:
         commit_message: 'coverage: updated master coverage [skip ci]'
-        file_pattern: ./service/coverage-master.txt
+        file_pattern: ./coverage-master.txt
 
     - name: Push badge to git
       uses: stefanzweifel/git-auto-commit-action@v4
