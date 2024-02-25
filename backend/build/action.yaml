@@ -63,27 +63,6 @@ inputs:
     description: "build and push image for deployment"
     default: "false"
 
-  build_push_image_swagger:
-    required: false
-    description: "build and push image for swagger"
-    default: "false"
-
-  build_push_image_mockoon:
-    required: false
-    description: "build and push image for mockoon"
-
-  swagger_script_path:
-    required: false
-    description: "swagger script path"
-
-  openapi_input_file:
-    required: false
-    description: "openapi input file"
-
-  openapi_output_file:
-    required: false
-    description: "openapi output file"
-
   working_directory:
     required: false
     description: "Set working directory"
@@ -132,23 +111,3 @@ runs:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         package: ${{ inputs.build_push_image }}
-
-    - name: Build, tag, and push Docker image Swagger
-      if: "${{ inputs.build_push_image_swagger == 'true' }}"
-      uses: kitabisa/composite-actions/backend/tools/swagger@v2
-      with:
-        project_id: ${{ inputs.project_id }}
-        artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
-        openapi_input_file: ${{ inputs.openapi_input_file }}
-        openapi_output_file: ${{ inputs.openapi_output_file }}
-        swagger_script_path: ${{ inputs.swagger_script_path }}
-
-    # if you require to build mockoon image for 3rd party mocking
-    - name: Build, tag, and push Docker image Mockoon
-      shell: bash
-      if: "${{ inputs.build_push_image_mockoon == 'true' }}"
-      env:
-        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
-      run: |-
-        make package-mockoon

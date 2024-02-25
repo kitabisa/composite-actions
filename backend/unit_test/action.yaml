@@ -2,31 +2,24 @@ name: "Test Coverage"
 description: "Build and push docker image"
 
 inputs:
+  gh_user:
+    required: true
+    description: "github user"
+
+  gh_token:
+    required: true
+    description: "github token"
+
   working_directory:
     required: false
     description: "Set working directory"
     default: "."
     type: string
 
-  cache:
-    required: false
-    description: "enable cache for go modules"
-    default: "true"
-
-  cache_dependency_path:
-    required: false
-    description: "go sum location"
-    default: "go.sum"
-
   go_version:
     required: false
     description: "go version"
     default: "^1.13.1"
-
-  need_mockery:
-    required: false
-    description: "need mockery"
-    default: "false"
 
   custom_command_flag:
     required: false
@@ -43,6 +36,11 @@ inputs:
     description: "unit test command"
     default: "go test ./internal/... -coverprofile=coverage.out -covermode=atomic"
 
+  hash_files:
+    required: false
+    description: "hash files"
+    default: "go.sum"
+
 runs:
   using: "composite"
   steps:
@@ -55,15 +53,18 @@ runs:
     - name: Checking out repository
       uses: actions/checkout@v4
       with:
+        fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
     - name: Setuptools backend
-      uses: kitabisa/composite-actions/backend/tools/setuptools@v2
+      uses: kitabisa/composite-actions/backend/tools/setuptools@b2106acf15911301ec6542be7c68e2f43160617e
       with:
         setup_git: true
         setup_go: true
+        go_version: ${{ inputs.go_version }}
         gh_user: ${{ inputs.gh_user }}
         gh_token: ${{ inputs.gh_token }}
+        hash_files: ${{ inputs.hash_files }}
 
     - name: Generate Master Coverage
       id: unit-test-master
@@ -71,11 +72,6 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         echo "master_coverage=$(cat coverage-master.txt)" >> $GITHUB_ENV
-
-    - name: Install Mockery
-      if: "${{ inputs.need_mockery == 'true' }}"
-      shell: bash
-      run: go install github.com/vektra/mockery/v2@latest
 
     - name: Custom Command
       shell: bash

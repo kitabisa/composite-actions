@@ -43,11 +43,45 @@ inputs:
   hash_files:
     required: false
     description: "hashFiles location"
-    default: "**"
+
 
 runs:
   using: "composite"
   steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
+
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ inputs.go_version }}
+        cache-dependency-path: ${{ inputs.working_directory }}/${{ inputs.cache_dependency_path }}
+        cache: false
+
+    - name: Setup Cache
+      id: go-cache-paths
+      shell: bash
+      run: |
+        echo "::set-output name=go-build::$(go env GOCACHE)"
+        echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+
+    # Cache go build cache, used to speedup go test
+    - name: Go Build Cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.go-cache-paths.outputs.go-build }}
+        key: ${{ inputs.hash_files }}
+
+    # Cache go mod cache, used to speedup builds
+    - name: Go Mod Cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.go-cache-paths.outputs.go-mod }}
+        key: ${{ inputs.hash_files }}
+
     - name: Configure Git for private modules
       if: "${{ inputs.setup_git == 'true' }}"
       env:
@@ -56,12 +90,6 @@ runs:
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
-    - uses: actions/setup-go@v5
-      if: "${{ inputs.setup_go == 'true' }}"
-      with:
-        cache: false
-        cache-dependency-path: ${{ inputs.cache_dependency_path }}
-        go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
 
     # # Cache go build cache, used to speedup go test
     # - name: Go Build Cache
