@@ -8,24 +8,6 @@ inputs:
     default: "."
     type: string
 
-  gh_user:
-    required: true
-    description: "gh user"
-
-  gh_token:
-    required: true
-    description: "gh token"
-
-  cache_dependency_path:
-    required: false
-    description: "go sum location"
-    default: "go.sum"
-
-  go_version:
-    required: false
-    description: "go version"
-    default: "^1.13.1"
-
   badge_path:
     required: false
     description: "badge path for coverage"
@@ -49,19 +31,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checking current repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        token: ${{ inputs.gh_token }}
-
-    - name: Setuptools backend
-      uses: kitabisa/composite-actions/backend/tools/setuptools@v2
-      with:
-        setup_git: true
-        setup_go: true
-        gh_user: ${{ inputs.gh_user }}
-        gh_token: ${{ inputs.gh_token }}
 
     - name: Generate Master Coverage
       shell: bash
