@@ -43,6 +43,7 @@ inputs:
   hash_files:
     required: false
     description: "hashFiles location"
+    default: "${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}"
 
 
 runs:
@@ -74,6 +75,10 @@ runs:
       with:
         path: ${{ steps.go-cache-paths.outputs.go-build }}
         key: ${{ inputs.hash_files }}
+        restore-keys: |
+          ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+          ${{ runner.os }}-go-build-
+          ${{ runner.os }}-
 
     # Cache go mod cache, used to speedup builds
     - name: Go Mod Cache
@@ -81,6 +86,10 @@ runs:
       with:
         path: ${{ steps.go-cache-paths.outputs.go-mod }}
         key: ${{ inputs.hash_files }}
+        restore-keys: |
+          ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+          ${{ runner.os }}-go-build-
+          ${{ runner.os }}-
 
     - name: Configure Git for private modules
       if: "${{ inputs.setup_git == 'true' }}"
