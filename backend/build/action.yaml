@@ -72,22 +72,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checking out repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        token: ${{ inputs.gh_token }}
-
-    - name: Setuptools backend
-      uses: kitabisa/composite-actions/backend/tools/setuptools@v2
-      with:
-        setup_git: true
-        setup_go: true
-        custom_command_flag: ${{ inputs.custom_command_flag }}
-        custom_command: ${{ inputs.custom_command }}
-        gh_user: ${{ inputs.gh_user }}
-        gh_token: ${{ inputs.gh_token }}
-
     - name: Setuptools infra
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
