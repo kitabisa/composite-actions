@@ -43,7 +43,7 @@ inputs:
   hash_files:
     required: false
     description: "hashFiles location"
-    default: "${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}"
+    default: "**"
 
 
 runs:
@@ -74,9 +74,9 @@ runs:
       uses: actions/cache@v4
       with:
         path: ~/.cache/go-build
-        key: ${{ inputs.hash_files }}
+        key: ${{ runner.os }}-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
         restore-keys: |
-          ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+          ${{ runner.os }}-go-build-${{ hashFiles(inputs.hash_files) }}
           ${{ runner.os }}-go-build-
           ${{ runner.os }}-
 
@@ -85,7 +85,7 @@ runs:
       uses: actions/cache@v4
       with:
         path: ~/go/pkg/mod
-        key: ${{ inputs.hash_files }}
+        key: ${{ runner.os }}-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
         restore-keys: |
           ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
           ${{ runner.os }}-go-build-
