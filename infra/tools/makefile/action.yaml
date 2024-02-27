@@ -149,6 +149,9 @@ runs:
       if: "${{ inputs.build == 'true' }}"
       shell: bash
       working-directory: ${{ inputs.working_directory }}
+      env:
+        GOCACHE: ~/.cache/go-build
+        GOMODCACHE: ~/go/pkg/mod
       run: |-
         start=$(date +%s)
         make build
