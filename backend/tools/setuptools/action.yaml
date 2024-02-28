@@ -63,23 +63,23 @@ runs:
         cache-dependency-path: ${{ inputs.cache_dependency_path }}
         go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
 
-    # Cache go build cache, used to speedup go test
-    - name: Go Build Cache
-      uses: actions/cache@v4
-      with:
-        path: /home/runner/.cache/go-build
-        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-        restore-keys: |
-          ${{ runner.os }}-go-build-
+    # # Cache go build cache, used to speedup go test
+    # - name: Go Build Cache
+    #   uses: actions/cache@v4
+    #   with:
+    #     path: /home/runner/.cache/go-build
+    #     key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-go-build-
 
-    # Cache go mod cache, used to speedup builds
-    - name: Go Mod Cache
-      uses: actions/cache@v4
-      with:
-        path: /home/runner/go/pkg/mod
-        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-        restore-keys: |
-          ${{ runner.os }}-go-build-
+    # # Cache go mod cache, used to speedup builds
+    # - name: Go Mod Cache
+    #   uses: actions/cache@v4
+    #   with:
+    #     path: /home/runner/go/pkg/mod
+    #     key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-go-build-
 
     - name: Custom Command
       shell: bash
