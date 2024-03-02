@@ -55,37 +55,11 @@ runs:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
-    - name: Setup Go
-      uses: actions/setup-go@v5
+    - name: Setup Golang with cache
+      id: golang-with-cache
+      uses: magnetikonline/action-golang-cache@v4
       with:
         go-version: ${{ inputs.go_version }}
-        cache-dependency-path: ${{ inputs.working_directory }}/${{ inputs.cache_dependency_path }}
-        cache: false
-
-    - name: Setup Cache
-      id: go-cache-paths
-      shell: bash
-      run: |
-        echo "$(go env GOCACHE)"
-        echo "$(go env GOMODCACHE)"
-
-    # Cache go build cache, used to speedup go test
-    - name: Go Build Cache
-      uses: actions/cache@v4
-      with:
-        path: /home/runner/.cache/go-build
-        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-        restore-keys: |
-          ${{ runner.os }}-go-build-
-
-    # Cache go mod cache, used to speedup builds
-    - name: Go Mod Cache
-      uses: actions/cache@v4
-      with:
-        path: /home/runner/go/pkg/mod
-        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-        restore-keys: |
-          ${{ runner.os }}-go-build-
 
     - name: Configure Git for private modules
       if: "${{ inputs.setup_git == 'true' }}"

@@ -8,10 +8,23 @@ inputs:
     default: "."
     type: string
 
+  gh_user:
+    required: true
+    description: "gh user"
+
+  gh_token:
+    required: true
+    description: "gh token"
+
   badge_path:
     required: false
     description: "badge path for coverage"
     default: ".github/badges/code-coverage.svg"
+
+  go_version:
+    required: false
+    description: "go version"
+    default: "1.18"
 
   custom_command_flag:
     required: false
@@ -31,6 +44,32 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
+
+    - name: Setup Golang
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ inputs.go_version }}
+    - name: Setup Golang caches
+      uses: actions/cache@v3
+      with:
+        path: |
+          /home/runner/.cache/go-build
+          /home/runner/go/pkg/mod
+        key: ${{ runner.os }}-golang-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-golang-
+
+    - name: Configure Git for private modules
+      env:
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
+      shell: bash
+      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
     - name: Generate Master Coverage
       shell: bash

@@ -31,12 +31,6 @@ inputs:
     required: true
     description: "gh token"
 
-  # Optional
-  cache_dependency_path:
-    required: false
-    description: "go sum location"
-    default: "go.sum"
-
   go_version:
     required: false
     description: "go version"
@@ -69,9 +63,50 @@ inputs:
     default: "."
     type: string
 
+  hash_files:
+    required: false
+    description: "hashFiles location"
+    default: "**"
+
 runs:
   using: "composite"
   steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
+
+    - name: Setup Golang
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ inputs.go_version }}
+
+    - name: change path cache
+      shell: bash
+      run: |
+        GOCACHE=/tmp/runner/.cache/go-build
+        GOMODCACHE=/tmp/runner/go/pkg/mod
+        export GOCACHE
+        export GOMODCACHE
+
+    - name: Setup Golang caches
+      uses: actions/cache@v3
+      with:
+        path: |
+          /tmp/runner/.cache/go-build
+          /tmp/runner/go/pkg/mod
+        key: ${{ runner.os }}-golang-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+        restore-keys: |
+          ${{ runner.os }}-golang-
+
+    - name: Configure Git for private modules
+      env:
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
+      shell: bash
+      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
+
     - name: Setuptools infra
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
