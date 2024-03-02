@@ -65,7 +65,7 @@ runs:
 
     - name: Cache the node_modules
       id: go-cache
-      uses: mansagroup/gcs-cache-action@v2
+      uses: mansagroup/gcs-cache-action@v1
       with:
         bucket: golang-ci-cache
         path: /home/runner/.cache/go-build
