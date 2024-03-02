@@ -113,7 +113,7 @@ runs:
         gke_creds: false
 
     - name: Setuptools backend
-      uses: kitabisa/composite-actions/backend/tools/setuptools@v2
+      uses: kitabisa/composite-actions/backend/tools/setuptools@v2-gcs-cache
       with:
         setup_git: true
         setup_go: true
