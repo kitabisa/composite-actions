@@ -99,16 +99,6 @@ runs:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
-    - name: Setuptools backend
-      uses: kitabisa/composite-actions/backend/tools/setuptools@v2
-      with:
-        setup_git: true
-        setup_go: true
-        custom_command_flag: ${{ inputs.custom_command_flag }}
-        custom_command: ${{ inputs.custom_command }}
-        gh_user: ${{ inputs.gh_user }}
-        gh_token: ${{ inputs.gh_token }}
-
     - name: Setuptools infra
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
@@ -121,6 +111,16 @@ runs:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
         gke_creds: false
+
+    - name: Setuptools backend
+      uses: kitabisa/composite-actions/backend/tools/setuptools@v2
+      with:
+        setup_git: true
+        setup_go: true
+        custom_command_flag: ${{ inputs.custom_command_flag }}
+        custom_command: ${{ inputs.custom_command }}
+        gh_user: ${{ inputs.gh_user }}
+        gh_token: ${{ inputs.gh_token }}
 
     - name: Build application
       id: build-app

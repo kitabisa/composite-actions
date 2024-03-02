@@ -63,6 +63,16 @@ runs:
         cache-dependency-path: ${{ inputs.cache_dependency_path }}
         go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
 
+    - name: Cache the node_modules
+      id: go-cache
+      uses: mansagroup/gcs-cache-action@v2
+      with:
+        bucket: golang-ci-cache
+        path: /home/runner/.cache/go-build
+        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+        restore-keys: |
+          ${{ runner.os }}-go-build-
+
     # # Cache go build cache, used to speedup go test
     # - name: Go Build Cache
     #   uses: actions/cache@v4
