@@ -54,13 +54,22 @@ runs:
       uses: actions/setup-go@v4
       with:
         go-version: ${{ inputs.go_version }}
+
+    - name: change path cache
+      shell: bash
+      run: |
+        GOCACHE=/tmp/runner/.cache/go-build
+        GOMODCACHE=/tmp/runner/go/pkg/mod
+        export GOCACHE
+        export GOMODCACHE
+
     - name: Setup Golang caches
       uses: actions/cache@v3
       with:
         path: |
-          /home/runner/.cache/go-build
-          /home/runner/go/pkg/mod
-        key: ${{ runner.os }}-golang-${{ hashFiles('**/go.sum') }}
+          /tmp/runner/.cache/go-build
+          /tmp/runner/go/pkg/mod
+        key: ${{ runner.os }}-golang-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
         restore-keys: |
           ${{ runner.os }}-golang-
 
