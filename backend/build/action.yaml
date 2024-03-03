@@ -81,6 +81,7 @@ runs:
       uses: actions/setup-go@v4
       with:
         go-version: ${{ inputs.go_version }}
+        cache: false
 
     - name: change path cache
       shell: bash
