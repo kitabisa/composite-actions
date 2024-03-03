@@ -58,10 +58,8 @@ runs:
     - name: change path cache
       shell: bash
       run: |
-        GOCACHE=/tmp/runner/.cache/go-build
-        GOMODCACHE=/tmp/runner/go/pkg/mod
-        export GOCACHE
-        export GOMODCACHE
+        echo "export GOCACHE=/tmp/runner/.cache/go-build" >> $GITHUB_ENV
+        echo "export GOMODCACHE=/tmp/runner/go/pkg/mod" >> $GITHUB_ENV
 
     - name: Start caching go
       shell: bash
