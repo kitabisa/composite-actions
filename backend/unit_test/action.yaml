@@ -8,6 +8,19 @@ inputs:
     default: "."
     type: string
 
+  gh_user:
+    required: true
+    description: "gh user"
+
+  gh_token:
+    required: true
+    description: "gh token"
+
+  go_version:
+    required: false
+    description: "go version"
+    default: "1.18"
+
   custom_command_flag:
     required: false
     description: "custom command flag"
@@ -71,7 +84,7 @@ runs:
         TOKEN: ${{ inputs.gh_token }}
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
-      
+
     - name: Set base value
       shell: bash
       run: |
