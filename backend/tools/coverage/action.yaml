@@ -92,6 +92,11 @@ runs:
       if: "${{ inputs.custom_command_flag == 'true' }}"
       run: ${{ inputs.custom_command }}
 
+    - name: Start running unit test
+      shell: bash
+      run: |
+        echo "Start running unit test"
+
     - name: Run Unit tests
       id: unit-test-current
       shell: bash
@@ -100,6 +105,11 @@ runs:
         ${{ inputs.unit_test_command }}
         echo $(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}') > coverage-master.txt
         echo "current_coverage=$(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')" >> $GITHUB_ENV
+
+    - name: Finish running unit test
+      shell: bash
+      run: |
+        echo "Finish running unit test"
 
     - name: Create destination directory
       shell: bash

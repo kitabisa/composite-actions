@@ -90,6 +90,11 @@ runs:
         export GOCACHE
         export GOMODCACHE
 
+    - name: Start caching go
+      shell: bash
+      run: |
+        echo "Start retrieving cache"
+
     - name: Setup Golang caches
       uses: actions/cache@v3
       with:
@@ -99,6 +104,11 @@ runs:
         key: ${{ runner.os }}-golang-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
         restore-keys: |
           ${{ runner.os }}-golang-
+
+    - name: End caching go
+      shell: bash
+      run: |
+        echo "End retrieving cache"
 
     - name: Configure Git for private modules
       env:
@@ -119,6 +129,11 @@ runs:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
         gke_creds: false
+
+    - name: Start build
+      shell: bash
+      run: |
+        echo "Start building application"
 
     - name: Build application
       id: build-app
