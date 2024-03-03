@@ -36,6 +36,11 @@ inputs:
     description: "unit test command"
     default: "go test ./internal/... -coverprofile=coverage.out -covermode=atomic"
 
+  hash_files:
+    required: false
+    description: "hash files"
+    default: "**"
+
 runs:
   using: "composite"
   steps:
