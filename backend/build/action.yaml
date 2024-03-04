@@ -83,14 +83,6 @@ runs:
         go-version: ${{ inputs.go_version }}
         cache: false
 
-    - name: change path cache
-      shell: bash
-      run: |
-        GOCACHE=/tmp/runner/.cache/go-build
-        GOMODCACHE=/tmp/runner/go/pkg/mod
-        export GOCACHE
-        export GOMODCACHE
-
     - name: Start caching go
       shell: bash
       run: |
