@@ -16,20 +16,15 @@ inputs:
     required: true
     description: "gh token"
 
-  cache_dependency_path:
-    required: false
-    description: "go sum location"
-    default: "go.sum"
-
-  go_version:
-    required: false
-    description: "go version"
-    default: "^1.13.1"
-
   badge_path:
     required: false
     description: "badge path for coverage"
     default: ".github/badges/code-coverage.svg"
+
+  go_version:
+    required: false
+    description: "go version"
+    default: "1.18"
 
   custom_command_flag:
     required: false
@@ -46,22 +41,42 @@ inputs:
     description: "unit test command"
     default: "go test ./internal/... -coverprofile=coverage.out -covermode=atomic"
 
+  hash_files:
+    required: false
+    description: "hash files"
+    default: "**"
+
 runs:
   using: "composite"
   steps:
-    - name: Checking current repository
+    - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
-    - name: Setuptools backend
-      uses: kitabisa/composite-actions/backend/tools/setuptools@v2
+    - name: Setup Golang
+      uses: actions/setup-go@v4
       with:
-        setup_git: true
-        setup_go: true
-        gh_user: ${{ inputs.gh_user }}
-        gh_token: ${{ inputs.gh_token }}
+        go-version: ${{ inputs.go_version }}
+        cache: false
+
+    - name: Setup Golang caches
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-golang-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+        restore-keys: |
+          ${{ runner.os }}-golang-
+
+    - name: Configure Git for private modules
+      env:
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
+      shell: bash
+      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
     - name: Generate Master Coverage
       shell: bash
@@ -75,13 +90,24 @@ runs:
       if: "${{ inputs.custom_command_flag == 'true' }}"
       run: ${{ inputs.custom_command }}
 
+    - name: Start running unit test
+      shell: bash
+      run: |
+        echo "Start running unit test"
+
     - name: Run Unit tests
       id: unit-test-current
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       run: |-
         ${{ inputs.unit_test_command }}
+        echo $(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}') > coverage-master.txt
         echo "current_coverage=$(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')" >> $GITHUB_ENV
+
+    - name: Finish running unit test
+      shell: bash
+      run: |
+        echo "Finish running unit test"
 
     - name: Create destination directory
       shell: bash
