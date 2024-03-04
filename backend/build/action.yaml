@@ -31,12 +31,6 @@ inputs:
     required: true
     description: "gh token"
 
-  # Optional
-  cache_dependency_path:
-    required: false
-    description: "go sum location"
-    default: "go.sum"
-
   go_version:
     required: false
     description: "go version"
@@ -63,51 +57,66 @@ inputs:
     description: "build and push image for deployment"
     default: "false"
 
-  build_push_image_swagger:
-    required: false
-    description: "build and push image for swagger"
-    default: "false"
-
-  build_push_image_mockoon:
-    required: false
-    description: "build and push image for mockoon"
-
-  swagger_script_path:
-    required: false
-    description: "swagger script path"
-
-  openapi_input_file:
-    required: false
-    description: "openapi input file"
-
-  openapi_output_file:
-    required: false
-    description: "openapi output file"
-
   working_directory:
     required: false
     description: "Set working directory"
     default: "."
     type: string
 
+  hash_files:
+    required: false
+    description: "hashFiles location"
+    default: "**"
+
 runs:
   using: "composite"
   steps:
-    - name: Checking out repository
+    - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
-    - name: Setuptools backend
-      uses: kitabisa/composite-actions/backend/tools/setuptools@v2
+    - name: Setup Golang
+      uses: actions/setup-go@v4
       with:
-        setup_git: true
-        setup_go: true
-        custom_command_flag: ${{ inputs.custom_command_flag }}
-        custom_command: ${{ inputs.custom_command }}
-        gh_user: ${{ inputs.gh_user }}
-        gh_token: ${{ inputs.gh_token }}
+        go-version: ${{ inputs.go_version }}
+        cache: false
+
+    - name: change path cache
+      shell: bash
+      run: |
+        GOCACHE=/tmp/runner/.cache/go-build
+        GOMODCACHE=/tmp/runner/go/pkg/mod
+        export GOCACHE
+        export GOMODCACHE
+
+    - name: Start caching go
+      shell: bash
+      run: |
+        echo "Start retrieving cache"
+
+    - name: Setup Golang caches
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-golang-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+        restore-keys: |
+          ${{ runner.os }}-golang-
+
+    - name: End caching go
+      shell: bash
+      run: |
+        echo "End retrieving cache"
+
+    - name: Configure Git for private modules
+      env:
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
+      shell: bash
+      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
     - name: Setuptools infra
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
@@ -122,6 +131,11 @@ runs:
         credentials_json: ${{ inputs.credentials_json }}
         gke_creds: false
 
+    - name: Start build
+      shell: bash
+      run: |
+        echo "Start building application"
+
     - name: Build application
       id: build-app
       uses: kitabisa/composite-actions/infra/tools/makefile@v2
@@ -132,23 +146,3 @@ runs:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         package: ${{ inputs.build_push_image }}
-
-    - name: Build, tag, and push Docker image Swagger
-      if: "${{ inputs.build_push_image_swagger == 'true' }}"
-      uses: kitabisa/composite-actions/backend/tools/swagger@v2
-      with:
-        project_id: ${{ inputs.project_id }}
-        artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
-        openapi_input_file: ${{ inputs.openapi_input_file }}
-        openapi_output_file: ${{ inputs.openapi_output_file }}
-        swagger_script_path: ${{ inputs.swagger_script_path }}
-
-    # if you require to build mockoon image for 3rd party mocking
-    - name: Build, tag, and push Docker image Mockoon
-      shell: bash
-      if: "${{ inputs.build_push_image_mockoon == 'true' }}"
-      env:
-        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
-      run: |-
-        make package-mockoon

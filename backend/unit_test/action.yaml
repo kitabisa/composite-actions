@@ -8,25 +8,18 @@ inputs:
     default: "."
     type: string
 
-  cache:
-    required: false
-    description: "enable cache for go modules"
-    default: "true"
+  gh_user:
+    required: true
+    description: "gh user"
 
-  cache_dependency_path:
-    required: false
-    description: "go sum location"
-    default: "go.sum"
+  gh_token:
+    required: true
+    description: "gh token"
 
   go_version:
     required: false
     description: "go version"
-    default: "^1.13.1"
-
-  need_mockery:
-    required: false
-    description: "need mockery"
-    default: "false"
+    default: "1.18"
 
   custom_command_flag:
     required: false
@@ -43,27 +36,58 @@ inputs:
     description: "unit test command"
     default: "go test ./internal/... -coverprofile=coverage.out -covermode=atomic"
 
+  hash_files:
+    required: false
+    description: "hash files"
+    default: "**"
+
 runs:
   using: "composite"
   steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
+
+    - name: Setup Golang
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ inputs.go_version }}
+        cache: false
+
+    - name: Start caching go
+      shell: bash
+      run: |
+        echo "Start retrieving cache"
+
+    - name: Setup Golang caches
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-golang-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+        restore-keys: |
+          ${{ runner.os }}-golang-
+
+    - name: End caching go
+      shell: bash
+      run: |
+        echo "End retrieving cache"
+
+    - name: Configure Git for private modules
+      env:
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
+      shell: bash
+      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
+
     - name: Set base value
       shell: bash
       run: |
         echo "current_coverage=0" >> $GITHUB_ENV
         echo "master_coverage=0" >> $GITHUB_ENV
-
-    - name: Checking out repository
-      uses: actions/checkout@v4
-      with:
-        token: ${{ inputs.gh_token }}
-
-    - name: Setuptools backend
-      uses: kitabisa/composite-actions/backend/tools/setuptools@v2
-      with:
-        setup_git: true
-        setup_go: true
-        gh_user: ${{ inputs.gh_user }}
-        gh_token: ${{ inputs.gh_token }}
 
     - name: Generate Master Coverage
       id: unit-test-master
@@ -71,11 +95,6 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         echo "master_coverage=$(cat coverage-master.txt)" >> $GITHUB_ENV
-
-    - name: Install Mockery
-      if: "${{ inputs.need_mockery == 'true' }}"
-      shell: bash
-      run: go install github.com/vektra/mockery/v2@latest
 
     - name: Custom Command
       shell: bash
