@@ -6,6 +6,7 @@ inputs:
   tasks:
     required: true
     description: "Task command"
+    default: ""
     type: string
 
   # Optionals

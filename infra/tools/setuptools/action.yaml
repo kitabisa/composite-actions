@@ -39,7 +39,9 @@ runs:
 
     - name: Setup Taskfile
       if: "${{ inputs.setup_task == 'true' }}"
-      uses: arduino/setup-task@v1.0.3
+      uses: arduino/setup-task@v2
+      with:
+        version: 3.34.1
 
     - name: Setup Helm
       if: "${{ inputs.setup_helm == 'true' }}"
