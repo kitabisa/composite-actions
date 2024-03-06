@@ -140,7 +140,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       env:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
-        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
+        CHARTS_REPOSITORY: asia-southeast1-docker.pkg.dev/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
         make config
 
@@ -169,7 +169,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       env:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
-        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
+        CHARTS_REPOSITORY: asia-southeast1-docker.pkg.dev/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
         make deploy ${{ inputs.param }}
 
@@ -179,7 +179,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       env:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
-        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
+        CHARTS_REPOSITORY: asia-southeast1-docker.pkg.dev/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
         make deploy-test
 
