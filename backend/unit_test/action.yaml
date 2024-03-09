@@ -55,14 +55,14 @@ runs:
         token: ${{ inputs.gh_token }}
 
       if: "${{ inputs.go_version_file != '' }}"
-    - name: Setup Golang
+    - name: Setup Golang with go version file
       uses: actions/setup-go@v4
       with:
         go-version-file: ${{ inputs.go_version_file }}
         cache: false
 
       if: "${{ inputs.go_version != '' }}"
-    - name: Setup Golang
+    - name: Setup Golang with go version
       uses: actions/setup-go@v4
       with:
         go-version: ${{ inputs.go_version }}
