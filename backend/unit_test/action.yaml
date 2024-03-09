@@ -54,15 +54,15 @@ runs:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
-      if: "${{ inputs.go_version_file != '' }}"
     - name: Setup Golang with go version file
+      if: "${{ inputs.go_version_file != '' }}"
       uses: actions/setup-go@v4
       with:
         go-version-file: ${{ inputs.go_version_file }}
         cache: false
 
-      if: "${{ inputs.go_version != '' }}"
     - name: Setup Golang with go version
+      if: "${{ inputs.go_version != '' }}"
       uses: actions/setup-go@v4
       with:
         go-version: ${{ inputs.go_version }}
