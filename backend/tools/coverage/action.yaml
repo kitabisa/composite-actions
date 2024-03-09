@@ -140,12 +140,3 @@ runs:
       with:
         commit_message: 'coverage: updated coverage badge [skip ci]'
         file_pattern: ${{ inputs.badge_path }}
-
-    - name: Save cache
-      uses: actions/cache/save@v3
-      if: always()
-      with:
-        path: |
-          ~/.cache/go-build
-          ~/go/pkg/mod
-        key: ${{ runner.os }}-golang-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
