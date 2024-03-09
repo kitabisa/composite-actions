@@ -19,7 +19,6 @@ inputs:
   go_version:
     required: false
     description: "go version"
-    default: "1.18"
 
   custom_command_flag:
     required: false
