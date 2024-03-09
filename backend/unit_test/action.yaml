@@ -41,6 +41,11 @@ inputs:
     description: "hash files"
     default: "**"
 
+  go_version_file:
+    required: false
+    description: "go version file"
+    default: "go.mod"
+
 runs:
   using: "composite"
   steps:
@@ -50,11 +55,20 @@ runs:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
+      if: "${{ inputs.go_version_file != '' }}"
+    - name: Setup Golang
+      uses: actions/setup-go@v4
+      with:
+        go-version-file: ${{ inputs.go_version_file }}
+        cache: false
+
+      if: "${{ inputs.go_version != '' }}"
     - name: Setup Golang
       uses: actions/setup-go@v4
       with:
         go-version: ${{ inputs.go_version }}
         cache: false
+
 
     - name: Start caching go
       shell: bash
