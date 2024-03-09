@@ -78,7 +78,7 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: Setup Golang
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
         go-version: ${{ inputs.go_version }}
         cache: false
@@ -89,7 +89,7 @@ runs:
         echo "Start retrieving cache"
 
     - name: Setup Golang caches
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.cache/go-build
