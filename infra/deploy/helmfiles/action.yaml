@@ -44,13 +44,16 @@ runs:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
-
-    - name: Auth GKE credential
-      uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
-      with:
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
-        project_id: ${{ inputs.project_id }}
+
+    # # Need it?
+    # - name: Auth GKE credential
+    #   uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
+    #   with:
+    #     gke_cluster_name: ${{ inputs.gke_cluster_name }}
+    #     gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
+    #     project_id: ${{ inputs.project_id }}
 
     - name: Deploy
       uses: kitabisa/composite-actions/infra/tools/makefile@v2
