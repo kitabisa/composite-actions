@@ -69,7 +69,7 @@ runs:
       if: "${{ inputs.artifact_creds == 'true' }}"
       shell: bash
       run: |-
-        gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://${{ inputs.artifact_registry_host }}
+        gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://asia-southeast1-docker.pkg.dev
 
     - name: Get GKE credential
       if: "${{ inputs.gke_creds == 'true' }}"
