@@ -110,6 +110,11 @@ runs:
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
+    - name: setup custom command
+      if: ${{ inputs.custom_command_flag == 'true' }}
+      shell: bash
+      run: ${{ inputs.custom_command }}
+
     - name: Setuptools infra
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
       with:
