@@ -11,5 +11,5 @@ An action that configures `git` for specified GitHub user.
     # Defaults to "$GITHUB_ACTOR" if not specified.
     username: kitabisaengineer
     # Defaults to "local" if not specified.
-  	scope: local # valid scopes are "global", "system", "local", or "worktree".
+    scope: local # valid scopes are "global", "system", "local", or "worktree".
 ```
