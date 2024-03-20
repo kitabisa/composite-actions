@@ -15,6 +15,11 @@ inputs:
     description: "Setup git"
     default: 'true'
 
+  cache:
+    required: false
+    description: "Activate cache"
+    default: 'false'
+
   setup_go:
     required: false
     description: "Setup Go"
@@ -48,6 +53,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
+
     - name: Configure Git for private modules
       if: "${{ inputs.setup_git == 'true' }}"
       env:
@@ -56,12 +67,23 @@ runs:
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
-    - uses: actions/setup-go@v5
+    - name: Setup Golang
+      uses: actions/setup-go@v5
       if: "${{ inputs.setup_go == 'true' }}"
       with:
+        go-version: ${{ inputs.go_version }}
         cache: false
-        cache-dependency-path: ${{ inputs.cache_dependency_path }}
-        go-version: ${{ inputs.go_version }} # The Go version to download (if necessary) and use.
+
+    - name: Setup Golang caches
+      if: "${{ inputs.cache == 'true' }}"
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-golang-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+        restore-keys: |
+          ${{ runner.os }}-golang-
 
     # # Cache go build cache, used to speedup go test
     # - name: Go Build Cache

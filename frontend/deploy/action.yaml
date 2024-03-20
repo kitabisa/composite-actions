@@ -3,10 +3,6 @@ description: "Frontend composite deployment"
 
 inputs:
   # Required
-  gh_token:
-    required: true
-    description: "Github token"
-
   artifact_registry_host:
     required: true
     description: "Artifact registry host"

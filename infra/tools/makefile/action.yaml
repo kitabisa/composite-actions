@@ -53,6 +53,22 @@ inputs:
     default: false
     type: string
 
+  test:
+    required: false
+    description: "make test"
+    default: false
+    type: string
+
+  custom_command_flag:
+    required: false
+    description: "custom command flag"
+    default: 'false'
+
+  custom_command:
+    required: false
+    description: "custom command"
+    default: "echo no command"
+
   rollback:
     required: false
     description: "make rollback"
@@ -162,6 +178,13 @@ runs:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
         make package
+
+    - name: Run unit test
+      if: "${{ (inputs.test == 'true') && (inputs.custom_command_flag == 'true') }}"
+      shell: bash
+      run: |-
+        ${{ inputs.custom_command }} &&
+        make test
 
     - name: Deploy via helmfile
       if: "${{ (inputs.deploy == 'true') && (inputs.deploy_test == 'false') }}"
