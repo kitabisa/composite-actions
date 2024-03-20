@@ -1,0 +1,53 @@
+name: "Setup git config for a user"
+description: "Configure user's name & email for git"
+inputs:
+  scope:
+    description: "Scope for configured git user"
+    required: true
+    default: "local"
+  username:
+    description: "GitHub username"
+    required: false
+    default: "${{ github.actor }}"
+outputs:
+  email:
+    description: "Configured git user's email"
+    value: "${{ steps.setup.outputs.email }}"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Validate scope
+      env:
+        SCOPE: ${{ inputs.scope }}
+      run: |
+        valid_scopes=("global" "system" "local" "worktree")
+
+        echo "::debug::Validate input scope"
+        if [[ ! "${valid_scopes[@]}" =~ "${SCOPE}" ]]; then
+          echo "::error::Invalid scope specified: \"${SCOPE}\""
+          echo "::error::Valid scopes are \"global\", \"system\", \"local\", or \"worktree\"."
+          exit 1
+        fi
+      shell: bash
+
+    - name: Set up git user
+      id: setup
+      env:
+        SCOPE: "${{ inputs.scope }}"
+        USERNAME: "${{ inputs.username }}"
+        EMAIL: "${{ inputs.username }}@users.noreply.github.com"
+      run: |
+        echo "::debug::Prepend user's ID to user's email"
+        if [[ "${USERNAME}" == "${GITHUB_ACTOR}" ]]; then
+          EMAIL="${GITHUB_ACTOR_ID}+${EMAIL}"
+        fi
+
+        echo "::debug::Set git user's email"
+        git config --$SCOPE user.email "${EMAIL}"
+
+        echo "::debug::Set git user's name"
+        git config --$SCOPE user.name "${USERNAME}"
+
+        echo "email=${EMAIL}" >> $GITHUB_OUTPUT
+      shell: bash
