@@ -67,7 +67,7 @@ inputs:
   custom_command:
     required: false
     description: "custom command"
-    default: "echo no command"
+    default: ""
 
   rollback:
     required: false
