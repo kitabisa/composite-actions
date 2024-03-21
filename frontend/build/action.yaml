@@ -1,0 +1,232 @@
+name: "Frontend build"
+description: "Frontend composite build"
+
+inputs:
+  # Required
+  artifact_registry_host:
+    required: true
+    description: "Artifact registry host"
+    type: string
+
+  artifact_registry_project_id:
+    required: true
+    description: "Artifact registry project id"
+    type: string
+
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  # Optional
+  cache:
+    required: false
+    description: "Run action cache"
+    default: "true"
+    type: string
+
+  web_static:
+    required: false
+    description: "Build static web"
+    default: "false"
+    type: string
+
+  setup_nvmrc:
+    required: false
+    description: "Setup node custom by nvmrc"
+    default: "false"
+    type: string
+
+  setup_pnpm:
+    required: false
+    description: "Setup pnpm and cache modules"
+    default: "false"
+    type: string
+
+  setup_yarn:
+    required: false
+    description: "Setup yarn and cache modules"
+    default: "false"
+    type: string
+
+  using_nextjs:
+    required: false
+    description: "Setup next.js cache modules"
+    default: "false"
+    type: string
+
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+  install:
+    required: false
+    description: "Run make install"
+    default: "true"
+    type: string
+
+  config:
+    required: false
+    description: "Run make config"
+    default: "true"
+    type: string
+
+  build:
+    required: false
+    description: "Run make build"
+    default: "true"
+    type: string
+
+  package:
+    required: false
+    description: "Run make package"
+    default: "true"
+    type: string
+
+  using_cdn:
+    required: false
+    description: "Setup cdn for static assets"
+    default: "false"
+    type: string
+
+  delete_oldest_cdn:
+    required: false
+    description: "Setup delete oldest cdn"
+    default: "true"
+    type: string
+
+  cdn_aws_s3_bucket:
+    required: false
+    description: "CDN aws s3 bucket"
+    default: ""
+    type: string
+
+  cdn_aws_access_key_id:
+    required: false
+    description: "CDN aws access key id"
+    default: ""
+    type: string
+
+  cdn_aws_secret_access_key:
+    required: false
+    description: "CDN aws secret access key"
+    default: ""
+    type: string
+
+  cdn_aws_region:
+    required: false
+    description: "CDN aws region"
+    default: ""
+    type: string
+
+  cdn_source_dir:
+    required: false
+    description: "CDN source dir"
+    default: ""
+    type: string
+
+  cdn_dest_dir:
+    required: false
+    description: "CDN dest dir"
+    default: ""
+    type: string
+
+  cdn_keep_latest_version:
+    required: false
+    description: "CDN keep latest version length"
+    default: "2"
+    type: string
+
+outputs:
+  build-time:
+    description: "Define build time"
+    value: ${{ steps.build-push.outputs.build-time }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v4
+
+    - name: Setuptools frontend
+      if: "${{ inputs.web_static != 'true' }}"
+      uses: kitabisa/composite-actions/frontend/tools/setuptools@v2
+      with:
+        setup_nvmrc: ${{ inputs.setup_nvmrc }}
+        setup_yarn: ${{ inputs.setup_yarn }}
+        setup_pnpm: ${{ inputs.setup_pnpm }}
+        cache: ${{ inputs.cache }}
+        using_nextjs: ${{ inputs.using_nextjs }}
+        working_directory: ${{ inputs.working_directory }}
+
+    - name: Setuptools infra
+      uses: kitabisa/composite-actions/infra/tools/setuptools@v2
+      with:
+        setup_buildx: true
+
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+        gke_creds: false
+
+    - name: Build and push image
+      if: "${{ inputs.web_static != 'true' }}"
+      id: build-push
+      uses: kitabisa/composite-actions/infra/tools/makefile@v2
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
+        project_id: ${{ inputs.project_id }}
+        install: ${{ inputs.install }}
+        config: ${{ inputs.config }}
+        build: ${{ inputs.build }}
+        package: ${{ inputs.package }}
+        using_cdn: ${{ inputs.using_cdn }}
+        cdn_keep_latest_version: ${{ inputs.cdn_keep_latest_version }}
+
+    - name: Build and push image static
+      if: "${{ inputs.web_static == 'true' }}"
+      uses: kitabisa/composite-actions/infra/tools/makefile@v2
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
+        project_id: ${{ inputs.project_id }}
+        working_directory: ${{ inputs.working_directory }}
+        package: true
+
+    - name: Upload CDN static
+      if: "${{ inputs.using_cdn == 'true' }}"
+      uses: kitabisa/composite-actions/frontend/tools/cdn@v2
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
+        cdn_aws_access_key_id: ${{ inputs.cdn_aws_access_key_id }}
+        cdn_aws_secret_access_key: ${{ inputs.cdn_aws_secret_access_key }}
+        cdn_aws_region: ${{ inputs.cdn_aws_region }}
+        cdn_source_dir: ${{ inputs.cdn_source_dir }}
+        upload: ${{ steps.build-push.outputs.cdn-upload-path }}/${{ inputs.cdn_dest_dir }}
+
+    - name: Delete oldest CDN static
+      if: >-
+        inputs.using_cdn == 'true' &&
+        inputs.delete_oldest_cdn == 'true' &&
+        steps.build-push.outputs.cdn-upload-path != steps.build-push.outputs.cdn-delete-path
+      uses: kitabisa/composite-actions/frontend/tools/cdn@v2
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        cdn_aws_s3_bucket: ${{ inputs.cdn_aws_s3_bucket }}
+        cdn_aws_access_key_id: ${{ inputs.cdn_aws_access_key_id }}
+        cdn_aws_secret_access_key: ${{ inputs.cdn_aws_secret_access_key }}
+        cdn_aws_region: ${{ inputs.cdn_aws_region }}
+        delete: ${{ steps.build-push.outputs.cdn-delete-path }}

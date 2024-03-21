@@ -1,0 +1,142 @@
+name: "Generate Coverage"
+description: "generate coverage badge for readme"
+
+inputs:
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+  gh_user:
+    required: true
+    description: "gh user"
+
+  gh_token:
+    required: true
+    description: "gh token"
+
+  badge_path:
+    required: false
+    description: "badge path for coverage"
+    default: ".github/badges/code-coverage.svg"
+
+  go_version:
+    required: false
+    description: "go version"
+    default: "1.18"
+
+  custom_command_flag:
+    required: false
+    description: "custom command flag"
+    default: "false"
+
+  custom_command:
+    required: false
+    description: "custom command"
+    default: "echo no command"
+
+  unit_test_command:
+    required: false
+    description: "unit test command"
+    default: "go test ./internal/... -coverprofile=coverage.out -covermode=atomic"
+
+  hash_files:
+    required: false
+    description: "hash files"
+    default: "**"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
+
+    - name: Setup Golang
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ inputs.go_version }}
+        cache: false
+
+    - name: Setup Golang caches
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-golang-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+        restore-keys: |
+          ${{ runner.os }}-golang-
+
+    - name: Configure Git for private modules
+      env:
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
+      shell: bash
+      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
+
+    - name: Generate Master Coverage
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |-
+        echo "current_master_coverage=$(cat coverage-master.txt)" >> $GITHUB_ENV
+
+    - name: Custom Command
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      if: "${{ inputs.custom_command_flag == 'true' }}"
+      run: ${{ inputs.custom_command }}
+
+    - name: Start running unit test
+      shell: bash
+      run: |
+        echo "Start running unit test"
+
+    - name: Run Unit tests
+      id: unit-test-current
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |-
+        ${{ inputs.unit_test_command }}
+        echo $(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}') > coverage-master.txt
+        echo "current_coverage=$(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')" >> $GITHUB_ENV
+
+    - name: Finish running unit test
+      shell: bash
+      run: |
+        echo "Finish running unit test"
+
+    - name: Create destination directory
+      shell: bash
+      run: mkdir -p "${{ inputs.badge_path }}%/*"
+
+    - name: Generate badge SVG image
+      uses: emibcn/badge-action@v2.0.2
+      id: badge
+      with:
+        label: 'Code coverage'
+        status: ${{ env.current_coverage }}
+        color: 'green'
+        path: ${{ inputs.badge_path }}
+
+    - name: Upload badge as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: badge
+        path: ${{ inputs.badge_path }}
+        if-no-files-found: error
+
+    - name: Push coverage master to git
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: 'coverage: updated master coverage [skip ci]'
+        file_pattern: ${{ inputs.working_directory }}/coverage-master.txt
+
+    - name: Push badge to git
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: 'coverage: updated coverage badge [skip ci]'
+        file_pattern: ${{ inputs.badge_path }}

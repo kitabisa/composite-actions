@@ -1,0 +1,60 @@
+name: "Destroy deployment"
+description: "Destroy release deployment"
+
+inputs:
+  # Required
+  artifact_registry_host:
+    required: true
+    description: "Artifact registry host"
+    type: string
+
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  gke_cluster_name:
+    required: true
+    description: "GKE cluster name"
+    type: string
+
+  gke_cluster_zone:
+    required: true
+    description: "GKE cluster location zone"
+    type: string
+
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v4
+
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        credentials_json: ${{ inputs.credentials_json }}
+        project_id: ${{ inputs.project_id }}
+        gke_cluster_name: ${{ inputs.gke_cluster_name }}
+        gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
+
+    - name: Destroy release
+      id: destroy-release
+      uses: kitabisa/composite-actions/infra/tools/makefile@v2
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        project_id: ${{ inputs.project_id }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
+        destroy: true

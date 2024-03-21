@@ -1,0 +1,64 @@
+name: "Helmfiles"
+description: "Deploy Releases"
+
+inputs:
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  artifact_registry_host:
+    required: true
+    description: "Artifact registry host"
+    type: string
+
+  artifact_registry_project_id:
+    required: false
+    description: "Artifact registry project id"
+    type: string
+
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  gke_cluster_name:
+    required: true
+    description: "GKE cluster name"
+    type: string
+
+  gke_cluster_zone:
+    required: true
+    description: "GKE cluster location zone"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+        gke_cluster_name: ${{ inputs.gke_cluster_name }}
+        gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
+
+    # # Need it?
+    # - name: Auth GKE credential
+    #   uses: kitabisa/composite-actions/infra/tools/gke-credential@v2
+    #   with:
+    #     gke_cluster_name: ${{ inputs.gke_cluster_name }}
+    #     gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
+    #     project_id: ${{ inputs.project_id }}
+
+    - name: Deploy
+      uses: kitabisa/composite-actions/infra/tools/makefile@v2
+      with:
+        project_id: ${{ inputs.project_id }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
+        deploy: true

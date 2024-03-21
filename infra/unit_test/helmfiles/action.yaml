@@ -1,0 +1,91 @@
+name: "Helmfiles test"
+description: "Composite for testing helmfile"
+
+inputs:
+  artifact_registry_host:
+    required: true
+    description: "GCP container registry host"
+    type: string
+
+  artifact_registry_project_id:
+    required: true
+    description: "Artifact registry project id"
+    type: string
+
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  gh_token:
+    required: true
+    description: "Github token"
+
+  gke_cluster_name:
+    required: true
+    description: "GKE cluster name"
+
+  gke_cluster_zone:
+    required: true
+    description: "GKE cluster location zone"
+
+  path:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v4
+
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
+      with:
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        credentials_json: ${{ inputs.credentials_json }}
+        project_id: ${{ inputs.project_id }}
+        docker_creds: false
+        gke_cluster_name: ${{ inputs.gke_cluster_name }}
+        gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
+
+    - name: Helmfile diff
+      shell: bash
+      env:
+        CHARTS_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.artifact_registry_project_id }}/charts
+      run: |
+        make diff > /tmp/stdout-helmfile-diff-stg.log
+
+    - name: Print helmfile diff
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ inputs.gh_token }}
+        script: |
+          const execSync = require('child_process').execSync;
+          const stdout = execSync('cat /tmp/stdout-helmfile-diff-stg.log');
+          const output = `
+          <details>
+          <summary>Show helmfile diff on stg environment</summary>
+
+
+          \`\`\`
+          ${stdout}
+          \`\`\`
+
+
+          </details>
+          `;
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })

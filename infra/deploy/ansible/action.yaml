@@ -1,0 +1,39 @@
+# Noted:
+# This action required requirements even if your module doesn't need requirement.yaml
+# Please create requirement.yaml in your playbooks with value below.
+# ---
+# collections: []
+
+name: "Ansible Playbook"
+description: "Run Ansible Playbooks"
+
+inputs:
+  path:
+    required: true
+    description: "Ansible Playbook path"
+    type: string
+
+  ssh_private_key:
+    required: true
+    description: "SSH Private Key"
+    type: string
+
+  vault_password:
+    required: false
+    description: "Vault password"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Provisioning Server
+      uses: dawidd6/action-ansible-playbook@v2
+      with:
+        playbook: main.yaml
+        directory: ${{ inputs.path }}
+        key: ${{ inputs.ssh_private_key }}
+        requirements: requirements.yaml
+        vault_password: ${{ inputs.vault_password }}

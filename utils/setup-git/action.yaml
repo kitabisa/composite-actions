@@ -1,0 +1,33 @@
+name: "Setup git config for a user"
+description: "Configure user's name & email for git"
+inputs:
+  scope:
+    description: "Scope for configured git user"
+    required: true
+    default: "local"
+  username:
+    description: "GitHub username"
+    required: false
+    default: "${{ github.actor }}"
+outputs:
+  email:
+    description: "Configured git user's email"
+    value: "${{ steps.setup.outputs.email }}"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Validate scope
+      env:
+        SCOPE: ${{ inputs.scope }}
+      run: $GITHUB_ACTION_PATH/validate.sh
+      shell: bash
+
+    - name: Set up git user
+      id: setup
+      env:
+        SCOPE: "${{ inputs.scope }}"
+        USERNAME: "${{ inputs.username }}"
+        EMAIL: "${{ inputs.username }}@users.noreply.github.com"
+      run: $GITHUB_ACTION_PATH/main.sh
+      shell: bash

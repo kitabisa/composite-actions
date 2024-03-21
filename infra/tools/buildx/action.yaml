@@ -1,0 +1,20 @@
+name: "Caching with buildx"
+description: "Setup Docker buildx cache"
+
+inputs:
+  cache:
+    required: false
+    description: "Run action cache"
+    default: "true"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache docker layers
+      uses: actions/cache@v4
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ hashFiles('**/Dockerfile') }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
