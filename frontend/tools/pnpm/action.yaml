@@ -51,7 +51,7 @@ runs:
         echo "cache-path=${{ github.workspace }}$cache_path/.next/cache" >> $GITHUB_OUTPUT
 
     - name: Cache Next.js
-      if: "${{ (inputs.using_nextjs == 'true') && (inputs.cache == 'true') && (input.cfpages != 'true') }}"
+      if: "${{ (inputs.using_nextjs == 'true') && (inputs.cache == 'true') && (inputs.cfpages != 'true') }}"
       uses: actions/cache@v4
       with:
         path: ${{ steps.path.outputs.cache-path }}
@@ -60,7 +60,7 @@ runs:
           ${{ runner.os }}-nextjs-
 
     - name: Cache Next.js
-      if: "${{ (inputs.using_nextjs == 'true') && (inputs.cache == 'true') && (input.cfpages == 'true') }}"
+      if: "${{ (inputs.using_nextjs == 'true') && (inputs.cache == 'true') && (inputs.cfpages == 'true') }}"
       uses: actions/cache@v4
       with:
         path: ${{ steps.path.outputs.cache-path }}
