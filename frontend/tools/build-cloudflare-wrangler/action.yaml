@@ -1,0 +1,51 @@
+name: "Frontend build"
+description: "Frontend composite build"
+
+inputs:
+  # Required
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  # Optional
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checking out repository
+      uses: actions/checkout@v4
+
+    - name: Setuptools frontend
+      uses: kitabisa/composite-actions/frontend/tools/pnpm@v2
+      with:
+        cfpages: true
+        using_nextjs: true
+        working_directory: ${{ inputs.working_directory }}
+
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+        docker_creds: false
+        gke_creds: false
+        artifact_creds: false
+
+    - name: Install dependencies and build page
+      uses: kitabisa/composite-actions/infra/tools/makefile@v2
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        install: true
+        config: true
+        build: true
