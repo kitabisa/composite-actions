@@ -1,7 +1,7 @@
 <!-- action-docs-description -->
 ## Description
 
-Setup pnpm & cache modules
+Setup bun & cache modules
 <!-- action-docs-description -->
 
 <!-- action-docs-inputs -->
