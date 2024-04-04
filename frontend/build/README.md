@@ -16,14 +16,12 @@ Frontend composite deployment
 | cache | Run action cache | `false` | true |
 | project_id | GCP project id | `true` |  |
 | credentials_json | GCP credentials services account | `true` |  |
-| gcr_host | GCP container registry host | `true` |  |
+| artifact_registry_host | Artifact registry host | `true` |  |
+| artifact_registry_project_id | Artifact registry project id | `true` |  |
 | setup_pnpm | Setup pnpm and cache modules | `false` | false |
 | setup_yarn | Setup yarn and cache modules | `false` | false |
-| chartmuseum_host | ChartMuseum host | `true` |  |
-| chartmuseum_user | ChartMuseum user | `true` |  |
-| chartmuseum_pass | ChartMuseum password | `true` |  |
+| setup_bun | Setup bun and cache modules | `false` | false |
 | working_directory | Set working directory | `false` | . |
-| pnpm_version | Setup pnpm version | `false` | latest |
 | using_nextjs | Setup next.js cache modules | `false` | false |
 | using_cdn | Setup cdn for static assets | `false` | false |
 | delete_oldest_cdn | Setup delete oldest cdn | `false` | true |

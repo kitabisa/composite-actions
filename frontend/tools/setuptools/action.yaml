@@ -10,6 +10,10 @@ inputs:
     required: false
     description: "Setup pnpm"
 
+  setup_bun:
+    required: false
+    description: "Setup bun"
+
   setup_nvmrc:
     required: false
     description: "Setup node custom by nvmrc"
@@ -55,6 +59,14 @@ runs:
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
       uses: kitabisa/composite-actions/frontend/tools/pnpm@v2
+      with:
+        cache: ${{ inputs.cache }}
+        using_nextjs: ${{ inputs.using_nextjs }}
+        working_directory: ${{ inputs.working_directory }}
+
+    - name: Setup bun
+      if: "${{ inputs.setup_bun == 'true' }}"
+      uses: kitabisa/composite-actions/frontend/tools/bun@v2
       with:
         cache: ${{ inputs.cache }}
         using_nextjs: ${{ inputs.using_nextjs }}
