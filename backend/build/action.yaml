@@ -149,17 +149,3 @@ runs:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         package: ${{ inputs.build_push_image }}
-
-    - name: Save go build cache
-      uses: actions/cache/save@v3
-      if: always()
-      with:
-        path: ~/.cache/go-build
-        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-
-    - name: Save go mod cache
-      uses: actions/cache/save@v3
-      if: always()
-      with:
-        path: ~/go/pkg/mod
-        key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
