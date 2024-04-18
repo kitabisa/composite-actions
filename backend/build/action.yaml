@@ -151,7 +151,7 @@ runs:
         package: ${{ inputs.build_push_image }}
 
     - name: Install the gh cli
-      uses: ksivamuthu/actions-setup-gh-cli@<VERSION>
+      uses: ksivamuthu/actions-setup-gh-cli@v2
       with:
         version: 2.24.3
 
