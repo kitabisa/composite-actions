@@ -88,15 +88,21 @@ runs:
       run: |
         echo "Start retrieving cache"
 
-    - name: Setup Golang caches
+    - name: Setup Golang build cache
       uses: actions/cache@v4
       with:
-        path: |
-          ~/.cache/go-build
-          ~/go/pkg/mod
-        key: ${{ runner.os }}-golang-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+        path: ~/.cache/go-build
+        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
         restore-keys: |
-          ${{ runner.os }}-golang-
+          ${{ runner.os }}-go-build-
+
+    - name: Setup Golang Mod Cache
+      uses: actions/cache@v4
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+        restore-keys: |
+          ${{ runner.os }}-go-mod-
 
     - name: End caching go
       shell: bash
