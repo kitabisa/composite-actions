@@ -149,3 +149,35 @@ runs:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         package: ${{ inputs.build_push_image }}
+
+    - uses: actions4gh/setup-gh@v1
+
+    - name: Delete Previous Cache Mod
+      if: ${{ steps.cache-restore-mod.outputs.cache-hit }}
+      continue-on-error: true
+      shell: bash
+      run: |
+        gh extension install actions/gh-actions-cache
+        gh actions-cache delete "${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" --confirm
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+    - name: Save Cache Mod
+      uses: actions/cache/save@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+
+    - name: Delete Previous Cache Build
+      if: ${{ steps.cache-restore-build.outputs.cache-hit }}
+      continue-on-error: true
+      shell: bash
+      run: |
+        gh extension install actions/gh-actions-cache
+        gh actions-cache delete "${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" --confirm
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+    - name: Save Cache Build
+      uses: actions/cache/save@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
