@@ -21,6 +21,11 @@ inputs:
     description: "badge path for coverage"
     default: ".github/badges/code-coverage.svg"
 
+  setup_go:
+    required: false
+    description: "setup go"
+    default: true
+
   go_version:
     required: false
     description: "go version"
@@ -56,6 +61,7 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: Setup Golang
+      if: ${{ inputs.setup_go }}
       uses: actions/setup-go@v5
       with:
         go-version: ${{ inputs.go_version }}
