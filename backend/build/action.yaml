@@ -189,12 +189,11 @@ runs:
       continue-on-error: true
       shell: bash
       run: |
-        gh extension install actions/gh-actions-cache
         gh actions-cache delete "${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" --confirm
       env:
         GH_TOKEN: ${{ inputs.gh_token }}
     - name: Save Cache Build
       uses: actions/cache/save@v3
       with:
-        path: ~/go/pkg/mod
+        path: ~/.cache/go-build
         key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
