@@ -68,6 +68,11 @@ inputs:
     description: "hashFiles location"
     default: "**"
 
+  setup_go:
+    required: false
+    description: "setup go"
+    default: true
+
 runs:
   using: "composite"
   steps:
@@ -78,6 +83,7 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: Setup Golang
+      if: ${{ inputs.setup_go }}
       uses: actions/setup-go@v5
       with:
         go-version: ${{ inputs.go_version }}
@@ -104,24 +110,24 @@ runs:
 #        restore-keys: |
 #          ${{ runner.os }}-go-mod-
 
-    - name: Restore Cache mod
-      id: cache-restore-mod
-      uses: actions/cache/restore@v3
-      with:
-        path: ~/go/pkg/mod
-        key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-
-    - name: Restore Cache build
-      id: cache-restore-build
-      uses: actions/cache/restore@v3
-      with:
-        path: ~/.cache/go-build
-        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-
-    - name: End caching go
-      shell: bash
-      run: |
-        echo "End retrieving cache"
+#    - name: Restore Cache mod
+#      id: cache-restore-mod
+#      uses: actions/cache/restore@v3
+#      with:
+#        path: ~/go/pkg/mod
+#        key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+#
+#    - name: Restore Cache build
+#      id: cache-restore-build
+#      uses: actions/cache/restore@v3
+#      with:
+#        path: ~/.cache/go-build
+#        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+#
+#    - name: End caching go
+#      shell: bash
+#      run: |
+#        echo "End retrieving cache"
 
     - name: Configure Git for private modules
       env:
