@@ -73,6 +73,11 @@ inputs:
     description: "setup go"
     default: true
 
+  setup_cache:
+    required: false
+    description: "setup cache"
+    default: true
+
 runs:
   using: "composite"
   steps:
@@ -94,40 +99,26 @@ runs:
       run: |
         echo "Start retrieving cache"
 
-#    - name: Setup Golang build cache
-#      uses: actions/cache@v4
-#      with:
-#        path: ~/.cache/go-build
-#        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-#        restore-keys: |
-#          ${{ runner.os }}-go-build-
-#
-#    - name: Setup Golang Mod Cache
-#      uses: actions/cache@v4
-#      with:
-#        path: ~/go/pkg/mod
-#        key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-#        restore-keys: |
-#          ${{ runner.os }}-go-mod-
+    - name: Restore Cache mod
+      id: cache-restore-mod
+      if: ${{ inputs.setup_cache }}
+      uses: actions/cache/restore@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
 
-#    - name: Restore Cache mod
-#      id: cache-restore-mod
-#      uses: actions/cache/restore@v3
-#      with:
-#        path: ~/go/pkg/mod
-#        key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-#
-#    - name: Restore Cache build
-#      id: cache-restore-build
-#      uses: actions/cache/restore@v3
-#      with:
-#        path: ~/.cache/go-build
-#        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-#
-#    - name: End caching go
-#      shell: bash
-#      run: |
-#        echo "End retrieving cache"
+    - name: Restore Cache build
+      id: cache-restore-build
+      if: ${{ inputs.setup_cache }}
+      uses: actions/cache/restore@v3
+      with:
+        path: ~/.cache/go-build
+        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+
+    - name: End caching go
+      shell: bash
+      run: |
+        echo "End retrieving cache"
 
     - name: Configure Git for private modules
       env:
@@ -171,35 +162,40 @@ runs:
         package: ${{ inputs.build_push_image }}
 
     - name: Install the gh cli
+      if: ${{ inputs.setup_cache }}
       uses: ksivamuthu/actions-setup-gh-cli@v2
       with:
         version: 2.24.3
 
-#    - name: Delete Previous Cache Mod
-#      if: ${{ steps.cache-restore-mod.outputs.cache-hit }}
-#      continue-on-error: true
-#      shell: bash
-#      run: |
-#        gh extension install actions/gh-actions-cache
-#        gh actions-cache delete "${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" --confirm
-#      env:
-#        GH_TOKEN: ${{ inputs.gh_token }}
-#    - name: Save Cache Mod
-#      uses: actions/cache/save@v3
-#      with:
-#        path: ~/go/pkg/mod
-#        key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-#
-#    - name: Delete Previous Cache Build
-#      if: ${{ steps.cache-restore-build.outputs.cache-hit }}
-#      continue-on-error: true
-#      shell: bash
-#      run: |
-#        gh actions-cache delete "${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" --confirm
-#      env:
-#        GH_TOKEN: ${{ inputs.gh_token }}
-#    - name: Save Cache Build
-#      uses: actions/cache/save@v3
-#      with:
-#        path: ~/.cache/go-build
-#        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+    - name: Delete Previous Cache Mod
+      if: ${{ steps.cache-restore-mod.outputs.cache-hit }}
+      continue-on-error: true
+      shell: bash
+      run: |
+        gh extension install actions/gh-actions-cache
+        gh actions-cache delete "${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" --confirm
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+
+    - name: Save Cache Mod
+      if: ${{ inputs.setup_cache }}
+      uses: actions/cache/save@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+
+    - name: Delete Previous Cache Build
+      if: ${{ steps.cache-restore-build.outputs.cache-hit }}
+      continue-on-error: true
+      shell: bash
+      run: |
+        gh actions-cache delete "${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" --confirm
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+
+    - name: Save Cache Build
+      if: ${{ inputs.setup_cache }}
+      uses: actions/cache/save@v3
+      with:
+        path: ~/.cache/go-build
+        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
