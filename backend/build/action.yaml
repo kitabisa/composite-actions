@@ -88,7 +88,7 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: Setup Golang
-      if: ${{ inputs.setup_go }}
+      if: ${{ inputs.setup_go == 'true' }}
       uses: actions/setup-go@v5
       with:
         go-version: ${{ inputs.go_version }}
@@ -101,7 +101,7 @@ runs:
 
     - name: Restore Cache mod
       id: cache-restore-mod
-      if: ${{ inputs.setup_cache }}
+      if: ${{ inputs.setup_cache == 'true' }}
       uses: actions/cache/restore@v3
       with:
         path: ~/go/pkg/mod
@@ -109,7 +109,7 @@ runs:
 
     - name: Restore Cache build
       id: cache-restore-build
-      if: ${{ inputs.setup_cache }}
+      if: ${{ inputs.setup_cache == 'true' }}
       uses: actions/cache/restore@v3
       with:
         path: ~/.cache/go-build
@@ -162,7 +162,7 @@ runs:
         package: ${{ inputs.build_push_image }}
 
     - name: Install the gh cli
-      if: ${{ inputs.setup_cache }}
+      if: ${{ inputs.setup_cache == 'true' }}
       uses: ksivamuthu/actions-setup-gh-cli@v2
       with:
         version: 2.24.3
@@ -178,7 +178,7 @@ runs:
         GH_TOKEN: ${{ inputs.gh_token }}
 
     - name: Save Cache Mod
-      if: ${{ inputs.setup_cache }}
+      if: ${{ inputs.setup_cache == 'true' }}
       uses: actions/cache/save@v3
       with:
         path: ~/go/pkg/mod
@@ -194,7 +194,7 @@ runs:
         GH_TOKEN: ${{ inputs.gh_token }}
 
     - name: Save Cache Build
-      if: ${{ inputs.setup_cache }}
+      if: ${{ inputs.setup_cache == 'true' }}
       uses: actions/cache/save@v3
       with:
         path: ~/.cache/go-build
