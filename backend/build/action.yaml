@@ -179,7 +179,7 @@ runs:
         version: 2.24.3
 
     - name: Delete Previous Cache Mod
-      if: ${{ steps.cache-restore-mod.outputs.cache-hit }}
+      if: ${{ steps.cache-restore-mod.outputs.cache-hit || inputs.setup_save_cache == 'true' }}
       continue-on-error: true
       shell: bash
       run: |
@@ -196,7 +196,7 @@ runs:
         key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
 
     - name: Delete Previous Cache Build
-      if: ${{ steps.cache-restore-build.outputs.cache-hit }}
+      if: ${{ steps.cache-restore-build.outputs.cache-hit || inputs.setup_save_cache == 'true' }}
       continue-on-error: true
       shell: bash
       run: |
