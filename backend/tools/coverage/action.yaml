@@ -56,6 +56,11 @@ inputs:
     description: "setup cache"
     default: true
 
+  install_gh_cli:
+    required: false
+    description: "setup cache"
+    default: true
+
 runs:
   using: "composite"
   steps:
@@ -158,13 +163,13 @@ runs:
         file_pattern: ${{ inputs.badge_path }}
 
     - name: Install the gh cli
-      if: ${{ inputs.setup_save_cache == 'true' }}
+      if: ${{ inputs.install_gh_cli == 'true' }}
       uses: ksivamuthu/actions-setup-gh-cli@v2
       with:
         version: 2.24.3
 
     - name: Delete Previous Cache Mod
-      if: ${{ steps.cache-restore-mod.outputs.cache-hit || inputs.setup_save_cache == 'true' }}
+      if: ${{ steps.cache-restore-mod.outputs.cache-hit || inputs.install_gh_cli == 'true' }}
       continue-on-error: true
       shell: bash
       run: |
@@ -172,6 +177,7 @@ runs:
         gh actions-cache delete "${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" --confirm
       env:
         GH_TOKEN: ${{ inputs.gh_token }}
+
     - name: Save Cache Mod
       if: ${{ inputs.setup_save_cache == 'true' }}
       uses: actions/cache/save@v3
@@ -180,13 +186,14 @@ runs:
         key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
 
     - name: Delete Previous Cache Build
-      if: ${{ steps.cache-restore-mod.outputs.cache-hit || inputs.setup_save_cache == 'true' }}
+      if: ${{ steps.cache-restore-build.outputs.cache-hit || inputs.install_gh_cli == 'true' }}
       continue-on-error: true
       shell: bash
       run: |
         gh actions-cache delete "${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" --confirm
       env:
         GH_TOKEN: ${{ inputs.gh_token }}
+
     - name: Save Cache Build
       if: ${{ inputs.setup_save_cache == 'true' }}
       uses: actions/cache/save@v3
