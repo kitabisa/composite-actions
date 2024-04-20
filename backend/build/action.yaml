@@ -78,10 +78,16 @@ inputs:
     description: "setup cache"
     default: true
 
+  setup_checkout:
+    required: false
+    description: "setup checkout"
+    default: true
+
 runs:
   using: "composite"
   steps:
     - name: Checkout
+      if: ${{ inputs.setup_checkout == 'true' }}
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
