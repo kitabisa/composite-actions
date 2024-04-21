@@ -156,10 +156,7 @@ runs:
         credentials_json: ${{ inputs.credentials_json }}
         gke_creds: false
 
-    - name: Start build
-      shell: bash
-      run: |
-        echo "Start building application"
+
 
     - name: Build application
       id: build-app
@@ -171,6 +168,11 @@ runs:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         package: ${{ inputs.build_push_image }}
+
+    - name: build complete
+      shell: bash
+      run: |
+        echo "::set-output name=build-finished::true"
 
     - name: Install the gh cli
       if: ${{ inputs.setup_save_cache == 'true' }}
