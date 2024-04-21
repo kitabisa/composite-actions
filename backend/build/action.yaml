@@ -90,7 +90,7 @@ inputs:
 outputs:
   build-app-status:
     description: "build app status"
-    value: ${{steps.build-app.outputs.status}}
+    value: ${{steps.status.outputs.build-app-status}}
 
 runs:
   using: "composite"
@@ -177,6 +177,7 @@ runs:
         package: ${{ inputs.build_push_image }}
 
     - name: set output
+      id: status
       shell: bash
       run: |
         # Perform actions
