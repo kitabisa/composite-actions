@@ -51,16 +51,6 @@ inputs:
     description: "setup cache"
     default: true
 
-  cache_path_mod:
-    required: false
-    description: "cache path mod"
-    default: "~/go/pkg/mod"
-
-  cache_path_build:
-    required: false
-    description: "cache path build"
-    default: "~/.cache/go-build"
-
 runs:
   using: "composite"
   steps:
@@ -81,7 +71,7 @@ runs:
       if: ${{ inputs.setup_restore_cache == 'true' }}
       uses: actions/cache/restore@v3
       with:
-        path: ${{ inputs.cache_path_mod }}
+        path: ~/go/pkg/mod
         key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
 
     - name: Restore Cache build
@@ -89,7 +79,7 @@ runs:
       if: ${{ inputs.setup_restore_cache == 'true' }}
       uses: actions/cache/restore@v3
       with:
-        path: ${{ inputs.cache_path_build }}
+        path: ~/.cache/go-build
         key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
 
     - name: Configure Git for private modules
