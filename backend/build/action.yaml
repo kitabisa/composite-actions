@@ -88,6 +88,16 @@ inputs:
     description: "setup checkout"
     default: true
 
+  cache_path_mod:
+    required: false
+    description: "cache path mod"
+    default: "~/go/pkg/mod"
+
+  cache_path_build:
+    required: false
+    description: "cache path build"
+    default: "~/.cache/go-build"
+
 runs:
   using: "composite"
   steps:
@@ -115,7 +125,7 @@ runs:
       if: ${{ inputs.setup_restore_cache == 'true' }}
       uses: actions/cache/restore@v3
       with:
-        path: ~/go/pkg/mod
+        path: ${{ inputs.cache_path_mod }}
         key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
 
     - name: Restore Cache build
@@ -123,7 +133,7 @@ runs:
       if: ${{ inputs.setup_restore_cache == 'true' }}
       uses: actions/cache/restore@v3
       with:
-        path: ~/.cache/go-build
+        path: ${{ inputs.cache_path_build }}$
         key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
 
     - name: End caching go
@@ -192,7 +202,7 @@ runs:
       if: ${{ inputs.setup_save_cache == 'true' }}
       uses: actions/cache/save@v3
       with:
-        path: ~/go/pkg/mod
+        path: ${{ inputs.cache_path_mod }}
         key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
 
     - name: Delete Previous Cache Build
@@ -208,5 +218,5 @@ runs:
       if: ${{ inputs.setup_save_cache == 'true' }}
       uses: actions/cache/save@v3
       with:
-        path: ~/.cache/go-build
+        path: ${{ inputs.cache_path_build }}
         key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
