@@ -46,6 +46,12 @@ inputs:
     description: "custom command"
     default: "echo no command"
 
+  param:
+    required: false
+    description: "argument for service name"
+    default: ""
+    type: string
+
   build:
     required: false
     description: "Run make build"
@@ -165,6 +171,7 @@ runs:
       id: build-app
       uses: kitabisa/composite-actions/infra/tools/makefile@v2
       with:
+        param: ${{ inputs.param }}
         build: ${{ inputs.build }}
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}

@@ -37,6 +37,12 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
+  param:
+    required: false
+    description: "argument for service name"
+    default: ""
+    type: string
+
   env:
     required: true
     description: "environment to deploy to"
@@ -98,6 +104,7 @@ runs:
     - name: Deploy
       uses: kitabisa/composite-actions/infra/tools/makefile@v2
       with:
+        param: ${{ inputs.param }}
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
