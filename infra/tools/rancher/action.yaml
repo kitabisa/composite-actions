@@ -39,6 +39,12 @@ runs:
         echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
         echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
 
+    - name: get namespace
+      shell: bash
+      run: |-
+        make get-app-name &&
+        make get-business-unit
+
     - name: Configure namespace-project mapping in rancher
       uses: kitabisa/actions/rancher-ns-mover@master
       with:
