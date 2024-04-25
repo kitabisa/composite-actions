@@ -189,7 +189,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         start=$(date +%s)
-        make build-kj ${{ inputs.param }}
+        make build-kj service=${{ inputs.param }}
         echo "duration=$(($(date +%s)-$start))" >> $GITHUB_OUTPUT
 
     - name: Build and push docker image
@@ -208,7 +208,7 @@ runs:
       env:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
-        make package-kj ${{ inputs.param }}
+        make package-kj service=${{ inputs.param }}
 
     - name: Run unit test
       if: "${{ (inputs.test == 'true') && (inputs.custom_command_flag == 'true') }}"
