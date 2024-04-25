@@ -61,7 +61,7 @@ inputs:
   build-kj:
     required: false
     description: "Run make build-kj"
-    default: true
+    default: false
     type: string
 
   build_push_image:
