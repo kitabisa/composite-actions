@@ -80,6 +80,18 @@ inputs:
     default: "."
     type: string
 
+  deploy:
+    required: false
+    description: "Run make deploy"
+    default: "true"
+    type: string
+
+  deploy-kj:
+    required: false
+    description: "Run make deploy-kj"
+    default: "false"
+    type: string
+
   deploy_test:
     required: false
     description: "Run make deploy-test"
@@ -124,7 +136,8 @@ runs:
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
-        deploy: true
+        deploy: ${{ inputs.deploy }}
+        deploy-kj: ${{ inputs.deploy-kj }}
         deploy_test: ${{ inputs.deploy_test }}
 
     - name: Rancher ns mover
