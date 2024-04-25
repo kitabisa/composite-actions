@@ -58,9 +58,20 @@ inputs:
     default: true
     type: string
 
+  build-kj:
+    required: false
+    description: "Run make build-kj"
+    default: true
+    type: string
+
   build_push_image:
     required: false
     description: "build and push image for deployment"
+    default: "false"
+
+  build_push_image_kj:
+    required: false
+    description: "build and push image for deployment kj"
     default: "false"
 
   working_directory:
@@ -173,11 +184,13 @@ runs:
       with:
         param: ${{ inputs.param }}
         build: ${{ inputs.build }}
+        build-kj: ${{ inputs.build-kj }}
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         package: ${{ inputs.build_push_image }}
+        package-kj: ${{ inputs.build_push_image_kj }}
 
     - name: Install the gh cli
       if: ${{ inputs.setup_save_cache == 'true' }}

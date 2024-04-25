@@ -47,6 +47,12 @@ inputs:
     default: false
     type: string
 
+  package-kj:
+    required: false
+    description: "make package-kj"
+    default: false
+    type: string
+
   deploy:
     required: false
     description: "make deploy"
@@ -194,6 +200,15 @@ runs:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
         make package ${{ inputs.param }}
+
+    - name: Build and push docker image
+      if: "${{ inputs.package-kj == 'true' }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      env:
+        DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
+      run: |-
+        make package-kj ${{ inputs.param }}
 
     - name: Run unit test
       if: "${{ (inputs.test == 'true') && (inputs.custom_command_flag == 'true') }}"
