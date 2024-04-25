@@ -37,6 +37,16 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
+  custom_command_flag:
+    required: false
+    description: "custom command flag"
+    default: "false"
+
+  custom_command:
+    required: false
+    description: "custom command"
+    default: "echo no command"
+
   param:
     required: false
     description: "argument for service name"
@@ -91,6 +101,11 @@ runs:
       with:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
+
+    - name: setup custom command
+      if: ${{ inputs.custom_command_flag == 'true' }}
+      shell: bash
+      run: ${{ inputs.custom_command }}
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
