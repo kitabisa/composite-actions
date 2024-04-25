@@ -35,6 +35,12 @@ inputs:
     default: false
     type: string
 
+  build-kj:
+    required: false
+    description: "make build-kj"
+    default: false
+    type: string
+
   package:
     required: false
     description: "make package"
@@ -168,6 +174,16 @@ runs:
       run: |-
         start=$(date +%s)
         make build ${{ inputs.param }}
+        echo "duration=$(($(date +%s)-$start))" >> $GITHUB_OUTPUT
+
+    - name: Build application
+      id: build-app-kj
+      if: "${{ inputs.build-kj == 'true' }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |-
+        start=$(date +%s)
+        make build-kj ${{ inputs.param }}
         echo "duration=$(($(date +%s)-$start))" >> $GITHUB_OUTPUT
 
     - name: Build and push docker image
