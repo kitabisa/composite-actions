@@ -48,6 +48,8 @@ runs:
       run: |-
         echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
         echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
+        echo "app-name=$(make get-app-name)"
+        echo "business-unit=$(make get-business-unit)"
 
     - name: setup custom command
       if: ${{ inputs.rancher_custom_command_flag == 'true' }}
