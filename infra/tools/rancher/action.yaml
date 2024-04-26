@@ -28,16 +28,6 @@ inputs:
     default: "."
     type: string
 
-  rancher_custom_command_flag:
-    required: false
-    description: "custom command flag"
-    default: "false"
-
-  rancher_custom_command:
-    required: false
-    description: "custom command"
-    default: "echo no command"
-
   deploy:
     required: false
     description: "Run make deploy"
@@ -67,8 +57,6 @@ runs:
       run: |-
         echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
         echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
-        echo "app-name=$(make get-app-name)"
-        echo "business-unit=$(make get-business-unit)"
 
     - name: Get business unit & app name values
       id: app-meta-kj
@@ -78,11 +66,6 @@ runs:
       run: |-
         echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
         echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
-
-    - name: setup custom command
-      if: ${{ inputs.rancher_custom_command_flag == 'true' }}
-      shell: bash
-      run: ${{ inputs.rancher_custom_command }}
 
     - name: Configure namespace-project mapping in rancher
       uses: kitabisa/actions/rancher-ns-mover@master
