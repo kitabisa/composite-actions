@@ -54,6 +54,11 @@ runs:
       run: |-
         make get-app-name
 
+    - name: setup custom command
+      if: ${{ inputs.rancher_custom_command_flag == 'true' }}
+      shell: bash
+      run: ${{ inputs.rancher_custom_command }}
+
     - name: Configure namespace-project mapping in rancher
       uses: kitabisa/actions/rancher-ns-mover@master
       with:
