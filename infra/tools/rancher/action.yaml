@@ -28,6 +28,16 @@ inputs:
     default: "."
     type: string
 
+  rancher_custom_command_flag:
+    required: false
+    description: "custom command flag"
+    default: "false"
+
+  rancher_custom_command:
+    required: false
+    description: "custom command"
+    default: "echo no command"
+
 runs:
   using: "composite"
   steps:
@@ -42,8 +52,7 @@ runs:
     - name: get namespace
       shell: bash
       run: |-
-        make get-app-name &&
-        make get-business-unit
+        make get-app-name
 
     - name: Configure namespace-project mapping in rancher
       uses: kitabisa/actions/rancher-ns-mover@master

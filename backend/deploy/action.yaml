@@ -47,6 +47,16 @@ inputs:
     description: "custom command"
     default: "echo no command"
 
+  rancher_custom_command_flag:
+    required: false
+    description: "custom command flag"
+    default: "false"
+
+  rancher_custom_command:
+    required: false
+    description: "custom command"
+    default: "echo no command"
+
   param:
     required: false
     description: "argument for service name"
@@ -140,15 +150,15 @@ runs:
         deploy-kj: ${{ inputs.deploy-kj }}
         deploy_test: ${{ inputs.deploy_test }}
 
-    # - name: Rancher ns mover
-    #   if: "${{ inputs.deploy_test != 'true' }}"
-    #   uses: kitabisa/composite-actions/infra/tools/rancher@v2
-    #   with:
-    #     working_directory: ${{ inputs.working_directory }}
-    #     rancher_host: ${{ inputs.rancher_host }}
-    #     rancher_access_key: ${{ inputs.rancher_access_key }}
-    #     rancher_secret_key: ${{ inputs.rancher_secret_key }}
-    #     rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
+    - name: Rancher ns mover
+      if: "${{ inputs.deploy_test != 'true' }}"
+      uses: kitabisa/composite-actions/infra/tools/rancher@v2
+      with:
+        working_directory: ${{ inputs.working_directory }}
+        rancher_host: ${{ inputs.rancher_host }}
+        rancher_access_key: ${{ inputs.rancher_access_key }}
+        rancher_secret_key: ${{ inputs.rancher_secret_key }}
+        rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
 
     - uses: chrnorm/deployment-status@v2
       if: success()
