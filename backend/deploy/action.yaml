@@ -155,6 +155,9 @@ runs:
       uses: kitabisa/composite-actions/infra/tools/rancher@v2
       with:
         working_directory: ${{ inputs.working_directory }}
+        param: ${{ inputs.param }}
+        deploy: ${{ inputs.deploy }}
+        deploy-kj: ${{ inputs.deploy-kj }}
         rancher_host: ${{ inputs.rancher_host }}
         rancher_access_key: ${{ inputs.rancher_access_key }}
         rancher_secret_key: ${{ inputs.rancher_secret_key }}
