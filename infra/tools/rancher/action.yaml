@@ -77,7 +77,6 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         export service-kj=${{ inputs.param }}
-        export service-kj=${{ inputs.param }})
         echo "app-name=$(make get-app-name)"
         echo "business-unit=$(make get-business-unit)"
         echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
