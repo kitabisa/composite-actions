@@ -77,7 +77,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         echo "app-name=$(make get-app-name service-kj=${{ inputs.param }})" >> $GITHUB_OUTPUT
-        echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
+        echo "business-unit=$(make get-business-unit service-kj=${{ inputs.param }})" >> $GITHUB_OUTPUT
 
     - name: setup custom command
       if: ${{ inputs.rancher_custom_command_flag == 'true' }}
