@@ -38,11 +38,24 @@ inputs:
     description: "custom command"
     default: "echo no command"
 
+  deploy:
+    required: false
+    description: "Run make deploy"
+    default: "true"
+    type: string
+
+  deploy-kj:
+    required: false
+    description: "Run make deploy-kj"
+    default: "false"
+    type: string
+
 runs:
   using: "composite"
   steps:
     - name: Get business unit & app name values
       id: app-meta
+      if: "${{ (inputs.deploy == 'true') && (inputs.deploy-kj == 'false') }}"
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       run: |-
@@ -50,6 +63,15 @@ runs:
         echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
         echo "app-name=$(make get-app-name)"
         echo "business-unit=$(make get-business-unit)"
+
+    - name: Get business unit & app name values
+      id: app-meta-kj
+      if: "${{ (inputs.deploy == 'false') && (inputs.deploy-kj == 'true') }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |-
+        echo "app-name=$(make get-app-name service-kj=${{ inputs.param }})" >> $GITHUB_OUTPUT
+        echo "business-unit=$(make get-business-unit})" >> $GITHUB_OUTPUT
 
     - name: setup custom command
       if: ${{ inputs.rancher_custom_command_flag == 'true' }}
