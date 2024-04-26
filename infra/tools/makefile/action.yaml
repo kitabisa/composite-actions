@@ -185,7 +185,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         start=$(date +%s)
-        make build ${{ inputs.param }}
+        make build
         echo "duration=$(($(date +%s)-$start))" >> $GITHUB_OUTPUT
 
     - name: Build application
@@ -205,7 +205,7 @@ runs:
       env:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
-        make package ${{ inputs.param }}
+        make package
 
     - name: Build and push docker image
       if: "${{ inputs.package-kj == 'true' }}"
@@ -231,7 +231,7 @@ runs:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         CHARTS_REPOSITORY: asia-southeast1-docker.pkg.dev/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
-        make deploy ${{ inputs.param }}
+        make deploy
 
     - name: Deploy-kj via helmfile
       if: "${{ (inputs.deploy == 'false') && (inputs.deploy-kj == 'true') }}"

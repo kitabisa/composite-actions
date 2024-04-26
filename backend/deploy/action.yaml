@@ -159,6 +159,8 @@ runs:
         rancher_access_key: ${{ inputs.rancher_access_key }}
         rancher_secret_key: ${{ inputs.rancher_secret_key }}
         rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
+        rancher_custom_command_flag: ${{ inputs.rancher_custom_command_flag }}
+        rancher_custom_command: ${{ inputs.rancher_custom_command }}
 
     - uses: chrnorm/deployment-status@v2
       if: success()
