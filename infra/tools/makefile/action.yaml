@@ -195,7 +195,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         start=$(date +%s)
-        make build-kj service=${{ inputs.param }}
+        make build-kj ${{ inputs.param }}
         echo "duration=$(($(date +%s)-$start))" >> $GITHUB_OUTPUT
 
     - name: Build and push docker image
@@ -214,7 +214,7 @@ runs:
       env:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
       run: |-
-        make package-kj service=${{ inputs.param }}
+        make package-kj ${{ inputs.param }}
 
     - name: Run unit test
       if: "${{ (inputs.test == 'true') && (inputs.custom_command_flag == 'true') }}"
@@ -241,7 +241,7 @@ runs:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         CHARTS_REPOSITORY: asia-southeast1-docker.pkg.dev/${{ inputs.artifact_registry_project_id }}/charts
       run: |-
-        make deploy service=${{ inputs.param }}
+        make deploy-kj ${{ inputs.param }}
 
     - name: Deploy-test via helmfile
       if: "${{ inputs.deploy_test == 'true' }}"
