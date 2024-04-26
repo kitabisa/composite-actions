@@ -76,7 +76,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       run: |-
-        echo "app-name=kitajaga-api-${{ inputs.param }}" >> $GITHUB_OUTPUT
+        echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
         echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
 
     - name: setup custom command
