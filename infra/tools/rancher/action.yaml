@@ -50,6 +50,12 @@ inputs:
     default: "false"
     type: string
 
+  param:
+    required: false
+    description: "argument for service name"
+    default: ""
+    type: string
+
 runs:
   using: "composite"
   steps:
