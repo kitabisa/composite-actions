@@ -74,13 +74,20 @@ runs:
         path: ~/go/pkg/mod
         key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
 
+    - name: Restore cache mod from nearest cache
+      if: steps.cache-restore-mod.outputs.cache-hit != 'true' && inputs.setup_restore_cache == 'true'
+      uses: actions/cache/restore@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-mod-
+
     - name: Restore Cache build
       id: cache-restore-build
       if: ${{ inputs.setup_restore_cache == 'true' }}
       uses: actions/cache/restore@v3
       with:
         path: ~/.cache/go-build
-        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+        key: ${{ runner.os }}-go-build-
 
     - name: Configure Git for private modules
       env:
