@@ -100,6 +100,11 @@ inputs:
     description: "setup cache"
     default: true
 
+  save_cache_master:
+    required: false
+    description: "setup cache"
+    default: false
+
   setup_checkout:
     required: false
     description: "setup checkout"
@@ -222,12 +227,30 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.gh_token }}
 
+    - name: Delete Previous Cache Build And Mod Master
+      if: ${{ inputs.save_cache_master == 'true' &&  inputs.setup_save_cache == 'true' }}
+      continue-on-error: true
+      shell: bash
+      run: |
+        gh actions-cache delete "${{ runner.os }}-go-mod-" --confirm
+        gh actions-cache delete "${{ runner.os }}-go-build-" --confirm
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+
     - name: Save Cache Mod
       if: ${{ inputs.setup_save_cache == 'true' }}
       uses: actions/cache/save@v3
       with:
         path: ~/go/pkg/mod
         key: ${{ runner.os }}-go-mod-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+
+
+    - name: Save Cache Mod Master
+      if: ${{ inputs.save_cache_master == 'true' }}
+      uses: actions/cache/save@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-mod-
 
     - name: Delete Previous Cache Build
       if: ${{ steps.cache-restore-build.outputs.cache-hit || inputs.setup_save_cache == 'true' }}
@@ -239,6 +262,13 @@ runs:
         GH_TOKEN: ${{ inputs.gh_token }}
 
     - name: Save Cache Build
+      if: ${{ inputs.setup_save_cache == 'true' }}
+      uses: actions/cache/save@v3
+      with:
+        path: ~/.cache/go-build
+        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+
+    - name: Save Cache Build Master
       if: ${{ inputs.setup_save_cache == 'true' }}
       uses: actions/cache/save@v3
       with:
