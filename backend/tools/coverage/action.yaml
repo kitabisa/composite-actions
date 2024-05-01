@@ -87,6 +87,13 @@ runs:
       uses: actions/cache/restore@v3
       with:
         path: ~/.cache/go-build
+        key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
+
+    - name: Restore cache build from nearest cache
+      if: steps.cache-restore-build.outputs.cache-hit != 'true' && inputs.setup_restore_cache == 'true'
+      uses: actions/cache/restore@v3
+      with:
+        path: ~/.cache/go-build
         key: ${{ runner.os }}-go-build-
 
     - name: Configure Git for private modules
