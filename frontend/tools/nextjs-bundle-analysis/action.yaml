@@ -46,11 +46,17 @@ runs:
 
     - name: Download base branch bundle stats
       uses: dawidd6/action-download-artifact@v3
+      id: dw
       if: success() && inputs.pr_number != ''
       with:
         workflow: ${{ inputs.workflow_name }}
         branch: ${{ inputs.base_branch }}
         path: ${{ inputs.working_directory }}/.next/analyze/base
+
+    - name: Checking artifact
+      if: steps.dw.outputs.found_artifact == 'false'
+      shell: bash
+      run: exit 0
 
     - name: Compare with base branch bundle
       if: success() && inputs.pr_number != ''
