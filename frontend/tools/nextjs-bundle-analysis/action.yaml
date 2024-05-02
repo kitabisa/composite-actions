@@ -39,16 +39,15 @@ runs:
       working-directory: ${{ inputs.working_directory }}
 
     - name: Upload bundle
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: bundle
         path: ${{ inputs.working_directory }}/.next/analyze/__bundle_analysis.json
 
     - name: Download base branch bundle stats
-      uses: dawidd6/action-download-artifact@v2
+      uses: dawidd6/action-download-artifact@v3
       if: success() && inputs.pr_number != ''
       with:
-        name: bundle
         workflow: ${{ inputs.workflow_name }}
         branch: ${{ inputs.base_branch }}
         path: ${{ inputs.working_directory }}/.next/analyze/base
