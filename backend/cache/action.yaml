@@ -1,0 +1,104 @@
+name: "Test Coverage"
+description: "Build and push docker image"
+
+inputs:
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+  gh_user:
+    required: true
+    description: "gh user"
+
+  gh_token:
+    required: true
+    description: "gh token"
+
+  go_version:
+    required: false
+    description: "go version"
+    default: "~1.22"
+
+  custom_command:
+    required: false
+    description: "custom command"
+    default: "echo no command"
+
+  hash_files:
+    required: false
+    description: "hash files"
+    default: "**"
+
+  cache_key_suffix:
+    required: false
+    description: Optional cache key suffix.
+    default:
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
+
+    - name: Install the gh cli
+      uses: ksivamuthu/actions-setup-gh-cli@v2
+      with:
+        version: 2.24.3
+
+    - name: Delete existing cache mod
+      continue-on-error: true
+      shell: bash
+      run: |
+        gh extension install actions/gh-actions-cache
+        gh actions-cache delete "Linux-golang-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" --confirm
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+
+    - name: Setup Golang
+      uses: actions/setup-go@v5
+      with:
+        cache: false
+        go-version: ${{ inputs.go_version }}
+
+    - name: Determine Golang cache paths and construct cache key
+      id: golang-env
+      run: |
+        echo "build-cache-path=$(go env GOCACHE)" >>"$GITHUB_OUTPUT"
+        echo "module-cache-path=$(go env GOMODCACHE)" >>"$GITHUB_OUTPUT"
+        cacheKeyRoot="${{ runner.os }}-golang${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-"
+        echo "cache-key-restore=$cacheKeyRoot" >>"$GITHUB_OUTPUT"
+        echo "cache-key=${cacheKeyRoot}${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Setup Golang cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ steps.golang-env.outputs.build-cache-path }}
+          ${{ steps.golang-env.outputs.module-cache-path }}
+        key: ${{ steps.golang-env.outputs.cache-key }}
+        restore-keys: |
+          ${{ steps.golang-env.outputs.cache-key-restore }}
+
+    - name: Configure Git for private modules
+      env:
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
+      shell: bash
+      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
+
+    - name: Run base module
+      shell: bash
+      run: |
+        go mod download
+        go build
+
+    - name: Run custom command for library you want to store
+      shell: bash
+      run: ${{ inputs.custom_command }}
+
