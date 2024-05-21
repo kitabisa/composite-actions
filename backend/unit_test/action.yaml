@@ -44,7 +44,7 @@ inputs:
   default_unit_test:
     required: false
     description: "default unit test"
-    default: true
+    default: "true"
 
   setup_go_cache:
     required: false

@@ -88,17 +88,17 @@ inputs:
   setup_go:
     required: false
     description: "setup go"
-    default: true
+    default: "true"
 
   setup_action_cache:
     required: false
     description: "setup cache"
-    default: true
+    default: "true"
 
   setup_checkout:
     required: false
     description: "setup checkout"
-    default: true
+    default: "true"
 
   go_cache:
     required: false

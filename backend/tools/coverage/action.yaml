@@ -54,7 +54,7 @@ inputs:
   setup_action_cache:
     required: false
     description: "setup cache"
-    default: false
+    default: "true"
 
 runs:
   using: "composite"
