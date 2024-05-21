@@ -135,7 +135,7 @@ runs:
       run: mkdir -p "${{ inputs.badge_path }}%/*"
 
     - name: Generate badge SVG image
-      uses: emibcn/badge-action@v2.0.2
+      uses: emibcn/badge-action@v2.0.3
       id: badge
       with:
         label: 'Code coverage'
@@ -144,20 +144,14 @@ runs:
         path: ${{ inputs.badge_path }}
 
     - name: Upload badge as artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: badge
         path: ${{ inputs.badge_path }}
         if-no-files-found: error
 
     - name: Push coverage master to git
-      uses: stefanzweifel/git-auto-commit-action@v4
+      uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: 'coverage: updated master coverage [skip ci]'
-        file_pattern: ${{ inputs.working_directory }}/coverage-master.txt
-
-    - name: Push badge to git
-      uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: 'coverage: updated coverage badge [skip ci]'
-        file_pattern: ${{ inputs.badge_path }}
+        commit_message: 'coverage: updated coverage [skip ci]'
+        file_pattern: '${{ inputs.working_directory }}/coverage-master.txt ${{ inputs.badge_path }}'
