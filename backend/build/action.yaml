@@ -93,7 +93,7 @@ inputs:
   setup_action_cache:
     required: false
     description: "setup cache"
-    default: "true"
+    default: "false"
 
   setup_checkout:
     required: false
@@ -119,7 +119,7 @@ runs:
       if: ${{ inputs.setup_go == 'true' }}
       uses: actions/setup-go@v5
       with:
-        cache: ${{ inputs.go_cache }}
+        cache: ${{ inputs.setup_go_cache }}
         go-version: ${{ inputs.go_version }}
 
     - name: Determine Golang cache paths and construct cache key
@@ -133,7 +133,7 @@ runs:
       shell: bash
 
     - name: Setup Golang cache
-      if: ${{ inputs.setup_restore_cache == 'true' }}
+      if: ${{ inputs.setup_action_cache == 'true' }}
       uses: actions/cache/restore@v4
       with:
         path: |
