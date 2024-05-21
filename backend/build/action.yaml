@@ -90,10 +90,10 @@ inputs:
     description: "setup go"
     default: true
 
-  setup_restore_cache:
+  setup_action_cache:
     required: false
     description: "setup cache"
-    default: false
+    default: true
 
   setup_checkout:
     required: false
@@ -134,7 +134,7 @@ runs:
 
     - name: Setup Golang cache
       if: ${{ inputs.setup_restore_cache == 'true' }}
-      uses: actions/cache@v4
+      uses: actions/cache/restore@v4
       with:
         path: |
           ${{ steps.golang-env.outputs.build-cache-path }}
