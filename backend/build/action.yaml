@@ -100,7 +100,7 @@ inputs:
     description: "setup checkout"
     default: "true"
 
-  go_cache:
+  setup_go_cache:
     required: false
     description: "go version"
     default: "false"
