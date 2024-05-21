@@ -46,6 +46,16 @@ inputs:
     description: "default unit test"
     default: true
 
+  setup_go_cache:
+    required: false
+    description: "go version"
+    default: "false"
+
+  setup_action_cache:
+    required: false
+    description: "setup cache"
+    default: "true"
+
   cache_key_suffix:
     required: false
     description: Optional cache key suffix.
@@ -63,7 +73,7 @@ runs:
     - name: Setup Golang
       uses: actions/setup-go@v5
       with:
-        cache: false
+        cache: ${{ inputs.setup_go_cache }}
         go-version: ${{ inputs.go_version }}
 
     - name: Determine Golang cache paths and construct cache key
@@ -77,6 +87,7 @@ runs:
       shell: bash
 
     - name: Setup Golang cache
+      if: ${{ inputs.setup_action_cache == 'true' }}
       uses: actions/cache/restore@v4
       with:
         path: |

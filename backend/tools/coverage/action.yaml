@@ -26,11 +26,6 @@ inputs:
     description: "go version"
     default: "~1.22"
 
-  go_cache:
-    required: false
-    description: "go version"
-    default: "false"
-
   custom_command_flag:
     required: false
     description: "custom command flag"
@@ -51,7 +46,12 @@ inputs:
     description: "hash files"
     default: "**"
 
-  setup_restore_cache:
+  setup_go_cache:
+    required: false
+    description: "go version"
+    default: "false"
+
+  setup_action_cache:
     required: false
     description: "setup cache"
     default: false
@@ -68,7 +68,7 @@ runs:
     - name: Setup Golang
       uses: actions/setup-go@v5
       with:
-        cache: ${{ inputs.go_cache }}
+        cache: ${{ inputs.setup_go_cache }}
         go-version: ${{ inputs.go_version }}
 
     - name: Determine Golang cache paths and construct cache key
@@ -82,8 +82,8 @@ runs:
       shell: bash
 
     - name: Setup Golang cache
-      if: ${{ inputs.setup_restore_cache }}
-      uses: actions/cache@v4
+      if: ${{ inputs.setup_action_cache == 'true'}}
+      uses: actions/cache/restore@v4
       with:
         path: |
           ${{ steps.golang-env.outputs.build-cache-path }}
