@@ -20,6 +20,11 @@ inputs:
     description: "Activate cache"
     default: 'false'
 
+  enhanced_cache:
+    required: false
+    description: "Activate enhanced cache"
+    default: 'false'
+
   setup_go:
     required: false
     description: "Setup Go"
@@ -85,23 +90,28 @@ runs:
         restore-keys: |
           ${{ runner.os }}-golang-
 
-    # # Cache go build cache, used to speedup go test
-    # - name: Go Build Cache
-    #   uses: actions/cache@v4
-    #   with:
-    #     path: /home/runner/.cache/go-build
-    #     key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-go-build-
+    # enhanced caching mechanism
+    - name: Determine Golang cache paths and construct cache key
+      if: "${{ inputs.enhanced_cache == 'true' }}"
+      id: golang-env
+      run: |
+        echo "build-cache-path=$(go env GOCACHE)" >>"$GITHUB_OUTPUT"
+        echo "module-cache-path=$(go env GOMODCACHE)" >>"$GITHUB_OUTPUT"
+        cacheKeyRoot="${{ runner.os }}-golang${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-"
+        echo "cache-key-restore=$cacheKeyRoot" >>"$GITHUB_OUTPUT"
+        echo "cache-key=${cacheKeyRoot}${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
+      shell: bash
 
-    # # Cache go mod cache, used to speedup builds
-    # - name: Go Mod Cache
-    #   uses: actions/cache@v4
-    #   with:
-    #     path: /home/runner/go/pkg/mod
-    #     key: ${{ runner.os }}-go-build-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-go-build-
+    - name: Setup Golang cache
+      if: "${{ inputs.enhanced_cache == 'true' }}"
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          ${{ steps.golang-env.outputs.build-cache-path }}
+          ${{ steps.golang-env.outputs.module-cache-path }}
+        key: ${{ steps.golang-env.outputs.cache-key }}
+        restore-keys: |
+          ${{ steps.golang-env.outputs.cache-key-restore }}
 
     - name: Custom Command
       shell: bash
