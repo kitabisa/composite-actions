@@ -2,12 +2,6 @@ name: "Generate Coverage"
 description: "generate coverage badge for readme. This action must be used after test coverage and expect coverage.out generated from unit test"
 
 inputs:
-  working_directory:
-    required: false
-    description: "Set working directory"
-    default: "."
-    type: string
-
   gh_token:
     required: true
     description: "gh token"
@@ -15,31 +9,26 @@ inputs:
 runs:
   using: "composite"
   steps:
-
     - name: Calculate coverage
       id: unit-test-current
       shell: bash
-      working-directory: ${{ inputs.working_directory }}
       run: |-
         go tool cover -func=coverage.out -o=coverage.out
 
     - name: Go Coverage Badge  # Pass the `coverage.out` output to this action
       uses: tj-actions/coverage-badge-go@v2
-      working-directory: ${{ inputs.working_directory }}
       with:
         filename: coverage.out
 
     - name: Verify Changed files
       uses: tj-actions/verify-changed-files@v16
       id: verify-changed-files
-      working-directory: ${{ inputs.working_directory }}
       with:
         files: README.md
 
     - name: Commit changes
       if: steps.verify-changed-files.outputs.files_changed == 'true'
       shell: bash
-      working-directory: ${{ inputs.working_directory }}
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
