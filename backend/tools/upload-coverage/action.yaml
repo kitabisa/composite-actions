@@ -15,6 +15,14 @@ inputs:
 runs:
   using: "composite"
   steps:
+
+    - name: Calculate coverage
+      id: unit-test-current
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |-
+        go tool cover -func=coverage.out -o=coverage.out
+
     - name: Go Coverage Badge  # Pass the `coverage.out` output to this action
       uses: tj-actions/coverage-badge-go@v2
       working-directory: ${{ inputs.working_directory }}
