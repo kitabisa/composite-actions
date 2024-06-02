@@ -33,7 +33,7 @@ runs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add README.md
-        git commit -m "chore: Updated coverage badge [skip ci]."
+        git commit -m "coverage: updated coverage badge [skip ci]."
 
     - name: Push changes
       if: steps.verify-changed-files.outputs.files_changed == 'true'
