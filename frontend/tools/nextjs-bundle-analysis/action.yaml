@@ -52,6 +52,7 @@ runs:
         workflow: ${{ inputs.workflow_name }}
         branch: ${{ inputs.base_branch }}
         path: ${{ inputs.working_directory }}/.next/analyze/base
+        if_no_artifact_found: warn
 
     - name: Checking artifact
       if: steps.dw.outputs.found_artifact == 'false'
