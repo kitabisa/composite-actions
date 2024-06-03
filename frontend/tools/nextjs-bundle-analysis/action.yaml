@@ -46,7 +46,7 @@ runs:
 
     - name: Download base branch bundle stats
       uses: dawidd6/action-download-artifact@v3
-      id: dw
+      id: base_bundle
       if: success() && inputs.pr_number != ''
       with:
         workflow: ${{ inputs.workflow_name }}
@@ -54,13 +54,8 @@ runs:
         path: ${{ inputs.working_directory }}/.next/analyze/base
         if_no_artifact_found: warn
 
-    - name: Checking artifact
-      if: steps.dw.outputs.found_artifact == 'false'
-      shell: bash
-      run: exit 0
-
     - name: Compare with base branch bundle
-      if: success() && inputs.pr_number != ''
+      if: steps.base_bundle.outputs.found_artifact == 'true' && inputs.pr_number != ''
       run: |
         ls -laR .next/analyze/base && npx -p nextjs-bundle-analysis compare
         sed -i 's/Next.js Bundle Analysis/${{ inputs.comment_header }}/g' .next/analyze/__bundle_analysis_comment.txt
