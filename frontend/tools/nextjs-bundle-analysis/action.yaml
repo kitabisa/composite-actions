@@ -55,7 +55,7 @@ runs:
         if_no_artifact_found: warn
 
     - name: Compare with base branch bundle
-      if: steps.base_bundle.outputs.found_artifact == 'true' && inputs.pr_number != ''
+      if: success() && inputs.pr_number != '' && steps.base_bundle.outputs.found_artifact == 'true'
       run: |
         ls -laR .next/analyze/base && npx -p nextjs-bundle-analysis compare
         sed -i 's/Next.js Bundle Analysis/${{ inputs.comment_header }}/g' .next/analyze/__bundle_analysis_comment.txt
@@ -64,7 +64,7 @@ runs:
 
     - name: Get comment body
       id: get-comment-body
-      if: success() && inputs.pr_number != ''
+      if: success() && inputs.pr_number != '' && steps.base_bundle.outputs.found_artifact == 'true'
       uses: actions/github-script@v6
       with:
         result-encoding: string
@@ -75,7 +75,7 @@ runs:
 
     - name: Find Comment
       uses: peter-evans/find-comment@v2
-      if: success() && inputs.pr_number != ''
+      if: success() && inputs.pr_number != '' && steps.base_bundle.outputs.found_artifact == 'true'
       id: fc
       with:
         issue-number: ${{ inputs.pr_number }}
@@ -83,14 +83,14 @@ runs:
 
     - name: Create Comment
       uses: peter-evans/create-or-update-comment@v2
-      if: success() && inputs.pr_number != '' && steps.fc.outputs.comment-id == 0
+      if: success() && inputs.pr_number != '' && steps.fc.outputs.comment-id == 0 && steps.base_bundle.outputs.found_artifact == 'true'
       with:
         issue-number: ${{ inputs.pr_number }}
         body: ${{ steps.get-comment-body.outputs.body }}
 
     - name: Update Comment
       uses: peter-evans/create-or-update-comment@v2
-      if: success() && inputs.pr_number != '' && steps.fc.outputs.comment-id != 0
+      if: success() && inputs.pr_number != '' && steps.fc.outputs.comment-id != 0 && steps.base_bundle.outputs.found_artifact == 'true'
       with:
         issue-number: ${{ inputs.pr_number }}
         body: ${{ steps.get-comment-body.outputs.body }}
