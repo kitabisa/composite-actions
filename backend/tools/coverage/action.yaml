@@ -143,6 +143,12 @@ runs:
         color: 'green'
         path: ${{ inputs.badge_path }}
 
+    - name: Verify Changed files
+      uses: tj-actions/verify-changed-files@v16
+      id: verify-changed-files
+      with:
+        files: ${{ inputs.badge_path }}
+
     - name: Upload badge as artifact
       uses: actions/upload-artifact@v4
       with:
