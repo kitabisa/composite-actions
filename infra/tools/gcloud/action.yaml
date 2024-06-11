@@ -47,6 +47,13 @@ inputs:
     type: string
     default: 'true'
 
+  gcloud_components:
+    required: false
+    description: " List of additional gcloud components to install"
+    type: string
+    default: 'true'
+  
+
 runs:
   using: "composite"
   steps:
@@ -58,6 +65,8 @@ runs:
 
     - name: Setup gcloud
       uses: google-github-actions/setup-gcloud@v2
+      with: 
+        gcloud_components: ${{ inputs.gcloud_components }}
 
     - name: Register gcloud as a docker credential helper
       if: "${{ inputs.docker_creds == 'true' }}"
