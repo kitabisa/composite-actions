@@ -51,8 +51,6 @@ inputs:
     required: false
     description: " List of additional gcloud components to install"
     type: string
-    default: 'true'
-  
 
 runs:
   using: "composite"
