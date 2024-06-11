@@ -146,7 +146,9 @@ runs:
       uses: tj-actions/verify-changed-files@v20
       id: verify-changed-files
       with:
-        files: ${{ inputs.badge_path }}
+        files: |
+          ${{ inputs.badge_path }}
+          coverage-master.txt
 
     - name: Upload badge as artifact
       if: ${{ steps.verify-changed-files.outputs.files_changed == 'true' }}
