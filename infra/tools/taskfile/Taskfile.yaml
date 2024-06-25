@@ -4,7 +4,7 @@ silent: false
 
 vars:
   NAMESPACE:
-    sh: kubectl get ns | grep -v -e maxwell -e NAME | awk '{ print $1 }'
+    sh: kubectl get ns | grep -v -e maxwell -e NAME -e slack-devbot-helper | awk '{ print $1 }'
 
 tasks:
   destroy-dev:
