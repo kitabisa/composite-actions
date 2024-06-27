@@ -22,6 +22,12 @@ inputs:
     default: "true"
     type: string
 
+  setup_github_cli:
+    required: false
+    description: "setup github cli"
+    default: "false"
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -43,3 +49,7 @@ runs:
       uses: kitabisa/composite-actions/sdet/tools/bun@v2
       with:
         cache: ${{ inputs.cache }}
+
+    - name: setup github cli
+      if: "${{ inputs.setup_github_cli == 'true' }}"
+      uses: kitabisa/composite-actions/sdet/tools/github_cli@v2
