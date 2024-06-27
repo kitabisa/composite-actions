@@ -6,6 +6,30 @@ inputs:
     required: true
     description: "gh token"
 
+  setup_nvmrc:
+    required: false
+    description: "setup node custom by nvmrc"
+    default: "false"
+    type: string
+
+  setup_pnpm:
+    required: false
+    description: "setup pnpm and cache modules"
+    default: "false"
+    type: string
+
+  setup_bun:
+    required: false
+    description: "setup bun and cache modules"
+    default: "false"
+    type: string
+
+  cache:
+    required: false
+    description: "run action cache"
+    default: "true"
+    type: string
+
   platform:
     required: false
     description: "platform type"
