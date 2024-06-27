@@ -1,0 +1,126 @@
+name: "automation test"
+description: "build and run automation test"
+
+inputs:
+  gh_token:
+    required: true
+    description: "gh token"
+
+  platform:
+    required: false
+    description: "platform type"
+    default: ""
+    type: string
+
+  custom_command_packages:
+    required: false
+    description: "custom command packages"
+    default: ""
+    type: string
+
+  custom_command_run:
+    required: false
+    description: "custom command run"
+    default: ""
+    type: string
+
+  custom_command_create_test_run:
+    required: false
+    description: "custom command create test run"
+    default: ""
+    type: string
+
+  custom_command_setup_rsync:
+    required: false
+    description: "custom command setup rsync"
+    default: ""
+    type: string
+
+  custom_command_report_folder:
+    required: false
+    description: "custom command report folder"
+    default: ""
+    type: string
+
+  custom_command_insert_testrails:
+    required: false
+    description: "custom command insert testrails"
+    default: ""
+    type: string
+
+  custom_command_send_report_to_slack:
+    required: false
+    description: "custom command send report to slack"
+    default: ""
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
+
+    - name: setup tools sdet
+      uses: kitabisa/composite-actions/sdet/tools/setup-tools@v2
+      with:
+        setup_nvmrc: ${{ inputs.setup_nvmrc }}
+        setup_pnpm: ${{ inputs.setup_pnpm }}
+        setup_bun: ${{ inputs.setup_bun }}
+        cache: ${{ inputs.cache }}
+    
+    - name: install packages
+      shell: bash
+      run: ${{ inputs.custom_command_packages }}
+
+    - name: setup environment
+      shell: bash
+      run: |
+        cp .env.sample .env
+        echo "TEST_TYPE=${{ inputs.profile }}" >> .env
+        echo "SLACK_WEBHOOK_URL=${{ secrets.SLACK_WEBHOOK_URL }}" >> .env
+        echo "SLACK_WEBHOOK_DEBUG_URL=${{ secrets.SLACK_WEBHOOK_DEBUG_URL }}" >> .env
+        echo "TESTRAIL_USERNAME=${{ secrets.TESTRAIL_USERNAME }}" >> .env
+        echo "TESTRAIL_PASSWORD=${{ secrets.TESTRAIL_PASSWORD }}" >> .env
+
+    - name: create test run on testrails
+      shell: bash
+      if: >- 
+        ${{ inputs.platform = 'api' }} && 
+        always()
+      run: ${{ inputs.custom_command_create_test_run }}
+
+    - name: run automation test
+      shell: bash
+      if: always()
+      run: ${{ inputs.custom_command_run }}
+
+    - name: Install rsync
+      shell: bash
+      if: >- 
+        ${{ inputs.platform = 'api' }} && 
+        always()
+      run: ${{ inputs.custom_command_setup_rsync }}
+
+    - name: deploy reports to github pages
+      if: always()
+      uses: JamesIves/github-pages-deploy-action@v4.6.1
+      with:
+        branch: gh-pages
+        folder: ${{ inputs.custom_command_report_folder }}
+        clean: true
+        single-commit: true
+
+    - name: insert result to testrails
+      shell: bash
+      if: >- 
+        ${{ inputs.platform = 'api' }} && 
+        always()
+      run: ${{ inputs.custom_command_insert_testrails }}
+
+    - name: send report to slack
+      shell: bash
+      if: always()
+      run: ${{ inputs.custom_command_send_report_to_slack }}

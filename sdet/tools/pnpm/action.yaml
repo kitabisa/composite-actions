@@ -1,0 +1,19 @@
+name: "setup pnpm"
+description: "setup pnpm & cache modules"
+
+runs:
+  using: "composite"
+  steps:
+    - name: install pnpm
+      uses: pnpm/action-setup@v4.0.0
+      with:
+        pnpm-version: latest
+
+    - name: cache pnpm modules
+      if: "${{ inputs.cache == 'true' }}"
+      uses: actions/cache@v4
+      with:
+        path: ~/.pnpm-store
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-
