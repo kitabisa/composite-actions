@@ -1,0 +1,51 @@
+name: "sdet build"
+description: "sdet composite build"
+
+inputs:
+  setup_nvmrc:
+    required: false
+    description: "setup node custom by nvmrc"
+    default: "false"
+    type: string
+
+  setup_pnpm:
+    required: false
+    description: "setup pnpm and cache modules"
+    default: "false"
+    type: string
+
+  setup_bun:
+    required: false
+    description: "setup bun and cache modules"
+    default: "false"
+    type: string
+
+  cache:
+    required: false
+    description: "run action cache"
+    default: "true"
+    type: string
+
+  custom_command_packages:
+    required: false
+    description: "custom command packages"
+    default: ""
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: checking out repository
+      uses: actions/checkout@v4
+
+    - name: setup tools sdet
+      uses: kitabisa/composite-actions/sdet/tools/setup-tools@v2
+      with:
+        setup_nvmrc: ${{ inputs.setup_nvmrc }}
+        setup_pnpm: ${{ inputs.setup_pnpm }}
+        setup_bun: ${{ inputs.setup_bun }}
+        cache: ${{ inputs.cache }}
+    
+    - name: install packages
+      shell: bash
+      run: ${{ inputs.custom_command_packages }}
