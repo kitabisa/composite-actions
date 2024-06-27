@@ -6,6 +6,38 @@ inputs:
     required: true
     description: "gh token"
 
+  base_url_stg:
+    required: false
+    description: "base url stg"
+
+  qa_service_url:
+    required: false
+    description: "qa service url"
+
+  wong_service_url:
+    required: false
+    description: "wong service url"
+
+  slack_webhook_url:
+    required: false
+    description: "slack webhook url"
+
+  slack_webhook_debug_url:
+    required: false
+    description: "slack webhook debug url"
+
+  testrail_url:
+    required: false
+    description: "testrail url"
+
+  testrail_username:
+    required: false
+    description: "testrail username"
+
+  testrail_password:
+    required: false
+    description: "testrail password"
+
   platform:
     required: false
     description: "platform type"
@@ -74,6 +106,30 @@ inputs:
     default: ""
     type: string
 
+  slack_webhook_url:
+    required: false
+    description: "slack webhook url"
+    default: ""
+    type: string
+
+  slack_webhook_debug_url:
+    required: false
+    description: "slack webhook debug url"
+    default: ""
+    type: string
+
+  testrail_username:
+    required: false
+    description: "testrail username"
+    default: ""
+    type: string
+
+  testrail_password:
+    required: false
+    description: "testrail password"
+    default: ""
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -96,20 +152,20 @@ runs:
       run: ${{ inputs.custom_command_packages }}
 
     - name: setup environment
-      shell: bash
-      run: |
-        cp .env.sample .env
-        echo "TEST_TYPE=${{ inputs.profile }}" >> .env
-        echo "SLACK_WEBHOOK_URL=${{ secrets.SLACK_WEBHOOK_URL }}" >> .env
-        echo "SLACK_WEBHOOK_DEBUG_URL=${{ secrets.SLACK_WEBHOOK_DEBUG_URL }}" >> .env
-        echo "TESTRAIL_USERNAME=${{ secrets.TESTRAIL_USERNAME }}" >> .env
-        echo "TESTRAIL_PASSWORD=${{ secrets.TESTRAIL_PASSWORD }}" >> .env
+      env:
+        TEST_TYPE: ${{ inputs.profile }}
+        BASE_URL_STG: ${{ inputs.base_url_stg }}
+        QA_SERVICE_URL: ${{ inputs.qa_service_url }}
+        WONG_SERVICE_URL: ${{ inputs.wong_service_url }}
+        SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
+        SLACK_WEBHOOK_DEBUG_URL: ${{ inputs.slack_webhook_debug_url }}
+        TESTRAIL_URL: ${{ inputs.testrail_url }}
+        TESTRAIL_USERNAME: ${{ inputs.testrail_username }}
+        TESTRAIL_PASSWORD: ${{ inputs.testrail_password }}
 
     - name: create test run on testrails
       shell: bash
-      if: >- 
-        ${{ inputs.platform = 'api' }} && 
-        always()
+      if: "${{ inputs.platform = 'api' }}"
       run: ${{ inputs.custom_command_create_test_run }}
 
     - name: run automation test
@@ -119,9 +175,7 @@ runs:
 
     - name: Install rsync
       shell: bash
-      if: >- 
-        ${{ inputs.platform = 'api' }} && 
-        always()
+      if: "${{ inputs.platform = 'api' }}"
       run: ${{ inputs.custom_command_setup_rsync }}
 
     - name: deploy reports to github pages
@@ -135,9 +189,7 @@ runs:
 
     - name: insert result to testrails
       shell: bash
-      if: >- 
-        ${{ inputs.platform = 'api' }} && 
-        always()
+      if: "${{ inputs.platform = 'api' }}"
       run: ${{ inputs.custom_command_insert_testrails }}
 
     - name: send report to slack
