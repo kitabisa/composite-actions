@@ -1,0 +1,45 @@
+name: "setup dependencies tools" # Install & preparation tools
+description: "setup dependencies tools"
+
+inputs:
+  setup_pnpm:
+    required: false
+    description: "setup pnpm"
+
+  setup_bun:
+    required: false
+    description: "setup bun"
+
+  setup_nvmrc:
+    required: false
+    description: "setup node custom by nvmrc"
+    default: "false"
+    type: string
+
+  cache:
+    required: false
+    description: "run action cache"
+    default: "true"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: setup node.js by nvmrc
+      if: "${{ inputs.setup_nvmrc == 'true' }}"
+      uses: actions/setup-node@v4
+      with:
+        check-latest: true
+        node-version-file: "${{ inputs.working_directory }}/.nvmrc"
+
+    - name: setup pnpm
+      if: "${{ inputs.setup_pnpm == 'true' }}"
+      uses: kitabisa/composite-actions/sdet/tools/pnpm@v2
+      with:
+        cache: ${{ inputs.cache }}
+
+    - name: setup bun
+      if: "${{ inputs.setup_bun == 'true' }}"
+      uses: kitabisa/composite-actions/sdet/tools/bun@v2
+      with:
+        cache: ${{ inputs.cache }}
