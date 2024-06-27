@@ -11,7 +11,6 @@ Build and run automation test
 | --- | --- | --- | --- |
 | gh_token | gh token | `true` |  |
 | custom_command_packages | custom command packages | `false` |  |
-| custom_command_env | custom command env | `false` |  |
 | custom_command_run | custom command run | `false` |  |
 | custom_command_create_test_run | custom command create test run | `false` |  |
 | custom_command_setup_rsync | custom command setup rsync | `false` |  |
