@@ -9,34 +9,50 @@ inputs:
   base_url_stg:
     required: false
     description: "base url stg"
+    default: ""
+    type: string
 
   qa_service_url:
     required: false
     description: "qa service url"
+    default: ""
+    type: string
 
   wong_service_url:
     required: false
     description: "wong service url"
+    default: ""
+    type: string
 
   slack_webhook_url:
     required: false
     description: "slack webhook url"
+    default: ""
+    type: string
 
   slack_webhook_debug_url:
     required: false
     description: "slack webhook debug url"
+    default: ""
+    type: string
 
   testrail_url:
     required: false
     description: "testrail url"
+    default: ""
+    type: string
 
   testrail_username:
     required: false
     description: "testrail username"
+    default: ""
+    type: string
 
   testrail_password:
     required: false
     description: "testrail password"
+    default: ""
+    type: string
 
   platform:
     required: false
