@@ -1,0 +1,60 @@
+name: "manage env"
+description: "manage environment variables for test automation"
+
+inputs:
+  profile:
+    required: true
+    description: "test profile"
+    type: string
+
+  qa_service_url:
+    required: true
+    description: "qa service url"
+    type: string
+
+  wong_service_url:
+    required: true
+    description: "wong service url"
+    type: string
+
+  slack_webhook_url:
+    required: true
+    description: "slack webhook url"
+    type: string
+
+  slack_webhook_debug_url:
+    required: true
+    description: "slack webhook debug url"
+    type: string
+
+  testrail_url:
+    required: true
+    description: "testrail url"
+    type: string
+
+  testrail_username:
+    required: true
+    description: "testrail username"
+    type: string
+
+  testrail_password:
+    required: true
+    description: "testrail password"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: setup env variables
+      shell: bash
+      run: cp .env.example .env
+      env:
+        TEST_TYPE: ${{ inputs.profile }}
+        QA_SERVICE_URL: ${{ inputs.qa_service_url }}
+        WONG_SERVICE_URL: ${{ inputs.wong_service_url }}
+        SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
+        SLACK_WEBHOOK_DEBUG_URL: ${{ inputs.slack_webhook_debug_url }}
+        TESTRAIL_URL: ${{ inputs.testrail_url }}
+        TESTRAIL_USERNAME: ${{ inputs.testrail_username }}
+        TESTRAIL_PASSWORD: ${{ inputs.testrail_password }}
+      

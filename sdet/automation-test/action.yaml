@@ -143,21 +143,21 @@ runs:
       shell: bash
       run: ${{ inputs.custom_command_packages }}
 
-    - name: setup environment
-      env:
-        TEST_TYPE: ${{ inputs.profile }}
-        BASE_URL_STG: ${{ inputs.base_url_stg }}
-        QA_SERVICE_URL: ${{ inputs.qa_service_url }}
-        WONG_SERVICE_URL: ${{ inputs.wong_service_url }}
-        SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
-        SLACK_WEBHOOK_DEBUG_URL: ${{ inputs.slack_webhook_debug_url }}
-        TESTRAIL_URL: ${{ inputs.testrail_url }}
-        TESTRAIL_USERNAME: ${{ inputs.testrail_username }}
-        TESTRAIL_PASSWORD: ${{ inputs.testrail_password }}
+    - name: setup environment variables test automation
+      uses: kitabisa/composite-actions/sdet/tools/env@v2
+      with:
+        profile: ${{ inputs.profile }}
+        qa_service_url: ${{ inputs.qa_service_url }}
+        wong_service_url: ${{ inputs.wong_service_url }}
+        slack_webhook_url: ${{ inputs.slack_webhook_url }}
+        slack_webhook_debug_url: ${{ inputs.slack_webhook_debug_url }}
+        testrail_url: ${{ inputs.testrail_url }}
+        testrail_username: ${{ inputs.testrail_username }}
+        testrail_password: ${{ inputs.testrail_password }}
 
     - name: create test run on testrails
       shell: bash
-      if: "${{ inputs.platform = 'api' }}"
+      if: "${{ inputs.platform == 'api' }}"
       run: ${{ inputs.custom_command_create_test_run }}
 
     - name: run automation test
@@ -167,7 +167,7 @@ runs:
 
     - name: Install rsync
       shell: bash
-      if: "${{ inputs.platform = 'api' }}"
+      if: "${{ inputs.platform == 'api' }}"
       run: ${{ inputs.custom_command_setup_rsync }}
 
     - name: deploy reports to github pages
@@ -181,7 +181,7 @@ runs:
 
     - name: insert result to testrails
       shell: bash
-      if: "${{ inputs.platform = 'api' }}"
+      if: "${{ inputs.platform == 'api' }}"
       run: ${{ inputs.custom_command_insert_testrails }}
 
     - name: send report to slack
