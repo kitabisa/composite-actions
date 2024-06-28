@@ -122,30 +122,6 @@ inputs:
     default: ""
     type: string
 
-  slack_webhook_url:
-    required: false
-    description: "slack webhook url"
-    default: ""
-    type: string
-
-  slack_webhook_debug_url:
-    required: false
-    description: "slack webhook debug url"
-    default: ""
-    type: string
-
-  testrail_username:
-    required: false
-    description: "testrail username"
-    default: ""
-    type: string
-
-  testrail_password:
-    required: false
-    description: "testrail password"
-    default: ""
-    type: string
-
 runs:
   using: "composite"
   steps:
