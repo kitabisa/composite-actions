@@ -6,24 +6,6 @@ inputs:
     required: true
     description: "gh token"
 
-  base_url_stg:
-    required: false
-    description: "base url stg"
-    default: ""
-    type: string
-
-  qa_service_url:
-    required: false
-    description: "qa service url"
-    default: ""
-    type: string
-
-  wong_service_url:
-    required: false
-    description: "wong service url"
-    default: ""
-    type: string
-
   slack_webhook_url:
     required: false
     description: "slack webhook url"
@@ -147,8 +129,6 @@ runs:
       uses: kitabisa/composite-actions/sdet/tools/env@v2
       with:
         profile: ${{ inputs.profile }}
-        qa_service_url: ${{ inputs.qa_service_url }}
-        wong_service_url: ${{ inputs.wong_service_url }}
         slack_webhook_url: ${{ inputs.slack_webhook_url }}
         slack_webhook_debug_url: ${{ inputs.slack_webhook_debug_url }}
         testrail_url: ${{ inputs.testrail_url }}

@@ -7,16 +7,6 @@ inputs:
     description: "test profile"
     type: string
 
-  qa_service_url:
-    required: true
-    description: "qa service url"
-    type: string
-
-  wong_service_url:
-    required: true
-    description: "wong service url"
-    type: string
-
   slack_webhook_url:
     required: true
     description: "slack webhook url"
@@ -50,8 +40,6 @@ runs:
       run: cp .env.example .env
       env:
         TEST_TYPE: ${{ inputs.profile }}
-        QA_SERVICE_URL: ${{ inputs.qa_service_url }}
-        WONG_SERVICE_URL: ${{ inputs.wong_service_url }}
         SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
         SLACK_WEBHOOK_DEBUG_URL: ${{ inputs.slack_webhook_debug_url }}
         TESTRAIL_URL: ${{ inputs.testrail_url }}
