@@ -6,36 +6,6 @@ inputs:
     required: true
     description: "gh token"
 
-  slack_webhook_url:
-    required: false
-    description: "slack webhook url"
-    default: ""
-    type: string
-
-  slack_webhook_debug_url:
-    required: false
-    description: "slack webhook debug url"
-    default: ""
-    type: string
-
-  testrail_url:
-    required: false
-    description: "testrail url"
-    default: ""
-    type: string
-
-  testrail_username:
-    required: false
-    description: "testrail username"
-    default: ""
-    type: string
-
-  testrail_password:
-    required: false
-    description: "testrail password"
-    default: ""
-    type: string
-
   platform:
     required: false
     description: "platform type"
@@ -125,15 +95,10 @@ runs:
       shell: bash
       run: ${{ inputs.custom_command_packages }}
 
-    - name: setup environment variables test automation
+    - name: setup env variables test automation
       uses: kitabisa/composite-actions/sdet/tools/env@v2
       with:
         profile: ${{ inputs.profile }}
-        slack_webhook_url: ${{ inputs.slack_webhook_url }}
-        slack_webhook_debug_url: ${{ inputs.slack_webhook_debug_url }}
-        testrail_url: ${{ inputs.testrail_url }}
-        testrail_username: ${{ inputs.testrail_username }}
-        testrail_password: ${{ inputs.testrail_password }}
 
     - name: create test run on testrails
       shell: bash
