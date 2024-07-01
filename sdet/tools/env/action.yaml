@@ -37,7 +37,7 @@ runs:
   steps:
     - name: setup env variables
       shell: bash
-      run: cp .env.example .env
+      run: cp .env.sample .env
       env:
         TEST_TYPE: ${{ inputs.profile }}
         SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
