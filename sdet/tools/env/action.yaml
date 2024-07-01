@@ -45,4 +45,3 @@ runs:
         TESTRAIL_URL: ${{ inputs.testrail_url }}
         TESTRAIL_USERNAME: ${{ inputs.testrail_username }}
         TESTRAIL_PASSWORD: ${{ inputs.testrail_password }}
-      
