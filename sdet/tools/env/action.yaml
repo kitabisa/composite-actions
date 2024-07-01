@@ -7,18 +7,42 @@ inputs:
     description: "test profile"
     type: string
 
+  slack_webhook_url:
+    required: true
+    description: "slack webhook url"
+    type: string
+
+  slack_webhook_debug_url:
+    required: true
+    description: "slack webhook debug url"
+    type: string
+
+  testrail_url:
+    required: true
+    description: "testrail url"
+    type: string
+
+  testrail_username:
+    required: true
+    description: "testrail username"
+    type: string
+
+  testrail_password:
+    required: true
+    description: "testrail password"
+    type: string
+
 runs:
   using: "composite"
   steps:
     - name: setup env variables
       shell: bash
+      run: cp .env.sample .env
       env:
         TEST_TYPE: ${{ inputs.profile }}
-      run: |
-        cp .env.sample .env
-        echo "TEST_TYPE=Debug Test" >> .env
-        echo "SLACK_WEBHOOK_URL=${{ secrets.SLACK_WEBHOOK_DEBUG_URL }}" >> .env
-        echo "SLACK_WEBHOOK_DEBUG_URL=${{ secrets.SLACK_WEBHOOK_DEBUG_URL }}" >> .env
-        echo "TESTRAIL_URL=${{ secrets.TESTRAIL_URL }}" >> .env
-        echo "TESTRAIL_USERNAME=${{ secrets.TESTRAIL_USERNAME }}" >> .env
-        echo "TESTRAIL_PASSWORD=${{ secrets.TESTRAIL_PASSWORD }}" >> .env
+        SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
+        SLACK_WEBHOOK_DEBUG_URL: ${{ inputs.slack_webhook_debug_url }}
+        TESTRAIL_URL: ${{ inputs.testrail_url }}
+        TESTRAIL_USERNAME: ${{ inputs.testrail_username }}
+        TESTRAIL_PASSWORD: ${{ inputs.testrail_password }}
+      
