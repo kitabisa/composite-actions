@@ -167,7 +167,7 @@ runs:
     - name: send report to slack
       shell: bash
       if: always()
+      run: ${{ inputs.custom_command_send_report_to_slack }}
       env:
         SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_DEBUG_URL: ${{ env.SLACK_WEBHOOK_DEBUG_URL }}
-      run: ${{ inputs.custom_command_send_report_to_slack }}
