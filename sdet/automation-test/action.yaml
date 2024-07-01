@@ -169,5 +169,5 @@ runs:
       if: always()
       run: ${{ inputs.custom_command_send_report_to_slack }}
       env:
-        SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
-        SLACK_WEBHOOK_DEBUG_URL: ${{ env.SLACK_WEBHOOK_DEBUG_URL }}
+        SLACK_WEBHOOK_URL: ${{ env.slack_webhook_url }}
+        SLACK_WEBHOOK_DEBUG_URL: ${{ env.slack_webhook_debug_url }}
