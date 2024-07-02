@@ -41,8 +41,8 @@ runs:
         cp .env.sample .env
         echo "TEST_TYPE=${{ inputs.profile }}" >> $GITHUB_ENV
         echo "TEST_TYPE=${{ inputs.profile }}" >> .env
-        echo "SLACK_WEBHOOK_URL=${{ inputs.profile }}" >> .env
-        echo "SLACK_WEBHOOK_DEBUG_URL=${{ inputs.profile }}" >> .env
-        echo "TESTRAIL_URL=${{ inputs.profile }}" >> .env
-        echo "TESTRAIL_USERNAME=${{ inputs.profile }}" >> .env
-        echo "TESTRAIL_PASSWORD=${{ inputs.profile }}" >> .env
+        echo "SLACK_WEBHOOK_URL=${{ inputs.slack_webhook_url }}" >> .env
+        echo "SLACK_WEBHOOK_DEBUG_URL=${{ inputs.slack_webhook_debug_url }}" >> .env
+        echo "TESTRAIL_URL=${{ inputs.testrail_url }}" >> .env
+        echo "TESTRAIL_USERNAME=${{ inputs.testrail_username }}" >> .env
+        echo "TESTRAIL_PASSWORD=${{ inputs.testrail_password }}" >> .env
