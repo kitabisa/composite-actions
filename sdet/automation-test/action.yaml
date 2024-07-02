@@ -6,6 +6,12 @@ inputs:
     required: true
     description: "gh token"
 
+  profile:
+    required: false
+    description: "profile"
+    default: ""
+    type: string
+
   slack_webhook_url:
     required: false
     description: "slack webhook url"
@@ -120,7 +126,7 @@ runs:
         setup_pnpm: ${{ inputs.setup_pnpm }}
         setup_bun: ${{ inputs.setup_bun }}
         cache: ${{ inputs.cache }}
-    
+
     - name: install packages
       shell: bash
       run: ${{ inputs.custom_command_packages }}
@@ -168,6 +174,3 @@ runs:
       shell: bash
       if: always()
       run: ${{ inputs.custom_command_send_report_to_slack }}
-      env:
-        SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
-        SLACK_WEBHOOK_DEBUG_URL: ${{ env.SLACK_WEBHOOK_DEBUG_URL }}

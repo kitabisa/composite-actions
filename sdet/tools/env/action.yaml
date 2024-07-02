@@ -37,11 +37,11 @@ runs:
   steps:
     - name: setup env variables
       shell: bash
-      run: cp .env.sample .env
-      env:
-        TEST_TYPE: ${{ inputs.profile }}
-        SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
-        SLACK_WEBHOOK_DEBUG_URL: ${{ inputs.slack_webhook_debug_url }}
-        TESTRAIL_URL: ${{ inputs.testrail_url }}
-        TESTRAIL_USERNAME: ${{ inputs.testrail_username }}
-        TESTRAIL_PASSWORD: ${{ inputs.testrail_password }}
+      run: |
+        cp .env.sample .env
+        echo "TEST_TYPE=${{ inputs.profile }}" >> .env
+        echo "SLACK_WEBHOOK_URL=${{ inputs.slack_webhook_url }}" >> .env
+        echo "SLACK_WEBHOOK_DEBUG_URL=${{ inputs.slack_webhook_debug_url }}" >> .env
+        echo "TESTRAIL_URL=${{ inputs.testrail_url }}" >> .env
+        echo "TESTRAIL_USERNAME=${{ inputs.testrail_username }}" >> .env
+        echo "TESTRAIL_PASSWORD=${{ inputs.testrail_password }}" >> .env
