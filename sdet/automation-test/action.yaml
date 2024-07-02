@@ -6,6 +6,12 @@ inputs:
     required: true
     description: "gh token"
 
+  profile:
+    required: false
+    description: "profile"
+    default: ""
+    type: string
+
   slack_webhook_url:
     required: false
     description: "slack webhook url"
@@ -120,13 +126,20 @@ runs:
         setup_pnpm: ${{ inputs.setup_pnpm }}
         setup_bun: ${{ inputs.setup_bun }}
         cache: ${{ inputs.cache }}
-    
+
     - name: install packages
       shell: bash
       run: ${{ inputs.custom_command_packages }}
 
     - name: setup env variables test automation
-      uses: kitabisa/composite-actions/sdet/tools/env@v2
+      uses: kitabisa/composite-actions/sdet/tools/env@sdet
+      with:
+        profile: ${{ inputs.profile }}
+        slack_webhook_url: ${{ inputs.slack_webhook_url }}
+        slack_webhook_debug_url: ${{ inputs.slack_webhook_debug_url }}
+        testrail_url: ${{ inputs.testrail_url }}
+        testrail_username: ${{ inputs.testrail_username }}
+        testrail_password: ${{ inputs.testrail_password }}
 
     - name: create test run on testrails
       shell: bash
