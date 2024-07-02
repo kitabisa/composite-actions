@@ -132,7 +132,7 @@ runs:
       run: ${{ inputs.custom_command_packages }}
 
     - name: setup env variables test automation
-      uses: kitabisa/composite-actions/sdet/tools/env@sdet
+      uses: kitabisa/composite-actions/sdet/tools/env@v2
       with:
         profile: ${{ inputs.profile }}
         slack_webhook_url: ${{ inputs.slack_webhook_url }}
