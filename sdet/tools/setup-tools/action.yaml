@@ -5,10 +5,14 @@ inputs:
   setup_pnpm:
     required: false
     description: "setup pnpm"
+    default: "false"
+    type: string
 
   setup_bun:
     required: false
     description: "setup bun"
+    default: "false"
+    type: string
 
   setup_nvmrc:
     required: false
@@ -19,7 +23,7 @@ inputs:
   cache:
     required: false
     description: "run action cache"
-    default: "true"
+    default: "false"
     type: string
 
 runs:

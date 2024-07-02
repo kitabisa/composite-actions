@@ -126,14 +126,7 @@ runs:
       run: ${{ inputs.custom_command_packages }}
 
     - name: setup env variables test automation
-      uses: kitabisa/composite-actions/sdet/tools/env@v2
-      with:
-        profile: ${{ inputs.profile }}
-        slack_webhook_url: ${{ inputs.slack_webhook_url }}
-        slack_webhook_debug_url: ${{ inputs.slack_webhook_debug_url }}
-        testrail_url: ${{ inputs.testrail_url }}
-        testrail_username: ${{ inputs.testrail_username }}
-        testrail_password: ${{ inputs.testrail_password }}
+      uses: kitabisa/composite-actions/sdet/tools/env@sdet-composite-actions-env
 
     - name: create test run on testrails
       shell: bash
@@ -168,6 +161,3 @@ runs:
       shell: bash
       if: always()
       run: ${{ inputs.custom_command_send_report_to_slack }}
-      env:
-        SLACK_WEBHOOK_URL: ${{ env.slack_webhook_url }}
-        SLACK_WEBHOOK_DEBUG_URL: ${{ env.slack_webhook_debug_url }}
