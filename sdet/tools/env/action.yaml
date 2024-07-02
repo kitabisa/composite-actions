@@ -39,9 +39,19 @@ runs:
       shell: bash
       run: | 
         cp .env.sample .env
-        echo "TEST_TYPE=${{ inputs.profile }}" >> .env
-        echo "SLACK_WEBHOOK_URL=${{ inputs.slack_webhook_url }}" >> .env
-        echo "SLACK_WEBHOOK_DEBUG_URL=${{ inputs.slack_webhook_debug_url }}" >> .env
-        echo "TESTRAIL_URL=${{ inputs.testrail_url }}" >> .env
-        echo "TESTRAIL_USERNAME=${{ inputs.testrail_username }}" >> .env
-        echo "TESTRAIL_PASSWORD=${{ inputs.testrail_password }}" >> .env
+        echo "TEST_TYPE=${{ inputs.profile }}" >> $GITHUB_ENV
+        echo "SLACK_WEBHOOK_URL=${{ inputs.slack_webhook_url }}" >> $GITHUB_ENV
+        echo "SLACK_WEBHOOK_DEBUG_URL=${{ inputs.slack_webhook_debug_url }}" >> $GITHUB_ENV
+        echo "TESTRAIL_URL=${{ inputs.testrail_url }}" >> $GITHUB_ENV
+        echo "TESTRAIL_USERNAME=${{ inputs.testrail_username }}" >> $GITHUB_ENV
+        echo "TESTRAIL_PASSWORD=${{ inputs.testrail_password }}" >> $GITHUB_ENV
+
+    - name: check value env
+      shell: bash
+      run: |
+        echo "$TEST_TYPE"
+        echo "$SLACK_WEBHOOK_URL"
+        echo "$SLACK_WEBHOOK_DEBUG_URL"
+        echo "$TESTRAIL_URL"
+        echo "$TESTRAIL_USERNAME"
+        echo "$TESTRAIL_PASSWORD"

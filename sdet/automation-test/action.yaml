@@ -126,7 +126,7 @@ runs:
       run: ${{ inputs.custom_command_packages }}
 
     - name: setup env variables test automation
-      uses: kitabisa/composite-actions/sdet/tools/env@sdet-composite-actions-env
+      uses: kitabisa/composite-actions/sdet/tools/env@v2
 
     - name: create test run on testrails
       shell: bash
