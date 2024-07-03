@@ -1,5 +1,5 @@
 name: "setup bun"
-description: "setup bun & cache modules"
+description: "setup bun"
 
 runs:
   using: "composite"
@@ -8,12 +8,3 @@ runs:
       uses: oven-sh/setup-bun@v2
       with:
         bun-version: latest
-  
-    - name: cache bun modules
-      if: "${{ inputs.cache == 'true' }}"
-      uses: actions/cache@v4
-      with:
-        path: ~/.bun/install/cache
-        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
-        restore-keys: |
-          ${{ runner.os }}-bun-

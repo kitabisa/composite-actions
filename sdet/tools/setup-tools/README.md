@@ -1,7 +1,7 @@
 <!-- action-docs-description -->
 ## Description
 
-Setup pnpm & cache modules
+SDET composite setup tools
 <!-- action-docs-description -->
 
 <!-- action-docs-inputs -->
@@ -9,12 +9,9 @@ Setup pnpm & cache modules
 
 | parameter | description | required | default |
 | --- | --- | --- | --- |
-| cache | run action cache | `false` | true |
+| setup_pnpm | setup pnpm | `false` |  |
+| setup_bun | setup bun | `false` |  |
 <!-- action-docs-inputs -->
-
-<!-- action-docs-outputs -->
-
-<!-- action-docs-outputs -->
 
 <!-- action-docs-runs -->
 ## Runs

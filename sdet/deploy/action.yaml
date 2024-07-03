@@ -5,6 +5,7 @@ inputs:
   platform:
     required: false
     description: "platform type"
+    default: ""
     type: string
 
   profile:
