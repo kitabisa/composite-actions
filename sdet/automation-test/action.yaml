@@ -158,6 +158,8 @@ runs:
 
     - name: deploy reports to github pages
       uses: kitabisa/composite-actions/sdet/deploy@sdet-deploy-report
+      with:
+        custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
 
     - name: insert result to testrails
       shell: bash
