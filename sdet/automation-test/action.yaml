@@ -143,7 +143,7 @@ runs:
 
     - name: create test run on testrails
       shell: bash
-      if: "${{ inputs.platform == 'api' }}"
+      if: "${{ inputs.platform == 'api' && always() }}"
       run: ${{ inputs.custom_command_create_test_run }}
 
     - name: run automation test
@@ -151,23 +151,17 @@ runs:
       if: always()
       run: ${{ inputs.custom_command_run }}
 
-    - name: Install rsync
+    - name: install rsync
       shell: bash
-      if: "${{ inputs.platform == 'api' }}"
+      if: "${{ inputs.platform == 'api' && always() }}"
       run: ${{ inputs.custom_command_setup_rsync }}
 
     - name: deploy reports to github pages
-      if: always()
-      uses: JamesIves/github-pages-deploy-action@v4.6.1
-      with:
-        branch: gh-pages
-        folder: ${{ inputs.custom_command_report_folder }}
-        clean: true
-        single-commit: true
+      uses: kitabisa/composite-actions/sdet/deploy@sdet-deploy-report
 
     - name: insert result to testrails
       shell: bash
-      if: "${{ inputs.platform == 'api' }}"
+      if: "${{ inputs.platform == 'api' && always() }}"
       run: ${{ inputs.custom_command_insert_testrails }}
 
     - name: send report to slack
