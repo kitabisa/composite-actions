@@ -16,6 +16,9 @@ SDET composite build and run automation test
 | testrail_url | testrail url | `false` |  |
 | testrail_username | testrail username | `false` |  |
 | testrail_password | testrail password | `false` |  |
+| github_run_number | github run number | `false` |  |
+| credentials_sangu | credentials sangu | `false` |  |
+| password_sangu | password sangu | `false` |  |
 | platform | platform | `false` |  |
 | setup_pnpm | setup pnpm | `false` |  |
 | setup_bun | setup bun | `false` |  |

@@ -15,6 +15,9 @@ SDET composite setup env
 | testrail_url | testrail url | `false` |  |
 | testrail_username | testrail username | `false` |  |
 | testrail_password | testrail password | `false` |  |
+| github_run_number | github run number | `false` |  |
+| credentials_sangu | credentials sangu | `false` |  |
+| password_sangu | password sangu | `false` |  |
 <!-- action-docs-inputs -->
 
 <!-- action-docs-runs -->

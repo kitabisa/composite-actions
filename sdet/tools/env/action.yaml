@@ -3,33 +3,57 @@ description: "manage environment variables for test automation"
 
 inputs:
   profile:
-    required: true
+    required: false
     description: "test profile"
+    default: ""
     type: string
 
   slack_webhook_url:
-    required: true
+    required: false
     description: "slack webhook url"
+    default: ""
     type: string
 
   slack_webhook_debug_url:
-    required: true
+    required: false
     description: "slack webhook debug url"
+    default: ""
     type: string
 
   testrail_url:
-    required: true
+    required: false
     description: "testrail url"
+    default: ""
     type: string
 
   testrail_username:
-    required: true
+    required: false
     description: "testrail username"
+    default: ""
     type: string
 
   testrail_password:
-    required: true
+    required: false
     description: "testrail password"
+    default: ""
+    type: string
+
+  github_run_number:
+    required: false
+    description: "github run number"
+    default: ""
+    type: string
+
+  credentials_sangu:
+    required: false
+    description: "credentials sangu"
+    default: ""
+    type: string
+
+  password_sangu:
+    required: false
+    description: "password sangu"
+    default: ""
     type: string
 
 runs:
@@ -45,3 +69,6 @@ runs:
         echo "TESTRAIL_URL=${{ inputs.testrail_url }}" >> .env
         echo "TESTRAIL_USERNAME=${{ inputs.testrail_username }}" >> .env
         echo "TESTRAIL_PASSWORD=${{ inputs.testrail_password }}" >> .env
+        echo "GITHUB_RUN_NUMBER=${{ inputs.github_run_number }}" >> .env
+        echo "CREDENTIALS_SANGU=${{ inputs.credentials_sangu }}" >> .env
+        echo "PASSWORD_SANGU=${{ inputs.password_sangu }}" >> .env
