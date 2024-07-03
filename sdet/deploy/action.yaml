@@ -18,7 +18,10 @@ inputs:
     description: "custom command report folder"
     default: ""
     type: string
-      
+
+runs:
+  using: "composite"
+  steps:
       - name: get allure history
         uses: actions/checkout@v4
         if: "${{ inputs.platform == 'api' && always() }}"
