@@ -14,6 +14,42 @@ inputs:
     type: string
 
   # Optional
+  cache:
+    required: false
+    description: "Run action cache"
+    default: "true"
+    type: string
+
+  setup_nvmrc:
+    required: false
+    description: "Setup node custom by nvmrc"
+    default: "false"
+    type: string
+
+  setup_pnpm:
+    required: false
+    description: "Setup pnpm and cache modules"
+    default: "false"
+    type: string
+
+  setup_yarn:
+    required: false
+    description: "Setup yarn and cache modules"
+    default: "false"
+    type: string
+
+  setup_bun:
+    required: false
+    description: "Setup bun and cache modules"
+    default: "false"
+    type: string
+
+  using_nextjs:
+    required: false
+    description: "Setup next.js cache modules"
+    default: "false"
+    type: string
+
   working_directory:
     required: false
     description: "Set working directory"
@@ -27,10 +63,14 @@ runs:
       uses: actions/checkout@v4
 
     - name: Setuptools frontend
-      uses: kitabisa/composite-actions/frontend/tools/pnpm@v2
+      uses: kitabisa/composite-actions/frontend/tools/setuptools@v2
       with:
-        cfpages: true
-        using_nextjs: true
+        setup_nvmrc: ${{ inputs.setup_nvmrc }}
+        setup_yarn: ${{ inputs.setup_yarn }}
+        setup_pnpm: ${{ inputs.setup_pnpm }}
+        setup_bun: ${{ inputs.setup_bun }}
+        cache: ${{ inputs.cache }}
+        using_nextjs: ${{ inputs.using_nextjs }}
         working_directory: ${{ inputs.working_directory }}
 
     - name: Setup Gcloud credential

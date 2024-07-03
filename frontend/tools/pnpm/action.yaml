@@ -20,12 +20,6 @@ inputs:
     default: true
     type: string
 
-  cfpages:
-    required: false
-    description: "Build cloudflare pages"
-    default: false
-    type: string
-
 runs:
   using: "composite"
   steps:
@@ -51,19 +45,10 @@ runs:
         echo "cache-path=${{ github.workspace }}$cache_path/.next/cache" >> $GITHUB_OUTPUT
 
     - name: Cache Next.js
-      if: "${{ (inputs.using_nextjs == 'true') && (inputs.cache == 'true') && (inputs.cfpages != 'true') }}"
+      if: "${{ (inputs.using_nextjs == 'true' && inputs.cache == 'true') }}"
       uses: actions/cache@v4
       with:
         path: ${{ steps.path.outputs.cache-path }}
         key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-nextjs-
-
-    - name: Cache Next.js
-      if: "${{ (inputs.using_nextjs == 'true') && (inputs.cache == 'true') && (inputs.cfpages == 'true') }}"
-      uses: actions/cache@v4
-      with:
-        path: ${{ steps.path.outputs.cache-path }}
-        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
-        restore-keys: |
-          ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
