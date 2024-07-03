@@ -1,0 +1,51 @@
+name: "sdet deploy"
+description: "sdet composite deploy reports"
+
+inputs:
+  platform:
+    required: false
+    description: "platform type"
+    default: ""
+    type: string
+
+  profile:
+    required: false
+    description: "profile"
+    default: ""
+    type: string
+
+  custom_command_report_folder:
+    required: false
+    description: "custom command report folder"
+    default: ""
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+      - name: get allure history
+        uses: actions/checkout@v4
+        if: "${{ inputs.platform == 'api' && always() }}"
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: mochawesome report action
+        uses: firmanrosid/mochawesome-report-action@v1.0.0
+        if: "${{ inputs.platform == 'api' && always() }}"
+        with:
+          subfolder: ${{ inputs.profile }}
+          keep_reports: 3
+          mochawesome_report: mochawesome-report
+          gh_pages: gh-pages
+          report_history: report-history
+
+      - name: deploy reports to github pages
+        if: always()
+        uses: JamesIves/github-pages-deploy-action@v4.6.1
+        with:
+          branch: gh-pages
+          folder: ${{ inputs.custom_command_report_folder }}
+          clean: true
+          single-commit: true

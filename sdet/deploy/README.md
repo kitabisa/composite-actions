@@ -1,7 +1,7 @@
 <!-- action-docs-description -->
 ## Description
 
-Setup bun & cache modules
+SDET composite deploy report
 <!-- action-docs-description -->
 
 <!-- action-docs-inputs -->
@@ -9,12 +9,10 @@ Setup bun & cache modules
 
 | parameter | description | required | default |
 | --- | --- | --- | --- |
-| cache | run action cache | `false` | true |
+| platform | platform type | `false` |  |
+| profile | profile | `false` |  |
+| custom_command_report_folder | custom command report folder | `false` |  |
 <!-- action-docs-inputs -->
-
-<!-- action-docs-outputs -->
-
-<!-- action-docs-outputs -->
 
 <!-- action-docs-runs -->
 ## Runs
