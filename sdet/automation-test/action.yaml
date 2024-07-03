@@ -56,6 +56,24 @@ inputs:
     required: false
     description: "setup bun"
 
+  github_run_number:
+    required: false
+    description: "github run number"
+    default: ""
+    type: string
+
+  credentials_sangu:
+    required: false
+    description: "credentials sangu"
+    default: ""
+    type: string
+
+  password_sangu:
+    required: false
+    description: "password sangu"
+    default: ""
+    type: string
+
   custom_command_packages:
     required: false
     description: "custom command packages"
@@ -126,6 +144,9 @@ runs:
         testrail_url: ${{ inputs.testrail_url }}
         testrail_username: ${{ inputs.testrail_username }}
         testrail_password: ${{ inputs.testrail_password }}
+        github_run_number: ${{ inputs.github_run_number }}
+        credentials_sangu: ${{ inputs.credentials_sangu }}
+        password_sangu: ${{ inputs.password_sangu }}
 
     - name: create test run on testrails
       shell: bash
