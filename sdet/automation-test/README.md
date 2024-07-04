@@ -24,10 +24,10 @@ SDET composite build and run automation test
 | setup_bun | setup bun | `false` |  |
 | custom_command_packages | custom command packages | `false` |  |
 | custom_command_run | custom command run | `false` |  |
-| custom_command_create_test_run | custom command create test run | `false` |  |
-| custom_command_setup_rsync | custom command setup rsync | `false` |  |
+| create_test_run | create test run | `false` |  |
+| setup_rsync | setup rsync | `false` |  |
 | custom_command_report_folder | custom command report folder | `false` |  |
-| custom_command_insert_testrails | custom command insert testrails | `false` |  |
+| insert_testrails | insert testrails | `false` |  |
 | custom_command_send_report_to_slack | custom command send report to slack | `false` |  |
 <!-- action-docs-inputs -->
 
