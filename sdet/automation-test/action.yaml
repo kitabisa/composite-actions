@@ -42,12 +42,6 @@ inputs:
     default: ""
     type: string
 
-  platform:
-    required: false
-    description: "platform type"
-    default: ""
-    type: string
-
   setup_pnpm:
     required: false
     description: "setup pnpm"
@@ -86,15 +80,15 @@ inputs:
     default: ""
     type: string
 
-  custom_command_create_test_run:
+  create_test_run:
     required: false
-    description: "custom command create test run"
+    description: "create test run"
     default: ""
     type: string
 
-  custom_command_setup_rsync:
+  setup_rsync:
     required: false
-    description: "custom command setup rsync"
+    description: "setup rsync"
     default: ""
     type: string
 
@@ -104,9 +98,9 @@ inputs:
     default: ""
     type: string
 
-  custom_command_insert_testrails:
+  insert_testrails:
     required: false
-    description: "custom command insert testrails"
+    description: "insert testrails"
     default: ""
     type: string
 
@@ -150,8 +144,8 @@ runs:
 
     - name: create test run on testrails
       shell: bash
-      if: "${{ inputs.platform == 'api' && always() }}"
-      run: ${{ inputs.custom_command_create_test_run }}
+      if: "${{ inputs.create_test_run == 'true' && always() }}"
+      run: bun run createTestrunTestrail
 
     - name: run automation test
       shell: bash
@@ -160,8 +154,8 @@ runs:
 
     - name: install rsync
       shell: bash
-      if: "${{ inputs.platform == 'api' && always() }}"
-      run: ${{ inputs.custom_command_setup_rsync }}
+      if: "${{ inputs.setup_rsync == 'true' && always() }}"
+      run: sudo apt-get update && apt-get install -y rsync
 
     - name: deploy reports to github pages
       uses: kitabisa/composite-actions/sdet/deploy@v2
@@ -170,8 +164,8 @@ runs:
 
     - name: insert result to testrails
       shell: bash
-      if: "${{ inputs.platform == 'api' && always() }}"
-      run: ${{ inputs.custom_command_insert_testrails }}
+      if: "${{ inputs.insert_testrails == 'true' && always() }}"
+      run: bun run insertResultTestrail
 
     - name: send report to slack
       shell: bash
