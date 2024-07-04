@@ -12,6 +12,12 @@ inputs:
     default: ""
     type: string
 
+  platform:
+    required: false
+    description: "platform"
+    default: ""
+    type: string
+
   slack_webhook_url:
     required: false
     description: "slack webhook url"
@@ -161,6 +167,7 @@ runs:
       uses: kitabisa/composite-actions/sdet/deploy@v2
       with:
         custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
+        platform: ${{ inputs.platform }}
 
     - name: insert result to testrails
       shell: bash
