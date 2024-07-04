@@ -93,13 +93,13 @@ runs:
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
+    - name: Run custom command for library you want to store
+      shell: bash
+      run: ${{ inputs.custom_command }}
+
     - name: Run base module
       shell: bash
       run: |
         go mod download
         go build
-
-    - name: Run custom command for library you want to store
-      shell: bash
-      run: ${{ inputs.custom_command }}
 
