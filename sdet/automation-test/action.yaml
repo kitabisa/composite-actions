@@ -165,6 +165,7 @@ runs:
 
     - name: deploy reports to github pages
       uses: kitabisa/composite-actions/sdet/deploy@v2
+      if: always()
       with:
         custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
         platform: ${{ inputs.platform }}
