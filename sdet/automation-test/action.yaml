@@ -158,10 +158,10 @@ runs:
       if: always()
       run: ${{ inputs.custom_command_run }}
 
-    - name: install rsync
+    - name: install rsync and bc
       shell: bash
       if: "${{ inputs.setup_rsync == 'true' && always() }}"
-      run: sudo apt-get update && sudo apt-get install -y rsync
+      run: sudo apt-get update && sudo apt-get install -y rsync && sudo apt-get install -y bc
 
     - name: deploy reports to github pages
       uses: kitabisa/composite-actions/sdet/deploy@v2
