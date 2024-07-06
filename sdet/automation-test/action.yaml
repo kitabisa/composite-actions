@@ -94,7 +94,7 @@ inputs:
 
   setup_rsync:
     required: false
-    description: "setup rsync"
+    description: "setup rsync and bc"
     default: ""
     type: string
 
