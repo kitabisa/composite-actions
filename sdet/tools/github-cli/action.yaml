@@ -1,0 +1,13 @@
+name: "setup github cli"
+description: "setup github cli"
+
+runs:
+  using: "composite"
+  steps:
+    - name: delay
+      run: sleep 300
+
+    - name: install github cli
+      uses: sersoft-gmbh/setup-gh-cli-action@v2
+      with:
+        version: stable

@@ -12,6 +12,12 @@ inputs:
     default: ""
     type: string
 
+  service_name:
+    required: false
+    description: "service name"
+    default: ""
+    type: string
+
   platform:
     required: false
     description: "platform"
@@ -51,10 +57,20 @@ inputs:
   setup_pnpm:
     required: false
     description: "setup pnpm"
+    default: "false"
+    type: string
 
   setup_bun:
     required: false
     description: "setup bun"
+    default: "false"
+    type: string
+
+  setup_gh_cli:
+    required: false
+    description: "setup github cli"
+    default: "false"
+    type: string
 
   github_run_number:
     required: false
@@ -114,6 +130,12 @@ inputs:
     required: false
     description: "custom command send report to slack"
     default: ""
+    type: string
+
+  automation_test_api:
+    required: false
+    description: "automation test api trigger from deployment"
+    default: "false"
     type: string
 
 runs:
@@ -180,3 +202,12 @@ runs:
       shell: bash
       if: always()
       run: ${{ inputs.custom_command_send_report_to_slack }}
+
+    - name: automation test api trigger from deployment
+      uses: kitabisa/composite-actions/sdet/tools/setup-tools@v2
+      if: "${{ inputs.automation_test_api == 'true' }}"
+      with:
+        setup_gh_cli: ${{ inputs.setup_gh_cli }}
+      run: gh workflow run -R kitabisa/qorin .github/workflows/manual-trigger-deploy-stg.yaml -f profile=${{ inputs.service_name }} --ref master
+      env:
+        GITHUB_TOKEN: ${{ inputs.gh_token }}
