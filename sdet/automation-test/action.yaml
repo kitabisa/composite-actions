@@ -204,10 +204,10 @@ runs:
       run: ${{ inputs.custom_command_send_report_to_slack }}
 
     - name: automation test api trigger from deployment
+      shell: bash
       uses: kitabisa/composite-actions/sdet/tools/setup-tools@v2
-      if: "${{ inputs.automation_test_api == 'true' }}"
       with:
         setup_gh_cli: ${{ inputs.setup_gh_cli }}
+        gh_token: ${{ inputs.gh_token }}
+      if: "${{ inputs.automation_test_api == 'true' }}"
       run: gh workflow run -R kitabisa/qorin .github/workflows/manual-trigger-deploy-stg.yaml -f profile=${{ inputs.service_name }} --ref master
-      env:
-        GITHUB_TOKEN: ${{ inputs.gh_token }}
