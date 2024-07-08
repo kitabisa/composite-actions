@@ -14,12 +14,6 @@ inputs:
     default: "false"
     type: string
 
-  setup_gh_cli:
-    required: false
-    description: "setup delay and github cli"
-    default: "false"
-    type: string
-
 runs:
   using: "composite"
   steps:
@@ -30,7 +24,3 @@ runs:
     - name: setup bun
       if: "${{ inputs.setup_bun == 'true' }}"
       uses: kitabisa/composite-actions/sdet/tools/bun@v2
-
-    - name: setup github cli
-      if: "${{ inputs.setup_gh_cli == 'true' }}"
-      uses: kitabisa/composite-actions/sdet/tools/github-cli@v2
