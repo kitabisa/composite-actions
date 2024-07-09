@@ -1,0 +1,62 @@
+name: "trigger automation test when deploy completed"
+description: "build and trigger automation test api when deploy completed"
+
+inputs:
+  gh_token:
+    required: true
+    description: "gh token"
+    default: "false"
+    type: string
+
+  setup_pnpm:
+    required: false
+    description: "setup pnpm"
+    default: "false"
+    type: string
+
+  setup_bun:
+    required: false
+    description: "setup bun"
+    default: "false"
+    type: string
+
+  setup_gh_cli:
+    required: false
+    description: "setup gh cli"
+    default: "false"
+    type: string
+
+  service_name:
+    required: false
+    description: "service name"
+    default: "false"
+    type: string
+
+  trigger_automation_test_api_when_deploy:
+    required: false
+    description: "trigger automation test api when deploy"
+    default: "false"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: delay
+      shell: bash
+      if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
+      run: sleep 300
+
+    - name: setup tools sdet
+      uses: kitabisa/composite-actions/sdet/tools/setup-tools@v2
+      with:
+        setup_pnpm: ${{ inputs.setup_pnpm }}
+        setup_bun: ${{ inputs.setup_bun }}
+        setup_gh_cli: ${{ inputs.setup_gh_cli }}
+
+    - name: trigger automation test api when deploy completed
+      shell: bash
+      if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
+      run: |
+        gh workflow run -R kitabisa/qorin .github/workflows/manual-trigger-deploy-stg.yaml -f profile=${{ inputs.service_name }} --ref master
+      env:
+        GITHUB_TOKEN: ${{ inputs.gh_token }}

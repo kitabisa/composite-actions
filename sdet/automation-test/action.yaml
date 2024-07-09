@@ -5,6 +5,8 @@ inputs:
   gh_token:
     required: true
     description: "gh token"
+    default: "false"
+    type: string
 
   profile:
     required: false
@@ -57,6 +59,12 @@ inputs:
   setup_bun:
     required: false
     description: "setup bun"
+    default: "false"
+    type: string
+
+  setup_gh_cli:
+    required: false
+    description: "setup gh cli"
     default: "false"
     type: string
 
