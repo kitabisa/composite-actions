@@ -22,6 +22,7 @@ SDET composite build and run automation test
 | platform | platform | `false` |  |
 | setup_pnpm | setup pnpm | `false` |  |
 | setup_bun | setup bun | `false` |  |
+| setup_gh_cli | setup github cli | `false` |  |
 | custom_command_packages | custom command packages | `false` |  |
 | custom_command_run | custom command run | `false` |  |
 | create_test_run | create test run | `false` |  |

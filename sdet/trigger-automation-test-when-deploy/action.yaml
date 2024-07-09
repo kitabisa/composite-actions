@@ -57,6 +57,6 @@ runs:
       shell: bash
       if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
       run: |
-        gh workflow run -R kitabisa/qorin .github/workflows/manual-trigger-deploy-stg.yaml -f profile=${{ inputs.service_name }} --ref master
+        gh workflow run -R kitabisa/qorin .github/workflows/trigger-when-deploy.yaml -f profile=${{ inputs.service_name }} --ref master
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
