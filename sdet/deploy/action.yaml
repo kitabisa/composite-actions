@@ -23,9 +23,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: get allure history
+    - name: get report history
       uses: actions/checkout@v4
-      if: "${{ inputs.platform == 'api' }}"
       continue-on-error: true
       with:
         ref: gh-pages
