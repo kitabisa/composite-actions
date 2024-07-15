@@ -2,12 +2,6 @@ name: "sdet deploy"
 description: "sdet composite deploy reports"
 
 inputs:
-  platform:
-    required: false
-    description: "platform type"
-    default: ""
-    type: string
-
   profile:
     required: false
     description: "profile"

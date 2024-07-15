@@ -9,7 +9,6 @@ SDET composite deploy report
 
 | parameter | description | required | default |
 | --- | --- | --- | --- |
-| platform | platform type | `false` |  |
 | profile | profile | `false` |  |
 | custom_command_report_folder | custom command report folder | `true` | report-history |
 <!-- action-docs-inputs -->

@@ -193,7 +193,6 @@ runs:
       if: always()
       with:
         custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
-        platform: ${{ inputs.platform }}
         profile: ${{ inputs.profile }}
 
     - name: insert result to testrails
