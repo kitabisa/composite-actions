@@ -23,13 +23,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: get report history
-      uses: actions/checkout@v4
-      continue-on-error: true
-      with:
-        ref: gh-pages
-        path: gh-pages
-
     - name: report history action
       uses: kitabisa/report-history-action@v1
       with:
