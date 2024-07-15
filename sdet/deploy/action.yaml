@@ -31,7 +31,7 @@ runs:
         path: gh-pages
 
     - name: report history action
-      uses: kitabisa/report-history-action@master
+      uses: kitabisa/report-history-action@v1
       with:
         subfolder: ${{ inputs.profile }}
         keep_reports: 3
