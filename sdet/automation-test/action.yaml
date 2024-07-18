@@ -116,6 +116,12 @@ inputs:
     default: ""
     type: string
 
+  custom_command_report_subfolder:
+    required: false
+    description: "custom command report subfolder"
+    default: ""
+    type: string
+
   insert_testrails:
     required: false
     description: "insert testrails"
@@ -193,7 +199,7 @@ runs:
       if: always()
       with:
         custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
-        profile: ${{ inputs.profile }}
+        profile: ${{ inputs.custom_command_report_subfolder || inputs.profile }}
 
     - name: insert result to testrails
       shell: bash
