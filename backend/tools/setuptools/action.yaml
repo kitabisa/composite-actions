@@ -64,6 +64,9 @@ runs:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
+    - name: Setup docker buildx
+      uses: docker/setup-buildx-action@v3
+
     - name: Configure Git for private modules
       if: "${{ inputs.setup_git == 'true' }}"
       env:
