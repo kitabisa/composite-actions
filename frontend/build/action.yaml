@@ -60,6 +60,12 @@ inputs:
     default: "false"
     type: string
 
+  pnpm_version:
+    required: false
+    description: "Setup pnpm version"
+    default: "latest"
+    type: string
+
   using_nextjs:
     required: false
     description: "Setup next.js cache modules"
@@ -170,6 +176,7 @@ runs:
         setup_pnpm: ${{ inputs.setup_pnpm }}
         setup_bun: ${{ inputs.setup_bun }}
         cache: ${{ inputs.cache }}
+        pnpm_version: ${{ inputs.pnpm_version }}
         using_nextjs: ${{ inputs.using_nextjs }}
         working_directory: ${{ inputs.working_directory }}
 

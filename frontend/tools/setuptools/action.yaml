@@ -26,6 +26,12 @@ inputs:
     default: true
     type: string
 
+  pnpm_version:
+    required: false
+    description: "Setup pnpm version"
+    default: "latest"
+    type: string
+
   using_nextjs:
     required: false
     description: "Setup next.js cache modules"
@@ -61,6 +67,7 @@ runs:
       uses: kitabisa/composite-actions/frontend/tools/pnpm@v2
       with:
         cache: ${{ inputs.cache }}
+        pnpm_version: ${{ inputs.pnpm_version }}
         using_nextjs: ${{ inputs.using_nextjs }}
         working_directory: ${{ inputs.working_directory }}
 

@@ -8,6 +8,12 @@ inputs:
     default: "."
     type: string
 
+  pnpm_version:
+    required: false
+    description: "Setup pnpm version"
+    default: "latest"
+    type: string
+
   using_nextjs:
     required: false
     description: "Setup next.js cache modules"
@@ -31,6 +37,12 @@ runs:
         key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-
+
+    - name: Setup pnpm
+      if: "${{ inputs.pnpm_version != 'latest' }}"
+      uses: pnpm/action-setup@v2
+      with:
+        version: ${{ inputs.pnpm_version }}
 
     - name: Set cache path Next.js
       if: "${{ inputs.using_nextjs == 'true' }}"
