@@ -224,7 +224,9 @@ runs:
         workflow: build-and-deploy-gh-pages.yml
         workflow_timeout_seconds: 300
 
-    - name: use the output run ID and URL
+    - name: use the output run id and url
+      shell: bash
+      if: "${{ inputs.deploy_gh_pages == 'true' }}"
       run: |
         echo ${{steps.return_dispatch.outputs.run_id}}
         echo ${{steps.return_dispatch.outputs.run_url}}
