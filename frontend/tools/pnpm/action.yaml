@@ -40,7 +40,7 @@ runs:
 
     - name: Setup pnpm
       if: "${{ inputs.pnpm_version != 'latest' }}"
-      uses: pnpm/action-setup@v2
+      uses: pnpm/action-setup@v4
       with:
         version: ${{ inputs.pnpm_version }}
 
