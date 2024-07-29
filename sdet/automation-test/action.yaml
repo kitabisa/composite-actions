@@ -146,6 +146,12 @@ inputs:
     default: ""
     type: string
 
+  deploy_gh_pages:
+    required: false
+    description: "deploy to gh pages"
+    default: true
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -229,3 +235,20 @@ runs:
         gh workflow run -R kitabisa/qorin .github/workflows/manual-trigger-deploy-stg.yaml -f profile=${{ inputs.service_name }} --ref master
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
+
+    - name: build and deploy to gh pages
+      uses: codex-/return-dispatch@v1
+      id: return_dispatch
+      if: "${{ inputs.deploy_gh_pages == 'true' }}"
+      with:
+        token: ${{ inputs.gh_token }}
+        ref: ${{ github.ref }}
+        repo: ${{ github.repository }}
+        owner: ${{ github.repository_owner }}
+        workflow: build-and-deploy-gh-pages.yml
+        workflow_timeout_seconds: 300
+
+    - name: use the output run ID and URL
+      run: |
+        echo ${{steps.return_dispatch.outputs.run_id}}
+        echo ${{steps.return_dispatch.outputs.run_url}}
