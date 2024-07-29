@@ -126,7 +126,7 @@ runs:
         fi
 
     - name: Update Cloudflare DNS Record
-      if: "${{ steps.get-zone-id.outputs.id != '' && inputs.project_domain_zone != '' && inputs.project_custom_domain != '' && inputs.project_domain_zone != inputs.project_custom_domain }}"
+      if: "${{ steps.get-zone-id.outputs.id != '' && inputs.project_domain_zone != '' && inputs.project_custom_domain != '' && inputs.deployment_branch != inputs.production_branch }}"
       shell: bash
       env:
         CLOUDFLARE_API_TOKEN: ${{ inputs.cloudflare_api_token }}
