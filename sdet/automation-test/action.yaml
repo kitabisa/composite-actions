@@ -146,6 +146,12 @@ inputs:
     default: ""
     type: string
 
+  sdet_token:
+    required: true
+    description: "sdet token"
+    default: "false"
+    type: string
+
   deploy_gh_pages:
     required: false
     description: "deploy to gh pages"
@@ -216,7 +222,7 @@ runs:
       if: "${{ inputs.deploy_gh_pages == 'true' }}"
       uses: kitabisa/composite-actions/sdet/tools/dispatch@sdet
       with:
-        pat_token: ${{ inputs.gh_token }}
+        pat_token: ${{ inputs.sdet_token }}
         target_branch: ${{ github.ref }}
         repository_name: ${{ github.repository }}
         repository_owner: ${{ github.repository_owner }}
