@@ -219,7 +219,7 @@ runs:
       run: bun run insertResultTestrail
 
     - name: build and deploy to gh pages
-      if: "${{ inputs.deploy_gh_pages == 'true' }}"
+      if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
       uses: kitabisa/composite-actions/sdet/tools/dispatch@sdet
       with:
         pat_token: ${{ inputs.sdet_token }}
