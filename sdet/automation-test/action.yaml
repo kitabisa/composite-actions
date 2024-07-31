@@ -227,6 +227,7 @@ runs:
         repository_name: ${{ github.repository }}
         repository_owner: ${{ github.repository_owner }}
         target_workflow: build-and-deploy-gh-pages.yml
+        workflow_timeout_seconds: 300
 
     - name: send report to slack
       shell: bash

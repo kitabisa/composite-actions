@@ -22,6 +22,10 @@ inputs:
     required: true
     description: "target workflow"
     type: string
+  workflow_timeout_seconds:
+    required: true
+    description: "workflow timeout seconds"
+    type: string
 
 runs:
   using: "composite"
@@ -42,7 +46,7 @@ runs:
         repo: ${{ env.REPOSITORY_NAME }}
         owner: ${{ inputs.repository_owner }}
         workflow: ${{ inputs.target_workflow }}
-        workflow_timeout_seconds: 300
+        workflow_timeout_seconds: ${{ inputs.workflow_timeout_seconds }}
 
     - name: use the output run id and url
       shell: bash
