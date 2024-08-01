@@ -1,0 +1,60 @@
+name: "setup return dispatch"
+description: "setup return dispatch"
+
+inputs:
+  token:
+    required: true
+    description: "personal access token"
+    type: string
+  target_branch:
+    required: true
+    description: "target branch"
+    type: string
+  repository_name:
+    required: true
+    description: "repository name"
+    type: string
+  repository_owner:
+    required: true
+    description: "repository owner"
+    type: string
+  target_workflow:
+    required: true
+    description: "target workflow"
+    type: string
+  workflow_inputs:
+    required: false
+    description: "workflow inputs"
+    type: string
+  workflow_timeout_seconds:
+    required: true
+    description: "workflow timeout seconds"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: get repository name
+      shell: bash
+      run: |-
+        REPOSITORY_OWNER_SLASH_NAME=${{ inputs.repository_name }}
+        echo "REPOSITORY_NAME=${REPOSITORY_OWNER_SLASH_NAME##*/}"  >> $GITHUB_ENV
+        ls -R .github/workflows
+
+    - name: build and deploy to gh pages
+      uses: codex-/return-dispatch@v1
+      id: return_dispatch
+      with:
+        token: ${{ inputs.token }}
+        ref: ${{ inputs.target_branch }}
+        repo: ${{ env.REPOSITORY_NAME }}
+        owner: ${{ inputs.repository_owner }}
+        workflow: ${{ inputs.target_workflow }}
+        workflow_inputs: ${{ inputs.workflow_inputs }}
+        workflow_timeout_seconds: ${{ inputs.workflow_timeout_seconds }}
+
+    - name: use the output run id and url
+      shell: bash
+      run: |
+        echo ${{steps.return_dispatch.outputs.run_id}}
+        echo ${{steps.return_dispatch.outputs.run_url}}

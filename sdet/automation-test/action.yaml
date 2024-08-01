@@ -146,6 +146,18 @@ inputs:
     default: ""
     type: string
 
+  personal_access_token:
+    required: false
+    description: "personal access token"
+    default: ""
+    type: string
+
+  deploy_gh_pages:
+    required: false
+    description: "deploy to gh pages"
+    default: ""
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -205,6 +217,17 @@ runs:
       shell: bash
       if: "${{ inputs.insert_testrails == 'true' && always() }}"
       run: bun run insertResultTestrail
+
+    - name: build and deploy to gh pages
+      if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
+      uses: kitabisa/composite-actions/sdet/tools/dispatch@v2
+      with:
+        token: ${{ inputs.personal_access_token }}
+        target_branch: ${{ github.ref }}
+        repository_name: ${{ github.repository }}
+        repository_owner: ${{ github.repository_owner }}
+        target_workflow: build-and-deploy-gh-pages.yml
+        workflow_timeout_seconds: 300
 
     - name: send report to slack
       shell: bash
