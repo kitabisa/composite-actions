@@ -30,7 +30,7 @@ SDET composite build and run automation test
 | custom_command_report_folder | custom command report folder | `false` |  |
 | custom_command_report_subfolder | custom command report subfolder | `false` |  |
 | insert_testrails | insert testrails | `false` |  |
-| sdet_token | personal access token | `false` |  |
+| personal_access_token | personal access token | `false` |  |
 | deploy_gh_pages | dispatch deploy to gh pages | `false` |  |
 | custom_command_send_report_to_slack | custom command send report to slack | `false` |  |
 <!-- action-docs-inputs -->

@@ -146,9 +146,9 @@ inputs:
     default: ""
     type: string
 
-  sdet_token:
+  personal_access_token:
     required: false
-    description: "sdet token"
+    description: "personal access token"
     default: ""
     type: string
 
@@ -222,7 +222,7 @@ runs:
       if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
       uses: kitabisa/composite-actions/sdet/tools/dispatch@sdet
       with:
-        pat: ${{ inputs.sdet_token }}
+        token: ${{ inputs.personal_access_token }}
         target_branch: ${{ github.ref }}
         repository_name: ${{ github.repository }}
         repository_owner: ${{ github.repository_owner }}

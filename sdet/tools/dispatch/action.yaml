@@ -2,7 +2,7 @@ name: "setup return dispatch"
 description: "setup return dispatch"
 
 inputs:
-  pat:
+  token:
     required: true
     description: "personal access token"
     type: string
@@ -45,12 +45,12 @@ runs:
       uses: codex-/return-dispatch@v1
       id: return_dispatch
       with:
-        token: ${{ inputs.pat }}
+        token: ${{ inputs.token }}
         ref: ${{ inputs.target_branch }}
         repo: ${{ env.REPOSITORY_NAME }}
         owner: ${{ inputs.repository_owner }}
         workflow: ${{ inputs.target_workflow }}
-        workflow_inputs: ${{ inputs.target_workflow }}
+        workflow_inputs: ${{ inputs.workflow_inputs }}
         workflow_timeout_seconds: ${{ inputs.workflow_timeout_seconds }}
 
     - name: use the output run id and url
