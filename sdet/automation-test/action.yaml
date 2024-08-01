@@ -147,15 +147,15 @@ inputs:
     type: string
 
   sdet_token:
-    required: true
+    required: false
     description: "sdet token"
-    default: "false"
+    default: ""
     type: string
 
   deploy_gh_pages:
     required: false
     description: "deploy to gh pages"
-    default: true
+    default: ""
     type: string
 
 runs:
