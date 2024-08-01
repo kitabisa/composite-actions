@@ -220,7 +220,7 @@ runs:
 
     - name: build and deploy to gh pages
       if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
-      uses: kitabisa/composite-actions/sdet/tools/dispatch@sdet
+      uses: kitabisa/composite-actions/sdet/tools/dispatch@v2
       with:
         token: ${{ inputs.personal_access_token }}
         target_branch: ${{ github.ref }}
