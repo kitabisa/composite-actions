@@ -22,7 +22,6 @@ inputs:
     required: true
     description: "target workflow"
     type: string
-    type: string
   workflow_inputs:
     required: false
     description: "workflow inputs"
