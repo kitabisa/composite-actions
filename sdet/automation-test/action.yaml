@@ -222,7 +222,7 @@ runs:
       if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
       uses: kitabisa/composite-actions/sdet/tools/dispatch@sdet
       with:
-        pat_token: ${{ inputs.sdet_token }}
+        pat: ${{ inputs.sdet_token }}
         target_branch: ${{ github.ref }}
         repository_name: ${{ github.repository }}
         repository_owner: ${{ github.repository_owner }}
