@@ -1,0 +1,82 @@
+name: "Frontend deploy to cloudflare"
+description: "Frontend composite deployment to cloudflare"
+
+inputs:
+  cloudflare_api_token:
+    required: true
+    description: "Set cloudflare api token"
+    type: string
+
+  cloudflare_account_id:
+    required: true
+    description: "Set cloudflare account id"
+    type: string
+
+  deployment_branch:
+    required: true
+    description: "Set deployment branch"
+    type: string
+
+  production_branch:
+    required: true
+    description: "Set production branch"
+    type: string
+
+  build_directory:
+    required: true
+    description: "Set build directory"
+    type: string
+
+  package_manager:
+    required: true
+    description: "Set package manager"
+    type: string
+
+  project_name:
+    required: true
+    description: "Set project name"
+    type: string
+
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+  project_domain_zone:
+    required: false
+    description: "Set project domain zone"
+    default: ""
+    type: string
+
+  project_custom_domain:
+    required: false
+    description: "Set project custom domain"
+    default: ""
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Deploy
+      id: deploy
+      uses: kitabisa/cloudflare-pages-action@v1
+      with:
+        api-token: ${{ inputs.cloudflare_api_token }}
+        account-id: ${{ inputs.cloudflare_account_id }}
+        branch: ${{ inputs.deployment_branch }}
+        production-branch: ${{ inputs.production_branch }}
+        package-manager: ${{ inputs.package_manager }}
+        build-directory: ${{ inputs.build_directory }}
+        project-name: ${{ inputs.project_name }}
+        zone-name: ${{ inputs.project_domain_zone }}
+        custom-domain: ${{ inputs.project_custom_domain }}
+        working-directory: ${{ inputs.working_directory }}
+
+    - name: Comment preview url
+      if: "${{ github.event.pull_request.number != '' }}"
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          Open the application by accessing these URL: ${{ steps.deploy.outputs.deployment-url }}

@@ -1,4 +1,4 @@
-name: "Frontend build"
+name: "Frontend deploy"
 description: "Frontend composite deployment"
 
 inputs:
@@ -113,7 +113,9 @@ runs:
         rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
 
     - name: Comment preview url
-      if: "${{ inputs.preview_url != '' }}"
-      uses: KeisukeYamashita/create-comment@v1
+      if: "${{ inputs.preview_url != '' && github.event.pull_request.number != '' }}"
+      uses: peter-evans/create-or-update-comment@v4
       with:
-        comment: "Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})"
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})
