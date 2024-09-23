@@ -46,9 +46,9 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: Install the gh cli
-      uses: ksivamuthu/actions-setup-gh-cli@v2
+      uses: ksivamuthu/actions-setup-gh-cli@v3
       with:
-        version: 2.24.3
+        version: 2.57.0
 
     - name: Delete existing cache mod
       continue-on-error: true
