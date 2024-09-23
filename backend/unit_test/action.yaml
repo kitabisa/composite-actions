@@ -93,8 +93,8 @@ runs:
     - name: Clean up Go cache
       shell: bash
       run: |
-        rm -rf ~/go/pkg/mod
-        rm -rf ~/.cache/go-build
+        sudo rm -rf ~/go/pkg/mod
+        sudo rm -rf ~/.cache/go-build
 
     - name: Setup Golang cache
       if: ${{ inputs.setup_action_cache == 'true' }}
