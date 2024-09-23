@@ -76,9 +76,9 @@ runs:
         cache: ${{ inputs.setup_go_cache }}
         go-version: ${{ inputs.go_version }}
 
-    - name: Sleep debug only
-      shell: bash
-      run: sleep 120
+    # - name: Sleep debug only
+    #   shell: bash
+    #   run: sleep 120
     
     - name: Determine Golang cache paths and construct cache key
       id: golang-env
