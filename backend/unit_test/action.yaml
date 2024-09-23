@@ -91,6 +91,7 @@ runs:
       shell: bash
 
     - name: Clean up Go cache
+      shell: bash
       run: |
         rm -rf ~/go/pkg/mod
         rm -rf ~/.cache/go-build
