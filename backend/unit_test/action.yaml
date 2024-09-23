@@ -90,6 +90,11 @@ runs:
         echo "cache-key=${cacheKeyRoot}${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
       shell: bash
 
+    - name: Clean up Go cache
+      run: |
+        rm -rf ~/go/pkg/mod
+        rm -rf ~/.cache/go-build
+
     - name: Setup Golang cache
       if: ${{ inputs.setup_action_cache == 'true' }}
       uses: actions/cache/restore@v4
