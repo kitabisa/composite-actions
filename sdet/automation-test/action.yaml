@@ -226,7 +226,7 @@ runs:
         target_branch: ${{ github.ref }}
         repository_name: ${{ github.repository }}
         repository_owner: ${{ github.repository_owner }}
-        target_workflow: build-and-deploy-gh-pages.yml
+        target_workflow: build-and-deploy-gh-pages.yaml
         workflow_timeout_seconds: 300
 
     - name: send report to slack

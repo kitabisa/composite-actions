@@ -38,7 +38,7 @@ runs:
       shell: bash
       run: |-
         REPOSITORY_OWNER_SLASH_NAME=${{ inputs.repository_name }}
-        echo "REPOSITORY_NAME=${REPOSITORY_OWNER_SLASH_NAME##*/}"  >> $GITHUB_ENV
+        echo "REPOSITORY_NAME=${REPOSITORY_OWNER_SLASH_NAME##*/}" >> $GITHUB_ENV
         ls -R .github/workflows
 
     - name: build and deploy to gh pages
