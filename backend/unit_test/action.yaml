@@ -79,7 +79,7 @@ runs:
     # - name: Sleep debug only
     #   shell: bash
     #   run: sleep 120
-    
+
     - name: Determine Golang cache paths and construct cache key
       id: golang-env
       run: |
@@ -156,25 +156,43 @@ runs:
         echo "current_coverage=$(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')" >> $GITHUB_ENV
         echo $(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
 
+    - name: generate diff
+      shell: bash
+      run: |
+       git diff origin/${{ github.base_ref }}...origin/${{ github.head_ref }} > pr.diff
+
+    - name: compute new code coverage
+      id: covdiffaction
+      uses: panagiotisptr/cov-diff@main
+      with:
+        path: .
+        coverprofile: coverage.out
+        diff: pr.diff
+        module: github.com/panagiotisptr/cov-diff
+
+    - name: Comment
+      uses: mshick/add-pr-comment@v2
+      with:
+        message: |
+          Coverage on new code: ${{ steps.covdiffaction.outputs.covdiff }}%
+
     - name: Comment PR and Set Fail Result
-      if: fromJSON(env.current_coverage) < fromJSON(env.master_coverage)
+      if: steps.covdiffaction.outputs.covdiff < 99
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         recreate: true
         message: |
           ##  ⚠⚠️ Unit Test Coverage ⚠⚠
           ```
-          Current branch coverage : ${{ env.current_coverage }}
-          Master branch coverage : ${{ env.master_coverage }}
-          Condition: Current branch coverage must be bigger or equal than master branch coverage.
+          New code coverage is less than 99%..
           ```
           <b> PR Blocked ❌. Please fix your unit test coverage </b>
 
     - name: Coverage below master, Fail PR
-      if: fromJSON(env.current_coverage) < fromJSON(env.master_coverage)
+      if: steps.covdiffaction.outputs.covdiff < 99
       shell: bash
       run: |
-        echo "::error :: unit test coverage is below master"
+        echo "::error :: new code is not fully covered"
         exit 1
 
     - name: Comment PR
@@ -184,9 +202,7 @@ runs:
         message: |
           ##  ✅✅ Unit Test Coverage ✅✅
           ```
-          Current branch coverage : ${{ env.current_coverage }}
-          Master branch coverage : ${{ env.master_coverage }}
-          Condition: Current branch coverage must be bigger or equal than master branch coverage.
+          Coverage on new code: ${{ steps.covdiffaction.outputs.covdiff }}%
           ```
           PR Coverage check passed.
 
