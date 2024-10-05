@@ -157,6 +157,7 @@ runs:
         echo $(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
 
     - name: generate diff
+      shell: bash
       run: |
        git diff origin/${{ github.base_ref }}...origin/${{ github.head_ref }} > pr.diff
 
