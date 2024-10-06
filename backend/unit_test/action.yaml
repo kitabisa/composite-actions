@@ -186,7 +186,7 @@ runs:
           ```
           New code coverage is less than 99%..
           ```
-          <b> PR Blocked ❌. Please fix your unit test coverage </b>
+          <b> PR Blocked ❌. Please fix coverage for your new code </b>
 
     - name: Coverage below master, Fail PR
       if: steps.covdiffaction.outputs.covdiff < 99
