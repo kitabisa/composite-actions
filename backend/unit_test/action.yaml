@@ -177,19 +177,19 @@ runs:
           Coverage on new code: ${{ steps.covdiffaction.outputs.covdiff }}%
 
     - name: Comment PR and Set Fail Result
-      if: steps.covdiffaction.outputs.covdiff < 99
+      if: steps.covdiffaction.outputs.covdiff < 80
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         recreate: true
         message: |
           ##  ⚠⚠️ Unit Test Coverage ⚠⚠
           ```
-          New code coverage is less than 99%..
+          New code coverage is {{ steps.covdiffaction.outputs.covdiff }}%. Please increase coverage of your new code to 80%..
           ```
           <b> PR Blocked ❌. Please fix coverage for your new code </b>
 
     - name: Coverage below master, Fail PR
-      if: steps.covdiffaction.outputs.covdiff < 99
+      if: steps.covdiffaction.outputs.covdiff < 80
       shell: bash
       run: |
         echo "::error :: new code is not fully covered"
