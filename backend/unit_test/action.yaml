@@ -184,7 +184,7 @@ runs:
         message: |
           ##  ⚠⚠️ Unit Test Coverage ⚠⚠
           ```
-          New code coverage is {{ steps.covdiffaction.outputs.covdiff }}%. Please increase coverage of your new code to 80%..
+          New code coverage is ${{ steps.covdiffaction.outputs.covdiff }}%. Please increase coverage of your new code to 80%..
           ```
           <b> PR Blocked ❌. Please fix coverage for your new code </b>
 
