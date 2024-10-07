@@ -18,6 +18,7 @@ func main() {
 
 	diffFile := os.Args[1]
 	coverageFile := os.Args[2]
+	pathScanned := os.Args[3]
 
 	// Parse the diff file to get changed files
 	changedFiles, err := parseNewFiles(diffFile)
@@ -27,7 +28,7 @@ func main() {
 	}
 
 	// Get coverage data using go tool cover
-	fileCoverages, err := getCoverageData(coverageFile, changedFiles)
+	fileCoverages, err := getCoverageData(coverageFile, changedFiles, pathScanned)
 	if err != nil {
 		fmt.Printf("Error processing coverage file: %v\n", err)
 		return
@@ -77,7 +78,7 @@ func parseNewFiles(filename string) (map[string]bool, error) {
 	return newFiles, scanner.Err()
 }
 
-func getCoverageData(coverageFile string, changedFiles map[string]bool) (fileCoverages map[string]float64, err error) {
+func getCoverageData(coverageFile string, changedFiles map[string]bool, validTestFolder string) (fileCoverages map[string]float64, err error) {
 	cmd := exec.Command("go", "tool", "cover", "-func", coverageFile)
 	output, err := cmd.Output()
 	if err != nil {
@@ -99,8 +100,8 @@ func getCoverageData(coverageFile string, changedFiles map[string]bool) (fileCov
 				strArrResult := strings.Split(strArr, "\t")
 				coveragePercent := strings.TrimSuffix(strArrResult[2], "%")
 
-				// Check if the file path contains "internal/" and coverage is 0
-				if strings.Contains(strArrResult[0], "internal/") {
+				// Check if the file validTestFolder contains "internal/" and coverage is 0
+				if strings.Contains(strArrResult[0], validTestFolder) {
 					floatVal, _ := strconv.ParseFloat(coveragePercent, 64)
 					fileCoverages[fmt.Sprintf("%s %s", file, strArrResult[1])] = floatVal
 				}
