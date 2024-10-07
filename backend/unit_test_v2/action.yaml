@@ -65,6 +65,7 @@ inputs:
     description: "Diff file path"
     required: false
     default: "pr.diff"
+    
   coverage_file:
     description: "Coverage file path"
     required: false
