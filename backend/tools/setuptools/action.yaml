@@ -30,11 +30,6 @@ inputs:
     description: "Setup Go"
     default: 'true'
 
-  cache_dependency_path:
-    required: false
-    description: "go sum location"
-    default: "go.sum"
-
   go_version:
     required: false
     description: "go version"
