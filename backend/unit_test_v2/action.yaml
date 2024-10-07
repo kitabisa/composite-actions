@@ -65,7 +65,7 @@ inputs:
     description: "Diff file path"
     required: false
     default: "pr.diff"
-    
+
   coverage_file:
     description: "Coverage file path"
     required: false
@@ -168,7 +168,7 @@ runs:
         # Run the script and capture its output
         cat <<EOF | tee comment.txt
         Coverage Analysis Results:
-        $(go run composite-actions/backend/unit_test_v2/calc_new_code_coverage/new_code_coverage.go ${{ inputs.diff_file }} ${{ inputs.coverage_file }})
+        $(go run ${{ github.action_path }}/calc_new_code_coverage/new_code_coverage.go ${{ inputs.diff_file }} ${{ inputs.coverage_file }})
         EOF
 
         if cat comment.txt | grep -q "below" ; then
