@@ -161,7 +161,7 @@ runs:
     - name: generate diff
       shell: bash
       run: |
-       git diff origin/${{ github.base_ref }}...origin/${{ github.head_ref }} > pr.diff
+       git diff origin/${{ github.base_ref }}...origin/${{ github.head_ref }} > ${{ inputs.diff_file }}
 
     - name: Run coverage analysis
       run: |
