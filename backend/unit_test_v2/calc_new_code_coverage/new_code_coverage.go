@@ -27,15 +27,21 @@ func main() {
 	}
 
 	// Get coverage data using go tool cover
-	fileCoverages, errArr := getCoverageData(coverageFile, changedFiles)
+	fileCoverages, err := getCoverageData(coverageFile, changedFiles)
+	if err != nil {
+		fmt.Printf("Error processing coverage file: %v\n", err)
+		return
+	}
 	// Check if changed files exist in coverage data and print their coverage
 	var fileCoverageResult string
 	var fileCoverageBelowThreshold string
 	fileCoverageResult += "\n"
 	fileCoverageBelowThreshold += "\n"
+	belowCoverageFlag := false
 	for file, coverage := range fileCoverages {
 		if coverage < 80 {
 			fileCoverageBelowThreshold += fmt.Sprintf("File: %s, Coverage: %.2f%%\n", file, coverage)
+			belowCoverageFlag = true
 		} else {
 			fileCoverageResult += fmt.Sprintf("File: %s, Coverage: %.2f%%\n", file, coverage)
 		}
@@ -43,7 +49,7 @@ func main() {
 
 	fmt.Printf("Coverage accepted %v\n", fileCoverageResult)
 
-	if len(errArr) > 0 {
+	if belowCoverageFlag {
 		fmt.Printf("Coverage below threshold: %v\n", fileCoverageBelowThreshold)
 	}
 }
@@ -71,11 +77,10 @@ func parseNewFiles(filename string) (map[string]bool, error) {
 	return newFiles, scanner.Err()
 }
 
-func getCoverageData(coverageFile string, changedFiles map[string]bool) (fileCoverages map[string]float64, errArr []error) {
+func getCoverageData(coverageFile string, changedFiles map[string]bool) (fileCoverages map[string]float64, err error) {
 	cmd := exec.Command("go", "tool", "cover", "-func", coverageFile)
 	output, err := cmd.Output()
 	if err != nil {
-		errArr = append(errArr, err)
 		return
 	}
 
@@ -98,9 +103,6 @@ func getCoverageData(coverageFile string, changedFiles map[string]bool) (fileCov
 				if strings.Contains(strArrResult[0], "internal/") {
 					floatVal, _ := strconv.ParseFloat(coveragePercent, 64)
 					fileCoverages[fmt.Sprintf("%s %s", file, strArrResult[1])] = floatVal
-					if floatVal < 80 {
-						errArr = append(errArr, fmt.Errorf("file %s with function %s is in 'internal/' directory and has %s coverage", cleanFile, strArrResult[1], coveragePercent))
-					}
 				}
 
 			}
