@@ -1,0 +1,209 @@
+name: "Test Coverage"
+description: "Build and push docker image"
+
+inputs:
+  working_directory:
+    required: false
+    description: "Set working directory"
+    default: "."
+    type: string
+
+  gh_user:
+    required: true
+    description: "gh user"
+
+  gh_token:
+    required: true
+    description: "gh token"
+
+  go_version:
+    required: false
+    description: "go version"
+    default: "~1.22"
+
+  custom_command_flag:
+    required: false
+    description: "custom command flag"
+    default: "false"
+
+  custom_command:
+    required: false
+    description: "custom command"
+    default: "echo no command"
+
+  unit_test_command:
+    required: false
+    description: "unit test command"
+    default: "go test ./internal/... -coverprofile=coverage.out -covermode=atomic"
+
+  hash_files:
+    required: false
+    description: "hash files"
+    default: "**"
+
+  default_unit_test:
+    required: false
+    description: "default unit test"
+    default: "true"
+
+  setup_go_cache:
+    required: false
+    description: "go version"
+    default: "false"
+
+  setup_action_cache:
+    required: false
+    description: "setup cache"
+    default: "true"
+
+  cache_key_suffix:
+    required: false
+    description: Optional cache key suffix.
+    default:
+
+  diff_file:
+    description: "Diff file path"
+    required: false
+    default: "pr.diff"
+  coverage_file:
+    description: "Coverage file path"
+    required: false
+    default: "coverage.out"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
+
+    - name: Setup Golang
+      uses: actions/setup-go@v5
+      with:
+        cache: ${{ inputs.setup_go_cache }}
+        go-version: ${{ inputs.go_version }}
+
+    # - name: Sleep debug only
+    #   shell: bash
+    #   run: sleep 120
+
+    - name: Determine Golang cache paths and construct cache key
+      id: golang-env
+      run: |
+        echo "build-cache-path=$(go env GOCACHE)" >>"$GITHUB_OUTPUT"
+        echo "module-cache-path=$(go env GOMODCACHE)" >>"$GITHUB_OUTPUT"
+        cacheKeyRoot="${{ runner.os }}-golang${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-"
+        echo "cache-key-restore=$cacheKeyRoot" >>"$GITHUB_OUTPUT"
+        echo "cache-key=${cacheKeyRoot}${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Clean up Go cache
+      shell: bash
+      run: |
+        sudo rm -rf ~/go/pkg/mod
+        sudo rm -rf ~/.cache/go-build
+
+    - name: Setup Golang cache
+      if: ${{ inputs.setup_action_cache == 'true' }}
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          ${{ steps.golang-env.outputs.build-cache-path }}
+          ${{ steps.golang-env.outputs.module-cache-path }}
+        key: ${{ steps.golang-env.outputs.cache-key }}
+        restore-keys: |
+          ${{ steps.golang-env.outputs.cache-key-restore }}
+
+    - name: Configure Git for private modules
+      env:
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
+      shell: bash
+      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
+
+    - name: Set base value
+      shell: bash
+      run: |
+        echo "current_coverage=0" >> $GITHUB_ENV
+        echo "master_coverage=0" >> $GITHUB_ENV
+
+    - name: Generate Master Coverage
+      id: unit-test-master
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |-
+        echo "master_coverage=$(cat coverage-master.txt)" >> $GITHUB_ENV
+
+    - name: Custom Command
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      if: "${{ inputs.custom_command_flag == 'true' }}"
+      run: ${{ inputs.custom_command }}
+
+    - name: Run Default Unit Test
+      id: unit-test-current
+      if: "${{ inputs.default_unit_test == 'true' }}"
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |-
+        ${{ inputs.unit_test_command }}
+
+    - name: Run Custom Unit Test
+      if: "${{ inputs.default_unit_test == 'false' }}"
+      uses: robherley/go-test-action@v0
+      with:
+        moduleDirectory: ${{ inputs.working_directory }}
+        testArguments: ${{ inputs.unit_test_command }}
+
+    - name: generate diff
+      shell: bash
+      run: |
+       git diff origin/${{ github.base_ref }}...origin/${{ github.head_ref }} > pr.diff
+
+    - name: Run coverage analysis
+      run: |
+        # Run the script and capture its output
+        cat <<EOF | tee comment.txt
+        Coverage Analysis Results:
+        $(go run composite-actions/backend/unit_test_v2/calc_new_code_coverage/new_code_coverage.go ${{ inputs.diff_file }} ${{ inputs.coverage_file }})
+        EOF
+
+        if cat comment.txt | grep -q "below" ; then
+        echo "::set-output name=below_threshold::true"
+        fi
+      shell: bash
+
+    - name: Comment PR for below threshold Result
+      if: steps.coverage_analysis.outputs.below_threshold != ''
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        header: 'diff-coverage'
+        recreate: true
+        path: comment.txt
+        message: |
+          ## ⚠️⚠️ Unit Test Coverage ⚠️⚠️
+          Coverage below threshold
+
+    - name: Exit when below threshold
+      shell: bash
+      run: |
+        # Check if the output contains the string "Below"
+        if cat comment.txt | grep -q "below" ; then
+          echo "Below threshold detected"
+          exit 1
+        fi
+
+
+    - name: Comment PR for above threshold Result
+      if: steps.coverage_analysis.outputs.below_threshold == ''
+      uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        header: 'diff-coverage'
+        recreate: true
+        path: comment.txt
+        message: |
+          ##  ✅✅ Unit Test Coverage ✅✅
+          All new code passed the coverage threshold.
+
