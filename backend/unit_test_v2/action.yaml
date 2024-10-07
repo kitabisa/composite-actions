@@ -164,6 +164,7 @@ runs:
        git diff origin/${{ github.base_ref }}...origin/${{ github.head_ref }} > ${{ inputs.diff_file }}
 
     - name: Run coverage analysis
+      id: coverage_analysis
       run: |
         # Run the script and capture its output
         cat <<EOF | tee comment.txt
