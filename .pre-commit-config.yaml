@@ -1,0 +1,17 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: no-commit-to-branch
+
+  - repo: local
+    hooks:
+      - id: branch-convention
+        name: branch-convention
+        entry: ./branch-convention.sh
+        language: script
+        types: [file]

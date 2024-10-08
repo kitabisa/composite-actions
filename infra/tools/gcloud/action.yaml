@@ -63,7 +63,7 @@ runs:
 
     - name: Setup gcloud
       uses: google-github-actions/setup-gcloud@v2
-      with: 
+      with:
         install_components: ${{ inputs.gcloud_components }}
 
     - name: Register gcloud as a docker credential helper

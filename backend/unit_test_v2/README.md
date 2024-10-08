@@ -53,5 +53,3 @@ To use this action with a custom command:
   with:
     custom_command_flag: true
     custom_command: "your-custom-command"
-
-

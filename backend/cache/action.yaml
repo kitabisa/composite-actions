@@ -102,4 +102,3 @@ runs:
       run: |
         go mod download
         go build
-
