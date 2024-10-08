@@ -8,11 +8,11 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: googleapis/release-please-action@v4
+      - name: Release please
+        id: release
+        uses: googleapis/release-please-action@v4
         with:
           release-type: simple
-          labels: "autorelease-pending"
-          release-labels: "autorelease-tagged"
 
       - name: Checkout repository
         if: ${{ steps.release.outputs.release_created }}
