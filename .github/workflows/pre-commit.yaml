@@ -8,7 +8,7 @@ env:
 
 jobs:
   pre-commit:
-    runs-on: ktbs-small-runner
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: cloudposse/github-action-pre-commit@v4.0.0
