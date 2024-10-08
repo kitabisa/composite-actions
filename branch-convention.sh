@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REGEX="^(feat|fix|docs|refactor|perf|test|build|ci|chore)\/[A-Za-z0-9._-]+$"
+REGEX="^(feat|fix|docs|refactor|perf|test|build|ci|chore)\/[A-Za-z0-9._-]+$|release-please--.*"
 
 if [[ -z "${BRANCH}" ]]; then
     BRANCH=$(git rev-parse --abbrev-ref HEAD)
