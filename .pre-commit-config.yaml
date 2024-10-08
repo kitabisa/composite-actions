@@ -6,12 +6,12 @@ repos:
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files
-  #     - id: no-commit-to-branch
+      - id: no-commit-to-branch
 
-  # - repo: local
-  #   hooks:
-  #     - id: branch-convention
-  #       name: branch-convention
-  #       entry: ./branch-convention.sh
-  #       language: script
-  #       types: [file]
+  - repo: local
+    hooks:
+      - id: branch-convention
+        name: branch-convention
+        entry: ./branch-convention.sh
+        language: script
+        types: [file]
