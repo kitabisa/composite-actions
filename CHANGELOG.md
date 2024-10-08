@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/kitabisa/composite-actions/compare/v2.0.1...v2.1.0) (2024-10-08)
+
+
+### Features
+
+* enable pre-commit check ([#158](https://github.com/kitabisa/composite-actions/issues/158)) ([825dfd2](https://github.com/kitabisa/composite-actions/commit/825dfd20a6597b1883a843692c1a6d8e407d882e))
+
 ## [2.0.1](https://github.com/kitabisa/composite-actions/compare/v2.0.0...v2.0.1) (2024-10-08)
 
 
