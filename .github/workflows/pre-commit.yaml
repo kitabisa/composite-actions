@@ -11,4 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: cloudposse/github-action-pre-commit@v4.0.0
+
+    - name: pre-commit check
+      if: steps.branch-name.outputs.current_branch != 'release-please--branches--main'
+      uses: cloudposse/github-action-pre-commit@v4.0.0
