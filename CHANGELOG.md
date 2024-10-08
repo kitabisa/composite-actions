@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0](https://github.com/kitabisa/composite-actions/compare/v2.1.0...v2.2.0) (2024-10-08)
+
+
+### Features
+
+* **workflow:** Add type for pull request ([#162](https://github.com/kitabisa/composite-actions/issues/162)) ([25f0f06](https://github.com/kitabisa/composite-actions/commit/25f0f062fa00f3e36c085fe0496b87cc06dda0ab))
+
+
+### Bug Fixes
+
+* **workflow:** set extension yaml ([#160](https://github.com/kitabisa/composite-actions/issues/160)) ([66d3838](https://github.com/kitabisa/composite-actions/commit/66d3838370d8bfc3838b84f36351d11c5cb859d6))
+
 ## [2.1.0](https://github.com/kitabisa/composite-actions/compare/v2.0.1...v2.1.0) (2024-10-08)
 
 
