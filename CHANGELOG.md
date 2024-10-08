@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.1.0-alpha.4](https://github.com/kitabisa/composite-actions/compare/v2.0.0-alpha.4...v2.1.0-alpha.4) (2024-10-08)
+
+
+### Features
+
+* move setup-git ke infra ([23c2d42](https://github.com/kitabisa/composite-actions/commit/23c2d42dcebe1f9e9f9ef9112038aab462c2d0e5))
+* **ut:** added custom unit test folder ([2ec3f1a](https://github.com/kitabisa/composite-actions/commit/2ec3f1aa32fd47e3dd2f3e3d7c1e5e4464629fef))
+* **ut:** added id analysis ([d26590f](https://github.com/kitabisa/composite-actions/commit/d26590f37043d0c1e8bd6c404b9d7ef425b825a4))
+* **ut:** handle error when below coverage ([ee1b3bc](https://github.com/kitabisa/composite-actions/commit/ee1b3bcdfe5d9691dcf85f331af67558bc99638b))
+
 ## [1.5.1](https://github.com/kitabisa/composite-actions/compare/v1.5.0...v1.5.1) (2023-10-23)
 
 
