@@ -189,4 +189,3 @@ runs:
           Condition: Current branch coverage must be bigger or equal than master branch coverage.
           ```
           PR Coverage check passed.
-

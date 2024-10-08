@@ -30,7 +30,7 @@ runs:
     - name: setup bun
       if: "${{ inputs.setup_bun == 'true' }}"
       uses: kitabisa/composite-actions/sdet/tools/bun@v2
-    
+
     - name: setup github cli
       if: "${{ inputs.setup_gh_cli == 'true' }}"
       uses: kitabisa/composite-actions/sdet/tools/gh_cli@v2

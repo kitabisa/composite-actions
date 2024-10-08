@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - v2
 
 name: release-please
 jobs:
@@ -13,5 +13,3 @@ jobs:
           release-type: simple
           labels: "autorelease-pending"
           release-labels: "autorelease-tagged"
-
-
