@@ -52,6 +52,11 @@ inputs:
     description: "List of additional gcloud components to install"
     type: string
 
+  workload_identity_provider:
+    required: true
+    description: "Workload identity provider"
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -59,7 +64,7 @@ runs:
       uses: google-github-actions/auth@v2
       with:
         project_id: ${{ inputs.project_id }}
-        credentials_json: ${{ inputs.credentials_json }}
+        workload_identity_provider: ${{ inputs.workload_identity_provider }}
 
     - name: Setup gcloud
       uses: google-github-actions/setup-gcloud@v2
