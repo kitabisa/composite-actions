@@ -52,6 +52,11 @@ inputs:
     description: "List of additional gcloud components to install"
     type: string
 
+  service_account:
+    required: false
+    description: "Service Account name for workload identity"
+    type: string
+
   workload_identity_provider:
     required: true
     description: "Workload identity provider"
@@ -65,6 +70,7 @@ runs:
       with:
         project_id: ${{ inputs.project_id }}
         workload_identity_provider: ${{ inputs.workload_identity_provider }}
+        service_account: ${{ inputs.service_account }}
 
     - name: Setup gcloud
       uses: google-github-actions/setup-gcloud@v2
