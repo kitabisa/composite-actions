@@ -56,16 +56,26 @@ inputs:
     required: false
     description: "Service Account name for workload identity"
     type: string
+    default: ''
 
   workload_identity_provider:
-    required: true
+    required: false
     description: "Workload identity provider"
     type: string
+    default: ''
 
 runs:
   using: "composite"
   steps:
-    - name: Authenticate to Google Cloud
+    - name: Authenticate to Google Cloud with SA
+      if: "${{ (inputs.credentials_json != '') && (inputs.workload_identity_provider == '') }}"
+      uses: google-github-actions/auth@v2
+      with:
+        project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Authenticate to Google Cloud with Workload Identity
+      if: "${{ inputs.workload_identity_provider != '' }}"
       uses: google-github-actions/auth@v2
       with:
         project_id: ${{ inputs.project_id }}
