@@ -11,6 +11,10 @@ on:
 env:
  BRANCH: ${{ github.head_ref || github.ref_name }}
 
+concurrency:
+  group: pre-commit-check
+  cancel-in-progress: true
+
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
