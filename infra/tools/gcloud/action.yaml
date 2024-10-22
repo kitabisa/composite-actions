@@ -68,7 +68,7 @@ runs:
   using: "composite"
   steps:
     - name: Authenticate to Google Cloud with SA
-      if: "${{ inputs.credentials_json != '' }}"
+      if: "${{ inputs.workload_identity_provider == 'false' }}"
       uses: google-github-actions/auth@v2
       with:
         project_id: ${{ inputs.project_id }}
