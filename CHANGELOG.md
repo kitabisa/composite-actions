@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://github.com/kitabisa/composite-actions/compare/v2.2.0...v2.3.0) (2024-10-22)
+
+
+### Features
+
+* gcloud auth using workload identity ([#163](https://github.com/kitabisa/composite-actions/issues/163)) ([137f219](https://github.com/kitabisa/composite-actions/commit/137f2190bd88994a4e79c6c9d899fcfbe41d5e48))
+
 ## [2.2.0](https://github.com/kitabisa/composite-actions/compare/v2.1.0...v2.2.0) (2024-10-08)
 
 
