@@ -13,3 +13,29 @@ tasks:
       - for: { var: NAMESPACE }
         cmd: helm ls -n {{.ITEM}} | grep "\-dev" | awk '{ print $1 }' | xargs -I % helm delete -n {{.ITEM}} % 2> /dev/null
         ignore_error: true
+
+  create-mysql-db:
+    desc: Create a MySQL DB
+    ignore_error: true
+    cmds:
+      - |
+        mysql -h ${MYSQL_DEV_HOST} -u root -p${MYSQL_DEV_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};
+        CREATE USER IF NOT EXISTS '${APP_NAME}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+        GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${APP_NAME}'@'%';
+        FLUSH PRIVILEGES;" 2> /dev/null
+
+  create-pgsql-db:
+    desc: "Create a PostgreSQL DB"
+    ignore_error: true
+    cmds:
+      - psql -h ${PGSQL_DEV_HOST} -U postgres -c "CREATE DATABASE ${DB_NAME};" 2> /dev/null
+      - psql -h ${PGSQL_DEV_HOST} -U postgres -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';" 2> /dev/null
+      - psql -h ${PGSQL_DEV_HOST} -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${APP_NAME};" 2> /dev/null
+
+  # drop-mysql-db:
+  #   desc: Drop MySQL DB
+  #   cmd:
+
+  # drop-postgres-db:
+  #   desc: Drop Postgres DB
+  #   cmd:
