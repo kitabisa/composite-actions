@@ -35,8 +35,8 @@ tasks:
   delete-pgsql-db:
     desc: "Delete a Single PostgreSQL DB"
     ignore_error: true
-    cmds: 
-      - | 
+    cmds:
+      - |
         #!/bin/bash
         # Set environment variable for password (optional)
         export PGPASSWORD=$PGSQL_DEV_PASSWORD
@@ -51,19 +51,19 @@ tasks:
   delete-mysql-db:
     desc: "Delete a Single Mysql DB"
     ignore_error: true
-    cmds: 
-      - | 
+    cmds:
+      - |
         #!/bin/bash
         # Execute the DROP DATABASE command
         mysql -u "$MYSQL_DEV_USER" -h "${MYSQL_DEV_HOST}" -p"${MYSQL_DEV_PASSWORD}" -e "DROP DATABASE $DB_NAME;"
 
         echo "Database '$DB_NAME' has been deleted."
-  
+
   delete-all-mysql-db:
     desc: "Delete All Mysql DB"
-    ignore_error: true 
+    ignore_error: true
     silent: false
-    cmds: 
+    cmds:
       - |
         #!/bin/bash
         databases=$(mysql -u"$MYSQL_DEV_USER" -p"$MYSQL_DEV_PASSWORD" -h"$MYSQL_DEV_HOST" -e "SHOW DATABASES;" | grep -Ev "(Database|information_schema|performance_schema|mysql|sys)")
@@ -76,10 +76,10 @@ tasks:
 
   delete-all-pgsql-db:
     desc: "Delete All Mysql DB"
-    ignore_error: true 
+    ignore_error: true
     silent: false
-    cmds: 
-      - | 
+    cmds:
+      - |
         # Export the password so it can be used by psql without prompting
         export PGPASSWORD="$PGSQL_DEV_PASSWORD"
 
