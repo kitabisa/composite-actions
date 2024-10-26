@@ -32,10 +32,64 @@ tasks:
       - psql -h ${PGSQL_DEV_HOST} -U postgres -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';" 2> /dev/null
       - psql -h ${PGSQL_DEV_HOST} -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${APP_NAME};" 2> /dev/null
 
-  # drop-mysql-db:
-  #   desc: Drop MySQL DB
-  #   cmd:
+  delete-pgsql-db:
+    desc: "Delete a Single PostgreSQL DB"
+    ignore_error: true
+    cmds: 
+      - | 
+        #!/bin/bash
+        # Set environment variable for password (optional)
+        export PGPASSWORD=$PGSQL_DEV_PASSWORD
 
-  # drop-postgres-db:
-  #   desc: Drop Postgres DB
-  #   cmd:
+        # Execute the DROP DATABASE command
+        psql -U "$PGSQL_DEV_USER" -h "$PGSQL_DEV_HOST" -c "DROP DATABASE \"$DB_NAME\";"
+
+        # Unset the password environment variable for security
+        unset PGPASSWORD
+        echo "Database '$DB_NAME' has been deleted."
+
+  delete-mysql-db:
+    desc: "Delete a Single Mysql DB"
+    ignore_error: true
+    cmds: 
+      - | 
+        #!/bin/bash
+        # Execute the DROP DATABASE command
+        mysql -u "$MYSQL_DEV_USER" -h "${MYSQL_DEV_HOST}" -p"${MYSQL_DEV_PASSWORD}" -e "DROP DATABASE $DB_NAME;"
+
+        echo "Database '$DB_NAME' has been deleted."
+  
+  delete-all-mysql-db:
+    desc: "Delete All Mysql DB"
+    ignore_error: true 
+    silent: false
+    cmds: 
+      - |
+        #!/bin/bash
+        databases=$(mysql -u"$MYSQL_DEV_USER" -p"$MYSQL_DEV_PASSWORD" -h"$MYSQL_DEV_HOST" -e "SHOW DATABASES;" | grep -Ev "(Database|information_schema|performance_schema|mysql|sys)")
+        # Loop through each database and drop it
+        for db in $databases; do
+          echo "Dropping database: $db"
+          mysql -u"$MYSQL_USER" -p"$MYSQL_PASS" -h"$MYSQL_HOST" -e "DROP DATABASE $db;"
+        done
+        echo "All user databases have been dropped."
+
+  delete-all-pgsql-db:
+    desc: "Delete All Mysql DB"
+    ignore_error: true 
+    silent: false
+    cmds: 
+      - | 
+        # Export the password so it can be used by psql without prompting
+        export PGPASSWORD="$PGSQL_DEV_PASSWORD"
+
+        # Get a list of databases excluding the system databases
+        databases=$(psql -U "$PGSQL_DEV_USER" -h "$PGSQL_DEV_HOST" -p "5432" -t -c "SELECT datname FROM pg_database WHERE datname NOT IN ('postgres', 'template0', 'template1');")
+
+        # Loop through each database and drop it
+        for db in $databases; do
+          echo "Dropping database: $db"
+          psql -U "$PGSQL_DEV_USER" -h "$PGSQL_DEV_HOST" -p "5432" -c "DROP DATABASE \"$db\";"
+        done
+
+        echo "All user databases have been dropped."
