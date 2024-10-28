@@ -42,7 +42,7 @@ tasks:
         export PGPASSWORD=$PGSQL_DEV_PASSWORD
 
         # Execute the DROP DATABASE command
-        psql -U "$PGSQL_DEV_USER" -h "$PGSQL_DEV_HOST" -c "DROP DATABASE \"$DB_NAME\";"
+        psql -U postgres -h "$PGSQL_DEV_HOST" -c "DROP DATABASE \"$DB_NAME\";"
 
         # Unset the password environment variable for security
         unset PGPASSWORD
@@ -84,12 +84,12 @@ tasks:
         export PGPASSWORD="$PGSQL_DEV_PASSWORD"
 
         # Get a list of databases excluding the system databases
-        databases=$(psql -U "$PGSQL_DEV_USER" -h "$PGSQL_DEV_HOST" -p "5432" -t -c "SELECT datname FROM pg_database WHERE datname NOT IN ('postgres', 'template0', 'template1');")
+        databases=$(psql -U postgres -h "$PGSQL_DEV_HOST" -p "5432" -t -c "SELECT datname FROM pg_database WHERE datname NOT IN ('postgres', 'template0', 'template1');")
 
         # Loop through each database and drop it
         for db in $databases; do
           echo "Dropping database: $db"
-          psql -U "$PGSQL_DEV_USER" -h "$PGSQL_DEV_HOST" -p "5432" -c "DROP DATABASE \"$db\";"
+          psql -U postgres -h "$PGSQL_DEV_HOST" -p "5432" -c "DROP DATABASE \"$db\";"
         done
 
         echo "All user databases have been dropped."
