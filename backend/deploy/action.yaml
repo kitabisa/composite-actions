@@ -156,12 +156,18 @@ runs:
       if: "${{ (inputs.create_mysql_dev == 'true') && (inputs.deploy_test != 'true') }}"
       uses: kitabisa/composite-actions/infra/tools/taskfile@feat/update-taskfile
       with:
+        project_id: ${{ inputs.project_id }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         login_db_host: ${{ secrets.MYSQL_DEV_HOST }}
 
     - name: Create PostgreSQL Database dev
       if: "${{ (inputs.create_pgsql_dev == 'true') && (inputs.deploy_test != 'true') }}"
       uses: kitabisa/composite-actions/infra/tools/taskfile@feat/update-taskfile
       with:
+        project_id: ${{ inputs.project_id }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         login_db_host: ${{ secrets.PGSQL_DEV_HOST }}
 
     - name: Rancher ns mover
