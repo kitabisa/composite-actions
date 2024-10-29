@@ -1,0 +1,59 @@
+name: "Deploy DB Dev"
+description: "Deploy DB Dev environment"
+
+inputs:
+  # Required
+  credentials_json:
+    required: true
+    description: "GCP credentials services account"
+    type: string
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  gke_cluster_name:
+    required: true
+    description: "GKE cluster name"
+    type: string
+
+  gke_cluster_zone:
+    required: true
+    description: "GKE cluster location zone"
+    type: string
+
+  login_db_host:
+    required: true
+    description: "login DB dev"
+    type: string
+
+  login_db_password:
+    required: true
+    description: "login DB dev"
+    type: string
+
+  db_dev_password:
+    required: true
+    description: "login DB dev"
+    type: string
+
+  deploy_dev:
+    required: false
+    description: "deploy dev"
+    default: "false"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Create MySQL Database dev
+      if: "${{ (inputs.deploy_dev == 'true') && (inputs.deploy_test != 'true') }}"
+      uses: kitabisa/composite-actions/infra/tools/taskfile@feat/update-taskfile
+      with:
+        project_id: ${{ inputs.project_id }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
+        login_db_host: ${{ inputs.login_db_host }}
+        login_db_password: ${{ secrets.login_db_password }}
+        db_dev_password: ${{ secrets.db_dev_password }}
