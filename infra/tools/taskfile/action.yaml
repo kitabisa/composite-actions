@@ -37,10 +37,6 @@ inputs:
     description: 'Database password'
     required: false
 
-  db_type:
-    description: 'MySQL or PostgreSQL dev'
-    required: false
-
   db_name:
     description: 'Name for dev DB'
     required: false

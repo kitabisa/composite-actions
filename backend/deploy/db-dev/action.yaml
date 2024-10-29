@@ -33,27 +33,26 @@ inputs:
     description: "login DB dev"
     type: string
 
-  db_dev_password:
+  db_password:
     required: true
     description: "login DB dev"
     type: string
 
-  deploy_dev:
-    required: false
-    description: "deploy dev"
-    default: "false"
+  db_name:
+    required: true
+    description: "login DB dev"
     type: string
 
 runs:
   using: "composite"
   steps:
-    - name: Create MySQL Database dev
-      if: "${{ (inputs.deploy_dev == 'true') && (inputs.deploy_test != 'true') }}"
+    - name: Create Database dev
       uses: kitabisa/composite-actions/infra/tools/taskfile@feat/update-taskfile
       with:
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         login_db_host: ${{ inputs.login_db_host }}
-        login_db_password: ${{ secrets.login_db_password }}
-        db_dev_password: ${{ secrets.db_dev_password }}
+        login_db_password: ${{ inputs.login_db_password }}
+        db_name: ${{ inputs.db_name }}
+        db_password: ${{ inputs.db_password }}
