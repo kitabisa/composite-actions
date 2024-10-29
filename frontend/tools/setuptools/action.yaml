@@ -64,7 +64,7 @@ runs:
 
     - name: Setup pnpm
       if: "${{ inputs.setup_pnpm == 'true' }}"
-      uses: kitabisa/composite-actions/frontend/tools/pnpm@b3515ff23a0746e3bd7a3384bf4b9cb3e0242b4a
+      uses: kitabisa/composite-actions/frontend/tools/pnpm@release-please--test
       with:
         cache: ${{ inputs.cache }}
         pnpm_version: ${{ inputs.pnpm_version }}

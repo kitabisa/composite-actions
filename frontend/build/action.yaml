@@ -169,7 +169,7 @@ runs:
 
     - name: Setuptools frontend
       if: "${{ inputs.web_static != 'true' }}"
-      uses: kitabisa/composite-actions/frontend/tools/setuptools@v2
+      uses: kitabisa/composite-actions/frontend/tools/setuptools@release-please--test
       with:
         setup_nvmrc: ${{ inputs.setup_nvmrc }}
         setup_yarn: ${{ inputs.setup_yarn }}
