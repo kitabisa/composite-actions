@@ -22,15 +22,15 @@ tasks:
         mysql -h ${MYSQL_DEV_HOST} -u root -p${MYSQL_DEV_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};
         CREATE USER IF NOT EXISTS '${APP_NAME}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
         GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${APP_NAME}'@'%';
-        FLUSH PRIVILEGES;" 2> /dev/null
+        FLUSH PRIVILEGES;"
 
   create-pgsql-db:
     desc: "Create a PostgreSQL DB"
     ignore_error: true
     cmds:
-      - psql -h ${PGSQL_DEV_HOST} -U postgres -c "CREATE DATABASE ${DB_NAME};" 2> /dev/null
-      - psql -h ${PGSQL_DEV_HOST} -U postgres -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';" 2> /dev/null
-      - psql -h ${PGSQL_DEV_HOST} -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${APP_NAME};" 2> /dev/null
+      - psql -h ${PGSQL_DEV_HOST} -U postgres -c "CREATE DATABASE ${DB_NAME};"
+      - psql -h ${PGSQL_DEV_HOST} -U postgres -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';"
+      - psql -h ${PGSQL_DEV_HOST} -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${APP_NAME};"
 
   delete-pgsql-db:
     desc: "Delete a Single PostgreSQL DB"
