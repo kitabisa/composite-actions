@@ -34,8 +34,11 @@ tasks:
 
         # Create DB and user then grant user
         psql -h ${PGSQL_DEV_HOST} -U postgres -c "DROP DATABASE IF EXISTS ${DB_NAME};" -c "CREATE DATABASE ${DB_NAME};"
+        echo "host ${PGSQL_DEV_HOST} DB name ${DB_NAME}"
+
         # Create user and grant user
         psql -h ${PGSQL_DEV_HOST} -U postgres -c "DROP USER IF EXISTS ${APP_NAME};" -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';" -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${APP_NAME};"
+        echo "user ${DB_NAME}"
         unset PGPASSWORD
 
   delete-pgsql-db:
