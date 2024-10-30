@@ -28,9 +28,15 @@ tasks:
     desc: "Create a PostgreSQL DB"
     ignore_error: true
     cmds:
-      - psql -h ${PGSQL_DEV_HOST} -U postgres -c "CREATE DATABASE ${DB_NAME};"
-      - psql -h ${PGSQL_DEV_HOST} -U postgres -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';"
-      - psql -h ${PGSQL_DEV_HOST} -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${APP_NAME};"
+      - |
+        #!/bin/bash
+        export PGPASSWORD=$PGSQL_DEV_PASSWORD
+
+        # Create DB and user then grant user
+        psql -h ${PGSQL_DEV_HOST} -U postgres -c "DROP DATABASE IF EXISTS ${DB_NAME};" -c "CREATE DATABASE ${DB_NAME};"
+        # Create user and grant user
+        psql -h ${PGSQL_DEV_HOST} -U postgres -c "DROP USER IF EXISTS ${APP_NAME};" -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';" -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${APP_NAME};"
+        unset PGPASSWORD
 
   delete-pgsql-db:
     desc: "Delete a Single PostgreSQL DB"
@@ -42,7 +48,7 @@ tasks:
         export PGPASSWORD=$PGSQL_DEV_PASSWORD
 
         # Execute the DROP DATABASE command
-        psql -U postgres -h "$PGSQL_DEV_HOST" -c "DROP DATABASE \"$DB_NAME\";"
+        psql -U postgres -h "$PGSQL_DEV_HOST" -c "DROP DATABASE \"$DB_NAME\";" -c "DROP USER IF EXISTS ${APP_NAME};"
 
         # Unset the password environment variable for security
         unset PGPASSWORD
