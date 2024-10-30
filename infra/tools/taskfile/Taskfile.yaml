@@ -23,9 +23,9 @@ tasks:
     ignore_error: true
     cmds:
       - |
-        mysql -h ${LOGIN_DB_HOST} -u root -p${LOGIN_DB_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};
+        mysql -h ${LOGIN_DB_HOST} -u root -p${LOGIN_DB_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${APP_NAME}_${DB_NAME};
         CREATE USER IF NOT EXISTS '${APP_NAME}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
-        GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${APP_NAME}'@'%';
+        GRANT ALL PRIVILEGES ON ${APP_NAME}_${DB_NAME}.* TO '${APP_NAME}'@'%';
         FLUSH PRIVILEGES;"
 
   create-pgsql-db:
@@ -34,15 +34,13 @@ tasks:
     cmds:
       - |
         #!/bin/bash
-        export PGPASSWORD=$LOGIN_DB_PASSWORD
-
         # Create DB and user then grant user
-        psql -h ${LOGIN_DB_HOST} -U postgres -c "DROP DATABASE IF EXISTS ${DB_NAME};" -c "CREATE DATABASE ${DB_NAME};"
-        echo "host ${LOGIN_DB_HOST} DB name ${}${DB_NAME}"
+        psql -h ${LOGIN_DB_HOST} -U postgres -W${LOGIN_DB_PASSWORD} -c "DROP DATABASE IF EXISTS ${APP_NAME}_${DB_NAME};" -c "CREATE DATABASE ${APP_NAME}_${DB_NAME};"
+        echo "host ${LOGIN_DB_HOST} DB name ${}${APP_NAME}_${DB_NAME}"
 
         # Create user and grant user
-        psql -h ${LOGIN_DB_HOST} -U postgres -c "DROP USER IF EXISTS ${APP_NAME};" -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';" -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${APP_NAME};"
-        echo "user ${DB_NAME}"
+        psql -h ${LOGIN_DB_HOST} -U postgres -c "DROP USER IF EXISTS ${APP_NAME};" -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';" -c "GRANT ALL PRIVILEGES ON DATABASE ${APP_NAME}_${DB_NAME} TO ${APP_NAME};"
+        echo "user ${APP_NAME}_${DB_NAME}"
         unset PGPASSWORD
 
   delete-pgsql-db:
