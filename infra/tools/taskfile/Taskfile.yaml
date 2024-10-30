@@ -30,14 +30,14 @@ tasks:
     cmds:
       - |
         #!/bin/bash
-        export PGPASSWORD=$PGSQL_DEV_PASSWORD
+        export PGPASSWORD=$LOGIN_DB_PASSWORD
 
         # Create DB and user then grant user
-        psql -h ${PGSQL_DEV_HOST} -U postgres -c "DROP DATABASE IF EXISTS ${DB_NAME};" -c "CREATE DATABASE ${DB_NAME};"
-        echo "host ${PGSQL_DEV_HOST} DB name ${DB_NAME}"
+        psql -h ${LOGIN_DB_HOST} -U postgres -c "DROP DATABASE IF EXISTS ${DB_NAME};" -c "CREATE DATABASE ${DB_NAME};"
+        echo "host ${LOGIN_DB_HOST} DB name ${DB_NAME}"
 
         # Create user and grant user
-        psql -h ${PGSQL_DEV_HOST} -U postgres -c "DROP USER IF EXISTS ${APP_NAME};" -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';" -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${APP_NAME};"
+        psql -h ${LOGIN_DB_HOST} -U postgres -c "DROP USER IF EXISTS ${APP_NAME};" -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';" -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${APP_NAME};"
         echo "user ${DB_NAME}"
         unset PGPASSWORD
 
@@ -48,10 +48,10 @@ tasks:
       - |
         #!/bin/bash
         # Set environment variable for password (optional)
-        export PGPASSWORD=$PGSQL_DEV_PASSWORD
+        export PGPASSWORD=$LOGIN_DB_PASSWORD
 
         # Execute the DROP DATABASE command
-        psql -U postgres -h "$PGSQL_DEV_HOST" -c "DROP DATABASE \"$DB_NAME\";" -c "DROP USER IF EXISTS ${APP_NAME};"
+        psql -U postgres -h "$LOGIN_DB_HOST" -c "DROP DATABASE \"$DB_NAME\";" -c "DROP USER IF EXISTS ${APP_NAME};"
 
         # Unset the password environment variable for security
         unset PGPASSWORD
@@ -90,15 +90,15 @@ tasks:
     cmds:
       - |
         # Export the password so it can be used by psql without prompting
-        export PGPASSWORD="$PGSQL_DEV_PASSWORD"
+        export PGPASSWORD="$LOGIN_DB_PASSWORD"
 
         # Get a list of databases excluding the system databases
-        databases=$(psql -U postgres -h "$PGSQL_DEV_HOST" -p "5432" -t -c "SELECT datname FROM pg_database WHERE datname NOT IN ('postgres', 'template0', 'template1');")
+        databases=$(psql -U postgres -h "$LOGIN_DB_HOST" -p "5432" -t -c "SELECT datname FROM pg_database WHERE datname NOT IN ('postgres', 'template0', 'template1');")
 
         # Loop through each database and drop it
         for db in $databases; do
           echo "Dropping database: $db"
-          psql -U postgres -h "$PGSQL_DEV_HOST" -p "5432" -c "DROP DATABASE \"$db\";"
+          psql -U postgres -h "$LOGIN_DB_HOST" -p "5432" -c "DROP DATABASE \"$db\";"
         done
 
         echo "All user databases have been dropped."
