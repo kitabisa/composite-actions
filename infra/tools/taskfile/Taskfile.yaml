@@ -6,11 +6,11 @@ vars:
   NAMESPACE:
     sh: kubectl get ns | grep -v -e maxwell -e NAME -e slack-devbot-helper | awk '{ print $1 }'
 
-tasks:
-  get-app-name:
-    desc: Get APP_NAME by Makefile
-    cmd: echo APP_NAME=(make get-app-name) >> $GITHUB_ENV
+env:
+  APP_NAME:
+    sh: make get-app-name
 
+tasks:
   destroy-dev:
     desc: Destroy dev
     cmds:
@@ -21,10 +21,9 @@ tasks:
   create-mysql-db:
     desc: Create a MySQL DB
     ignore_error: true
-    deps: [get-app-name]
     cmds:
       - |
-        mysql -h ${MYSQL_DEV_HOST} -u root -p${MYSQL_DEV_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};
+        mysql -h ${LOGIN_DB_HOST} -u root -p${LOGIN_DB_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};
         CREATE USER IF NOT EXISTS '${APP_NAME}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
         GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${APP_NAME}'@'%';
         FLUSH PRIVILEGES;"
@@ -32,7 +31,6 @@ tasks:
   create-pgsql-db:
     desc: "Create a PostgreSQL DB"
     ignore_error: true
-    deps: [get-app-name]
     cmds:
       - |
         #!/bin/bash
@@ -50,7 +48,6 @@ tasks:
   delete-pgsql-db:
     desc: "Delete a Single PostgreSQL DB"
     ignore_error: true
-    deps: [get-app-name]
     cmds:
       - |
         #!/bin/bash
@@ -67,12 +64,11 @@ tasks:
   delete-mysql-db:
     desc: "Delete a Single Mysql DB"
     ignore_error: true
-    deps: [get-app-name]
     cmds:
       - |
         #!/bin/bash
         # Execute the DROP DATABASE command
-        mysql -u "$MYSQL_DEV_USER" -h "${MYSQL_DEV_HOST}" -p"${MYSQL_DEV_PASSWORD}" -e "DROP DATABASE $DB_NAME;"
+        mysql -u root -h "${LOGIN_DB_HOST}" -p"${LOGIN_DB_PASSWORD}" -e "DROP DATABASE $DB_NAME;"
 
         echo "Database '$DB_NAME' has been deleted."
 
@@ -80,11 +76,10 @@ tasks:
     desc: "Delete All Mysql DB"
     ignore_error: true
     silent: false
-    deps: [get-app-name]
     cmds:
       - |
         #!/bin/bash
-        databases=$(mysql -u"$MYSQL_DEV_USER" -p"$MYSQL_DEV_PASSWORD" -h"$MYSQL_DEV_HOST" -e "SHOW DATABASES;" | grep -Ev "(Database|information_schema|performance_schema|mysql|sys)")
+        databases=$(mysql -uroot -p"$LOGIN_DB_PASSWORD" -h"$LOGIN_DB_HOST" -e "SHOW DATABASES;" | grep -Ev "(Database|information_schema|performance_schema|mysql|sys)")
         # Loop through each database and drop it
         for db in $databases; do
           echo "Dropping database: $db"
@@ -96,7 +91,6 @@ tasks:
     desc: "Delete All Mysql DB"
     ignore_error: true
     silent: false
-    deps: [get-app-name]
     cmds:
       - |
         # Export the password so it can be used by psql without prompting
