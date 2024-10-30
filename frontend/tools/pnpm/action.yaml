@@ -33,7 +33,7 @@ runs:
       if: "${{ inputs.cache == 'true' }}"
       uses: actions/cache@v4
       with:
-        path: ~/.pnpm-store
+        path: /runner/.pnpm-store
         key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-
