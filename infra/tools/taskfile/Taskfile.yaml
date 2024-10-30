@@ -7,6 +7,10 @@ vars:
     sh: kubectl get ns | grep -v -e maxwell -e NAME -e slack-devbot-helper | awk '{ print $1 }'
 
 tasks:
+  get-app-name:
+    desc: Get APP_NAME by Makefile
+    cmd: echo APP_NAME=(make get-app-name) >> $GITHUB_ENV
+
   destroy-dev:
     desc: Destroy dev
     cmds:
@@ -17,6 +21,7 @@ tasks:
   create-mysql-db:
     desc: Create a MySQL DB
     ignore_error: true
+    deps: [get-app-name]
     cmds:
       - |
         mysql -h ${MYSQL_DEV_HOST} -u root -p${MYSQL_DEV_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};
@@ -27,6 +32,7 @@ tasks:
   create-pgsql-db:
     desc: "Create a PostgreSQL DB"
     ignore_error: true
+    deps: [get-app-name]
     cmds:
       - |
         #!/bin/bash
@@ -34,7 +40,7 @@ tasks:
 
         # Create DB and user then grant user
         psql -h ${LOGIN_DB_HOST} -U postgres -c "DROP DATABASE IF EXISTS ${DB_NAME};" -c "CREATE DATABASE ${DB_NAME};"
-        echo "host ${LOGIN_DB_HOST} DB name ${DB_NAME}"
+        echo "host ${LOGIN_DB_HOST} DB name ${}${DB_NAME}"
 
         # Create user and grant user
         psql -h ${LOGIN_DB_HOST} -U postgres -c "DROP USER IF EXISTS ${APP_NAME};" -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';" -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${APP_NAME};"
@@ -44,6 +50,7 @@ tasks:
   delete-pgsql-db:
     desc: "Delete a Single PostgreSQL DB"
     ignore_error: true
+    deps: [get-app-name]
     cmds:
       - |
         #!/bin/bash
@@ -60,6 +67,7 @@ tasks:
   delete-mysql-db:
     desc: "Delete a Single Mysql DB"
     ignore_error: true
+    deps: [get-app-name]
     cmds:
       - |
         #!/bin/bash
@@ -72,6 +80,7 @@ tasks:
     desc: "Delete All Mysql DB"
     ignore_error: true
     silent: false
+    deps: [get-app-name]
     cmds:
       - |
         #!/bin/bash
@@ -87,6 +96,7 @@ tasks:
     desc: "Delete All Mysql DB"
     ignore_error: true
     silent: false
+    deps: [get-app-name]
     cmds:
       - |
         # Export the password so it can be used by psql without prompting
