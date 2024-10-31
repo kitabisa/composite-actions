@@ -37,18 +37,6 @@ inputs:
     description: 'Database password'
     required: false
 
-  db_name:
-    description: 'Name for dev DB'
-    required: false
-
-  db_user:
-    description: 'User for dev DB'
-    required: false
-
-  db_password:
-    description: 'Password for dev DB'
-    required: false
-
 runs:
   using: "composite"
   steps:
@@ -72,11 +60,8 @@ runs:
 
     - name: Run task
       shell: bash
-      # env:
-      #   DB_NAME: ${{ inputs.db_name }}
-      #   DB_USER: ${{ inputs.db_user }}
-      #   DB_PASSWORD: ${{ inputs.db_password }}
-      #   LOGIN_DB_HOST: ${{ inputs.login_db_host }}
-      #   LOGIN_DB_PASSWORD: ${{ inputs.login_db_password }}
+      env:
+        LOGIN_DB_HOST: ${{ inputs.login_db_host }}
+        LOGIN_DB_PASSWORD: ${{ inputs.login_db_password }}
       run: |-
         task ${{ inputs.tasks }}

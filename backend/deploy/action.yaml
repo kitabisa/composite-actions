@@ -98,18 +98,6 @@ inputs:
     default: "false"
     type: string
 
-  create_mysql_dev:
-    required: false
-    description: "create DB MySQL dev"
-    default: "false"
-    type: string
-
-  create_pgsql_dev:
-    required: false
-    description: "create DB PostgreSQL dev"
-    default: "false"
-    type: string
-
 runs:
   using: "composite"
   steps:
