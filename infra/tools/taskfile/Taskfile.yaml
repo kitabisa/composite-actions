@@ -52,7 +52,7 @@ tasks:
       - |
         #!/bin/bash
         # Execute the DROP DATABASE command
-        psql -U postgres -h "$LOGIN_DB_HOST" -c "DROP DATABASE ${APP_NAME}_${DB_NAME};" -c "DROP USER IF EXISTS ${APP_NAME};"
+        psql -U postgres -h "$LOGIN_DB_HOST" -c "DROP DATABASE ${APP_NAME}_${DB_NAME};"
         echo "Database ${APP_NAME}_${DB_NAME} has been deleted."
 
   delete-mysql-db:
