@@ -29,12 +29,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup pnpm
-      if: "${{ inputs.pnpm_version != 'latest' }}"
-      uses: pnpm/action-setup@v4
-      with:
-        version: ${{ inputs.pnpm_version }}
-        dest: /runner/.pnpm-store
+    # - name: Setup pnpm
+    #   if: "${{ inputs.pnpm_version != 'latest' }}"
+    #   uses: pnpm/action-setup@v4
+    #   with:
+    #     version: ${{ inputs.pnpm_version }}
+    #     dest: /runner/.pnpm-store
 
     - name: Cache pnpm modules
       if: "${{ inputs.cache == 'true' }}"
@@ -61,7 +61,10 @@ runs:
       if: "${{ (inputs.using_nextjs == 'true' && inputs.cache == 'true') }}"
       uses: actions/cache@v4
       with:
-        path: ${{ steps.path.outputs.cache-path }}
+        path: |
+          /runner/.pnpm-store
+          ${{ github.workspace }}/node_modules
+          ${{ steps.path.outputs.cache-path }}
         key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-nextjs-
