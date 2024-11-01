@@ -34,20 +34,41 @@ inputs:
     default: "."
     type: string
 
+  tasks:
+    required: true
+    description: "Task command"
+    default: ""
+    type: string
+
+  env:
+    description: 'Toggle dev env'
+    required: false
+
+  login_db_host:
+    description: 'Database host'
+    required: false
+
+  login_db_password:
+    description: 'Database password'
+    required: false
+
 runs:
   using: "composite"
   steps:
     - name: Checking out repository
       uses: actions/checkout@v4
 
-    - name: Setup Gcloud credential
-      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
+    - name: Drop database dev
+      if: ${{ inputs.env == 'dev' }}
+      uses: kitabisa/composite-actions/infra/tools/taskfile@v2
       with:
-        artifact_registry_host: ${{ inputs.artifact_registry_host }}
         credentials_json: ${{ inputs.credentials_json }}
         project_id: ${{ inputs.project_id }}
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
+        login_db_host: ${{ inputs.login_db_host }}
+        login_db_password: ${{ inputs.login_db_password }}
+        tasks: ${{ inputs.tasks }}
 
     - name: Destroy release
       id: destroy-release
@@ -56,5 +77,4 @@ runs:
         working_directory: ${{ inputs.working_directory }}
         project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         destroy: true

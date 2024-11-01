@@ -9,7 +9,6 @@ inputs:
     default: ""
     type: string
 
-  # Optionals
   credentials_json:
     required: false
     description: "GCP credentials services account"
@@ -29,6 +28,14 @@ inputs:
     required: false
     description: "GCP project id"
     type: string
+
+  login_db_host:
+    description: 'Database host'
+    required: false
+
+  login_db_password:
+    description: 'Database password'
+    required: false
 
 runs:
   using: "composite"
@@ -53,5 +60,8 @@ runs:
 
     - name: Run task
       shell: bash
+      env:
+        LOGIN_DB_HOST: ${{ inputs.login_db_host }}
+        LOGIN_DB_PASSWORD: ${{ inputs.login_db_password }}
       run: |-
         task ${{ inputs.tasks }}
