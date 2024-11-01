@@ -41,7 +41,7 @@ inputs:
     type: string
 
   env:
-    description: 'Toggle dev env'
+    description: 'Input env to read'
     required: false
 
   login_db_host:
