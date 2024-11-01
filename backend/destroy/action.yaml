@@ -61,8 +61,8 @@ runs:
         project_id: ${{ inputs.project_id }}
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
-        login_db_host: ${{ secrets.login_db_host }}
-        login_db_password: ${{ secrets.login_db_password }}
+        login_db_host: ${{ inputs.login_db_host }}
+        login_db_password: ${{ inputs.login_db_password }}
         tasks: ${{ inputs.tasks }}
 
     - name: Destroy release
