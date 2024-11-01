@@ -60,7 +60,7 @@ runs:
 
     - name: Drop database dev
       if: ${{ inputs.env == 'dev' }}
-      uses: kitabisa/composite-actions/infra/tools/taskfile@feat/update-taskfile
+      uses: kitabisa/composite-actions/infra/tools/taskfile@v2
       with:
         credentials_json: ${{ inputs.credentials_json }}
         project_id: ${{ inputs.project_id }}
