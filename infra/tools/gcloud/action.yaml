@@ -52,14 +52,35 @@ inputs:
     description: "List of additional gcloud components to install"
     type: string
 
+  service_account:
+    required: false
+    description: "Service Account name for workload identity"
+    type: string
+    default: 'false'
+
+  workload_identity_provider:
+    required: false
+    description: "Workload identity provider"
+    type: string
+    default: 'false'
+
 runs:
   using: "composite"
   steps:
-    - name: Authenticate to Google Cloud
+    - name: Authenticate to Google Cloud with SA
+      if: "${{ inputs.workload_identity_provider == 'false' }}"
       uses: google-github-actions/auth@v2
       with:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
+
+    - name: Authenticate to Google Cloud with Workload Identity
+      if: "${{ (inputs.workload_identity_provider != 'false') && (inputs.service_account != 'false') }}"
+      uses: google-github-actions/auth@v2
+      with:
+        project_id: ${{ inputs.project_id }}
+        workload_identity_provider: ${{ inputs.workload_identity_provider }}
+        service_account: ${{ inputs.service_account }}
 
     - name: Setup gcloud
       uses: google-github-actions/setup-gcloud@v2
