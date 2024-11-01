@@ -24,7 +24,7 @@ tasks:
     cmds:
       - |
         mysql -h ${LOGIN_DB_HOST} -u root -p${LOGIN_DB_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${APP_NAME}_${DB_NAME};
-        CREATE USER IF NOT EXISTS '${APP_NAME}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+        CREATE USER IF NOT EXISTS '${APP_NAME}'@'%' IDENTIFIED BY '${DB_DEV_PASSWORD}';
         GRANT ALL PRIVILEGES ON ${APP_NAME}_${DB_NAME}.* TO '${APP_NAME}'@'%';"
 
   create-pgsql-db:
@@ -40,7 +40,7 @@ tasks:
         echo "DB ${APP_NAME}_${DB_NAME} has been created."
 
         # Create user and grant user
-        psql -h ${LOGIN_DB_HOST} -U postgres -c "DROP USER IF EXISTS ${APP_NAME};" -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_PASSWORD}';" -c "GRANT ALL PRIVILEGES ON DATABASE ${APP_NAME}_${DB_NAME} TO ${APP_NAME};"
+        psql -h ${LOGIN_DB_HOST} -U postgres -c "DROP USER IF EXISTS ${APP_NAME};" -c "CREATE USER ${APP_NAME} WITH PASSWORD '${DB_DEV_PASSWORD}';" -c "GRANT ALL PRIVILEGES ON DATABASE ${APP_NAME}_${DB_NAME} TO ${APP_NAME};"
         echo "User ${APP_NAME} has been granted to ${APP_NAME}_${DB_NAME}."
 
   delete-pgsql-db:
