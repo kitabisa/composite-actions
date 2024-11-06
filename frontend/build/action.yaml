@@ -186,7 +186,7 @@ runs:
         setup_buildx: true
 
     - name: Setup Gcloud credential
-      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
+      uses: kitabisa/composite-actions/infra/tools/gcloud@feat/cache-pnpm
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         project_id: ${{ inputs.project_id }}

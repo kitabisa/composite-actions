@@ -86,6 +86,7 @@ runs:
       uses: google-github-actions/setup-gcloud@v2
       with:
         install_components: ${{ inputs.gcloud_components }}
+        skip_install: true
 
     - name: Register gcloud as a docker credential helper
       if: "${{ inputs.docker_creds == 'true' }}"
