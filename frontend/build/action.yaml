@@ -169,7 +169,7 @@ runs:
 
     - name: Setuptools frontend
       if: "${{ inputs.web_static != 'true' }}"
-      uses: kitabisa/composite-actions/frontend/tools/setuptools@feat/cache-pnpm
+      uses: kitabisa/composite-actions/frontend/tools/setuptools@v2
       with:
         setup_nvmrc: ${{ inputs.setup_nvmrc }}
         setup_yarn: ${{ inputs.setup_yarn }}
@@ -186,7 +186,7 @@ runs:
         setup_buildx: true
 
     - name: Setup Gcloud credential
-      uses: kitabisa/composite-actions/infra/tools/gcloud@feat/cache-pnpm
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         project_id: ${{ inputs.project_id }}
