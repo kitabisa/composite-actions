@@ -36,14 +36,14 @@ runs:
         version: ${{ inputs.pnpm_version }}
         dest: /runner/.pnpm-store
 
-    # - name: Cache pnpm modules
-    #   if: "${{ inputs.cache == 'true' }}"
-    #   uses: actions/cache@v4
-    #   with:
-    #     path: /runner/.pnpm-store
-    #     key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-pnpm-
+    - name: Cache pnpm modules
+      if: "${{ inputs.cache == 'true' }}"
+      uses: actions/cache@v4
+      with:
+        path: /runner/.pnpm-store
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-
 
     - name: Set cache path Next.js
       if: "${{ inputs.using_nextjs == 'true' }}"
@@ -62,7 +62,6 @@ runs:
       uses: actions/cache@v4
       with:
         path: |
-          /runner/.pnpm-store
           ${{ github.workspace }}/node_modules
           ${{ steps.path.outputs.cache-path }}
         key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}
