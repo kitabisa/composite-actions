@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.1](https://github.com/kitabisa/composite-actions/compare/v2.5.0...v2.5.1) (2024-11-07)
+
+
+### Bug Fixes
+
+* cache pnpm missing ([#171](https://github.com/kitabisa/composite-actions/issues/171)) ([5ffe7bc](https://github.com/kitabisa/composite-actions/commit/5ffe7bc02194a1325d5024198bee3365f304f5ed))
+
 ## [2.5.0](https://github.com/kitabisa/composite-actions/compare/v2.4.0...v2.5.0) (2024-11-01)
 
 
