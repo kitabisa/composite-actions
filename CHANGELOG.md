@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.6.0](https://github.com/kitabisa/composite-actions/compare/v2.5.1...v2.6.0) (2024-11-12)
+
+
+### Features
+
+* fix deploy be to reopen ([#175](https://github.com/kitabisa/composite-actions/issues/175)) ([eab2a6b](https://github.com/kitabisa/composite-actions/commit/eab2a6bef6784b90172fdf83c6dca57b01144a18))
+* **infra:** update destroy db weekly ([#173](https://github.com/kitabisa/composite-actions/issues/173)) ([7c20c74](https://github.com/kitabisa/composite-actions/commit/7c20c7492d56b21018c66ce7f7f0846152a634e8))
+
 ## [2.5.1](https://github.com/kitabisa/composite-actions/compare/v2.5.0...v2.5.1) (2024-11-07)
 
 
