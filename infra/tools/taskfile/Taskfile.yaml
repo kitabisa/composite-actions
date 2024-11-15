@@ -24,8 +24,7 @@ tasks:
       - |
         mysql -h ${LOGIN_DB_HOST} -u root -p${LOGIN_DB_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${APP_NAME}_${DB_NAME};
         CREATE USER IF NOT EXISTS '${APP_NAME}'@'%' IDENTIFIED BY '${DB_DEV_PASSWORD}';
-        GRANT ALL ON ${APP_NAME}_${DB_NAME}.* TO '${APP_NAME}'@'%' WITH GRANT OPTION;
-        FLUSH PRIVILEGES;"
+        GRANT ALL PRIVILEGES ON ${APP_NAME}_${DB_NAME}.* TO '${APP_NAME}'@'%';"
 
   create-pgsql-db:
     desc: "Create a PostgreSQL DB"
