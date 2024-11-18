@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.1](https://github.com/kitabisa/composite-actions/compare/v2.6.0...v2.6.1) (2024-11-18)
+
+
+### Bug Fixes
+
+* fix taskfile mysql ([#176](https://github.com/kitabisa/composite-actions/issues/176)) ([79bcfe5](https://github.com/kitabisa/composite-actions/commit/79bcfe5ddcb96cbe4c9419fb9bb87d465ea3d6ce))
+
 ## [2.6.0](https://github.com/kitabisa/composite-actions/compare/v2.5.1...v2.6.0) (2024-11-12)
 
 
