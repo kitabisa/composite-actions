@@ -22,7 +22,8 @@ tasks:
         sh: make get-app-name
     cmds:
       - |
-        mysql -h ${LOGIN_DB_HOST} -u root -p${LOGIN_DB_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${APP_NAME}_${DB_NAME};
+        mysql -h ${LOGIN_DB_HOST} -u root -p${LOGIN_DB_PASSWORD} -e "DROP DATABASE IF EXISTS ${APP_NAME}_${DB_NAME};
+        CREATE DATABASE ${APP_NAME}_${DB_NAME};
         CREATE USER IF NOT EXISTS '${APP_NAME}'@'%' IDENTIFIED BY '${DB_DEV_PASSWORD}';
         GRANT ALL PRIVILEGES ON ${APP_NAME}_${DB_NAME}.* TO '${APP_NAME}'@'%';"
 
