@@ -167,19 +167,19 @@ runs:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
-    - name: setup tools sdet
-      uses: kitabisa/composite-actions/sdet/tools/setup-tools@v2
-      with:
-        setup_pnpm: ${{ inputs.setup_pnpm }}
-        setup_bun: ${{ inputs.setup_bun }}
-        setup_gh_cli: ${{ inputs.setup_gh_cli }}
+    # - name: setup tools sdet
+    #   uses: kitabisa/composite-actions/sdet/tools/setup-tools@test
+    #   with:
+    #     setup_pnpm: ${{ inputs.setup_pnpm }}
+    #     setup_bun: ${{ inputs.setup_bun }}
+    #     setup_gh_cli: ${{ inputs.setup_gh_cli }}
 
-    - name: install packages
-      shell: bash
-      run: ${{ inputs.custom_command_packages }}
+    # - name: install packages
+    #   shell: bash
+    #   run: ${{ inputs.custom_command_packages }}
 
     - name: setup env variables test automation
-      uses: kitabisa/composite-actions/sdet/tools/env@v2
+      uses: kitabisa/composite-actions/sdet/tools/env@test
       with:
         profile: ${{ inputs.profile }}
         slack_webhook_url: ${{ inputs.slack_webhook_url }}
@@ -190,6 +190,8 @@ runs:
         github_run_number: ${{ inputs.github_run_number }}
         credentials_sangu: ${{ inputs.credentials_sangu }}
         password_sangu: ${{ inputs.password_sangu }}
+      env:
+        DOTENV_PRIVATE_KEY_SECRET_${ENV_NAME}: ${{ secrets.DOTENV_PRIVATE_KEY_SECRET_${ENV_NAME} }}
 
     - name: create test run on testrails
       shell: bash
@@ -207,7 +209,7 @@ runs:
       run: sudo apt-get update && sudo apt-get install -y rsync && sudo apt-get install -y bc
 
     - name: deploy reports to github pages
-      uses: kitabisa/composite-actions/sdet/deploy@v2
+      uses: kitabisa/composite-actions/sdet/deploy@test
       if: always()
       with:
         custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
