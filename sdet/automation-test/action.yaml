@@ -97,6 +97,12 @@ inputs:
     description: "custom command packages"
     default: ""
     type: string
+  
+  custom_command_setup:
+    required: false
+    description: "custom command setup"
+    default: ""
+    type: string
 
   custom_command_run:
     required: false
@@ -183,6 +189,10 @@ runs:
     - name: install packages
       shell: bash
       run: ${{ inputs.custom_command_packages }}
+
+    - name: setup env
+      shell: bash
+      run: ${{ inputs.custom_command_setup }}
 
     - name: setup env variables test automation
       uses: kitabisa/composite-actions/sdet/tools/env@test
