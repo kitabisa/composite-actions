@@ -173,12 +173,12 @@ runs:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
-    # - name: setup tools sdet
-    #   uses: kitabisa/composite-actions/sdet/tools/setup-tools@test
-    #   with:
-    #     setup_pnpm: ${{ inputs.setup_pnpm }}
-    #     setup_bun: ${{ inputs.setup_bun }}
-    #     setup_gh_cli: ${{ inputs.setup_gh_cli }}
+    - name: setup tools sdet
+      uses: kitabisa/composite-actions/sdet/tools/setup-tools@test
+      with:
+        setup_pnpm: ${{ inputs.setup_pnpm }}
+        setup_bun: ${{ inputs.setup_bun }}
+        setup_gh_cli: ${{ inputs.setup_gh_cli }}
 
     - name: install packages
       shell: bash
