@@ -191,7 +191,7 @@ runs:
         credentials_sangu: ${{ inputs.credentials_sangu }}
         password_sangu: ${{ inputs.password_sangu }}
       env:
-        DOTENV_PRIVATE_KEY_SECRET_${ENV_NAME}: ${{ secrets.DOTENV_PRIVATE_KEY_SECRET_${ENV_NAME} }}
+        DOTENV_PRIVATE_KEY_SECRET_${ENV_NAME}: ${{ inputs.dotenv_private_key_secret_${ENV} }}
 
     - name: create test run on testrails
       shell: bash
