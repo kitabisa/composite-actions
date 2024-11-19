@@ -174,9 +174,9 @@ runs:
     #     setup_bun: ${{ inputs.setup_bun }}
     #     setup_gh_cli: ${{ inputs.setup_gh_cli }}
 
-    # - name: install packages
-    #   shell: bash
-    #   run: ${{ inputs.custom_command_packages }}
+    - name: install packages
+      shell: bash
+      run: ${{ inputs.custom_command_packages }}
 
     - name: setup env variables test automation
       uses: kitabisa/composite-actions/sdet/tools/env@test

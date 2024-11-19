@@ -62,7 +62,6 @@ runs:
     - name: setup env variables
       shell: bash
       run: |
-        make setup
         echo "TEST_TYPE=${{ inputs.profile }}" >> .env
         echo "SLACK_WEBHOOK_URL=${{ inputs.slack_webhook_url }}" >> .env
         echo "SLACK_WEBHOOK_DEBUG_URL=${{ inputs.slack_webhook_debug_url }}" >> .env
