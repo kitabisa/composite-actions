@@ -8,6 +8,12 @@ inputs:
     default: "false"
     type: string
 
+  dotenv_private_key_secret:
+    required: false
+    description: "dotenv private key secret"
+    default: ""
+    type: string
+
   profile:
     required: false
     description: "profile"
