@@ -55,7 +55,7 @@ runs:
       shell: bash
       run: |
         gh extension install actions/gh-actions-cache
-        gh actions-cache delete "Linux-golang-" --confirm
+        gh actions-cache list
       env:
         GH_TOKEN: ${{ inputs.gh_token }}
 
