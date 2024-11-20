@@ -193,6 +193,8 @@ runs:
     - name: setup env
       shell: bash
       run: ${{ inputs.custom_command_setup }}
+      env:
+        DOTENV_PRIVATE_KEY_SECRET_STG: ${{ inputs.dotenv_private_key_secret }}
 
     - name: setup env variables test automation
       uses: kitabisa/composite-actions/sdet/tools/env@test
@@ -206,8 +208,6 @@ runs:
         github_run_number: ${{ inputs.github_run_number }}
         credentials_sangu: ${{ inputs.credentials_sangu }}
         password_sangu: ${{ inputs.password_sangu }}
-      env:
-        DOTENV_PRIVATE_KEY_SECRET_STG: ${{ inputs.dotenv_private_key_secret }}
 
     # - name: create test run on testrails
     #   shell: bash
