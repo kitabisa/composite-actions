@@ -50,11 +50,20 @@ runs:
       with:
         version: 2.57.0
 
-    - name: test
-      uses: adapttive/cache-delete
+    - uses: adapttive/cache-delete@v1.1
       with:
         github-token: ${{ inputs.gh_token }}
         cache-key: Linux-golang-3439677b9d9b175ec9718ff7616356e63d9a7ad6eb6e222db8b309276b8f5ded
+
+    - uses: adapttive/cache-delete@v1.1
+      with:
+        github-token: ${{ inputs.gh_token }}
+        cache-key: Linux-golang-3439677b9d9b175ec9718ff7616356e63d9a7ad6eb6e222db8b309276b8f5ded-243a51fffaaead79c3966b37fad13c1e36342a46f42aef18731716a80ac47694
+
+    - uses: adapttive/cache-delete@v1.1
+      with:
+        github-token: ${{ inputs.gh_token }}
+        cache-key: Linux-golang-
 
     - name: Delete existing cache mod
       shell: bash
