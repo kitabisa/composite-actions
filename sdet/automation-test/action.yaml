@@ -9,19 +9,19 @@ inputs:
     type: string
 
   environment:
-    required: false
-    description: 'the environment'
+    required: true
+    description: 'environment'
     default: "false"
     type: string
 
   dotenv_private_key_secret_dev:
-    required: false
+    required: true
     description: 'dotenv private key for dev environment'
     default: "false"
     type: string
 
   dotenv_private_key_secret_stg:
-    required: false
+    required: true
     description: 'dotenv private key for stg environment'
     default: "false"
     type: string
@@ -69,7 +69,7 @@ inputs:
     type: string
   
   custom_command_setup:
-    required: false
+    required: true
     description: "custom command setup"
     default: ""
     type: string
@@ -157,6 +157,8 @@ runs:
     - name: setup env variables
       shell: bash
       run: |
+        $CUSTOM_COMMAND_SETUP
+
         case "$ENVIRONMENT" in
           dev)
             echo "setting secret for dev environment"
@@ -177,11 +179,32 @@ runs:
 
         echo "environment setup complete with secret key"
       env:
+        CUSTOM_COMMAND_SETUP: ${{ inputs.custom_command_setup }}
         ENVIRONMENT: ${{ inputs.environment }}
         TEST_TYPE: ${{ inputs.profile }}
         GITHUB_RUN_NUMBER: ${{ inputs.github_run_number }}
         DOTENV_PRIVATE_KEY_SECRET_DEV: ${{ inputs.dotenv_private_key_secret_dev }}
         DOTENV_PRIVATE_KEY_SECRET_STG: ${{ inputs.dotenv_private_key_secret_stg }}
+
+    # - name: Setup env variables
+    #   shell: bash
+    #   run: |
+    #     if [ "$ENVIRONMENT" == "dev" ]; then
+    #       export DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_DEV
+    #     elif [ "$ENVIRONMENT" == "stg" ]; then
+    #       export DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_STG
+    #     else
+    #       echo "Unknown environment: $ENVIRONMENT"
+    #       exit 1
+    #     fi
+
+    #     echo "Environment setup complete with secret key."
+    #     $CUSTOM_COMMAND_SETUP
+    #   env:
+    #     ENVIRONMENT: ${{ inputs.environment }}
+    #     CUSTOM_COMMAND_SETUP: ${{ inputs.custom_command_setup }}
+    #     DOTENV_PRIVATE_KEY_SECRET_DEV: ${{ inputs.dotenv_private_key_secret_dev }}
+    #     DOTENV_PRIVATE_KEY_SECRET_STG: ${{ inputs.dotenv_private_key_secret_stg }}
 
     - name: create test run on testrails
       shell: bash

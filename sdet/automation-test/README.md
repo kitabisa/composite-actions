@@ -1,7 +1,7 @@
 <!-- action-docs-description -->
 ## Description
 
-SDET composite build and run automation test
+SDET composite setup and run automation test
 <!-- action-docs-description -->
 
 <!-- action-docs-inputs -->
@@ -10,9 +10,9 @@ SDET composite build and run automation test
 | parameter | description | required | default |
 | --- | --- | --- | --- |
 | gh_token | gh token | `true` |  |
-| environment
-| dotenv_private_key_secret_dev
-| dotenv_private_key_secret_stg
+| environment | environment | `true` |  |
+| dotenv_private_key_secret_dev | dotenv private key secret dev | `true` |  |
+| dotenv_private_key_secret_stg | dotenv private key secret stg | `true` |  |
 | profile | profile | `false` |  |
 | github_run_number | github run number | `false` |  |
 | platform | platform | `false` |  |
@@ -20,7 +20,7 @@ SDET composite build and run automation test
 | setup_bun | setup bun | `false` |  |
 | setup_gh_cli | setup github cli | `false` |  |
 | custom_command_packages | custom command packages | `false` |  |
-| custom_command_setup:
+| custom_command_setup | custom command setup | `true` |  |
 | custom_command_run | custom command run | `false` |  |
 | create_test_run | create test run | `false` |  |
 | setup_rsync | setup rsync | `false` |  |
