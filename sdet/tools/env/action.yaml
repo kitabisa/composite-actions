@@ -63,11 +63,4 @@ runs:
       shell: bash
       run: |
         echo "TEST_TYPE=${{ inputs.profile }}" >> .env
-        echo "SLACK_WEBHOOK_URL=${{ inputs.slack_webhook_url }}" >> .env
-        echo "SLACK_WEBHOOK_DEBUG_URL=${{ inputs.slack_webhook_debug_url }}" >> .env
-        echo "TESTRAIL_URL=${{ inputs.testrail_url }}" >> .env
-        echo "TESTRAIL_USERNAME=${{ inputs.testrail_username }}" >> .env
-        echo "TESTRAIL_PASSWORD=${{ inputs.testrail_password }}" >> .env
         echo "GITHUB_RUN_NUMBER=${{ inputs.github_run_number }}" >> .env
-        echo "CREDENTIALS_SANGU=${{ inputs.credentials_sangu }}" >> .env
-        echo "PASSWORD_SANGU=${{ inputs.password_sangu }}" >> .env

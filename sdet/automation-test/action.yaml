@@ -190,24 +190,18 @@ runs:
       shell: bash
       run: ${{ inputs.custom_command_packages }}
 
-    - name: setup env
+    - name: setup env variables
       shell: bash
       run: ${{ inputs.custom_command_setup }}
       env:
+        DOTENV_PRIVATE_KEY_SECRET_DEV: ${{ inputs.dotenv_private_key_secret }} ||
         DOTENV_PRIVATE_KEY_SECRET_STG: ${{ inputs.dotenv_private_key_secret }}
 
-    - name: setup env variables test automation
+    - name: parse env variables
       uses: kitabisa/composite-actions/sdet/tools/env@test
       with:
         profile: ${{ inputs.profile }}
-        slack_webhook_url: ${{ inputs.slack_webhook_url }}
-        slack_webhook_debug_url: ${{ inputs.slack_webhook_debug_url }}
-        testrail_url: ${{ inputs.testrail_url }}
-        testrail_username: ${{ inputs.testrail_username }}
-        testrail_password: ${{ inputs.testrail_password }}
         github_run_number: ${{ inputs.github_run_number }}
-        credentials_sangu: ${{ inputs.credentials_sangu }}
-        password_sangu: ${{ inputs.password_sangu }}
 
     - name: create test run on testrails
       shell: bash
