@@ -157,14 +157,18 @@ runs:
     - name: setup env variables
       shell: bash
       run: |
-        if [ "$ENVIRONMENT" == "dev" ]; then
-          export DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_DEV
-        elif [ "$ENVIRONMENT" == "stg" ]; then
-          export DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_STG
-        else
-          echo "unknown environment: $ENVIRONMENT"
-          exit 1
-        fi
+        case "$ENVIRONMENT" in
+          dev)
+            export DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_DEV
+            ;;
+          stg)
+            export DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_STG
+            ;;
+          *)
+            echo "unknown environment: $ENVIRONMENT"
+            exit 1
+            ;;
+        esac
 
         echo "environment setup complete with secret key."
         $CUSTOM_COMMAND_SETUP
