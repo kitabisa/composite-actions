@@ -1,5 +1,5 @@
 name: "automation test"
-description: "build and run automation test"
+description: "setup and run automation test"
 
 inputs:
   gh_token:
@@ -38,36 +38,6 @@ inputs:
     default: ""
     type: string
 
-  slack_webhook_url:
-    required: false
-    description: "slack webhook url"
-    default: ""
-    type: string
-
-  slack_webhook_debug_url:
-    required: false
-    description: "slack webhook debug url"
-    default: ""
-    type: string
-
-  testrail_url:
-    required: false
-    description: "testrail url"
-    default: ""
-    type: string
-
-  testrail_username:
-    required: false
-    description: "testrail username"
-    default: ""
-    type: string
-
-  testrail_password:
-    required: false
-    description: "testrail password"
-    default: ""
-    type: string
-
   setup_pnpm:
     required: false
     description: "setup pnpm"
@@ -89,18 +59,6 @@ inputs:
   github_run_number:
     required: false
     description: "github run number"
-    default: ""
-    type: string
-
-  credentials_sangu:
-    required: false
-    description: "credentials sangu"
-    default: ""
-    type: string
-
-  password_sangu:
-    required: false
-    description: "password sangu"
     default: ""
     type: string
 
@@ -170,12 +128,6 @@ inputs:
     default: ""
     type: string
 
-  personal_access_token:
-    required: false
-    description: "personal access token"
-    default: ""
-    type: string
-
   deploy_gh_pages:
     required: false
     description: "deploy to gh pages"
@@ -192,7 +144,7 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: setup tools sdet
-      uses: kitabisa/composite-actions/sdet/tools/setup-tools@test
+      uses: kitabisa/composite-actions/sdet/tools/setup-tools@api
       with:
         setup_pnpm: ${{ inputs.setup_pnpm }}
         setup_bun: ${{ inputs.setup_bun }}
@@ -202,97 +154,93 @@ runs:
       shell: bash
       run: ${{ inputs.custom_command_packages }}
 
-    # - name: setup env variables
-    #   shell: bash
-    #   run: ${{ inputs.custom_command_setup }}
-    #   env:
-    #     DOTENV_PRIVATE_KEY_SECRET_DEV: ${{ inputs.dotenv_private_key_secret }}
-    #     DOTENV_PRIVATE_KEY_SECRET_STG: ${{ inputs.dotenv_private_key_secret }}
-
-    - name: Setup env variables
+    - name: setup env variables
       shell: bash
+      run: |
+        case "$ENVIRONMENT" in
+          dev)
+            echo "setting secret for dev environment"
+            echo "DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_DEV" >> $GITHUB_ENV
+            ;;
+          stg)
+            echo "setting secret for stg environment"
+            echo "DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_STG" >> $GITHUB_ENV
+            ;;
+          *)
+            echo "unknown environment: $ENVIRONMENT"
+            exit 1
+            ;;
+        esac
+
+        echo "TEST_TYPE=$TEST_TYPE" >> $GITHUB_ENV
+        echo "GITHUB_RUN_NUMBER=$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
+
+        echo "environment setup complete with secret key"
       env:
         ENVIRONMENT: ${{ inputs.environment }}
-        CUSTOM_COMMAND_SETUP: ${{ inputs.custom_command_setup }}
+        TEST_TYPE: ${{ inputs.profile }}
+        GITHUB_RUN_NUMBER: ${{ inputs.github_run_number }}
         DOTENV_PRIVATE_KEY_SECRET_DEV: ${{ inputs.dotenv_private_key_secret_dev }}
         DOTENV_PRIVATE_KEY_SECRET_STG: ${{ inputs.dotenv_private_key_secret_stg }}
-      run: |
-        if [ "$ENVIRONMENT" == "dev" ]; then
-          export DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_DEV
-        elif [ "$ENVIRONMENT" == "stg" ]; then
-          export DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_STG
-        else
-          echo "unknown environment: $ENVIRONMENT"
-          exit 1
-        fi
 
-        echo "environment setup complete with secret key."
-        $CUSTOM_COMMAND_SETUP
+    - name: create test run on testrails
+      shell: bash
+      if: "${{ inputs.create_test_run == 'true' && always() }}"
+      run: bun run createTestrunTestrail
 
-    - name: parse env variables
-      uses: kitabisa/composite-actions/sdet/tools/env@test
+    - name: run automation test
+      shell: bash
+      if: always()
+      run: ${{ inputs.custom_command_run }}
+
+    - name: install rsync and bc
+      shell: bash
+      if: "${{ inputs.setup_rsync == 'true' && always() }}"
+      run: sudo apt-get update && sudo apt-get install -y rsync && sudo apt-get install -y bc
+
+    - name: deploy reports to github pages
+      uses: kitabisa/composite-actions/sdet/deploy@api
+      if: always()
       with:
-        profile: ${{ inputs.profile }}
-        github_run_number: ${{ inputs.github_run_number }}
+        custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
+        profile: ${{ inputs.custom_command_report_subfolder || inputs.profile }}
 
-    # - name: create test run on testrails
-    #   shell: bash
-    #   if: "${{ inputs.create_test_run == 'true' && always() }}"
-    #   run: bun run createTestrunTestrail
+    - name: insert result to testrails
+      shell: bash
+      if: "${{ inputs.insert_testrails == 'true' && always() }}"
+      run: bun run insertResultTestrail
 
-    # - name: run automation test
-    #   shell: bash
-    #   if: always()
-    #   run: ${{ inputs.custom_command_run }}
+    - name: build and deploy to gh pages
+      if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
+      uses: kitabisa/composite-actions/sdet/tools/dispatch@v2
+      with:
+        token: ${{ inputs.gh_token }}
+        target_branch: ${{ github.ref }}
+        repository_name: ${{ github.repository }}
+        repository_owner: ${{ github.repository_owner }}
+        target_workflow: build-and-deploy-gh-pages.yaml
+        workflow_timeout_seconds: 300
 
-    # - name: install rsync and bc
-    #   shell: bash
-    #   if: "${{ inputs.setup_rsync == 'true' && always() }}"
-    #   run: sudo apt-get update && sudo apt-get install -y rsync && sudo apt-get install -y bc
+    - name: send report to slack
+      shell: bash
+      if: always()
+      run: ${{ inputs.custom_command_send_report_to_slack }}
 
-    # - name: deploy reports to github pages
-    #   uses: kitabisa/composite-actions/sdet/deploy@test
-    #   if: always()
-    #   with:
-    #     custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
-    #     profile: ${{ inputs.custom_command_report_subfolder || inputs.profile }}
+    - name: delay
+      shell: bash
+      if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
+      run: sleep 300
 
-    # - name: insert result to testrails
-    #   shell: bash
-    #   if: "${{ inputs.insert_testrails == 'true' && always() }}"
-    #   run: bun run insertResultTestrail
+    - name: install github cli
+      uses: sersoft-gmbh/setup-gh-cli-action@v2
+      if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
+      with:
+        version: stable
 
-    # - name: build and deploy to gh pages
-    #   if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
-    #   uses: kitabisa/composite-actions/sdet/tools/dispatch@v2
-    #   with:
-    #     token: ${{ inputs.personal_access_token }}
-    #     target_branch: ${{ github.ref }}
-    #     repository_name: ${{ github.repository }}
-    #     repository_owner: ${{ github.repository_owner }}
-    #     target_workflow: build-and-deploy-gh-pages.yaml
-    #     workflow_timeout_seconds: 300
-
-    # - name: send report to slack
-    #   shell: bash
-    #   if: always()
-    #   run: ${{ inputs.custom_command_send_report_to_slack }}
-
-    # - name: delay
-    #   shell: bash
-    #   if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
-    #   run: sleep 300
-
-    # - name: install github cli
-    #   uses: sersoft-gmbh/setup-gh-cli-action@v2
-    #   if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
-    #   with:
-    #     version: stable
-
-    # - name: trigger automation test api when deploy completed
-    #   shell: bash
-    #   if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
-    #   run: |
-    #     gh workflow run -R kitabisa/qorin .github/workflows/manual-trigger-deploy-stg.yaml -f profile=${{ inputs.service_name }} --ref master
-    #   env:
-    #     GITHUB_TOKEN: ${{ inputs.gh_token }}
+    - name: trigger automation test api when deploy completed
+      shell: bash
+      if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
+      run: |
+        gh workflow run -R kitabisa/qorin .github/workflows/manual-trigger-deploy-stg.yaml -f profile=${{ inputs.service_name }} --ref master
+      env:
+        GITHUB_TOKEN: ${{ inputs.gh_token }}
