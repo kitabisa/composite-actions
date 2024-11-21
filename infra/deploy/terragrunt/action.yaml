@@ -33,11 +33,18 @@ runs:
       shell: bash
       run: git config --global url."https://${{ inputs.git_user }}:${{ inputs.git_token }}@github.com".insteadOf "https://github.com"
 
-    - name: Authenticate to Google Cloud
-      if: "${{ inputs.gcp_credentials != '' }}"
+    # - name: Authenticate to Google Cloud
+    #   if: "${{ inputs.gcp_credentials != '' }}"
+    #   uses: google-github-actions/auth@v2
+    #   with:
+    #     credentials_json: ${{ inputs.gcp_credentials }}
+
+    - name: Authenticate to Google Cloud with Workload Identity
+      if: "${{ (inputs.workload_identity_provider != '') && (inputs.service_account != '') }}"
       uses: google-github-actions/auth@v2
       with:
-        credentials_json: ${{ inputs.gcp_credentials }}
+        workload_identity_provider: ${{ inputs.workload_identity_provider }}
+        service_account: ${{ inputs.service_account }}
 
     - name: Terragrunt Validate
       id: validate
