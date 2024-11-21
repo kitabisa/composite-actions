@@ -8,10 +8,28 @@ inputs:
     default: "false"
     type: string
 
-  dotenv_private_key_secret:
+  environment:
     required: false
-    description: "dotenv private key secret"
-    default: ""
+    description: 'the environment'
+    default: "false"
+    type: string
+    
+  custom_command_setup:
+    required: false
+    description: 'custom command for setup'
+    default: "false"
+    type: string
+
+  dotenv_private_key_secret_dev:
+    required: false
+    description: 'dotenv private key for dev environment'
+    default: "false"
+    type: string
+
+  dotenv_private_key_secret_stg:
+    required: false
+    description: 'dotenv private key for stg environment'
+    default: "false"
     type: string
 
   profile:
@@ -202,19 +220,19 @@ runs:
       env:
         ENVIRONMENT: ${{ inputs.environment }}
         CUSTOM_COMMAND_SETUP: ${{ inputs.custom_command_setup }}
-        DOTENV_PRIVATE_KEY_SECRET_DEV: ${{ secrets.DOTENV_PRIVATE_KEY_SECRET_DEV }}
-        DOTENV_PRIVATE_KEY_SECRET_STG: ${{ secrets.DOTENV_PRIVATE_KEY_SECRET_STG }}
+        DOTENV_PRIVATE_KEY_SECRET_DEV: ${{ inputs.dotenv_private_key_secret_dev }}
+        DOTENV_PRIVATE_KEY_SECRET_STG: ${{ inputs.dotenv_private_key_secret_stg }}
       run: |
         if [ "$ENVIRONMENT" == "dev" ]; then
           export DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_DEV
         elif [ "$ENVIRONMENT" == "stg" ]; then
           export DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_STG
         else
-          echo "Unknown environment: $ENVIRONMENT"
+          echo "unknown environment: $ENVIRONMENT"
           exit 1
         fi
 
-        echo "Environment setup complete with secret key."
+        echo "environment setup complete with secret key."
         $CUSTOM_COMMAND_SETUP
 
     - name: parse env variables
