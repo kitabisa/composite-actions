@@ -13,12 +13,6 @@ inputs:
     description: 'the environment'
     default: "false"
     type: string
-    
-  custom_command_setup:
-    required: false
-    description: 'custom command for setup'
-    default: "false"
-    type: string
 
   dotenv_private_key_secret_dev:
     required: false
