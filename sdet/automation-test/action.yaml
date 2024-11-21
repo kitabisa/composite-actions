@@ -190,12 +190,28 @@ runs:
       shell: bash
       run: ${{ inputs.custom_command_packages }}
 
-    - name: setup env variables
+    # - name: setup env variables
+    #   shell: bash
+    #   run: ${{ inputs.custom_command_setup }}
+    #   env:
+    #     DOTENV_PRIVATE_KEY_SECRET_DEV: ${{ inputs.dotenv_private_key_secret }}
+    #     DOTENV_PRIVATE_KEY_SECRET_STG: ${{ inputs.dotenv_private_key_secret }}
+
+    - name: Setup env variables
       shell: bash
-      run: ${{ inputs.custom_command_setup }}
+      run: |
+        if [ "${{ inputs.environment }}" == "dev" ]; then
+          export DOTENV_PRIVATE_KEY_SECRET=${{ secrets.DOTENV_PRIVATE_KEY_SECRET_DEV }}
+        elif [ "${{ inputs.environment }}" == "stg" ]; then
+          export DOTENV_PRIVATE_KEY_SECRET=${{ secrets.DOTENV_PRIVATE_KEY_SECRET_STG }}
+        else
+          echo "Unknown environment: ${{ inputs.environment }}"
+          exit 1
+        fi
+        ${{ inputs.custom_command_setup }}
       env:
-        DOTENV_PRIVATE_KEY_SECRET_DEV: ${{ inputs.dotenv_private_key_secret }} ||
-        DOTENV_PRIVATE_KEY_SECRET_STG: ${{ inputs.dotenv_private_key_secret }}
+        DOTENV_PRIVATE_KEY_SECRET_DEV: ${{ secrets.DOTENV_PRIVATE_KEY_SECRET_DEV }}
+        DOTENV_PRIVATE_KEY_SECRET_STG: ${{ secrets.DOTENV_PRIVATE_KEY_SECRET_STG }}
 
     - name: parse env variables
       uses: kitabisa/composite-actions/sdet/tools/env@test
