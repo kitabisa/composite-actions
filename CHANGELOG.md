@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.1](https://github.com/kitabisa/composite-actions/compare/v2.7.0...v2.7.1) (2024-11-25)
+
+
+### Bug Fixes
+
+* warning inputs on terragrunt ([#183](https://github.com/kitabisa/composite-actions/issues/183)) ([80bc394](https://github.com/kitabisa/composite-actions/commit/80bc394203d891c9628db738c75bc1ef36e461b2))
+
 ## [2.7.0](https://github.com/kitabisa/composite-actions/compare/v2.6.1...v2.7.0) (2024-11-25)
 
 
