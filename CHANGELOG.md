@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.0](https://github.com/kitabisa/composite-actions/compare/v2.6.1...v2.7.0) (2024-11-25)
+
+
+### Features
+
+* tidy up use workload identity ([#180](https://github.com/kitabisa/composite-actions/issues/180)) ([6145e42](https://github.com/kitabisa/composite-actions/commit/6145e4292fa277d3280b835cd974f3dd1a5dff3d))
+
 ## [2.6.1](https://github.com/kitabisa/composite-actions/compare/v2.6.0...v2.6.1) (2024-11-18)
 
 
