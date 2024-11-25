@@ -1,5 +1,5 @@
 name: "Terragrunt"
-description: "Run Terragrunt Plan & Apply"
+description: "Runs Terragrunt Plan & Apply"
 
 inputs:
   path:
