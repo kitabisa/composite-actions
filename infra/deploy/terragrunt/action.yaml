@@ -44,7 +44,7 @@ runs:
         workload_identity_provider: ${{ inputs.workload_identity_provider }}
         service_account: ${{ inputs.service_account }}
 
-    - name: Terragrunt Validate
+    - name: Terragrunt Validation
       id: validate
       shell: bash
       run: |
