@@ -9,11 +9,6 @@ inputs:
     default: ""
     type: string
 
-  credentials_json:
-    required: false
-    description: "GCP credentials services account"
-    type: string
-
   gke_cluster_name:
     required: false
     description: "GKE cluster name"
