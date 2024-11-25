@@ -17,10 +17,14 @@ inputs:
     description: "Git token access"
     type: string
 
-  gcp_credentials:
-    required: false
-    description: "GCP credentials"
-    default: ""
+  workload_identity_provider:
+    required: true
+    description: "Workload identity pool"
+    type: string
+
+  service_account:
+    required: true
+    description: "SA used in workload identity pool"
     type: string
 
 runs:
