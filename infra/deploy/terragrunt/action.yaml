@@ -18,12 +18,12 @@ inputs:
     type: string
 
   workload_identity_provider:
-    required: true
+    required: false
     description: "Workload identity pool"
     type: string
 
   service_account:
-    required: true
+    required: false
     description: "SA used in workload identity pool"
     type: string
 
