@@ -161,12 +161,10 @@ runs:
         echo "environment setup complete with secret key."
         $CUSTOM_COMMAND_SETUP
 
-        echo "TEST_TYPE=$TEST_TYPE" >> $GITHUB_ENV
-        echo "GITHUB_RUN_NUMBER=$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
+        echo "TEST_TYPE=${{ inputs.profile }}" >> .env
+        echo "RUN_NUMBER=${{ inputs.github_run_number }}" >> .env
       env:
         ENVIRONMENT: ${{ inputs.environment }}
-        TEST_TYPE: ${{ inputs.profile }}
-        GITHUB_RUN_NUMBER: ${{ inputs.github_run_number }}
         CUSTOM_COMMAND_SETUP: ${{ inputs.custom_command_setup }}
         DOTENV_PRIVATE_KEY_SECRET_DEV: ${{ inputs.dotenv_private_key_secret_dev }}
         DOTENV_PRIVATE_KEY_SECRET_STG: ${{ inputs.dotenv_private_key_secret_stg }}
