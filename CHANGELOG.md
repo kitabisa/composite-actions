@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.2](https://github.com/kitabisa/composite-actions/compare/v2.7.1...v2.7.2) (2024-11-26)
+
+
+### Bug Fixes
+
+* warning inputs on taskfile ([#185](https://github.com/kitabisa/composite-actions/issues/185)) ([12379c7](https://github.com/kitabisa/composite-actions/commit/12379c7251646a5d5eb2191a562f3c9994bb3831))
+
 ## [2.7.1](https://github.com/kitabisa/composite-actions/compare/v2.7.0...v2.7.1) (2024-11-25)
 
 
