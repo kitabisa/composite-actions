@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.3](https://github.com/kitabisa/composite-actions/compare/v2.7.2...v2.7.3) (2024-11-28)
+
+
+### Bug Fixes
+
+* **backend:** Restore cache key on backend refesh cache ([#178](https://github.com/kitabisa/composite-actions/issues/178)) ([2743c2f](https://github.com/kitabisa/composite-actions/commit/2743c2fec8e9e09107413e79f9663a614991d3d8))
+
 ## [2.7.2](https://github.com/kitabisa/composite-actions/compare/v2.7.1...v2.7.2) (2024-11-26)
 
 
