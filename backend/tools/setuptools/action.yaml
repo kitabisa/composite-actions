@@ -109,7 +109,7 @@ runs:
           ${{ steps.golang-env.outputs.module-cache-path }}
         key: ${{ steps.golang-env.outputs.cache-key }}
         restore-keys: |
-          ${{ steps.golang-env.outputs.cache-key-restore }}
+          ${{ steps.golang-env.outputs.cache-key }}
 
     - name: Custom Command
       shell: bash
