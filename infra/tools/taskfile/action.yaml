@@ -10,7 +10,7 @@ inputs:
     type: string
 
   credentials_json:
-    required: false
+    required: true
     description: "GCP credentials services account"
     type: string
 

@@ -1,5 +1,5 @@
 name: "Terragrunt"
-description: "Run Terragrunt Plan & Apply"
+description: "Runs Terragrunt Plan & Apply"
 
 inputs:
   path:
@@ -17,10 +17,14 @@ inputs:
     description: "Git token access"
     type: string
 
-  gcp_credentials:
+  workload_identity_provider:
     required: false
-    description: "GCP credentials"
-    default: ""
+    description: "Workload identity pool"
+    type: string
+
+  service_account:
+    required: false
+    description: "SA used in workload identity pool"
     type: string
 
 runs:
@@ -33,13 +37,14 @@ runs:
       shell: bash
       run: git config --global url."https://${{ inputs.git_user }}:${{ inputs.git_token }}@github.com".insteadOf "https://github.com"
 
-    - name: Authenticate to Google Cloud
-      if: "${{ inputs.gcp_credentials != '' }}"
+    - name: Authenticate to Google Cloud with Workload Identity
+      if: "${{ (inputs.workload_identity_provider != '') && (inputs.service_account != '') }}"
       uses: google-github-actions/auth@v2
       with:
-        credentials_json: ${{ inputs.gcp_credentials }}
+        workload_identity_provider: ${{ inputs.workload_identity_provider }}
+        service_account: ${{ inputs.service_account }}
 
-    - name: Terragrunt Validate
+    - name: Terragrunt Validation
       id: validate
       shell: bash
       run: |
