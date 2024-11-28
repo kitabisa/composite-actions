@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.7.2](https://github.com/kitabisa/composite-actions/compare/v2.7.1...v2.7.2) (2024-11-26)
+
+
+### Bug Fixes
+
+* warning inputs on taskfile ([#185](https://github.com/kitabisa/composite-actions/issues/185)) ([12379c7](https://github.com/kitabisa/composite-actions/commit/12379c7251646a5d5eb2191a562f3c9994bb3831))
+
+## [2.7.1](https://github.com/kitabisa/composite-actions/compare/v2.7.0...v2.7.1) (2024-11-25)
+
+
+### Bug Fixes
+
+* warning inputs on terragrunt ([#183](https://github.com/kitabisa/composite-actions/issues/183)) ([80bc394](https://github.com/kitabisa/composite-actions/commit/80bc394203d891c9628db738c75bc1ef36e461b2))
+
+## [2.7.0](https://github.com/kitabisa/composite-actions/compare/v2.6.1...v2.7.0) (2024-11-25)
+
+
+### Features
+
+* tidy up use workload identity ([#180](https://github.com/kitabisa/composite-actions/issues/180)) ([6145e42](https://github.com/kitabisa/composite-actions/commit/6145e4292fa277d3280b835cd974f3dd1a5dff3d))
+
 ## [2.6.1](https://github.com/kitabisa/composite-actions/compare/v2.6.0...v2.6.1) (2024-11-18)
 
 
