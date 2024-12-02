@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.0](https://github.com/kitabisa/composite-actions/compare/v2.7.3...v2.8.0) (2024-12-02)
+
+
+### Features
+
+* added suffix cache ([#188](https://github.com/kitabisa/composite-actions/issues/188)) ([3aff647](https://github.com/kitabisa/composite-actions/commit/3aff647146d6ff803d79a8e040f7f26381185e40))
+
 ## [2.7.3](https://github.com/kitabisa/composite-actions/compare/v2.7.2...v2.7.3) (2024-11-28)
 
 
