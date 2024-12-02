@@ -105,6 +105,11 @@ inputs:
     description: "go version"
     default: "false"
 
+  cache_key_suffix:
+    required: false
+    description: "cache key suffix"
+    default: ""
+
 runs:
   using: "composite"
   steps:
@@ -127,7 +132,7 @@ runs:
       run: |
         echo "build-cache-path=$(go env GOCACHE)" >>"$GITHUB_OUTPUT"
         echo "module-cache-path=$(go env GOMODCACHE)" >>"$GITHUB_OUTPUT"
-        cacheKeyRoot="${{ runner.os }}-golang${{ inputs.cache-key-suffix && format('-{0}',inputs.cache-key-suffix) }}-"
+        cacheKeyRoot="${{ runner.os }}-golang${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-"
         echo "cache-key-restore=$cacheKeyRoot" >>"$GITHUB_OUTPUT"
         echo "cache-key=${cacheKeyRoot}${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
       shell: bash

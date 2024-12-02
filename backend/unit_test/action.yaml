@@ -59,7 +59,7 @@ inputs:
   cache_key_suffix:
     required: false
     description: Optional cache key suffix.
-    default:
+    default: ""
 
 runs:
   using: "composite"
