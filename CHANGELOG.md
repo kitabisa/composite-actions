@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.1](https://github.com/kitabisa/composite-actions/compare/v2.8.0...v2.8.1) (2024-12-09)
+
+
+### Bug Fixes
+
+* composite artifact registry gke creds set to false ([#190](https://github.com/kitabisa/composite-actions/issues/190)) ([e86efda](https://github.com/kitabisa/composite-actions/commit/e86efda18cc756e6759f43ce4e33d93d1c0c998a))
+
 ## [2.8.0](https://github.com/kitabisa/composite-actions/compare/v2.7.3...v2.8.0) (2024-12-02)
 
 
