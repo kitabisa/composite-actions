@@ -147,10 +147,12 @@ runs:
       run: |
         case "$ENVIRONMENT" in
           dev)
-            export DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_DEV
+            export DOTENV_PRIVATE_KEY_SECRET_DEV_API=$DOTENV_PRIVATE_KEY_SECRET_DEV_API ||
+            export DOTENV_PRIVATE_KEY_SECRET_DEV_PWA=$DOTENV_PRIVATE_KEY_SECRET_DEV_PWA
             ;;
           stg)
-            export DOTENV_PRIVATE_KEY_SECRET=$DOTENV_PRIVATE_KEY_SECRET_STG
+            export DOTENV_PRIVATE_KEY_SECRET_STG_API=$DOTENV_PRIVATE_KEY_SECRET_STG_API ||
+            export DOTENV_PRIVATE_KEY_SECRET_STG_PWA=$DOTENV_PRIVATE_KEY_SECRET_STG_PWA
             ;;
           *)
             echo "unknown environment: $ENVIRONMENT"
@@ -166,8 +168,10 @@ runs:
       env:
         ENVIRONMENT: ${{ inputs.environment }}
         CUSTOM_COMMAND_SETUP: ${{ inputs.custom_command_setup }}
-        DOTENV_PRIVATE_KEY_SECRET_DEV: ${{ inputs.dotenv_private_key_secret_dev }}
-        DOTENV_PRIVATE_KEY_SECRET_STG: ${{ inputs.dotenv_private_key_secret_stg }}
+        DOTENV_PRIVATE_KEY_SECRET_DEV_API: ${{ inputs.dotenv_private_key_secret_dev }}
+        DOTENV_PRIVATE_KEY_SECRET_STG_API: ${{ inputs.dotenv_private_key_secret_stg }}
+        DOTENV_PRIVATE_KEY_SECRET_DEV_PWA: ${{ inputs.dotenv_private_key_secret_dev }}
+        DOTENV_PRIVATE_KEY_SECRET_STG_PWA: ${{ inputs.dotenv_private_key_secret_stg }}
 
     - name: create test run on testrails
       shell: bash
