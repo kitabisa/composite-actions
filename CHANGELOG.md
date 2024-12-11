@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.2](https://github.com/kitabisa/composite-actions/compare/v2.8.1...v2.8.2) (2024-12-11)
+
+
+### Bug Fixes
+
+* fix frontend cache ([#192](https://github.com/kitabisa/composite-actions/issues/192)) ([697ee4c](https://github.com/kitabisa/composite-actions/commit/697ee4c2db68762b40e5efabf60e936ce49e0da9))
+
 ## [2.8.1](https://github.com/kitabisa/composite-actions/compare/v2.8.0...v2.8.1) (2024-12-09)
 
 
