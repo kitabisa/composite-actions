@@ -36,7 +36,7 @@ runs:
         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
-          ${{ runner.os }}-yarn-
+          ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
     - name: Set cache path Next.js
       if: "${{ inputs.using_nextjs == 'true' }}"
@@ -57,4 +57,4 @@ runs:
         path: ${{ steps.path.outputs.cache-path }}
         key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
-          ${{ runner.os }}-nextjs-
+          ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}

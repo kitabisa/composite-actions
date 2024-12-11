@@ -36,7 +36,7 @@ runs:
         path: /runner/.pnpm-store
         key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-
+          ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
 
     - name: Setup pnpm
       if: "${{ inputs.pnpm_version != 'latest' }}"
@@ -66,4 +66,4 @@ runs:
           ${{ steps.path.outputs.cache-path }}
         key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-nextjs-
+          ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}
