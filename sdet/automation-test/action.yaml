@@ -67,7 +67,7 @@ inputs:
     description: "custom command packages"
     default: ""
     type: string
-  
+
   custom_command_setup:
     required: true
     description: "custom command setup"
