@@ -38,6 +38,18 @@ inputs:
     default: "false"
     type: string
 
+  pr_author:
+    required: false
+    description: "author of the pull request"
+    default: "unknown author"
+    type: string
+
+  pr_link:
+    required: false
+    description: "link to the pull request"
+    default: "not Available"
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -57,6 +69,10 @@ runs:
       shell: bash
       if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
       run: |
-        gh workflow run -R kitabisa/qorin .github/workflows/trigger-when-deploy.yaml -f profile=${{ inputs.service_name }} --ref master
+        gh workflow run -R kitabisa/qorin .github/workflows/trigger-when-deploy.yaml \
+          -f profile=${{ inputs.service_name }} \
+          -f pr_author=${{ inputs.pr_author }} \
+          -f pr_link=${{ inputs.pr_link }} \
+          --ref master
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
