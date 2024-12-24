@@ -60,7 +60,7 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: setup tools sdet
-      uses: kitabisa/composite-actions/sdet/tools/setup-tools@v2
+      uses: kitabisa/composite-actions/sdet/tools/setup-tools@deploy
       with:
         setup_pnpm: ${{ inputs.setup_pnpm }}
         setup_bun: ${{ inputs.setup_bun }}
@@ -90,6 +90,6 @@ runs:
           -f profile=${{ inputs.service_name }} \
           -f pr_author="${PR_AUTHOR}" \
           -f pr_link="${PR_LINK}" \
-          --ref master
+          --ref chore/sdet-1317-add-url-and-author-pr-to-slack-report
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
