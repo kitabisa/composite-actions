@@ -1,5 +1,5 @@
 name: "trigger automation test when deploy completed"
-description: "build and trigger automation test api when deploy completed"
+description: "setup and trigger automation test api when deploy completed"
 
 inputs:
   gh_token:
