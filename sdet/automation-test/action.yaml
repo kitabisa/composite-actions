@@ -132,7 +132,7 @@ runs:
         token: ${{ inputs.gh_token }}
 
     - name: setup tools sdet
-      uses: kitabisa/composite-actions/sdet/tools/setup-tools@v2
+      uses: kitabisa/composite-actions/sdet/tools/setup-tools@api
       with:
         setup_pnpm: ${{ inputs.setup_pnpm }}
         setup_bun: ${{ inputs.setup_bun }}
@@ -189,7 +189,7 @@ runs:
       run: sudo apt-get update && sudo apt-get install -y rsync && sudo apt-get install -y bc
 
     - name: deploy reports to github pages
-      uses: kitabisa/composite-actions/sdet/deploy@v2
+      uses: kitabisa/composite-actions/sdet/deploy@api
       if: always()
       with:
         custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
