@@ -1,7 +1,7 @@
 <!-- action-docs-description -->
 ## Description
 
-SDET composite build and trigger automation test api when deploy completed
+SDET composite trigger automation test api when deploy completed
 <!-- action-docs-description -->
 
 <!-- action-docs-inputs -->
