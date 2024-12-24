@@ -73,6 +73,6 @@ runs:
           -f profile=${{ inputs.service_name }} \
           -f pr_author=${{ inputs.pr_author }} \
           -f pr_link=${{ inputs.pr_link }} \
-          --ref master
+          --ref chore/sdet-1317-add-url-and-author-pr-to-slack-report
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
