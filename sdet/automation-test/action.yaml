@@ -1,10 +1,28 @@
 name: "automation test"
-description: "build and run automation test"
+description: "setup and run automation test"
 
 inputs:
   gh_token:
     required: true
     description: "gh token"
+    default: "false"
+    type: string
+
+  environment:
+    required: true
+    description: 'environment'
+    default: "false"
+    type: string
+
+  dotenv_private_key_secret_dev:
+    required: true
+    description: 'dotenv private key for dev environment'
+    default: "false"
+    type: string
+
+  dotenv_private_key_secret_stg:
+    required: true
+    description: 'dotenv private key for stg environment'
     default: "false"
     type: string
 
@@ -17,36 +35,6 @@ inputs:
   platform:
     required: false
     description: "platform"
-    default: ""
-    type: string
-
-  slack_webhook_url:
-    required: false
-    description: "slack webhook url"
-    default: ""
-    type: string
-
-  slack_webhook_debug_url:
-    required: false
-    description: "slack webhook debug url"
-    default: ""
-    type: string
-
-  testrail_url:
-    required: false
-    description: "testrail url"
-    default: ""
-    type: string
-
-  testrail_username:
-    required: false
-    description: "testrail username"
-    default: ""
-    type: string
-
-  testrail_password:
-    required: false
-    description: "testrail password"
     default: ""
     type: string
 
@@ -74,21 +62,15 @@ inputs:
     default: ""
     type: string
 
-  credentials_sangu:
-    required: false
-    description: "credentials sangu"
-    default: ""
-    type: string
-
-  password_sangu:
-    required: false
-    description: "password sangu"
-    default: ""
-    type: string
-
   custom_command_packages:
     required: false
     description: "custom command packages"
+    default: ""
+    type: string
+
+  custom_command_setup:
+    required: true
+    description: "custom command setup"
     default: ""
     type: string
 
@@ -134,24 +116,6 @@ inputs:
     default: ""
     type: string
 
-  trigger_automation_test_api_when_deploy:
-    required: false
-    description: "trigger automation test api when deploy"
-    default: "false"
-    type: string
-
-  service_name:
-    required: false
-    description: "service name"
-    default: ""
-    type: string
-
-  personal_access_token:
-    required: false
-    description: "personal access token"
-    default: ""
-    type: string
-
   deploy_gh_pages:
     required: false
     description: "deploy to gh pages"
@@ -178,18 +142,36 @@ runs:
       shell: bash
       run: ${{ inputs.custom_command_packages }}
 
-    - name: setup env variables test automation
-      uses: kitabisa/composite-actions/sdet/tools/env@v2
-      with:
-        profile: ${{ inputs.profile }}
-        slack_webhook_url: ${{ inputs.slack_webhook_url }}
-        slack_webhook_debug_url: ${{ inputs.slack_webhook_debug_url }}
-        testrail_url: ${{ inputs.testrail_url }}
-        testrail_username: ${{ inputs.testrail_username }}
-        testrail_password: ${{ inputs.testrail_password }}
-        github_run_number: ${{ inputs.github_run_number }}
-        credentials_sangu: ${{ inputs.credentials_sangu }}
-        password_sangu: ${{ inputs.password_sangu }}
+    - name: setup env variables
+      shell: bash
+      run: |
+        case "$ENVIRONMENT" in
+          dev)
+            export DOTENV_PRIVATE_KEY_SECRET_DEV_API=$DOTENV_PRIVATE_KEY_SECRET_DEV_API ||
+            export DOTENV_PRIVATE_KEY_SECRET_DEV_PWA=$DOTENV_PRIVATE_KEY_SECRET_DEV_PWA
+            ;;
+          stg)
+            export DOTENV_PRIVATE_KEY_SECRET_STG_API=$DOTENV_PRIVATE_KEY_SECRET_STG_API ||
+            export DOTENV_PRIVATE_KEY_SECRET_STG_PWA=$DOTENV_PRIVATE_KEY_SECRET_STG_PWA
+            ;;
+          *)
+            echo "unknown environment: $ENVIRONMENT"
+            exit 1
+            ;;
+        esac
+
+        echo "environment setup complete with secret key."
+        $CUSTOM_COMMAND_SETUP
+
+        echo "TEST_TYPE=${{ inputs.profile }}" >> $GITHUB_ENV
+        echo "RUN_NUMBER=${{ inputs.github_run_number }}" >> $GITHUB_ENV
+      env:
+        ENVIRONMENT: ${{ inputs.environment }}
+        CUSTOM_COMMAND_SETUP: ${{ inputs.custom_command_setup }}
+        DOTENV_PRIVATE_KEY_SECRET_DEV_API: ${{ inputs.dotenv_private_key_secret_dev }}
+        DOTENV_PRIVATE_KEY_SECRET_STG_API: ${{ inputs.dotenv_private_key_secret_stg }}
+        DOTENV_PRIVATE_KEY_SECRET_DEV_PWA: ${{ inputs.dotenv_private_key_secret_dev }}
+        DOTENV_PRIVATE_KEY_SECRET_STG_PWA: ${{ inputs.dotenv_private_key_secret_stg }}
 
     - name: create test run on testrails
       shell: bash
@@ -222,7 +204,7 @@ runs:
       if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
       uses: kitabisa/composite-actions/sdet/tools/dispatch@v2
       with:
-        token: ${{ inputs.personal_access_token }}
+        token: ${{ inputs.gh_token }}
         target_branch: ${{ github.ref }}
         repository_name: ${{ github.repository }}
         repository_owner: ${{ github.repository_owner }}
@@ -233,22 +215,3 @@ runs:
       shell: bash
       if: always()
       run: ${{ inputs.custom_command_send_report_to_slack }}
-
-    - name: delay
-      shell: bash
-      if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
-      run: sleep 300
-
-    - name: install github cli
-      uses: sersoft-gmbh/setup-gh-cli-action@v2
-      if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
-      with:
-        version: stable
-
-    - name: trigger automation test api when deploy completed
-      shell: bash
-      if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
-      run: |
-        gh workflow run -R kitabisa/qorin .github/workflows/manual-trigger-deploy-stg.yaml -f profile=${{ inputs.service_name }} --ref master
-      env:
-        GITHUB_TOKEN: ${{ inputs.gh_token }}
