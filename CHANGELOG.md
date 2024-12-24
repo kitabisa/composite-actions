@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.3](https://github.com/kitabisa/composite-actions/compare/v2.8.2...v2.8.3) (2024-12-24)
+
+
+### Bug Fixes
+
+* description action ([#196](https://github.com/kitabisa/composite-actions/issues/196)) ([421dd0a](https://github.com/kitabisa/composite-actions/commit/421dd0a39ca481ae863a459cbbc5b15848c19d3e))
+
 ## [2.8.2](https://github.com/kitabisa/composite-actions/compare/v2.8.1...v2.8.2) (2024-12-11)
 
 
