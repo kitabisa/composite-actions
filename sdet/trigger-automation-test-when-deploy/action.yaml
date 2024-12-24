@@ -79,6 +79,8 @@ runs:
         PR_LINK=$(gh pr view --json url --jq '.url')
         echo "PR_AUTHOR=$PR_AUTHOR" >> $GITHUB_ENV
         echo "PR_LINK=$PR_LINK" >> $GITHUB_ENV
+      env:
+        GITHUB_TOKEN: ${{ inputs.gh_token }}
 
     - name: trigger automation test api when deploy completed
       shell: bash
