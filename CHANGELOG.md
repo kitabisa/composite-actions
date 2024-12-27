@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.4](https://github.com/kitabisa/composite-actions/compare/v2.8.3...v2.8.4) (2024-12-27)
+
+
+### Bug Fixes
+
+* remove unused variable key ([#200](https://github.com/kitabisa/composite-actions/issues/200)) ([e2a0c7c](https://github.com/kitabisa/composite-actions/commit/e2a0c7c7477ff918397e52b8d9577661993e04d9))
+
 ## [2.8.3](https://github.com/kitabisa/composite-actions/compare/v2.8.2...v2.8.3) (2024-12-24)
 
 
