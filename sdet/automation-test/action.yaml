@@ -149,16 +149,12 @@ runs:
           dev)
             export DOTENV_PRIVATE_KEY_SECRET_DEV_API=$DOTENV_PRIVATE_KEY_SECRET_DEV_API ||
             export DOTENV_PRIVATE_KEY_SECRET_DEV_PWA=$DOTENV_PRIVATE_KEY_SECRET_DEV_PWA ||
-            export DOTENV_PRIVATE_KEY_SECRET_DEV_KF=$DOTENV_PRIVATE_KEY_SECRET_DEV_KF ||
-            export DOTENV_PRIVATE_KEY_SECRET_DEV_IOS=$DOTENV_PRIVATE_KEY_SECRET_DEV_IOS ||
-            export DOTENV_PRIVATE_KEY_SECRET_DEV_ANDROID=$DOTENV_PRIVATE_KEY_SECRET_DEV_ANDROID
+            export DOTENV_PRIVATE_KEY_SECRET_DEV_KF=$DOTENV_PRIVATE_KEY_SECRET_DEV_KF
             ;;
           stg)
             export DOTENV_PRIVATE_KEY_SECRET_STG_API=$DOTENV_PRIVATE_KEY_SECRET_STG_API ||
             export DOTENV_PRIVATE_KEY_SECRET_STG_PWA=$DOTENV_PRIVATE_KEY_SECRET_STG_PWA ||
-            export DOTENV_PRIVATE_KEY_SECRET_STG_KF=$DOTENV_PRIVATE_KEY_SECRET_STG_KF ||
-            export DOTENV_PRIVATE_KEY_SECRET_STG_IOS=$DOTENV_PRIVATE_KEY_SECRET_STG_IOS ||
-            export DOTENV_PRIVATE_KEY_SECRET_STG_ANDROID=$DOTENV_PRIVATE_KEY_SECRET_STG_ANDROID
+            export DOTENV_PRIVATE_KEY_SECRET_STG_KF=$DOTENV_PRIVATE_KEY_SECRET_STG_KF
             ;;
           *)
             echo "unknown environment: $ENVIRONMENT"
@@ -180,10 +176,6 @@ runs:
         DOTENV_PRIVATE_KEY_SECRET_STG_PWA: ${{ inputs.dotenv_private_key_secret_stg }}
         DOTENV_PRIVATE_KEY_SECRET_DEV_KF: ${{ inputs.dotenv_private_key_secret_dev }}
         DOTENV_PRIVATE_KEY_SECRET_STG_KF: ${{ inputs.dotenv_private_key_secret_stg }}
-        DOTENV_PRIVATE_KEY_SECRET_DEV_IOS: ${{ inputs.dotenv_private_key_secret_dev }}
-        DOTENV_PRIVATE_KEY_SECRET_STG_IOS: ${{ inputs.dotenv_private_key_secret_stg }}
-        DOTENV_PRIVATE_KEY_SECRET_DEV_ANDROID: ${{ inputs.dotenv_private_key_secret_dev }}
-        DOTENV_PRIVATE_KEY_SECRET_STG_ANDROID: ${{ inputs.dotenv_private_key_secret_stg }}
 
     - name: create test run on testrails
       shell: bash
