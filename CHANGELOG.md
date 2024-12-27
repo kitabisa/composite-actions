@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.0](https://github.com/kitabisa/composite-actions/compare/v2.8.4...v2.9.0) (2024-12-27)
+
+
+### Features
+
+* add release event on terragrunt apply ([#202](https://github.com/kitabisa/composite-actions/issues/202)) ([dd10672](https://github.com/kitabisa/composite-actions/commit/dd1067239545fb21d095acf0a4e486a3f6cea07f))
+
 ## [2.8.4](https://github.com/kitabisa/composite-actions/compare/v2.8.3...v2.8.4) (2024-12-27)
 
 
