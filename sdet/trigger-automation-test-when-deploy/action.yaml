@@ -91,7 +91,7 @@ runs:
         if gh api repos/kitabisa/qorin/git/refs/heads/${PR_BRANCH} > /dev/null 2>&1; then
           TARGET_REF=${PR_BRANCH}
         else
-          echo "Branch ${PR_BRANCH} not found. Using fallback 'master'."
+          echo "Branch ${PR_BRANCH} not found. Using fallback 'master'"
           TARGET_REF=master
         fi
 
