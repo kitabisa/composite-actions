@@ -70,9 +70,9 @@ runs:
       shell: bash
       if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
       run: |
-        PR_AUTHOR=$(gh pr view --json author --jq '.author.login')
-        PR_LINK=$(gh pr view --json url --jq '.url')
-        PR_BRANCH=$(gh pr view --json headRefName --jq '.headRefName')
+        PR_AUTHOR=$(gh pr list --state merged --base master --json author --jq '.[0].author.login')
+        PR_LINK=$(gh pr list --state merged --base master --json url --jq '.[0].url')
+        PR_BRANCH=$(gh pr list --state merged --base master --json headRefName --jq '.[0].headRefName')
         echo "PR_AUTHOR=$PR_AUTHOR" >> $GITHUB_ENV
         echo "PR_LINK=$PR_LINK" >> $GITHUB_ENV
         echo "PR_BRANCH=$PR_BRANCH" >> $GITHUB_ENV
