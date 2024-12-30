@@ -66,14 +66,16 @@ runs:
         setup_bun: ${{ inputs.setup_bun }}
         setup_gh_cli: ${{ inputs.setup_gh_cli }}
 
-    - name: get pr link and author
+    - name: get pr details
       shell: bash
       if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
       run: |
         PR_AUTHOR=$(gh pr view --json author --jq '.author.login')
         PR_LINK=$(gh pr view --json url --jq '.url')
+        PR_BRANCH=$(gh pr view --json headRefName --jq '.headRefName')
         echo "PR_AUTHOR=$PR_AUTHOR" >> $GITHUB_ENV
         echo "PR_LINK=$PR_LINK" >> $GITHUB_ENV
+        echo "PR_BRANCH=$PR_BRANCH" >> $GITHUB_ENV
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
 
@@ -90,6 +92,6 @@ runs:
           -f profile=${{ inputs.service_name }} \
           -f pr_author="${PR_AUTHOR}" \
           -f pr_link="${PR_LINK}" \
-          --ref master
+          --ref "${PR_BRANCH}"
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
