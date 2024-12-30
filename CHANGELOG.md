@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.3](https://github.com/kitabisa/composite-actions/compare/v2.9.2...v2.9.3) (2024-12-30)
+
+
+### Bug Fixes
+
+* dispatch event pr ([#208](https://github.com/kitabisa/composite-actions/issues/208)) ([aebe9ef](https://github.com/kitabisa/composite-actions/commit/aebe9ef0226d4bb001a3c245ba63a487e2b82d33))
+
 ## [2.9.2](https://github.com/kitabisa/composite-actions/compare/v2.9.1...v2.9.2) (2024-12-30)
 
 
