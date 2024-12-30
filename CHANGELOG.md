@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.2](https://github.com/kitabisa/composite-actions/compare/v2.9.1...v2.9.2) (2024-12-30)
+
+
+### Bug Fixes
+
+* command base on merge to master ([#206](https://github.com/kitabisa/composite-actions/issues/206)) ([a4699fb](https://github.com/kitabisa/composite-actions/commit/a4699fbce5fce6ff4c0b91cff4fe205c973bde48))
+
 ## [2.9.1](https://github.com/kitabisa/composite-actions/compare/v2.9.0...v2.9.1) (2024-12-30)
 
 
