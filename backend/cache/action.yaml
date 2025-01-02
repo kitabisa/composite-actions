@@ -45,6 +45,14 @@ runs:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
+    - name: Extract Go version
+      id: go-version
+      shell: bash
+      run: |
+        GO_VERSION=$(grep -E '^go [0-9]+\.[0-9]+' go.mod | awk '{print $2}')
+        echo "Go version found: $GO_VERSION"
+        echo "go_version=$GO_VERSION" >> $GITHUB_ENV
+
     - name: Install the gh cli
       uses: ksivamuthu/actions-setup-gh-cli@v3
       with:
@@ -54,7 +62,7 @@ runs:
       uses: actions/setup-go@v5
       with:
         cache: false
-        go-version: ${{ inputs.go_version }}
+        go-version: ${{ env.go_version }}
 
     - name: Determine Golang cache paths and construct cache key
       id: golang-env
