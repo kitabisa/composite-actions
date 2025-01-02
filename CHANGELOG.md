@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.4](https://github.com/kitabisa/composite-actions/compare/v2.9.3...v2.9.4) (2025-01-02)
+
+
+### Bug Fixes
+
+* **cache:** removed cache deletion ([433700e](https://github.com/kitabisa/composite-actions/commit/433700e6876234fb4b4033afd77773744ed8b2c7))
+
 ## [2.9.3](https://github.com/kitabisa/composite-actions/compare/v2.9.2...v2.9.3) (2024-12-30)
 
 
