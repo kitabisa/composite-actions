@@ -50,16 +50,6 @@ runs:
       with:
         version: 2.57.0
 
-    - name: Delete existing cache mod
-      continue-on-error: true
-      shell: bash
-      run: |
-        gh extension install actions/gh-actions-cache
-        gh actions-cache delete "Linux-golang-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" --confirm
-        gh actions-cache delete "Linux-golang-" --confirm
-      env:
-        GH_TOKEN: ${{ inputs.gh_token }}
-
     - name: Setup Golang
       uses: actions/setup-go@v5
       with:
