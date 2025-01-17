@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.10.0](https://github.com/kitabisa/composite-actions/compare/v2.9.3...v2.10.0) (2025-01-17)
+
+
+### Features
+
+* add auth dockerhub oci ([#211](https://github.com/kitabisa/composite-actions/issues/211)) ([21cba7d](https://github.com/kitabisa/composite-actions/commit/21cba7d5cf2a7fe938c94d66bf8a63eb39c24567))
+
+
+### Bug Fixes
+
+* **cache:** removed cache deletion ([433700e](https://github.com/kitabisa/composite-actions/commit/433700e6876234fb4b4033afd77773744ed8b2c7))
+
 ## [2.9.3](https://github.com/kitabisa/composite-actions/compare/v2.9.2...v2.9.3) (2024-12-30)
 
 
