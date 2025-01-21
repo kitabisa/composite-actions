@@ -57,7 +57,7 @@ inputs:
 
   cache_key_suffix:
     required: false
-    description: "cache key suffix"
+    description: "cache key suffix for github cache"
     default: ""
 
 runs:
