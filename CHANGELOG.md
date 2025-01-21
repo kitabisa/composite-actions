@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.0](https://github.com/kitabisa/composite-actions/compare/v2.10.0...v2.11.0) (2025-01-21)
+
+
+### Features
+
+* **coverage:** updated description ([f701629](https://github.com/kitabisa/composite-actions/commit/f701629ab856cff3f73c14af31309304618005ff))
+
 ## [2.10.0](https://github.com/kitabisa/composite-actions/compare/v2.9.3...v2.10.0) (2025-01-17)
 
 
