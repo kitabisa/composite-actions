@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.12.0](https://github.com/kitabisa/composite-actions/compare/v2.11.0...v2.12.0) (2025-02-07)
+
+
+### Features
+
+* change get cred gke to v2 ([846f6f9](https://github.com/kitabisa/composite-actions/commit/846f6f92df4c54ff63c792c82d5ddd4a3bfeec82))
+
 ## [2.11.0](https://github.com/kitabisa/composite-actions/compare/v2.10.0...v2.11.0) (2025-01-21)
 
 
