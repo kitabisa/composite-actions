@@ -24,7 +24,7 @@ runs:
       uses: azure/setup-kubectl@v3
 
     - name: Get GKE credential
-      uses: google-github-actions/get-gke-credentials@main
+      uses: google-github-actions/get-gke-credentials@v2
       with:
         cluster_name: ${{ inputs.gke_cluster_name }}
         location: ${{ inputs.gke_cluster_zone }}
