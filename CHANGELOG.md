@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.12.2](https://github.com/kitabisa/composite-actions/compare/v2.12.1...v2.12.2) (2025-02-10)
+
+
+### Bug Fixes
+
+* remove delay ([#215](https://github.com/kitabisa/composite-actions/issues/215)) ([5902817](https://github.com/kitabisa/composite-actions/commit/5902817881304bc2cfe5c92872a915969167428d))
+
 ## [2.12.1](https://github.com/kitabisa/composite-actions/compare/v2.12.0...v2.12.1) (2025-02-07)
 
 
