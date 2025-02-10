@@ -79,11 +79,6 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
 
-    - name: delay
-      shell: bash
-      if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
-      run: sleep 180
-
     - name: trigger automation test api when deploy completed
       shell: bash
       if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
@@ -95,7 +90,7 @@ runs:
           TARGET_REF=master
         fi
 
-        echo "Using ref: $TARGET_REF"
+        echo "using ref: $TARGET_REF"
 
         gh workflow run -R kitabisa/qorin .github/workflows/trigger-when-deploy.yaml \
           -f profile=${{ inputs.service_name }} \
