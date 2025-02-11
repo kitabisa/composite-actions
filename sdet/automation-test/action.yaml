@@ -147,12 +147,14 @@ runs:
       run: |
         case "$ENVIRONMENT" in
           dev)
-            export DOTENV_PRIVATE_KEY_SECRET_DEV_API=$DOTENV_PRIVATE_KEY_SECRET_DEV_API ||
+            export DOTENV_PRIVATE_KEY_SECRET_API_CF=$DOTENV_PRIVATE_KEY_SECRET_API_CF ||
+            export DOTENV_PRIVATE_KEY_SECRET_API_INS=$DOTENV_PRIVATE_KEY_SECRET_API_INS ||
             export DOTENV_PRIVATE_KEY_SECRET_DEV_PWA=$DOTENV_PRIVATE_KEY_SECRET_DEV_PWA ||
             export DOTENV_PRIVATE_KEY_SECRET_DEV_KF=$DOTENV_PRIVATE_KEY_SECRET_DEV_KF
             ;;
           stg)
-            export DOTENV_PRIVATE_KEY_SECRET_STG_API=$DOTENV_PRIVATE_KEY_SECRET_STG_API ||
+            export DOTENV_PRIVATE_KEY_SECRET_API_CF=$DOTENV_PRIVATE_KEY_SECRET_API_CF ||
+            export DOTENV_PRIVATE_KEY_SECRET_API_INS=$DOTENV_PRIVATE_KEY_SECRET_API_INS ||
             export DOTENV_PRIVATE_KEY_SECRET_STG_PWA=$DOTENV_PRIVATE_KEY_SECRET_STG_PWA ||
             export DOTENV_PRIVATE_KEY_SECRET_STG_KF=$DOTENV_PRIVATE_KEY_SECRET_STG_KF
             ;;
@@ -170,8 +172,8 @@ runs:
       env:
         ENVIRONMENT: ${{ inputs.environment }}
         CUSTOM_COMMAND_SETUP: ${{ inputs.custom_command_setup }}
-        DOTENV_PRIVATE_KEY_SECRET_DEV_API: ${{ inputs.dotenv_private_key_secret_dev }}
-        DOTENV_PRIVATE_KEY_SECRET_STG_API: ${{ inputs.dotenv_private_key_secret_stg }}
+        DOTENV_PRIVATE_KEY_SECRET_API_CF: ${{ inputs.dotenv_private_key_secret_stg }}
+        DOTENV_PRIVATE_KEY_SECRET_API_INS: ${{ inputs.dotenv_private_key_secret_stg }}
         DOTENV_PRIVATE_KEY_SECRET_DEV_PWA: ${{ inputs.dotenv_private_key_secret_dev }}
         DOTENV_PRIVATE_KEY_SECRET_STG_PWA: ${{ inputs.dotenv_private_key_secret_stg }}
         DOTENV_PRIVATE_KEY_SECRET_DEV_KF: ${{ inputs.dotenv_private_key_secret_dev }}
