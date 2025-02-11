@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.12.3](https://github.com/kitabisa/composite-actions/compare/v2.12.2...v2.12.3) (2025-02-11)
+
+
+### Bug Fixes
+
+* handle env variables ([#217](https://github.com/kitabisa/composite-actions/issues/217)) ([08f267e](https://github.com/kitabisa/composite-actions/commit/08f267ed3de7e6efd076f8ef223898b33966dd7d))
+
 ## [2.12.2](https://github.com/kitabisa/composite-actions/compare/v2.12.1...v2.12.2) (2025-02-10)
 
 
