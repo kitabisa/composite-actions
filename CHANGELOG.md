@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.16.2](https://github.com/kitabisa/composite-actions/compare/v2.16.1...v2.16.2) (2025-02-21)
+
+
+### CI
+
+* fix commit message ([cc0bab6](https://github.com/kitabisa/composite-actions/commit/cc0bab6f436c2de01b67e3a912bc29e16ae2363c))
+
 ## [2.16.1](https://github.com/kitabisa/composite-actions/compare/v2.16.0...v2.16.1) (2025-02-21)
 
 
