@@ -6,7 +6,7 @@ on:
 name: release-please
 jobs:
   release-please:
-    runs-on: ktbs-small-runner
+    runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-${{ github.head_ref }}
       cancel-in-progress: true
