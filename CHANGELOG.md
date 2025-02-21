@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.15.0](https://github.com/kitabisa/composite-actions/compare/v2.14.0...v2.15.0) (2025-02-21)
+
+
+### Features
+
+* add git source make source ([#227](https://github.com/kitabisa/composite-actions/issues/227)) ([061e489](https://github.com/kitabisa/composite-actions/commit/061e489e67790e4f5449381c34a5206b4a822087))
+
 ## [2.14.0](https://github.com/kitabisa/composite-actions/compare/v2.13.1...v2.14.0) (2025-02-21)
 
 
