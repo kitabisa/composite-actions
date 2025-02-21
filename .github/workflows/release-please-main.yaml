@@ -26,5 +26,5 @@ jobs:
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git remote add gh-token "https://${{ secrets.GITHUB_TOKEN }}@github.com/googleapis/release-please-action.git"
           git push origin --delete v2
-          git tag -a v2 -m -m "Re-Releasing v2"
+          git tag -a v2 -m "Re-Releasing v2"
           git push origin v2
