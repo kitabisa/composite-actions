@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.12.4](https://github.com/kitabisa/composite-actions/compare/v2.12.3...v2.12.4) (2025-02-21)
+
+
+### CI
+
+* change runner to ubuntu ([65be7e3](https://github.com/kitabisa/composite-actions/commit/65be7e3f5125555863865840ed49ea7921d9267b))
+* **coverage:** disable upload to artifact ([ac4df8d](https://github.com/kitabisa/composite-actions/commit/ac4df8d18f1bf94f9ddd7b6b1e8a0d2134c5bf1b))
+* removed token ([a1a73a6](https://github.com/kitabisa/composite-actions/commit/a1a73a61b824c370de8bbdd473a20fb846c66eff))
+* update release please main ([5a6959e](https://github.com/kitabisa/composite-actions/commit/5a6959e59c4eb8ed3fbd73e8b516516741675480))
+
+
+### Chore
+
+* added config release please ([fb133e6](https://github.com/kitabisa/composite-actions/commit/fb133e6a28f6406043013b2c1de84c6ac443deef))
+
 ## [2.12.3](https://github.com/kitabisa/composite-actions/compare/v2.12.2...v2.12.3) (2025-02-11)
 
 
