@@ -1,0 +1,25 @@
+{
+    "include-v-in-tag": true,
+    "tag-separator": "/",
+    "separate-pull-requests": true,
+    "draft-pull-request": true,
+    "release-label": "autorelease: tagged",
+    "label": "autorelease: pending",
+    "changelog-sections": [
+        {"type":"feat","section":"Features","hidden":false},
+        {"type":"feature","section":"Features","hidden":false},
+        {"type":"fix","section":"Bugfix","hidden":false},
+        {"type":"docs","section":"Documentation","hidden":false},
+        {"type":"refactor","section":"Refactor","hidden":false},
+        {"type":"ci","section":"CI","hidden":false},
+        {"type":"build","section":"CI","hidden":false},
+        {"type":"config","section":"Config","hidden":false},
+        {"type":"infra","section":"Config","hidden":false},
+        {"type":"chore","section":"Chore","hidden":false} ],
+    "packages": {
+        ".": {
+            "changelog-path": "CHANGELOG.md",
+            "release-type": "simple"
+        }
+    }
+}
