@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.14.0](https://github.com/kitabisa/composite-actions/compare/v2.13.1...v2.14.0) (2025-02-21)
+
+
+### Features
+
+* add github source env ([#225](https://github.com/kitabisa/composite-actions/issues/225)) ([e726b6b](https://github.com/kitabisa/composite-actions/commit/e726b6bf206567fe700b66e013cf739bcaea3feb))
+
 ## [2.13.1](https://github.com/kitabisa/composite-actions/compare/v2.13.0...v2.13.1) (2025-02-21)
 
 
