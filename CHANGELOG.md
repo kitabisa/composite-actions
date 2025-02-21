@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.16.0](https://github.com/kitabisa/composite-actions/compare/v2.15.0...v2.16.0) (2025-02-21)
+
+
+### Features
+
+* change env values ([#229](https://github.com/kitabisa/composite-actions/issues/229)) ([0195db9](https://github.com/kitabisa/composite-actions/commit/0195db9ccbad8ac82e035e027804fb1cf360a49a))
+
 ## [2.15.0](https://github.com/kitabisa/composite-actions/compare/v2.14.0...v2.15.0) (2025-02-21)
 
 
