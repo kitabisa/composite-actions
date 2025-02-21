@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.0](https://github.com/kitabisa/composite-actions/compare/v2.12.4...v2.13.0) (2025-02-21)
+
+
+### Features
+
+* change readme ([#220](https://github.com/kitabisa/composite-actions/issues/220)) ([eefc4f9](https://github.com/kitabisa/composite-actions/commit/eefc4f905609ffebe7042284272276d1ef4bb126))
+
 ## [2.12.4](https://github.com/kitabisa/composite-actions/compare/v2.12.3...v2.12.4) (2025-02-21)
 
 
