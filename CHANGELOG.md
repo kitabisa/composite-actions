@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.16.1](https://github.com/kitabisa/composite-actions/compare/v2.16.0...v2.16.1) (2025-02-21)
+
+
+### CI
+
+* test re-release tag v2 ([70081a3](https://github.com/kitabisa/composite-actions/commit/70081a3e518ba3dd1027358fbc0f67029ec3b73d))
+
 ## [2.16.0](https://github.com/kitabisa/composite-actions/compare/v2.15.0...v2.16.0) (2025-02-21)
 
 
