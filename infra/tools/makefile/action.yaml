@@ -175,7 +175,7 @@ runs:
       env:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         CHARTS_REPOSITORY: asia-southeast1-docker.pkg.dev/${{ inputs.artifact_registry_project_id }}/charts
-        GIT_SOURCE: $(echo "${{ github.repository }}" | cut -d'/' -f2)
+        GIT_SOURCE: ${{ github.event.repository.name }}
       run: |-
         make config
 
@@ -231,7 +231,7 @@ runs:
       env:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         CHARTS_REPOSITORY: asia-southeast1-docker.pkg.dev/${{ inputs.artifact_registry_project_id }}/charts
-        GIT_SOURCE: $(echo "${{ github.repository }}" | cut -d'/' -f2)
+        GIT_SOURCE: ${{ github.event.repository.name }}
       run: |-
         make deploy
 
@@ -242,7 +242,7 @@ runs:
       env:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         CHARTS_REPOSITORY: asia-southeast1-docker.pkg.dev/${{ inputs.artifact_registry_project_id }}/charts
-        GIT_SOURCE: $(echo "${{ github.repository }}" | cut -d'/' -f2)
+        GIT_SOURCE: ${{ github.event.repository.name }}
       run: |-
         make deploy-kj service-kj=${{ inputs.param }}
 
@@ -253,7 +253,7 @@ runs:
       env:
         DOCKER_REPOSITORY: ${{ inputs.artifact_registry_host }}/${{ inputs.project_id }}/images
         CHARTS_REPOSITORY: asia-southeast1-docker.pkg.dev/${{ inputs.artifact_registry_project_id }}/charts
-        GIT_SOURCE: $(echo "${{ github.repository }}" | cut -d'/' -f2)
+        GIT_SOURCE: ${{ github.event.repository.name }}
       run: |-
         make deploy-test
 
