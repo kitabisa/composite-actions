@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.13.1](https://github.com/kitabisa/composite-actions/compare/v2.13.0...v2.13.1) (2025-02-21)
+
+
+### Bugfix
+
+* major tagging ([#223](https://github.com/kitabisa/composite-actions/issues/223)) ([a43cc8d](https://github.com/kitabisa/composite-actions/commit/a43cc8d55004e400fe930f8f097ccc7e49ad1044))
+* rollback github token ([#222](https://github.com/kitabisa/composite-actions/issues/222)) ([ee08819](https://github.com/kitabisa/composite-actions/commit/ee08819f08d193a9642a2eba3d68a5870e5ca848))
+
 ## [2.13.0](https://github.com/kitabisa/composite-actions/compare/v2.12.4...v2.13.0) (2025-02-21)
 
 
