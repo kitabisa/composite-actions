@@ -12,3 +12,5 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
