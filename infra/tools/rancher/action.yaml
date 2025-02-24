@@ -56,7 +56,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
-        echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
+        echo "platform=$(make get-platform)" >> $GITHUB_OUTPUT
 
     - name: Get business unit & app name values
       id: app-meta-kj
@@ -65,7 +65,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
-        echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
+        echo "platform=$(make get-platform)" >> $GITHUB_OUTPUT
 
     - name: Configure namespace-project mapping in rancher
       uses: kitabisa/actions/rancher-ns-mover@master
@@ -75,7 +75,7 @@ runs:
         rancher-access-key: ${{ inputs.rancher_access_key }}
         rancher-secret-key: ${{ inputs.rancher_secret_key }}
         cluster-id: ${{ inputs.rancher_cluster_id }}
-        project-name: ${{ steps.app-meta.outputs.business-unit }}
+        project-name: ${{ steps.app-meta.outputs.platform }}
         namespace: ${{ steps.app-meta.outputs.app-name }}
 
     - name: Configure namespace-project mapping in rancher project kitajaga
@@ -86,5 +86,5 @@ runs:
         rancher-access-key: ${{ inputs.rancher_access_key }}
         rancher-secret-key: ${{ inputs.rancher_secret_key }}
         cluster-id: ${{ inputs.rancher_cluster_id }}
-        project-name: ${{ steps.app-meta-kj.outputs.business-unit }}
+        project-name: ${{ steps.app-meta-kj.outputs.platform }}
         namespace: ${{ steps.app-meta-kj.outputs.app-name }}
