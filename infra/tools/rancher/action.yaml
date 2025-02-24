@@ -49,17 +49,20 @@ inputs:
 runs:
   using: "composite"
   steps:
-    # will be deprecated
     - name: Get business unit & app name values
       id: app-meta
       if: "${{ (inputs.deploy == 'true') && (inputs.deploy-kj == 'false') }}"
       shell: bash
-      continue-on-error: true
       working-directory: ${{ inputs.working_directory }}
       run: |-
         echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
-        echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
 
+        if make -n get-platform >/dev/null 2>&1; then
+          echo "platform=$(make get-platform)" >> $GITHUB_OUTPUT
+        else
+          echo "platform=$(make get-business-unit)" >> $GITHUB_OUTPUT
+        fi
+        
     - name: Get business unit & app name values
       id: app-meta-kj
       if: "${{ (inputs.deploy == 'false') && (inputs.deploy-kj == 'true') }}"
@@ -78,7 +81,7 @@ runs:
         rancher-access-key: ${{ inputs.rancher_access_key }}
         rancher-secret-key: ${{ inputs.rancher_secret_key }}
         cluster-id: ${{ inputs.rancher_cluster_id }}
-        project-name: ${{ steps.app-meta.outputs.business-unit }}
+        project-name: ${{ steps.app-meta.outputs.platform }}
         namespace: ${{ steps.app-meta.outputs.app-name }}
 
     - name: Configure namespace-project mapping in rancher project kitajaga
@@ -91,26 +94,3 @@ runs:
         cluster-id: ${{ inputs.rancher_cluster_id }}
         project-name: ${{ steps.app-meta-kj.outputs.business-unit }}
         namespace: ${{ steps.app-meta-kj.outputs.app-name }}
-
-    # migration purpose
-    - name: Get business unit & app name values 
-      id: app-meta
-      if: "${{ (inputs.deploy == 'true') && (inputs.deploy-kj == 'false') }}"
-      shell: bash
-      continue-on-error: true
-      working-directory: ${{ inputs.working_directory }}
-      run: |-
-        echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
-        echo "platform=$(make get-platform)" >> $GITHUB_OUTPUT
-    
-    - name: Configure namespace-project mapping in rancher
-      uses: kitabisa/actions/rancher-ns-mover@master
-      if: "${{ (inputs.deploy == 'true') && (inputs.deploy-kj == 'false') }}"
-      continue-on-error: true
-      with:
-        rancher-host: ${{ inputs.rancher_host }}
-        rancher-access-key: ${{ inputs.rancher_access_key }}
-        rancher-secret-key: ${{ inputs.rancher_secret_key }}
-        cluster-id: ${{ inputs.rancher_cluster_id }}
-        project-name: ${{ steps.app-meta.outputs.business-unit }}
-        namespace: ${{ steps.app-meta.outputs.app-name }}
