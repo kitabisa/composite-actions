@@ -62,7 +62,7 @@ runs:
         else
           echo "platform=$(make get-business-unit)" >> $GITHUB_OUTPUT
         fi
-        
+
     - name: Get business unit & app name values
       id: app-meta-kj
       if: "${{ (inputs.deploy == 'false') && (inputs.deploy-kj == 'true') }}"
@@ -70,7 +70,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
-        
+
         if make -n get-platform >/dev/null 2>&1; then
           echo "platform=$(make get-platform)" >> $GITHUB_OUTPUT
         else
