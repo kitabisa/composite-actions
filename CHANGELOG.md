@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.17.0](https://github.com/kitabisa/composite-actions/compare/v2.16.3...v2.17.0) (2025-02-24)
+
+
+### Features
+
+* force run rancher ns mover ([#235](https://github.com/kitabisa/composite-actions/issues/235)) ([6c218da](https://github.com/kitabisa/composite-actions/commit/6c218da74ed6c27b85171c0d4904264a2e9f0707))
+
 ## [2.16.3](https://github.com/kitabisa/composite-actions/compare/v2.16.2...v2.16.3) (2025-02-21)
 
 
