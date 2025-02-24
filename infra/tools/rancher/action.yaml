@@ -70,7 +70,12 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
-        echo "business-unit=$(make get-business-unit)" >> $GITHUB_OUTPUT
+        
+        if make -n get-platform >/dev/null 2>&1; then
+          echo "platform=$(make get-platform)" >> $GITHUB_OUTPUT
+        else
+          echo "platform=$(make get-business-unit)" >> $GITHUB_OUTPUT
+        fi
 
     - name: Configure namespace-project mapping in rancher
       uses: kitabisa/actions/rancher-ns-mover@master
@@ -91,5 +96,5 @@ runs:
         rancher-access-key: ${{ inputs.rancher_access_key }}
         rancher-secret-key: ${{ inputs.rancher_secret_key }}
         cluster-id: ${{ inputs.rancher_cluster_id }}
-        project-name: ${{ steps.app-meta-kj.outputs.business-unit }}
+        project-name: ${{ steps.app-meta-kj.outputs.platform }}
         namespace: ${{ steps.app-meta-kj.outputs.app-name }}
