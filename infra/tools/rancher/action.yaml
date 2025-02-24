@@ -67,7 +67,6 @@ runs:
       id: app-meta-kj
       if: "${{ (inputs.deploy == 'false') && (inputs.deploy-kj == 'true') }}"
       shell: bash
-      continue-on-error: true
       working-directory: ${{ inputs.working_directory }}
       run: |-
         echo "app-name=$(make get-app-name)" >> $GITHUB_OUTPUT
