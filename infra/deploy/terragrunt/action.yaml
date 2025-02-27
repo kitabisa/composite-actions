@@ -47,8 +47,6 @@ runs:
     - name: Terragrunt Validation
       id: validate
       shell: bash
-      env:
-        TOFU_SKIP_PROVIDER_VERIFY: 1
       run: |
         cd ${{ inputs.path }}
         terragrunt run-all validate --terragrunt-non-interactive
@@ -57,8 +55,6 @@ runs:
       id: plan
       if: github.event_name == 'pull_request'
       shell: bash
-      env:
-        TOFU_SKIP_PROVIDER_VERIFY: 1
       run: |
         cd ${{ inputs.path }}
         terragrunt run-all plan --terragrunt-non-interactive -no-color > /tmp/stdout-plan.log
@@ -95,8 +91,6 @@ runs:
       id: apply
       if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'release'
       shell: bash
-      env:
-        TOFU_SKIP_PROVIDER_VERIFY: 1
       run: |
         cd ${{ inputs.path }}
         terragrunt run-all apply --terragrunt-non-interactive
