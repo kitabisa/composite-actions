@@ -55,6 +55,8 @@ runs:
       id: plan
       if: github.event_name == 'pull_request'
       shell: bash
+      env:
+        TOFU_SKIP_PROVIDER_VERIFY: 1
       run: |
         cd ${{ inputs.path }}
         terragrunt run-all plan --terragrunt-non-interactive -no-color > /tmp/stdout-plan.log
