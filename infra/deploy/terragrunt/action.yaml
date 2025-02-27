@@ -91,6 +91,8 @@ runs:
       id: apply
       if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'release'
       shell: bash
+      env:
+        TOFU_SKIP_PROVIDER_VERIFY: 1
       run: |
         cd ${{ inputs.path }}
         terragrunt run-all apply --terragrunt-non-interactive
