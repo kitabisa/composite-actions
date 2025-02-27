@@ -47,6 +47,8 @@ runs:
     - name: Terragrunt Validation
       id: validate
       shell: bash
+      env:
+        TOFU_SKIP_PROVIDER_VERIFY: 1
       run: |
         cd ${{ inputs.path }}
         terragrunt run-all validate --terragrunt-non-interactive
