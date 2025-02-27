@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.20.0](https://github.com/kitabisa/composite-actions/compare/v2.19.0...v2.20.0) (2025-02-27)
+
+
+### Features
+
+* skip validation ([340c882](https://github.com/kitabisa/composite-actions/commit/340c8829c93f6fb413e1c6207ba5a557c9595fb8))
+
 ## [2.19.0](https://github.com/kitabisa/composite-actions/compare/v2.18.0...v2.19.0) (2025-02-27)
 
 
