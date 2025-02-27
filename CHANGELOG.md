@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.18.0](https://github.com/kitabisa/composite-actions/compare/v2.17.0...v2.18.0) (2025-02-27)
+
+
+### Features
+
+* add skip tofu validation ([b469734](https://github.com/kitabisa/composite-actions/commit/b469734bc5c9e8bc0b8ee77a49826ec7147ec7e2))
+* skip validation ([22a1bdb](https://github.com/kitabisa/composite-actions/commit/22a1bdb685fa2b7a788090e20c7d823fd9554920))
+
 ## [2.17.0](https://github.com/kitabisa/composite-actions/compare/v2.16.3...v2.17.0) (2025-02-24)
 
 
