@@ -32,14 +32,12 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
+
 runs:
   using: "composite"
   steps:
     - name: Checkout
       uses: actions/checkout@v4
-
-    - name: Setup GHCR credential
-      uses: kitabisa/composite-actions/infra/tools/ghcr-credential@v2
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2

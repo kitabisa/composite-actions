@@ -121,6 +121,8 @@ runs:
 
     - name: Setup GHCR credential
       uses: kitabisa/composite-actions/infra/tools/ghcr-credential@v2
+      with:
+        gh_token: ${{ inputs.gh_token }}
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
