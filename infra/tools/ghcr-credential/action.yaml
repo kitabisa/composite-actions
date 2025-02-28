@@ -4,7 +4,7 @@ description: "Get GHCR Credential"
 runs:
   using: "composite"
   steps:
-    - name: Log in to Helm Registry (GHCR) 
+    - name: Log in to Helm Registry (GHCR)
       shell: bash
       run: |
           helm registry login ghcr.io --username $GITHUB_ACTOR --password "${{ secrets.GITHUB_TOKEN }}"
