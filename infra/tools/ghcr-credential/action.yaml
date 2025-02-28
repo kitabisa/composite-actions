@@ -1,10 +1,15 @@
 name: "Get GHCR Credential"
 description: "Get GHCR Credential"
 
+inputs:
+  gh_token:
+    required: true
+    description: "gh token"
+
 runs:
   using: "composite"
   steps:
     - name: Log in to Helm Registry (GHCR)
       shell: bash
       run: |
-          helm registry login ghcr.io --username $GITHUB_ACTOR --password "${{ secrets.GITHUB_TOKEN }}"
+          helm registry login ghcr.io --username $GITHUB_ACTOR --password "${{ inputs.gh_token }}"
