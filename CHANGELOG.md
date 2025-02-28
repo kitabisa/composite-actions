@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.23.0](https://github.com/kitabisa/composite-actions/compare/v2.22.1...v2.23.0) (2025-02-28)
+
+
+### Features
+
+* re trigger release ([#247](https://github.com/kitabisa/composite-actions/issues/247)) ([865b1d2](https://github.com/kitabisa/composite-actions/commit/865b1d257612e1527a9b1cccdef92ed31a5a2120))
+
 ## [2.22.1](https://github.com/kitabisa/composite-actions/compare/v2.22.0...v2.22.1) (2025-02-28)
 
 
