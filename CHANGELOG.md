@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.24.0](https://github.com/kitabisa/composite-actions/compare/v2.23.0...v2.24.0) (2025-02-28)
+
+
+### Features
+
+* add missing parameter and remove unused ([#249](https://github.com/kitabisa/composite-actions/issues/249)) ([b204a81](https://github.com/kitabisa/composite-actions/commit/b204a81054f06a6770664989ecfa23df13edec2b))
+
 ## [2.23.0](https://github.com/kitabisa/composite-actions/compare/v2.22.1...v2.23.0) (2025-02-28)
 
 
