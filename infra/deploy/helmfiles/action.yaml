@@ -38,6 +38,9 @@ runs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Setup GHCR
+      uses: kitabisa/composite-actions/infra/tools/ghcr-credential@v2
+
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
