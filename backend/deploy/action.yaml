@@ -119,6 +119,9 @@ runs:
       shell: bash
       run: ${{ inputs.custom_command }}
 
+    - name: Setup GHCR
+      uses: kitabisa/composite-actions/infra/tools/ghcr-credential@v2
+
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
