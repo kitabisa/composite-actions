@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.22.0](https://github.com/kitabisa/composite-actions/compare/v2.20.0...v2.22.0) (2025-02-28)
+
+
+### Features
+
+* add ghcr credential ([#240](https://github.com/kitabisa/composite-actions/issues/240)) ([ac2feff](https://github.com/kitabisa/composite-actions/commit/ac2feff0f2a6da4160c3158518bf9e6a7c919487))
+
+
+### Chore
+
+* release 2.22.0 ([7bf0679](https://github.com/kitabisa/composite-actions/commit/7bf0679b34bf4f95d246c87b7b590b73b881e03f))
+
 ## [2.20.0](https://github.com/kitabisa/composite-actions/compare/v2.19.0...v2.20.0) (2025-02-27)
 
 
