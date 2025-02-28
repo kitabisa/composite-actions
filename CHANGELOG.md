@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.22.1](https://github.com/kitabisa/composite-actions/compare/v2.22.0...v2.22.1) (2025-02-28)
+
+
+### Chore
+
+* retrigger release please add ghcr ([#244](https://github.com/kitabisa/composite-actions/issues/244)) ([4274fdd](https://github.com/kitabisa/composite-actions/commit/4274fdd9e2eb45059132115f6ad86e57d74aa832))
+
 ## [2.22.0](https://github.com/kitabisa/composite-actions/compare/v2.20.0...v2.22.0) (2025-02-28)
 
 
