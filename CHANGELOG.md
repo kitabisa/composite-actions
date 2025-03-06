@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.25.0](https://github.com/kitabisa/composite-actions/compare/v2.24.0...v2.25.0) (2025-03-06)
+
+
+### Features
+
+* enable push coverage master ([8f0a9a0](https://github.com/kitabisa/composite-actions/commit/8f0a9a065812823dbee8c5833cd50a3d6d57a104))
+
 ## [2.24.0](https://github.com/kitabisa/composite-actions/compare/v2.23.0...v2.24.0) (2025-02-28)
 
 
