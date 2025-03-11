@@ -10,12 +10,9 @@ SDET composite setup and run automation test
 | parameter | description | required | default |
 | --- | --- | --- | --- |
 | gh_token | gh token | `true` |  |
-| environment | environment | `true` |  |
-| dotenv_private_key_secret_dev | dotenv private key secret dev | `true` |  |
-| dotenv_private_key_secret_stg | dotenv private key secret stg | `true` |  |
 | profile | profile | `false` |  |
-| github_run_number | github run number | `false` |  |
 | platform | platform | `false` |  |
+| github_run_number | github run number | `false` |  |
 | setup_pnpm | setup pnpm | `false` |  |
 | setup_bun | setup bun | `false` |  |
 | setup_gh_cli | setup github cli | `false` |  |

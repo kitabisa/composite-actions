@@ -8,24 +8,6 @@ inputs:
     default: "false"
     type: string
 
-  environment:
-    required: true
-    description: 'environment'
-    default: "false"
-    type: string
-
-  dotenv_private_key_secret_dev:
-    required: true
-    description: 'dotenv private key for dev environment'
-    default: "false"
-    type: string
-
-  dotenv_private_key_secret_stg:
-    required: true
-    description: 'dotenv private key for stg environment'
-    default: "false"
-    type: string
-
   profile:
     required: false
     description: "profile"
@@ -145,39 +127,13 @@ runs:
     - name: setup env variables
       shell: bash
       run: |
-        case "$ENVIRONMENT" in
-          dev)
-            export DOTENV_PRIVATE_KEY_SECRET_API_CF=$DOTENV_PRIVATE_KEY_SECRET_API_CF ||
-            export DOTENV_PRIVATE_KEY_SECRET_API_INS=$DOTENV_PRIVATE_KEY_SECRET_API_INS ||
-            export DOTENV_PRIVATE_KEY_SECRET_DEV_PWA=$DOTENV_PRIVATE_KEY_SECRET_DEV_PWA ||
-            export DOTENV_PRIVATE_KEY_SECRET_DEV_KF=$DOTENV_PRIVATE_KEY_SECRET_DEV_KF
-            ;;
-          stg)
-            export DOTENV_PRIVATE_KEY_SECRET_API_CF=$DOTENV_PRIVATE_KEY_SECRET_API_CF ||
-            export DOTENV_PRIVATE_KEY_SECRET_API_INS=$DOTENV_PRIVATE_KEY_SECRET_API_INS ||
-            export DOTENV_PRIVATE_KEY_SECRET_STG_PWA=$DOTENV_PRIVATE_KEY_SECRET_STG_PWA ||
-            export DOTENV_PRIVATE_KEY_SECRET_STG_KF=$DOTENV_PRIVATE_KEY_SECRET_STG_KF
-            ;;
-          *)
-            echo "unknown environment: $ENVIRONMENT"
-            exit 1
-            ;;
-        esac
-
         echo "environment setup complete with secret key."
         $CUSTOM_COMMAND_SETUP
 
         echo "TEST_TYPE=${{ inputs.profile }}" >> $GITHUB_ENV
         echo "RUN_NUMBER=${{ inputs.github_run_number }}" >> $GITHUB_ENV
       env:
-        ENVIRONMENT: ${{ inputs.environment }}
         CUSTOM_COMMAND_SETUP: ${{ inputs.custom_command_setup }}
-        DOTENV_PRIVATE_KEY_SECRET_API_CF: ${{ inputs.dotenv_private_key_secret_stg }}
-        DOTENV_PRIVATE_KEY_SECRET_API_INS: ${{ inputs.dotenv_private_key_secret_stg }}
-        DOTENV_PRIVATE_KEY_SECRET_DEV_PWA: ${{ inputs.dotenv_private_key_secret_dev }}
-        DOTENV_PRIVATE_KEY_SECRET_STG_PWA: ${{ inputs.dotenv_private_key_secret_stg }}
-        DOTENV_PRIVATE_KEY_SECRET_DEV_KF: ${{ inputs.dotenv_private_key_secret_dev }}
-        DOTENV_PRIVATE_KEY_SECRET_STG_KF: ${{ inputs.dotenv_private_key_secret_stg }}
 
     - name: create test run on testrails
       shell: bash
