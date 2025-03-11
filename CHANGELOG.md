@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.25.1](https://github.com/kitabisa/composite-actions/compare/v2.25.0...v2.25.1) (2025-03-11)
+
+
+### Bugfix
+
+* remove unused code ([#253](https://github.com/kitabisa/composite-actions/issues/253)) ([28880f2](https://github.com/kitabisa/composite-actions/commit/28880f2a05fd4c118eba1eca707048f179e4f705))
+
 ## [2.25.0](https://github.com/kitabisa/composite-actions/compare/v2.24.0...v2.25.0) (2025-03-06)
 
 
