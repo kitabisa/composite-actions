@@ -117,7 +117,7 @@ runs:
       shell: bash
       run: |
         echo "app-name=$(make get-app-name)"
-        echo "http-url=$(kubectl get httproutes --namespace ${{ app-name }} -o jsonpath="{.items[0].spec.hostnames[0]}")" >> "$GITHUB_OUTPUT"
+        echo "http-url=$(kubectl get httproutes --namespace "$app-name" -o jsonpath="{.items[0].spec.hostnames[0]}")" >> "$GITHUB_OUTPUT"
 
     - name: Comment preview url
       uses: peter-evans/create-or-update-comment@v4
