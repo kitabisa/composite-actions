@@ -114,6 +114,7 @@ runs:
 
     - name: Get URL
       id: url
+      working-directory: ${{ inputs.working_directory }}
       shell: bash
       run: |
         app_name=$(make get-app-name)
