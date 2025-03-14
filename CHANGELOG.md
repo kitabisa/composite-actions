@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.25.2](https://github.com/kitabisa/composite-actions/compare/v2.25.1...v2.25.2) (2025-03-14)
+
+
+### CI
+
+* **backend:** build should use action cache ([88d031e](https://github.com/kitabisa/composite-actions/commit/88d031eb1f1ee0faf5eba411af95bdcaaf3e513b))
+
 ## [2.25.1](https://github.com/kitabisa/composite-actions/compare/v2.25.0...v2.25.1) (2025-03-11)
 
 
