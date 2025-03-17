@@ -65,12 +65,6 @@ inputs:
     default: "."
     type: string
 
-  preview_url:
-    required: false
-    description: "Set preview url"
-    default: ""
-    type: string
-
   prune:
     required: false
     description: "Run make prune"
@@ -112,10 +106,18 @@ runs:
         rancher_secret_key: ${{ inputs.rancher_secret_key }}
         rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
 
+    - name: Get URL
+      id: url
+      working-directory: ${{ inputs.working_directory }}
+      shell: bash
+      run: |
+        app_name=$(make get-app-name)
+        http_url=$(kubectl get httproutes --namespace "$app_name" -o jsonpath="{.items[0].spec.hostnames[0]}")
+        echo "http-url=$http_url" >> "$GITHUB_OUTPUT"
+
     - name: Comment preview url
-      if: "${{ inputs.preview_url != '' && github.event.pull_request.number != '' }}"
       uses: peter-evans/create-or-update-comment@v4
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body: |
-          Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})
+          Open the application by accessing these URL: [${{ steps.url.outputs.http-url }}](http://${{ steps.url.outputs.http-url }})
