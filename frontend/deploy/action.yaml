@@ -33,6 +33,11 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
+  # env:
+  #   required: true
+  #   description: "environment to deploy to"
+  #   default: "dev"
+
   deploy_test:
     required: false
     description: "Run make deploy-test"
@@ -106,18 +111,20 @@ runs:
         rancher_secret_key: ${{ inputs.rancher_secret_key }}
         rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
 
-    - name: Get URL
-      id: url
-      working-directory: ${{ inputs.working_directory }}
-      shell: bash
-      run: |
-        app_name=$(make get-app-name)
-        http_url=$(kubectl get httproutes --namespace "$app_name" -o jsonpath="{.items[0].spec.hostnames[0]}")
-        echo "http-url=$http_url" >> "$GITHUB_OUTPUT"
+    # - name: Get URL
+    #   if: ${{ inputs.env == 'dev' }}
+    #   id: url
+    #   working-directory: ${{ inputs.working_directory }}
+    #   shell: bash
+    #   run: |
+    #     app_name=$(make get-app-name)
+    #     http_url=$(kubectl get httproutes --namespace "$app_name" -o jsonpath="{.items[0].spec.hostnames[0]}")
+    #     echo "http-url=$http_url" >> "$GITHUB_OUTPUT"
 
-    - name: Comment preview url
-      uses: peter-evans/create-or-update-comment@v4
-      with:
-        issue-number: ${{ github.event.pull_request.number }}
-        body: |
-          Open the application by accessing these URL: [${{ steps.url.outputs.http-url }}](http://${{ steps.url.outputs.http-url }})
+    # - name: Comment preview url
+    #   if: ${{ inputs.env == 'dev' }}
+    #   uses: peter-evans/create-or-update-comment@v4
+    #   with:
+    #     issue-number: ${{ github.event.pull_request.number }}
+    #     body: |
+    #       Open the application by accessing these URL: [${{ steps.url.outputs.http-url }}](http://${{ steps.url.outputs.http-url }})
