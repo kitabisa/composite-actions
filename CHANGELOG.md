@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.26.1](https://github.com/kitabisa/composite-actions/compare/v2.26.0...v2.26.1) (2025-03-17)
+
+
+### Bugfix
+
+* fix comment action on PR ([#257](https://github.com/kitabisa/composite-actions/issues/257)) ([a58d0ff](https://github.com/kitabisa/composite-actions/commit/a58d0ff7693e5d693f6a1598b2c7fd596f209e58))
+
 ## [2.26.0](https://github.com/kitabisa/composite-actions/compare/v2.25.1...v2.26.0) (2025-03-17)
 
 
