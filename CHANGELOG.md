@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.26.0](https://github.com/kitabisa/composite-actions/compare/v2.25.1...v2.26.0) (2025-03-17)
+
+
+### Features
+
+* update frontend comment actions ([#255](https://github.com/kitabisa/composite-actions/issues/255)) ([89cdea3](https://github.com/kitabisa/composite-actions/commit/89cdea3c88cde60a8141bbb0ec20c6b2c5351059))
+
+
+### CI
+
+* **backend:** build should use action cache ([88d031e](https://github.com/kitabisa/composite-actions/commit/88d031eb1f1ee0faf5eba411af95bdcaaf3e513b))
+
 ## [2.25.1](https://github.com/kitabisa/composite-actions/compare/v2.25.0...v2.25.1) (2025-03-11)
 
 
