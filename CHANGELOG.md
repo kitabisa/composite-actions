@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.26.3](https://github.com/kitabisa/composite-actions/compare/v2.26.2...v2.26.3) (2025-03-18)
+
+
+### CI
+
+* add cache steps for summary ([#261](https://github.com/kitabisa/composite-actions/issues/261)) ([739bce7](https://github.com/kitabisa/composite-actions/commit/739bce77ef0817781d07b6bad07a12abfb713593))
+
 ## [2.26.2](https://github.com/kitabisa/composite-actions/compare/v2.26.1...v2.26.2) (2025-03-18)
 
 
