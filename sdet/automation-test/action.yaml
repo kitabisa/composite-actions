@@ -112,7 +112,7 @@ inputs:
 
   cache_summary:
     required: false
-    description: "cache summary"
+    description: "cache summary id"
     default: ""
     type: string
 
