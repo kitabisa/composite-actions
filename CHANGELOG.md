@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.26.2](https://github.com/kitabisa/composite-actions/compare/v2.26.1...v2.26.2) (2025-03-18)
+
+
+### Chore
+
+* handle send summary report to dashboard ([#259](https://github.com/kitabisa/composite-actions/issues/259)) ([44657ab](https://github.com/kitabisa/composite-actions/commit/44657abb3e6026b6943ee087ce94623e5aa38cde))
+
 ## [2.26.1](https://github.com/kitabisa/composite-actions/compare/v2.26.0...v2.26.1) (2025-03-17)
 
 
