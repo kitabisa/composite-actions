@@ -56,6 +56,12 @@ inputs:
     default: ""
     type: string
 
+  restore_cache_summary:
+    required: false
+    description: "restore cache summary"
+    default: ""
+    type: string
+
   custom_command_run:
     required: false
     description: "custom command run"
@@ -86,6 +92,12 @@ inputs:
     default: ""
     type: string
 
+  deploy_gh_pages:
+    required: false
+    description: "deploy to gh pages"
+    default: ""
+    type: string
+
   custom_command_send_report_to_slack:
     required: false
     description: "custom command send report to slack"
@@ -98,9 +110,9 @@ inputs:
     default: ""
     type: string
 
-  deploy_gh_pages:
+  cache_summary:
     required: false
-    description: "deploy to gh pages"
+    description: "cache summary id"
     default: ""
     type: string
 
@@ -140,6 +152,15 @@ runs:
       if: "${{ inputs.create_test_run == 'true' && always() }}"
       run: bun run createTestrunTestrail
 
+    - name: restore cached summary id file
+      uses: actions/cache/restore@v4
+      if: "${{ inputs.restore_cache_summary == 'true' && always() }}"
+      with:
+        path: summary-id.txt
+        key: summary-id-${{ github.run_id }}
+        restore-keys: |
+          summary-id-
+
     - name: run automation test
       shell: bash
       if: always()
@@ -177,3 +198,11 @@ runs:
       shell: bash
       if: always()
       run: ${{ inputs.custom_command_send_report_to_dashboard }}
+      continue-on-error: true
+
+    - name: cache summary id file
+      uses: actions/cache@v4
+      if: "${{ inputs.cache_summary == 'true' && always() }}"
+      with:
+        path: summary-id.txt
+        key: summary-id-${{ github.run_id }}
