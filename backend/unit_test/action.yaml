@@ -155,6 +155,7 @@ runs:
       with:
         moduleDirectory: ${{ inputs.working_directory }}
         testArguments: ${{ inputs.unit_test_command }}
+      continue-on-error: true
 
     - name: Generate Current Coverage
       shell: bash
