@@ -146,12 +146,10 @@ runs:
       shell: bash
       run: |
         echo "environment setup complete with secret key."
-        $CUSTOM_COMMAND_SETUP
+        ${{ inputs.custom_command_setup }}
 
         echo "TEST_TYPE=${{ inputs.profile }}" >> $GITHUB_ENV
         echo "RUN_NUMBER=${{ inputs.github_run_number }}" >> $GITHUB_ENV
-      env:
-        CUSTOM_COMMAND_SETUP: ${{ inputs.custom_command_setup }}
 
     - name: create test run on testrails
       shell: bash
