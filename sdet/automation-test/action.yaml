@@ -98,6 +98,12 @@ inputs:
     default: ""
     type: string
 
+  custom_command_send_report_to_slack_flag:
+    required: false
+    description: "custom command send report to slack flag"
+    default: "true"
+    type: string
+
   custom_command_send_report_to_slack:
     required: false
     description: "custom command send report to slack"
@@ -191,7 +197,7 @@ runs:
 
     - name: send report to slack
       shell: bash
-      if: always()
+      if: "${{ inputs.custom_command_send_report_to_slack_flag == 'true' && always() }}"
       run: ${{ inputs.custom_command_send_report_to_slack }}
 
     - name: send report to dashboard
