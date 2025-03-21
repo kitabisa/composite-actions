@@ -38,12 +38,6 @@ inputs:
     default: "false"
     type: string
 
-  github_run_number:
-    required: false
-    description: "github run number"
-    default: ""
-    type: string
-
   custom_command_packages:
     required: false
     description: "custom command packages"
@@ -149,7 +143,7 @@ runs:
         ${{ inputs.custom_command_setup }}
 
         echo "TEST_TYPE=${{ inputs.profile }}" >> $GITHUB_ENV
-        echo "RUN_NUMBER=${{ inputs.github_run_number }}" >> $GITHUB_ENV
+        echo "RUN_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
 
     - name: create test run on testrails
       shell: bash
