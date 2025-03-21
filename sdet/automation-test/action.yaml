@@ -95,7 +95,7 @@ inputs:
   custom_command_send_report_to_slack_flag:
     required: false
     description: "custom command send report to slack flag"
-    default: "true"
+    default: ""
     type: string
 
   custom_command_send_report_to_slack:
