@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.26.4](https://github.com/kitabisa/composite-actions/compare/v2.26.3...v2.26.4) (2025-03-21)
+
+
+### Bugfix
+
+* **backend:** ut continue on error on upload ([1275cfd](https://github.com/kitabisa/composite-actions/commit/1275cfdd465fffa111193535d270c07dfb605f56))
+
+
+### Chore
+
+* automation test mobile SDET-1267 ([#264](https://github.com/kitabisa/composite-actions/issues/264)) ([ea36ef4](https://github.com/kitabisa/composite-actions/commit/ea36ef40e04e12fa1dc8745a40d4f8d2ff28ece2))
+
 ## [2.26.3](https://github.com/kitabisa/composite-actions/compare/v2.26.2...v2.26.3) (2025-03-18)
 
 
