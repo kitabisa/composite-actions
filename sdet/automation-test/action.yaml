@@ -38,12 +38,6 @@ inputs:
     default: "false"
     type: string
 
-  github_run_number:
-    required: false
-    description: "github run number"
-    default: ""
-    type: string
-
   custom_command_packages:
     required: false
     description: "custom command packages"
@@ -98,6 +92,12 @@ inputs:
     default: ""
     type: string
 
+  custom_command_send_report_to_slack_flag:
+    required: false
+    description: "custom command send report to slack flag"
+    default: ""
+    type: string
+
   custom_command_send_report_to_slack:
     required: false
     description: "custom command send report to slack"
@@ -140,12 +140,10 @@ runs:
       shell: bash
       run: |
         echo "environment setup complete with secret key."
-        $CUSTOM_COMMAND_SETUP
+        ${{ inputs.custom_command_setup }}
 
         echo "TEST_TYPE=${{ inputs.profile }}" >> $GITHUB_ENV
-        echo "RUN_NUMBER=${{ inputs.github_run_number }}" >> $GITHUB_ENV
-      env:
-        CUSTOM_COMMAND_SETUP: ${{ inputs.custom_command_setup }}
+        echo "RUN_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
 
     - name: create test run on testrails
       shell: bash
@@ -191,7 +189,7 @@ runs:
 
     - name: send report to slack
       shell: bash
-      if: always()
+      if: "${{ inputs.custom_command_send_report_to_slack_flag == 'true' && always() }}"
       run: ${{ inputs.custom_command_send_report_to_slack }}
 
     - name: send report to dashboard
