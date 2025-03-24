@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.26.5](https://github.com/kitabisa/composite-actions/compare/v2.26.4...v2.26.5) (2025-03-24)
+
+
+### Bugfix
+
+* restore cache if rerun SDET-1267 ([#265](https://github.com/kitabisa/composite-actions/issues/265)) ([d0dc8c7](https://github.com/kitabisa/composite-actions/commit/d0dc8c7352ef5424bcdc9f6d7511fccf8471f985))
+
 ## [2.26.4](https://github.com/kitabisa/composite-actions/compare/v2.26.3...v2.26.4) (2025-03-21)
 
 
