@@ -152,7 +152,7 @@ runs:
 
     - name: restore cached summary id file
       uses: actions/cache/restore@v4
-      if: "${{ inputs.restore_cache_summary == 'true' && always() }}"
+      if: "${{ inputs.restore_cache_summary == 'true' && always() && github.run_attempt > 1 }}"
       with:
         path: summary-id.txt
         key: summary-id-${{ github.run_id }}
