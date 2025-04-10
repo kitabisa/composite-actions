@@ -64,6 +64,12 @@ inputs:
     description: "Rancher cluster id"
     type: string
 
+  preview_url:
+    required: false
+    description: "Set preview url"
+    default: ""
+    type: string
+
   working_directory:
     required: false
     description: "Set working directory"
@@ -122,7 +128,15 @@ runs:
         echo "http-url=$http_url" >> "$GITHUB_OUTPUT"
 
     - name: Comment preview url
-      if: ${{ inputs.env != 'stg' || inputs.env != 'prod' }}
+      if: "${{ inputs.preview_url != '' && github.event.pull_request.number != '' }}"
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})
+
+    - name: Comment preview url
+      if: "${{ github.event.pull_request.number != '' }}"
       uses: peter-evans/create-or-update-comment@v4
       with:
         issue-number: ${{ github.event.pull_request.number }}
