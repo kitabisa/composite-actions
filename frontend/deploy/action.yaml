@@ -33,11 +33,6 @@ inputs:
     description: "GKE cluster location zone"
     type: string
 
-  env:
-    required: true
-    description: "environment to deploy to"
-    default: "dev"
-
   deploy_test:
     required: false
     description: "Run make deploy-test"
