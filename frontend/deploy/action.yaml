@@ -118,7 +118,7 @@ runs:
         rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
 
     - name: Get URL
-      if: ${{ inputs.env != 'stg' || inputs.env != 'prod' }}
+      if: ${{ inputs.preview_url != '' && github.event.pull_request.number != '' }}
       id: url
       working-directory: ${{ inputs.working_directory }}
       shell: bash
