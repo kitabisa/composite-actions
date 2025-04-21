@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.27.0](https://github.com/kitabisa/composite-actions/compare/v2.26.5...v2.27.0) (2025-04-21)
+
+
+### Features
+
+* update preview-url chart v2 ([#268](https://github.com/kitabisa/composite-actions/issues/268)) ([1a58975](https://github.com/kitabisa/composite-actions/commit/1a589756ef50955792fb67ad2f9ee016d2546100))
+
 ## [2.26.5](https://github.com/kitabisa/composite-actions/compare/v2.26.4...v2.26.5) (2025-03-24)
 
 
