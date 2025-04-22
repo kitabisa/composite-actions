@@ -127,12 +127,9 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       if: "${{ inputs.custom_command_flag == 'true' }}"
       run: |
-        go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
         cd docs/openapi && go generate . && cd ../../
         pwd
         ls -lah
-        go install github.com/mfridman/tparse@latest
-        go install github.com/vektra/mockery/v2@v2.42.3
         cp ./params/.env.example ./params/.env
 
     - name: Run Unit tests
