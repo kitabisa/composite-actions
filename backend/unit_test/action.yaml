@@ -126,11 +126,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       if: "${{ inputs.custom_command_flag == 'true' }}"
-      run: |
-        cd docs/openapi && go generate . && cd ../../
-        pwd
-        ls -lah
-        cp ./params/.env.example ./params/.env
+      run: ${{ inputs.custom_command }}
 
     - name: Run Unit tests
       id: unit-test-current
