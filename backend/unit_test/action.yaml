@@ -127,8 +127,10 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       if: "${{ inputs.custom_command_flag == 'true' }}"
       run: |
+        cd docs/openapi && cd ../../
         pwd
         ls -lah
+        cp ./params/.env.example ./params/.env
         ${{ inputs.custom_command }}
 
     - name: Run Unit tests
