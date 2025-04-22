@@ -162,7 +162,7 @@ runs:
       if: github.event.pull_request.base.sha != ''
       uses: marocchino/sticky-pull-request-comment@v2
       with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.gh_token }}
         header: unit-test
         message: |
           ### Unit Test Coverage
