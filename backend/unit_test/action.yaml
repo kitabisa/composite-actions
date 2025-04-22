@@ -131,6 +131,7 @@ runs:
         pwd
         ls -lah
         cp ./params/.env.example ./params/.env
+        ls -lah ./params/
         ${{ inputs.custom_command }}
 
     - name: Run Unit tests
