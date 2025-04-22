@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.27.1](https://github.com/kitabisa/composite-actions/compare/v2.27.0...v2.27.1) (2025-04-22)
+
+
+### Bugfix
+
+* replace secret token ([05a60ca](https://github.com/kitabisa/composite-actions/commit/05a60cab206f8bc9c5ba87fa9f86289a9109f0c1))
+* replaced set output ([2bd1cca](https://github.com/kitabisa/composite-actions/commit/2bd1ccad7da763984bb478b51460bb29ca8024c6))
+
+
+### CI
+
+* **backend:** enhance unit test ([f9d5572](https://github.com/kitabisa/composite-actions/commit/f9d55729186495fe3af0abd33eb5c6500c660ff5))
+
 ## [2.27.0](https://github.com/kitabisa/composite-actions/compare/v2.26.5...v2.27.0) (2025-04-21)
 
 
