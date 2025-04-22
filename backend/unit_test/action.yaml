@@ -126,7 +126,10 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       if: "${{ inputs.custom_command_flag == 'true' }}"
-      run: ${{ inputs.custom_command }}
+      run: |
+        pwd
+        ls -lah
+        ${{ inputs.custom_command }}
 
     - name: Run Unit tests
       id: unit-test-current
