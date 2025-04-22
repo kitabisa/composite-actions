@@ -155,7 +155,7 @@ runs:
         echo "${REP}"
         REP="${REP//$'\n'/%0A}"
         cat gha-unit.txt
-        echo "::set-output name=rep::$REP"
+        echo "rep=$REP" >> "$GITHUB_OUTPUT"
 
     - name: Comment Test Coverage
       continue-on-error: true
