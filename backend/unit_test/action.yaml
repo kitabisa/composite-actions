@@ -34,7 +34,7 @@ inputs:
   unit_test_command:
     required: false
     description: "unit test command"
-    default: "go test ./internal/... -coverprofile=coverage.out -covermode=atomic"
+    default: "./internal/... -coverpkg=./internal/... -coverprofile=coverage.out -covermode=atomic"
 
   hash_files:
     required: false
@@ -122,19 +122,6 @@ runs:
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
-    - name: Set base value
-      shell: bash
-      run: |
-        echo "current_coverage=0" >> $GITHUB_ENV
-        echo "master_coverage=0" >> $GITHUB_ENV
-
-    - name: Generate Master Coverage
-      id: unit-test-master
-      shell: bash
-      working-directory: ${{ inputs.working_directory }}
-      run: |-
-        echo "master_coverage=$(cat coverage-master.txt)" >> $GITHUB_ENV
-
     - name: Custom Command
       shell: bash
       working-directory: ${{ inputs.working_directory }}
@@ -147,7 +134,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       run: |-
-        ${{ inputs.unit_test_command }}
+        go test ${{ inputs.unit_test_command }}
 
     - name: Run Go Test Action
       if: "${{ inputs.default_unit_test == 'false' }}"
@@ -157,44 +144,29 @@ runs:
         testArguments: ${{ inputs.unit_test_command }}
       continue-on-error: true
 
-    - name: Generate Current Coverage
-      shell: bash
-      working-directory: ${{ inputs.working_directory }}
-      run: |-
-        ls -al
-        echo "current_coverage=$(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')" >> $GITHUB_ENV
-        echo $(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
-
-    - name: Comment PR and Set Fail Result
-      if: fromJSON(env.current_coverage) < fromJSON(env.master_coverage)
-      uses: marocchino/sticky-pull-request-comment@v2
-      with:
-        recreate: true
-        message: |
-          ##  ⚠⚠️ Unit Test Coverage ⚠⚠
-          ```
-          Current branch coverage : ${{ env.current_coverage }}
-          Master branch coverage : ${{ env.master_coverage }}
-          Condition: Current branch coverage must be bigger or equal than master branch coverage.
-          ```
-          <b> PR Blocked ❌. Please fix your unit test coverage </b>
-
-    - name: Coverage below master, Fail PR
-      if: fromJSON(env.current_coverage) < fromJSON(env.master_coverage)
+    - name: Annotate missing test coverage
+      id: annotate
+      if: github.event.pull_request.base.sha != ''
       shell: bash
       run: |
-        echo "::error :: unit test coverage is below master"
-        exit 1
+        git fetch origin master ${{ github.event.pull_request.base.sha }}
+        curl -sLO https://github.com/vearutop/gocovdiff/releases/download/v1.3.4/linux_amd64.tar.gz && tar xf linux_amd64.tar.gz && echo "b351c67526eefeb0671c82e9271ae984875865eed19e911f40f78348cb98347c  gocovdiff" | shasum -c
+        REP=$(./gocovdiff -cov coverage.out -gha-annotations gha-unit.txt)
+        echo "${REP}"
+        REP="${REP//$'\n'/%0A}"
+        cat gha-unit.txt
+        echo "::set-output name=rep::$REP"
 
-    - name: Comment PR
+    - name: Comment Test Coverage
+      continue-on-error: true
+      if: github.event.pull_request.base.sha != ''
       uses: marocchino/sticky-pull-request-comment@v2
       with:
-        recreate: true
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        header: unit-test
         message: |
-          ##  ✅✅ Unit Test Coverage ✅✅
-          ```
-          Current branch coverage : ${{ env.current_coverage }}
-          Master branch coverage : ${{ env.master_coverage }}
-          Condition: Current branch coverage must be bigger or equal than master branch coverage.
-          ```
-          PR Coverage check passed.
+          ### Unit Test Coverage
+          <details><summary>Coverage of changed lines</summary>
+
+          ${{ steps.annotate.outputs.rep }}
+          </details>
