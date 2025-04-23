@@ -134,7 +134,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working_directory }}
       run: |-
-        go test ${{ inputs.unit_test_command }}
+        ${{ inputs.unit_test_command }}
 
     - name: Run Go Test Action
       if: "${{ inputs.default_unit_test == 'false' }}"
