@@ -199,6 +199,10 @@ runs:
         set -e
 
         echo "Service: $SERVICE_NAME"
+        if [ -z "$SERVICE_NAME" ]; then
+          echo "SERVICE_NAME is empty. Exiting..."
+          exit 0
+        fi
 
         CURRENT_TAG=$(git describe --tags --abbrev=0)
         PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^)
