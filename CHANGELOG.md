@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.29.3](https://github.com/kitabisa/composite-actions/compare/v2.29.2...v2.29.3) (2025-04-23)
+
+
+### Bugfix
+
+* **coverage:** no longer need to upload code coverage ([052c3be](https://github.com/kitabisa/composite-actions/commit/052c3be0413b964f396e8166f383de3fc4223b10))
+* **coverage:** removed coverage master ([2d0a763](https://github.com/kitabisa/composite-actions/commit/2d0a76397b759c0981fbd6b5437bea11570c78d1))
+
 ## [2.29.2](https://github.com/kitabisa/composite-actions/compare/v2.29.1...v2.29.2) (2025-04-23)
 
 
