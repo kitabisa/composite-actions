@@ -111,12 +111,6 @@ runs:
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
-    - name: Generate Master Coverage
-      shell: bash
-      working-directory: ${{ inputs.working_directory }}
-      run: |-
-        echo "current_master_coverage=$(cat coverage-master.txt)" >> $GITHUB_ENV
-
     - name: Custom Command
       shell: bash
       working-directory: ${{ inputs.working_directory }}
@@ -134,8 +128,6 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         ${{ inputs.unit_test_command }}
-        echo $(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}') > coverage-master.txt
-        echo "current_coverage=$(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')" >> $GITHUB_ENV
 
     - name: Finish running unit test
       shell: bash
