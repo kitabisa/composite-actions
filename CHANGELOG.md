@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.29.0](https://github.com/kitabisa/composite-actions/compare/v2.28.0...v2.29.0) (2025-04-23)
+
+
+### Features
+
+* **deploy:** add jira callback to deploy ([#273](https://github.com/kitabisa/composite-actions/issues/273)) ([5cc6f6d](https://github.com/kitabisa/composite-actions/commit/5cc6f6dbdfc5bdb5ff0afcd4d2738096dd10db53))
+
+
+### Bugfix
+
+* added back go test in default ([491dec2](https://github.com/kitabisa/composite-actions/commit/491dec2908db1f6a8e48894667f180cc9175910b))
+* comment in gh action ([a81d545](https://github.com/kitabisa/composite-actions/commit/a81d545a8bce176291c0fd8e766c3ae957dcb489))
+
 ## [2.28.0](https://github.com/kitabisa/composite-actions/compare/v2.27.1...v2.28.0) (2025-04-23)
 
 
