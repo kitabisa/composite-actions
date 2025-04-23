@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.29.2](https://github.com/kitabisa/composite-actions/compare/v2.29.1...v2.29.2) (2025-04-23)
+
+
+### Bugfix
+
+* **deploy:** handle when jira keys empty ([92117e4](https://github.com/kitabisa/composite-actions/commit/92117e45f8bdb9102be5f7c52a446a0f746c6e85))
+
 ## [2.29.1](https://github.com/kitabisa/composite-actions/compare/v2.29.0...v2.29.1) (2025-04-23)
 
 
