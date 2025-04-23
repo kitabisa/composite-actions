@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.28.0](https://github.com/kitabisa/composite-actions/compare/v2.27.1...v2.28.0) (2025-04-23)
+
+
+### Features
+
+* **test:** enhanced UT ([5be26a5](https://github.com/kitabisa/composite-actions/commit/5be26a5fc9c5c8f8872e7380e0ef1e36441ca00f))
+
+
+### Bugfix
+
+* incorrect command unit test ([29f6a8f](https://github.com/kitabisa/composite-actions/commit/29f6a8f065e7be4e5d0fc8a5c7341de46d2aef5f))
+
 ## [2.27.1](https://github.com/kitabisa/composite-actions/compare/v2.27.0...v2.27.1) (2025-04-22)
 
 
