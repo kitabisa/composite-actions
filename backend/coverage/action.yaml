@@ -38,7 +38,7 @@ inputs:
   unit_test_command:
     required: false
     description: "unit test command"
-    default: "go test ./internal/... -coverprofile=coverage.out -covermode=atomic"
+    default: "go test ./internal/... -coverpkg=./internal/... -coverprofile=coverage.out -covermode=atomic"
 
   hash_files:
     required: false

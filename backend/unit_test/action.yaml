@@ -149,7 +149,7 @@ runs:
       if: github.event.pull_request.base.sha != ''
       shell: bash
       run: |
-        git fetch origin master ${{ github.event.pull_request.base.sha }}
+        git fetch origin ${{ github.event.pull_request.base.ref }} ${{ github.event.pull_request.base.sha }}
         curl -sLO https://github.com/vearutop/gocovdiff/releases/download/v1.3.4/linux_amd64.tar.gz && tar xf linux_amd64.tar.gz && echo "b351c67526eefeb0671c82e9271ae984875865eed19e911f40f78348cb98347c  gocovdiff" | shasum -c
         REP=$(./gocovdiff -cov coverage.out -gha-annotations gha-unit.txt)
         echo "${REP}"
