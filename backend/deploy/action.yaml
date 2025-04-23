@@ -268,7 +268,6 @@ runs:
           -d "{
           \"body\": \"$COMMENT\"
         }" \
-
         "$JIRA_URL/rest/api/2/issue/$issue_key/comment"
 
         done
