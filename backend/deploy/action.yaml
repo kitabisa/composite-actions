@@ -98,6 +98,10 @@ inputs:
     default: "false"
     type: string
 
+  service_name:
+    required: false
+    type: string
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -173,3 +177,76 @@ runs:
         token: ${{ inputs.gh_token }}
         state: "failure"
         deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+
+    - name: Set Fix Version in Jira
+      if: "${{ inputs.env == 'test' }}"
+      env:
+        JIRA_URL: https://kitabisa.atlassian.net
+        JIRA_USERNAME: ${{ secrets.JIRA_CLOUD_API_USER }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_CLOUD_API_TOKEN }}
+        SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
+      run: |
+        #!/bin/bash
+        set -e
+
+        echo "Service: $SERVICE_NAME"
+
+        CURRENT_TAG=$(git describe --tags --abbrev=0)
+        PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^)
+
+        echo "Current tag: $CURRENT_TAG"
+        echo "Previous tag: $PREVIOUS_TAG"
+
+        commit_messages=$(git log ${PREVIOUS_TAG}...${CURRENT_TAG} --pretty=format:%s)
+        echo "Commit messages: $commit_messages"
+
+        jira_keys=$(echo "$commit_messages" | grep -oE '[A-Z]+-[0-9]+' | sort -u)
+        if [ -z "$jira_keys" ]; then
+          echo "No Jira issue keys found."
+          exit 0
+        fi
+
+        echo "Jira keys: $jira_keys"
+
+        declare -A created_projects
+
+        START_DATE=$(git log -1 --format=%cs "$PREVIOUS_TAG")
+        RELEASE_DATE=$(git log -1 --format=%cs "$CURRENT_TAG")
+
+        for issue_key in $jira_keys; do
+          PROJECT_KEY=$(echo "$issue_key" | cut -d'-' -f1)
+          VERSION_NAME="${SERVICE_NAME}-${CURRENT_TAG}"
+
+          if [ -z "${created_projects[$PROJECT_KEY]}" ]; then
+            echo "Creating version $VERSION_NAME in $PROJECT_KEY..."
+
+            curl -X POST \
+              -u "$JIRA_USERNAME:$JIRA_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"name\": \"$VERSION_NAME\",
+                \"project\": \"$PROJECT_KEY\",
+                \"startDate\": \"$START_DATE\",
+                \"releaseDate\": \"$RELEASE_DATE\",
+                \"released\": true
+              }" \
+              "$JIRA_URL/rest/api/2/version"
+
+            created_projects["$PROJECT_KEY"]=1
+          fi
+
+          echo "Updating $issue_key with fixVersion $VERSION_NAME..."
+
+          curl -X PUT \
+            -u "$JIRA_USERNAME:$JIRA_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"update\": {
+                \"fixVersions\": [
+                  { \"set\": [ { \"name\": \"$VERSION_NAME\" } ] }
+                ]
+              }
+            }" \
+            "$JIRA_URL/rest/api/2/issue/$issue_key"
+        done
+      shell: bash
