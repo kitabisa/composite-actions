@@ -257,5 +257,20 @@ runs:
               }
             }" \
             "$JIRA_URL/rest/api/2/issue/$issue_key"
+
+        # Add a comment
+        COMMENT="This issue was released as part of version $VERSION_NAME on $RELEASE_DATE."
+        echo "Adding comment to $issue_key"
+
+        curl -X POST \
+          -u "$JIRA_USERNAME:$JIRA_API_TOKEN" \
+          -H "Content-Type: application/json" \
+          -d "{
+          \"body\": \"$COMMENT\"
+        }" \
+
+        "$JIRA_URL/rest/api/2/issue/$issue_key/comment"
+
         done
+
       shell: bash
