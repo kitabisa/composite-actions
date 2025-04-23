@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.29.1](https://github.com/kitabisa/composite-actions/compare/v2.29.0...v2.29.1) (2025-04-23)
+
+
+### Bugfix
+
+* **deploy:** handle when service empty ([e325227](https://github.com/kitabisa/composite-actions/commit/e325227b23964b2c8a4737b1ac7242cdd041f247))
+
 ## [2.29.0](https://github.com/kitabisa/composite-actions/compare/v2.28.0...v2.29.0) (2025-04-23)
 
 
