@@ -102,6 +102,15 @@ inputs:
     required: false
     type: string
     default: ""
+
+  jira_cloud_api_user:
+    required: false
+    type: string
+
+  jira_cloud_api_token:
+    required: false
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -182,8 +191,8 @@ runs:
       if: "${{ inputs.env == 'test' }}"
       env:
         JIRA_URL: https://kitabisa.atlassian.net
-        JIRA_USERNAME: ${{ secrets.JIRA_CLOUD_API_USER }}
-        JIRA_API_TOKEN: ${{ secrets.JIRA_CLOUD_API_TOKEN }}
+        JIRA_USERNAME: ${{ inputs.JIRA_CLOUD_API_USER }}
+        JIRA_API_TOKEN: ${{ inputs.JIRA_CLOUD_API_TOKEN }}
         SERVICE_NAME: ${{ inputs.SERVICE_NAME }}
       run: |
         #!/bin/bash
