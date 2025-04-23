@@ -188,7 +188,7 @@ runs:
         deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
     - name: Set Fix Version in Jira
-      if: "${{ inputs.env == 'test' }}"
+      if: "${{ inputs.env == 'prod' }}"
       env:
         JIRA_URL: https://kitabisa.atlassian.net
         JIRA_USERNAME: ${{ inputs.JIRA_CLOUD_API_USER }}
