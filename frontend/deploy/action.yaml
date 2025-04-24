@@ -130,10 +130,35 @@ runs:
         body: |
           Open the application by accessing these URL: [${{ inputs.preview_url }}](http://${{ inputs.preview_url }})
 
+    - name: Set up iteration and message
+      id: set-variables
+      shell: bash
+      run: |
+        # You can dynamically generate iteration values here
+        ITERATION_COUNT=5
+        COMMENT="Here are the iteration values:\n"
+
+        for i in $(seq 1 $ITERATION_COUNT); do
+          COMMENT+="Iteration $i\n"
+        done
+
+        # Set output so we can use it in the next step
+        echo "comment<<EOF" >> $GITHUB_OUTPUT
+        echo -e "$COMMENT" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
     - name: Comment preview url
       if: "${{ steps.url.outputs.http-url != '' && github.event.pull_request.number != '' }}"
       uses: peter-evans/create-or-update-comment@v4
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body: |
-          Open the application by accessing these URL: [${{ steps.url.outputs.http-url }}](http://${{ steps.url.outputs.http-url }})
+          Open the application by accessing these URL: [${{ steps.set-variables.outputs.comment }}](http://${{ steps.set-variables.outputs.comment }})
+
+    # - name: Comment preview url
+    #   if: "${{ steps.url.outputs.http-url != '' && github.event.pull_request.number != '' }}"
+    #   uses: peter-evans/create-or-update-comment@v4
+    #   with:
+    #     issue-number: ${{ github.event.pull_request.number }}
+    #     body: |
+    #       Open the application by accessing these URL: [${{ steps.url.outputs.http-url }}](http://${{ steps.url.outputs.http-url }})
