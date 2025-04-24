@@ -119,7 +119,7 @@ runs:
       shell: bash
       run: |
         app_name=$(make get-app-name)
-        http_url=$(kubectl get httproutes --namespace "$app_name" -o jsonpath="{.items[*].spec.hostnames[0]}")
+        http_url=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -vE '\.kt.bs')
         echo "http-url=$http_url" >> "$GITHUB_OUTPUT"
 
     - name: Comment preview url
@@ -134,13 +134,16 @@ runs:
       id: set-variables
       shell: bash
       run: |
-        # You can dynamically generate iteration values here
-        ITERATION_COUNT=5
-        COMMENT="Here are the iteration values:\n"
+        app_name=$(make get-app-name)
+        ROUTES=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -vE '\.kt.bs')
+        COMMENT="Open the application by accessing these URL: \n"
 
-        for i in $(seq 1 $ITERATION_COUNT); do
-          COMMENT+="Iteration $i\n"
-        done
+        I=1
+        while read -r line; do
+          [ -z "$line" ] && continue
+          COMMENT+="[${{ steps.set-variables.outputs.comment }}](https://${{ steps.url.outputs.http-url }})\n"
+          ((I++))
+        done <<< "$ROUTES"
 
         # Set output so we can use it in the next step
         echo "comment<<EOF" >> $GITHUB_OUTPUT
