@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.29.4](https://github.com/kitabisa/composite-actions/compare/v2.29.3...v2.29.4) (2025-04-24)
+
+
+### Bugfix
+
+* encoded comment ([67f0148](https://github.com/kitabisa/composite-actions/commit/67f0148cb02cf9c7a1c1725d9909e2179921abc0))
+
 ## [2.29.3](https://github.com/kitabisa/composite-actions/compare/v2.29.2...v2.29.3) (2025-04-23)
 
 
