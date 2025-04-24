@@ -133,7 +133,7 @@ runs:
         I=1
         while read -r line; do
           [ -z "$line" ] && continue
-            COMMENT+="[$line](https://$line)\n"
+            COMMENT+="$line\n"
           ((I++))
         done <<< "$ROUTES"
 
