@@ -112,26 +112,18 @@ runs:
         rancher_secret_key: ${{ inputs.rancher_secret_key }}
         rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
 
+    # - name: Get URL
+    #   if: ${{ inputs.preview_url == '' && github.event.pull_request.number != '' }}
+    #   id: url
+    #   working-directory: ${{ inputs.working_directory }}
+    #   shell: bash
+    #   run: |
+    #     app_name=$(make get-app-name)
+    #     http_url=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -vE '\.kt.bs')
+    #     echo "http-url=$http_url" >> "$GITHUB_OUTPUT"
+
     - name: Get URL
-      if: ${{ inputs.preview_url == '' && github.event.pull_request.number != '' }}
-      id: url
-      working-directory: ${{ inputs.working_directory }}
-      shell: bash
-      run: |
-        app_name=$(make get-app-name)
-        http_url=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -vE '\.kt.bs')
-        echo "http-url=$http_url" >> "$GITHUB_OUTPUT"
-
-    - name: Comment preview url
-      if: "${{ steps.url.outputs.http-url == '' && github.event.pull_request.number != '' }}"
-      uses: peter-evans/create-or-update-comment@v4
-      with:
-        issue-number: ${{ github.event.pull_request.number }}
-        body: |
-          Open the application by accessing these URL: [${{ inputs.preview_url }}](http://${{ inputs.preview_url }})
-
-    - name: Set up iteration and message
-      id: set-variables
+      id: get-url
       shell: bash
       run: |
         app_name=$(make get-app-name)
@@ -141,7 +133,7 @@ runs:
         I=1
         while read -r line; do
           [ -z "$line" ] && continue
-          COMMENT+="[${{ steps.set-variables.outputs.comment }}](https://${{ steps.url.outputs.http-url }})\n"
+            COMMENT+="[$line](https://$line)\n"
           ((I++))
         done <<< "$ROUTES"
 
@@ -151,12 +143,19 @@ runs:
         echo "EOF" >> $GITHUB_OUTPUT
 
     - name: Comment preview url
-      if: "${{ steps.url.outputs.http-url != '' && github.event.pull_request.number != '' }}"
+      if: "${{ steps.url.outputs.get-url != '' && github.event.pull_request.number != '' }}"
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: ${{ steps.get-url.outputs.comment }}
+
+    - name: Comment preview url
+      if: "${{ steps.url.outputs.get-url == '' && github.event.pull_request.number != '' }}"
       uses: peter-evans/create-or-update-comment@v4
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body: |
-          Open the application by accessing these URL: [${{ steps.set-variables.outputs.comment }}](http://${{ steps.set-variables.outputs.comment }})
+          Open the application by accessing these URL: [${{ inputs.preview_url }}](http://${{ inputs.preview_url }})
 
     # - name: Comment preview url
     #   if: "${{ steps.url.outputs.http-url != '' && github.event.pull_request.number != '' }}"
