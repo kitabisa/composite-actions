@@ -134,7 +134,7 @@ runs:
         I=1
         while read -r line; do
           [ -z "$line" ] && continue
-          COMMENT+="$line\n"
+          COMMENT+="[$line](https://$line)\n"
           ((I++))
         done <<< "$ROUTES"
 
@@ -156,12 +156,4 @@ runs:
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body: |
-          Open the application by accessing these URL: [${{ inputs.preview_url }}](http://${{ inputs.preview_url }})
-
-    # - name: Comment preview url
-    #   if: "${{ steps.url.outputs.http-url != '' && github.event.pull_request.number != '' }}"
-    #   uses: peter-evans/create-or-update-comment@v4
-    #   with:
-    #     issue-number: ${{ github.event.pull_request.number }}
-    #     body: |
-    #       Open the application by accessing these URL: [${{ steps.url.outputs.http-url }}](http://${{ steps.url.outputs.http-url }})
+          Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})
