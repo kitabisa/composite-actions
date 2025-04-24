@@ -144,7 +144,7 @@ runs:
         echo "EOF" >> $GITHUB_OUTPUT
 
     - name: Comment preview url
-      if: "${{ steps.url.outputs.get-url != '' && github.event.pull_request.number != '' }}"
+      if: "${{ steps.url.outputs.comment != '' && github.event.pull_request.number != '' }}"
       uses: peter-evans/create-or-update-comment@v4
       with:
         issue-number: ${{ github.event.pull_request.number }}
