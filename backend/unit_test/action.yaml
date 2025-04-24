@@ -162,7 +162,6 @@ runs:
 
         REP=$(./gocovdiff -cov coverage.out -gha-annotations gha-unit.txt)
 
-        # Debug
         echo "$REP"
 
         {
@@ -171,20 +170,35 @@ runs:
           echo "EOF"
         } >> "$GITHUB_OUTPUT"
 
-        # Optional: show the annotations file
-          cat gha-unit.txt
+        cat gha-unit.txt
+
+        STRICT="${{ inputs.strict_check }}"
+        HAS_UNCOVERED="false"
+        STATUS="✅ Fully covered"
 
         if grep -Fq "statement(s) not covered by tests" gha-unit.txt; then
-        echo "❌ Uncovered statements detected in annotations."
-          if [[ "${{ inputs.strict_check }}" == "true" ]]; then
+          echo "❌ Uncovered statements detected in annotations."
+          HAS_UNCOVERED="true"
+
+          if [[ "$STRICT" == "true" ]]; then
             echo "🚫 strict_check=true, failing the workflow."
+            STATUS="❌ Failed due to uncovered statements"
+            echo "coverage_status=$STATUS" >> "$GITHUB_OUTPUT"
+            echo "has_uncovered=$HAS_UNCOVERED" >> "$GITHUB_OUTPUT"
+            echo "strict_check=$STRICT" >> "$GITHUB_OUTPUT"
             exit 1
           else
             echo "⚠️ strict_check=false, continuing despite uncovered lines."
+            STATUS="⚠️ Uncovered statements found, but not blocking"
           fi
         else
           echo "✅ No uncovered statements found in annotations. Proceeding..."
         fi
+
+        # Export final outputs
+        echo "coverage_status=$STATUS" >> "$GITHUB_OUTPUT"
+        echo "has_uncovered=$HAS_UNCOVERED" >> "$GITHUB_OUTPUT"
+        echo "strict_check=$STRICT" >> "$GITHUB_OUTPUT"
 
     - name: Comment Test Coverage
       continue-on-error: true
@@ -194,8 +208,14 @@ runs:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
         header: unit-test
         message: |
-          ### Unit Test Coverage
-          <details><summary>Coverage of changed lines</summary>
+          ### 🧪 Unit Test Coverage Summary
+
+          **Coverage Status:** `${{ steps.annotate.outputs.coverage_status }}`
+          **Strict Check Enabled:** `${{ steps.annotate.outputs.strict_check }}`
+          **Uncovered Statements Present:** `${{ steps.annotate.outputs.has_uncovered }}`
+
+          <details>
+          <summary>Coverage of changed lines</summary>
 
           ${{ steps.annotate.outputs.rep }}
           </details>
