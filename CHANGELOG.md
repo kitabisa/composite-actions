@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.30.0](https://github.com/kitabisa/composite-actions/compare/v2.29.4...v2.30.0) (2025-04-24)
+
+
+### Features
+
+* added strict and non strict test ([#278](https://github.com/kitabisa/composite-actions/issues/278)) ([469bc40](https://github.com/kitabisa/composite-actions/commit/469bc40a7c5c8826270db4bcd501a0707af02dfa))
+
 ## [2.29.4](https://github.com/kitabisa/composite-actions/compare/v2.29.3...v2.29.4) (2025-04-24)
 
 
