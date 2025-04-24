@@ -172,33 +172,28 @@ runs:
 
         cat gha-unit.txt
 
-        STRICT="${{ inputs.strict_check }}"
         HAS_UNCOVERED="false"
-        STATUS="✅ Fully covered"
+        SHOULD_FAIL="false"
+        STATUS="✅ No uncovered statements found"
 
         if grep -Fq "statement(s) not covered by tests" gha-unit.txt; then
           echo "❌ Uncovered statements detected in annotations."
           HAS_UNCOVERED="true"
-
-          if [[ "$STRICT" == "true" ]]; then
-            echo "🚫 strict_check=true, failing the workflow."
+          if [[ "${{ inputs.strict_check }}" == "true" ]]; then
+            echo "🚫 strict_check=true, will fail workflow after comment."
             STATUS="❌ Failed due to uncovered statements"
-            echo "coverage_status=$STATUS" >> "$GITHUB_OUTPUT"
-            echo "has_uncovered=$HAS_UNCOVERED" >> "$GITHUB_OUTPUT"
-            echo "strict_check=$STRICT" >> "$GITHUB_OUTPUT"
-            exit 1
+            SHOULD_FAIL="true"
           else
             echo "⚠️ strict_check=false, continuing despite uncovered lines."
             STATUS="⚠️ Uncovered statements found, but not blocking"
           fi
-        else
-          echo "✅ No uncovered statements found in annotations. Proceeding..."
         fi
 
-        # Export final outputs
+        # Export outputs
         echo "coverage_status=$STATUS" >> "$GITHUB_OUTPUT"
         echo "has_uncovered=$HAS_UNCOVERED" >> "$GITHUB_OUTPUT"
-        echo "strict_check=$STRICT" >> "$GITHUB_OUTPUT"
+        echo "strict_check=${{ inputs.strict_check }}" >> "$GITHUB_OUTPUT"
+        echo "should_fail=$SHOULD_FAIL" >> "$GITHUB_OUTPUT"
 
     - name: Comment Test Coverage
       continue-on-error: true
@@ -208,14 +203,21 @@ runs:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
         header: unit-test
         message: |
-          ### 🧪 Unit Test Coverage Summary
+          ### Unit Test Coverage Report
 
-          **Coverage Status:** `${{ steps.annotate.outputs.coverage_status }}`
-          **Strict Check Enabled:** `${{ steps.annotate.outputs.strict_check }}`
-          **Uncovered Statements Present:** `${{ steps.annotate.outputs.has_uncovered }}`
+          **Status:** ${{ steps.annotate.outputs.coverage_status }}
+          **Strict Mode:** ${{ steps.annotate.outputs.strict_check }}
+          **Uncovered Statements Found:** ${{ steps.annotate.outputs.has_uncovered }}
 
-          <details>
-          <summary>Coverage of changed lines</summary>
+          <details><summary>Coverage of changed lines</summary>
 
           ${{ steps.annotate.outputs.rep }}
+
           </details>
+
+    - name: Fail if uncovered and strict_check is true
+      if: steps.annotate.outputs.should_fail == 'true'
+      shell: bash
+      run: |
+        echo "❌ Failing job due to uncovered statements and strict_check=true."
+        exit 1
