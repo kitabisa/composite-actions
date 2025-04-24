@@ -155,18 +155,19 @@ runs:
         tar xf linux_amd64.tar.gz && \
         echo "b351c67526eefeb0671c82e9271ae984875865eed19e911f40f78348cb98347c  gocovdiff" | shasum -c
 
-        # Run gocovdiff and capture the raw output (with newlines)
         REP=$(./gocovdiff -cov coverage.out -gha-annotations gha-unit.txt)
 
-        # This is for debugging or commenting – prints cleanly with newlines
+        # Debug
         echo "$REP"
 
-        # For GitHub output, escape newlines
-        ENCODED_REP="${REP//$'\n'/%0A}"
-        echo "rep=$ENCODED_REP" >> "$GITHUB_OUTPUT"
+        {
+          echo "rep<<EOF"
+          echo "$REP"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
 
-        # Optionally, show the annotations file
-        cat gha-unit.txt
+        # Optional: show the annotations file
+          cat gha-unit.txt
 
     - name: Comment Test Coverage
       continue-on-error: true
