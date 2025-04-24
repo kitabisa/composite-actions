@@ -129,11 +129,12 @@ runs:
         app_name=$(make get-app-name)
         ROUTES=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -vE '\.kt.bs')
         COMMENT="Open the application by accessing these URL: \n"
+        echo "$ROUTES"
 
         I=1
         while read -r line; do
           [ -z "$line" ] && continue
-            COMMENT+="$line\n"
+          COMMENT+="$line\n"
           ((I++))
         done <<< "$ROUTES"
 
