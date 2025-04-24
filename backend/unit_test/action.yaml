@@ -61,6 +61,11 @@ inputs:
     description: Optional cache key suffix.
     default: ""
 
+  strict_check:
+    required: false
+    description: "Fail the workflow on uncovered lines if true"
+    default: "false"
+
 runs:
   using: "composite"
   steps:
@@ -168,6 +173,18 @@ runs:
 
         # Optional: show the annotations file
           cat gha-unit.txt
+
+        if grep -Fq "statement(s) not covered by tests" gha-unit.txt; then
+        echo "❌ Uncovered statements detected in annotations."
+          if [[ "${{ inputs.strict_check }}" == "true" ]]; then
+            echo "🚫 strict_check=true, failing the workflow."
+            exit 1
+          else
+            echo "⚠️ strict_check=false, continuing despite uncovered lines."
+          fi
+        else
+          echo "✅ No uncovered statements found in annotations. Proceeding..."
+        fi
 
     - name: Comment Test Coverage
       continue-on-error: true
