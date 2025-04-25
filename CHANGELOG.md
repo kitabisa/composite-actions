@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.31.0](https://github.com/kitabisa/composite-actions/compare/v2.30.0...v2.31.0) (2025-04-25)
+
+
+### Features
+
+* **test:** default unit test command ([d55e0ca](https://github.com/kitabisa/composite-actions/commit/d55e0cab6ba86c29249923149ed99e6e5733256e))
+
 ## [2.30.0](https://github.com/kitabisa/composite-actions/compare/v2.29.4...v2.30.0) (2025-04-24)
 
 
