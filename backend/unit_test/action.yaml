@@ -89,16 +89,18 @@ runs:
         cache: ${{ inputs.setup_go_cache }}
         go-version: ${{ env.go_version }}
 
-    # - name: Sleep debug only
-    #   shell: bash
-    #   run: sleep 120
+    - name: Get Date
+      id: get-date
+      run: |
+        echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+      shell: bash
 
     - name: Determine Golang cache paths and construct cache key
       id: golang-env
       run: |
         echo "build-cache-path=$(go env GOCACHE)" >>"$GITHUB_OUTPUT"
         echo "module-cache-path=$(go env GOMODCACHE)" >>"$GITHUB_OUTPUT"
-        cacheKeyRoot="${{ runner.os }}-golang${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-"
+        cacheKeyRoot="${{ runner.os }}-golang-${{ steps.get-date.outputs.date }}${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-"
         echo "cache-key-restore=$cacheKeyRoot" >>"$GITHUB_OUTPUT"
         echo "cache-key=${cacheKeyRoot}${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
       shell: bash
