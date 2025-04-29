@@ -36,12 +36,17 @@ inputs:
     description: Optional cache key suffix.
     default: ""
 
+  service_name:
+    required: true
+    description: "service name"
+
 runs:
   using: "composite"
   steps:
     - name: Checkout
       uses: actions/checkout@v4
       with:
+        repository: ${{ inputs.service_name }}
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
