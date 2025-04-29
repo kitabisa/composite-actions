@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.32.0](https://github.com/kitabisa/composite-actions/compare/v2.31.0...v2.32.0) (2025-04-29)
+
+
+### Features
+
+* removed tools coverage ([09cee7e](https://github.com/kitabisa/composite-actions/commit/09cee7e411485a580c2d486560bf09b2c0b81d68))
+
+
+### CI
+
+* backend cache ([#282](https://github.com/kitabisa/composite-actions/issues/282)) ([966652e](https://github.com/kitabisa/composite-actions/commit/966652ea9c8d1b99d1e9857bc83ed99155fe0bd5))
+
 ## [2.31.0](https://github.com/kitabisa/composite-actions/compare/v2.30.0...v2.31.0) (2025-04-25)
 
 
