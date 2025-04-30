@@ -127,7 +127,7 @@ runs:
       shell: bash
       run: |
         app_name=$(make get-app-name)
-        ROUTES=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -vE '\.kt.bs')
+        ROUTES=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -E '\-dev\.' | uniq)
         COMMENT="Open the application by accessing these URL: \n"
         echo "$ROUTES"
 
