@@ -36,12 +36,17 @@ inputs:
     description: Optional cache key suffix.
     default: ""
 
+  service_name:
+    required: true
+    description: "service name"
+
 runs:
   using: "composite"
   steps:
     - name: Checkout
       uses: actions/checkout@v4
       with:
+        repository: ${{ inputs.service_name }}
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
@@ -75,9 +80,9 @@ runs:
       run: |
         echo "build-cache-path=$(go env GOCACHE)" >>"$GITHUB_OUTPUT"
         echo "module-cache-path=$(go env GOMODCACHE)" >>"$GITHUB_OUTPUT"
-        cacheKeyRoot="${{ runner.os }}-golang-${{ steps.get-date.outputs.date }}${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-"
+        cacheKeyRoot="${{ runner.os }}-golang${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-${{ steps.get-date.outputs.date }}"
         echo "cache-key-restore=$cacheKeyRoot" >>"$GITHUB_OUTPUT"
-        echo "cache-key=${cacheKeyRoot}${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
+        echo "cache-key=${cacheKeyRoot}-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
       shell: bash
 
     - name: Setup Golang cache
@@ -88,6 +93,7 @@ runs:
           ${{ steps.golang-env.outputs.module-cache-path }}
         key: ${{ steps.golang-env.outputs.cache-key }}
         restore-keys: |
+          ${{ steps.golang-env.outputs.cache-key-restore }}
           ${{ steps.golang-env.outputs.cache-key }}
 
     - name: Configure Git for private modules
