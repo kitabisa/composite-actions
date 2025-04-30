@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.33.0](https://github.com/kitabisa/composite-actions/compare/v2.32.0...v2.33.0) (2025-04-30)
+
+
+### Features
+
+* updated ci cache format ([#283](https://github.com/kitabisa/composite-actions/issues/283)) ([7fb0ebe](https://github.com/kitabisa/composite-actions/commit/7fb0ebebc4c41aa02d585ad54203c3b046417c75))
+
 ## [2.32.0](https://github.com/kitabisa/composite-actions/compare/v2.31.0...v2.32.0) (2025-04-29)
 
 
