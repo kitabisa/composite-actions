@@ -150,7 +150,6 @@ runs:
       with:
         moduleDirectory: ${{ inputs.working_directory }}
         testArguments: ${{ inputs.unit_test_command }}
-      continue-on-error: true
 
     - name: Annotate missing test coverage
       id: annotate
