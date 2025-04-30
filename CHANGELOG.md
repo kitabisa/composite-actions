@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.33.1](https://github.com/kitabisa/composite-actions/compare/v2.33.0...v2.33.1) (2025-04-30)
+
+
+### CI
+
+* **test:** removed on error ([c42e557](https://github.com/kitabisa/composite-actions/commit/c42e557c22bfc264f0eed13081311427926305c2))
+
 ## [2.33.0](https://github.com/kitabisa/composite-actions/compare/v2.32.0...v2.33.0) (2025-04-30)
 
 
