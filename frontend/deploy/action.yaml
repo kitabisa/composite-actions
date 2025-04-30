@@ -139,17 +139,13 @@ runs:
           [ -z "$line" ] && continue
           if [[ "$line" == *"kitabisa.xyz"* ]]; then
             HAS_PUBLIC=true
+            COMMENT+="Public Domain: [$line](https://$line)\n"
           elif [[ "$line" == *"dev.kt.bs"* ]]; then
             HAS_PRIVATE=true
-            COMMENT+="[$line](https://$line)\n"
+            COMMENT+="Private Domain: [$line](https://$line)\n"
           fi
           ((I++))
         done <<< "$ROUTES"
-
-        # If public domain exists, clear the comment
-        if [[ "$HAS_PUBLIC" == true ]]; then
-          COMMENT="Public domain detected. No private domain URLs will be displayed."
-        fi
 
         # Set output so we can use it in the next step
         echo "comment<<EOF" >> $GITHUB_OUTPUT
