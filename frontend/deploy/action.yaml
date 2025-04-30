@@ -142,7 +142,7 @@ runs:
             COMMENT+="Public Domain: [$line](https://$line)\n"
           elif [[ "$line" == *".kt.bs" ]]; then
             HAS_PRIVATE=true
-            COMMENT+="Private Domain: [$line](https://$line)\n"
+            COMMENT+="Private Domain: [$line](http://$line)\n"
           fi
           ((I++))
         done <<< "$ROUTES"
