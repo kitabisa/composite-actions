@@ -110,6 +110,18 @@ inputs:
     default: ""
     type: string
 
+  custom_command_send_summary_comment_flag:
+    required: false
+    description: "custom command send summary comment flag"
+    default: ""
+    type: string
+
+  custom_command_send_summary_comment:
+    required: false
+    description: "custom command send summary comment"
+    default: ""
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -198,3 +210,7 @@ runs:
       with:
         path: summary-id.txt
         key: summary-id-${{ github.run_id }}
+
+    - name: send summary comment
+      if: "${{ inputs.custom_command_send_summary_comment_flag == 'true' && always() }}"
+
