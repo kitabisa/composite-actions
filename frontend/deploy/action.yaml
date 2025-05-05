@@ -139,10 +139,10 @@ runs:
           [ -z "$line" ] && continue
           if [[ ("$line" == *".xyz") || ("$line" == *".com") ]]; then
             HAS_PUBLIC=true
-            COMMENT+="Public Domain: [$line](https://$line)\n"
+            COMMENT+="[$line](https://$line)\n"
           elif [[ "$line" == *".kt.bs" ]]; then
             HAS_PRIVATE=true
-            COMMENT+="Private Domain: [$line](http://$line)\n"
+            COMMENT+="[$line](http://$line)\n"
           fi
           ((I++))
         done <<< "$ROUTES"
