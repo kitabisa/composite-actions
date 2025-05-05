@@ -137,10 +137,10 @@ runs:
         I=1
         while read -r line; do
           [ -z "$line" ] && continue
-          if [[ ("$line" == *"dev.kitabisa.xyz") || ("$line" == *"dev.salingjaga.com") ]]; then
+          if [[ ("$line" == *".xyz") || ("$line" == *".com") ]]; then
             HAS_PUBLIC=true
             COMMENT+="Public Domain: [$line](https://$line)\n"
-          elif [[ "$line" == *"dev.kt.bs" ]]; then
+          elif [[ "$line" == *".kt.bs" ]]; then
             HAS_PRIVATE=true
             COMMENT+="Private Domain: [$line](http://$line)\n"
           fi
