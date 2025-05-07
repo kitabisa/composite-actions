@@ -112,7 +112,16 @@ runs:
         rancher_secret_key: ${{ inputs.rancher_secret_key }}
         rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
 
+    - name: Comment preview url
+      if: "${{ inputs.preview_url == '' && github.event.pull_request.number != '' }}"
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})
+
     - name: Get URL
+      if: ${{ github.event.pull_request.number != '' }}
       id: get-url
       shell: bash
       run: |
@@ -166,11 +175,3 @@ runs:
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body: ${{ steps.get-url.outputs.comment }}
-
-    - name: Comment preview url
-      if: "${{ steps.get-url.outputs.comment == '' && github.event.pull_request.number != '' }}"
-      uses: peter-evans/create-or-update-comment@v4
-      with:
-        issue-number: ${{ github.event.pull_request.number }}
-        body: |
-          Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})
