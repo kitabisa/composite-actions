@@ -1,5 +1,45 @@
 # Changelog
 
+## [2.33.1](https://github.com/kitabisa/composite-actions/compare/v2.33.0...v2.33.1) (2025-04-30)
+
+
+### CI
+
+* **test:** removed on error ([c42e557](https://github.com/kitabisa/composite-actions/commit/c42e557c22bfc264f0eed13081311427926305c2))
+
+## [2.33.0](https://github.com/kitabisa/composite-actions/compare/v2.32.0...v2.33.0) (2025-04-30)
+
+
+### Features
+
+* updated ci cache format ([#283](https://github.com/kitabisa/composite-actions/issues/283)) ([7fb0ebe](https://github.com/kitabisa/composite-actions/commit/7fb0ebebc4c41aa02d585ad54203c3b046417c75))
+
+## [2.32.0](https://github.com/kitabisa/composite-actions/compare/v2.31.0...v2.32.0) (2025-04-29)
+
+
+### Features
+
+* removed tools coverage ([09cee7e](https://github.com/kitabisa/composite-actions/commit/09cee7e411485a580c2d486560bf09b2c0b81d68))
+
+
+### CI
+
+* backend cache ([#282](https://github.com/kitabisa/composite-actions/issues/282)) ([966652e](https://github.com/kitabisa/composite-actions/commit/966652ea9c8d1b99d1e9857bc83ed99155fe0bd5))
+
+## [2.31.0](https://github.com/kitabisa/composite-actions/compare/v2.30.0...v2.31.0) (2025-04-25)
+
+
+### Features
+
+* **test:** default unit test command ([d55e0ca](https://github.com/kitabisa/composite-actions/commit/d55e0cab6ba86c29249923149ed99e6e5733256e))
+
+## [2.30.0](https://github.com/kitabisa/composite-actions/compare/v2.29.4...v2.30.0) (2025-04-24)
+
+
+### Features
+
+* added strict and non strict test ([#278](https://github.com/kitabisa/composite-actions/issues/278)) ([469bc40](https://github.com/kitabisa/composite-actions/commit/469bc40a7c5c8826270db4bcd501a0707af02dfa))
+
 ## [2.29.4](https://github.com/kitabisa/composite-actions/compare/v2.29.3...v2.29.4) (2025-04-24)
 
 

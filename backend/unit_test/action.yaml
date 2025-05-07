@@ -61,6 +61,11 @@ inputs:
     description: Optional cache key suffix.
     default: ""
 
+  strict_check:
+    required: false
+    description: "Fail the workflow on uncovered lines if true"
+    default: "false"
+
 runs:
   using: "composite"
   steps:
@@ -84,18 +89,20 @@ runs:
         cache: ${{ inputs.setup_go_cache }}
         go-version: ${{ env.go_version }}
 
-    # - name: Sleep debug only
-    #   shell: bash
-    #   run: sleep 120
+    - name: Get Date
+      id: get-date
+      run: |
+        echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+      shell: bash
 
     - name: Determine Golang cache paths and construct cache key
       id: golang-env
       run: |
         echo "build-cache-path=$(go env GOCACHE)" >>"$GITHUB_OUTPUT"
         echo "module-cache-path=$(go env GOMODCACHE)" >>"$GITHUB_OUTPUT"
-        cacheKeyRoot="${{ runner.os }}-golang${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-"
+        cacheKeyRoot="${{ runner.os }}-golang${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-${{ steps.get-date.outputs.date }}"
         echo "cache-key-restore=$cacheKeyRoot" >>"$GITHUB_OUTPUT"
-        echo "cache-key=${cacheKeyRoot}${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
+        echo "cache-key=${cacheKeyRoot}-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
       shell: bash
 
     - name: Clean up Go cache
@@ -114,6 +121,7 @@ runs:
         key: ${{ steps.golang-env.outputs.cache-key }}
         restore-keys: |
           ${{ steps.golang-env.outputs.cache-key-restore }}
+          ${{ steps.golang-env.outputs.cache-key }}
 
     - name: Configure Git for private modules
       env:
@@ -142,7 +150,6 @@ runs:
       with:
         moduleDirectory: ${{ inputs.working_directory }}
         testArguments: ${{ inputs.unit_test_command }}
-      continue-on-error: true
 
     - name: Annotate missing test coverage
       id: annotate
@@ -157,7 +164,6 @@ runs:
 
         REP=$(./gocovdiff -cov coverage.out -gha-annotations gha-unit.txt)
 
-        # Debug
         echo "$REP"
 
         {
@@ -166,8 +172,30 @@ runs:
           echo "EOF"
         } >> "$GITHUB_OUTPUT"
 
-        # Optional: show the annotations file
-          cat gha-unit.txt
+        cat gha-unit.txt
+
+        HAS_UNCOVERED="false"
+        SHOULD_FAIL="false"
+        STATUS="✅ No uncovered statements found"
+
+        if grep -Fq "statement(s) not covered by tests" gha-unit.txt; then
+          echo "❌ Uncovered statements detected in annotations."
+          HAS_UNCOVERED="true"
+          if [[ "${{ inputs.strict_check }}" == "true" ]]; then
+            echo "🚫 strict_check=true, will fail workflow after comment."
+            STATUS="❌ Failed due to uncovered statements"
+            SHOULD_FAIL="true"
+          else
+            echo "⚠️ strict_check=false, continuing despite uncovered lines."
+            STATUS="⚠️ Uncovered statements found, but not blocking"
+          fi
+        fi
+
+        # Export outputs
+        echo "coverage_status=$STATUS" >> "$GITHUB_OUTPUT"
+        echo "has_uncovered=$HAS_UNCOVERED" >> "$GITHUB_OUTPUT"
+        echo "strict_check=${{ inputs.strict_check }}" >> "$GITHUB_OUTPUT"
+        echo "should_fail=$SHOULD_FAIL" >> "$GITHUB_OUTPUT"
 
     - name: Comment Test Coverage
       continue-on-error: true
@@ -177,8 +205,21 @@ runs:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
         header: unit-test
         message: |
-          ### Unit Test Coverage
+          ### Unit Test Coverage Report
+
+          **Status:** ${{ steps.annotate.outputs.coverage_status }}
+          **Strict Mode:** ${{ steps.annotate.outputs.strict_check }}
+          **Uncovered Statements Found:** ${{ steps.annotate.outputs.has_uncovered }}
+
           <details><summary>Coverage of changed lines</summary>
 
           ${{ steps.annotate.outputs.rep }}
+
           </details>
+
+    - name: Fail if uncovered and strict_check is true
+      if: steps.annotate.outputs.should_fail == 'true'
+      shell: bash
+      run: |
+        echo "❌ Failing job due to uncovered statements and strict_check=true."
+        exit 1
