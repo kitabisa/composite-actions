@@ -59,12 +59,6 @@ inputs:
     description: "Rancher cluster id"
     type: string
 
-  pr_number:
-    required: false
-    description: "PR number for dev"
-    default: ""
-    type: string
-
   preview_url:
     required: false
     description: "Set preview url"
@@ -120,12 +114,10 @@ runs:
 
     - name: Get URL
       id: get-url
-      with:
-        pr_number: ${{ inputs.pr_number }}
       shell: bash
       run: |
         app_name=$(make get-app-name)
-        ROUTES=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -E '${{ inputs.pr_number }}' | uniq)
+        ROUTES=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -E '${{ github.event.pull_request.number }}' | uniq)
         COMMENT="Open the application by accessing these URL: \n"
         HAS_PUBLIC=false
         HAS_PRIVATE=false
