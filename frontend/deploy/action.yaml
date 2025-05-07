@@ -137,6 +137,24 @@ runs:
           ((I++))
         done <<< "$ROUTES"
 
+        if [[ "$HAS_PUBLIC" == true && "$HAS_PRIVATE" == true ]]; then
+          COMMENT="Open the application by accessing these public URLs: \n"
+          while read -r line; do
+            [ -z "$line" ] && continue
+            if [[ "$line" == *".xyz" || "$line" == *".com" ]]; then
+              COMMENT+="[$line](https://$line)\n"
+            fi
+          done <<< "$ROUTES"
+        elif [[ "$HAS_PUBLIC" == false && "$HAS_PRIVATE" == true ]]; then
+          COMMENT="Open the application by accessing these private URLs: \n"
+          while read -r line; do
+            [ -z "$line" ] && continue
+            if [[ "$line" == *".kt.bs" ]]; then
+              COMMENT+="[$line](http://$line)\n"
+            fi
+          done <<< "$ROUTES"
+        fi
+
         # Set output so we can use it in the next step
         echo "comment<<EOF" >> $GITHUB_OUTPUT
         echo -e "$COMMENT" >> $GITHUB_OUTPUT
