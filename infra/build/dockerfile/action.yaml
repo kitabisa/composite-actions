@@ -81,5 +81,5 @@ runs:
         push: true
         pull: true
         tags: ${{ steps.tags.outputs.image-tags }}
-        cache-from: type=registry,ref=${{ steps.tags.outputs.image-name }}:latest
-        cache-to: type=registry,ref=${{ steps.tags.outputs.image-name }}:latest,mode=max
+        # cache-from: type=registry,ref=${{ steps.tags.outputs.image-name }}:latest
+        # cache-to: type=registry,ref=${{ steps.tags.outputs.image-name }}:latest,mode=max
