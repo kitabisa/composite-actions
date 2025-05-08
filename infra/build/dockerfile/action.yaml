@@ -11,11 +11,6 @@ inputs:
     required: true
     description: "Artifact registry host"
     type: string
-
-  artifact_registry_project_id:
-    required: true
-    description: "Artifact registry project id"
-    type: string
   
   dockerfile:
     required: true
@@ -50,8 +45,8 @@ runs:
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
+        project_id: ${{ inputs.project_id }}
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
-        artifact_registry_project_id: ${{ inputs.artifact_registry_project_id }}
         workload_identity_provider: ${{ inputs.workload_identity_provider }}
         service_account: ${{ inputs.service_account }}
         docker_creds: true
