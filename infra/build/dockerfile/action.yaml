@@ -50,6 +50,8 @@ runs:
         workload_identity_provider: ${{ inputs.workload_identity_provider }}
         service_account: ${{ inputs.service_account }}
         docker_creds: true
+        artifact_creds: false
+        gke_creds: false
 
     - name: Setuptools infra
       uses: kitabisa/composite-actions/infra/tools/setuptools@v2
