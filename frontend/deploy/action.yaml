@@ -125,6 +125,7 @@ runs:
       id: get-url
       shell: bash
       run: |
+        cd ${{ inputs.working_directory }}
         app_name=$(make get-app-name)
         ROUTES=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -E '${{ github.event.pull_request.number }}' | uniq)
         COMMENT="Open the application by accessing these URL: \n"
