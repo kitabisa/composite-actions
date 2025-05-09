@@ -61,7 +61,7 @@ inputs:
 
   preview_url:
     required: false
-    description: "Set preview url"
+    description: "Manual input preview url"
     default: ""
     type: string
 
