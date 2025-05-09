@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.34.0](https://github.com/kitabisa/composite-actions/compare/v2.33.1...v2.34.0) (2025-05-09)
+
+
+### Features
+
+* trigger release tag for frontend update ([#287](https://github.com/kitabisa/composite-actions/issues/287)) ([3efebc4](https://github.com/kitabisa/composite-actions/commit/3efebc4097bd7c594d5e78af29cfa320b6d8d70b))
+
 ## [2.33.1](https://github.com/kitabisa/composite-actions/compare/v2.33.0...v2.33.1) (2025-04-30)
 
 
