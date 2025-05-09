@@ -123,6 +123,7 @@ runs:
     - name: Get URL
       if: ${{ github.event.pull_request.number != '' }}
       id: get-url
+      working-directory: ${{ inputs.working_directory }}
       shell: bash
       run: |
         app_name=$(make get-app-name)
