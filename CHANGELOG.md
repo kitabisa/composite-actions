@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.34.1](https://github.com/kitabisa/composite-actions/compare/v2.34.0...v2.34.1) (2025-05-09)
+
+
+### Bugfix
+
+* deployment frontend ([#289](https://github.com/kitabisa/composite-actions/issues/289)) ([250b7a8](https://github.com/kitabisa/composite-actions/commit/250b7a8de5b011151d4b3b99c512d40d72d5e812))
+
 ## [2.34.0](https://github.com/kitabisa/composite-actions/compare/v2.33.1...v2.34.0) (2025-05-09)
 
 
