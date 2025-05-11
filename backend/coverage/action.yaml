@@ -38,7 +38,7 @@ inputs:
   unit_test_command:
     required: false
     description: "unit test command"
-    default: "go test ./internal/... -coverprofile=coverage.out -covermode=atomic"
+    default: "go test ./..."
 
   hash_files:
     required: false
@@ -83,14 +83,20 @@ runs:
         cache: ${{ inputs.setup_go_cache }}
         go-version: ${{ env.go_version }}
 
+    - name: Get Date
+      id: get-date
+      run: |
+        echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+      shell: bash
+
     - name: Determine Golang cache paths and construct cache key
       id: golang-env
       run: |
         echo "build-cache-path=$(go env GOCACHE)" >>"$GITHUB_OUTPUT"
         echo "module-cache-path=$(go env GOMODCACHE)" >>"$GITHUB_OUTPUT"
-        cacheKeyRoot="${{ runner.os }}-golang${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-"
+        cacheKeyRoot="${{ runner.os }}-golang${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-${{ steps.get-date.outputs.date }}"
         echo "cache-key-restore=$cacheKeyRoot" >>"$GITHUB_OUTPUT"
-        echo "cache-key=${cacheKeyRoot}${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
+        echo "cache-key=${cacheKeyRoot}-${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
       shell: bash
 
     - name: Setup Golang cache
@@ -103,6 +109,7 @@ runs:
         key: ${{ steps.golang-env.outputs.cache-key }}
         restore-keys: |
           ${{ steps.golang-env.outputs.cache-key-restore }}
+          ${{ steps.golang-env.outputs.cache-key }}
 
     - name: Configure Git for private modules
       env:
@@ -110,12 +117,6 @@ runs:
         TOKEN: ${{ inputs.gh_token }}
       shell: bash
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
-
-    - name: Generate Master Coverage
-      shell: bash
-      working-directory: ${{ inputs.working_directory }}
-      run: |-
-        echo "current_master_coverage=$(cat coverage-master.txt)" >> $GITHUB_ENV
 
     - name: Custom Command
       shell: bash
@@ -134,47 +135,8 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       run: |-
         ${{ inputs.unit_test_command }}
-        echo $(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}') > coverage-master.txt
-        echo "current_coverage=$(go tool cover -func coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')" >> $GITHUB_ENV
 
     - name: Finish running unit test
       shell: bash
       run: |
         echo "Finish running unit test"
-
-    - name: Create destination directory
-      shell: bash
-      run: mkdir -p "${{ inputs.badge_path }}%/*"
-
-    - name: Generate badge SVG image
-      uses: emibcn/badge-action@v2.0.3
-      id: badge
-      with:
-        label: 'Code coverage'
-        status: ${{ env.current_coverage }}
-        color: 'green'
-        path: ${{ inputs.badge_path }}
-
-    - name: Verify Changed files
-      uses: tj-actions/verify-changed-files@v20
-      id: verify-changed-files
-      with:
-        files: |
-          ${{ inputs.badge_path }}
-          coverage-master.txt
-
-    - name: Upload badge as artifact
-      if: ${{ steps.verify-changed-files.outputs.files_changed == 'true' }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: badge
-        path: ${{ inputs.badge_path }}
-        if-no-files-found: error
-
-    - name: Push coverage master to git
-      if: ${{ steps.verify-changed-files.outputs.files_changed == 'true' }}
-      uses: stefanzweifel/git-auto-commit-action@v5
-      continue-on-error: true
-      with:
-        commit_message: 'coverage: updated coverage [skip ci]'
-        file_pattern: '${{ inputs.working_directory }}/coverage-master.txt ${{ inputs.badge_path }}'

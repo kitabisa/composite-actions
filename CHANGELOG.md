@@ -1,5 +1,133 @@
 # Changelog
 
+## [2.34.1](https://github.com/kitabisa/composite-actions/compare/v2.34.0...v2.34.1) (2025-05-09)
+
+
+### Bugfix
+
+* deployment frontend ([#289](https://github.com/kitabisa/composite-actions/issues/289)) ([250b7a8](https://github.com/kitabisa/composite-actions/commit/250b7a8de5b011151d4b3b99c512d40d72d5e812))
+
+## [2.34.0](https://github.com/kitabisa/composite-actions/compare/v2.33.1...v2.34.0) (2025-05-09)
+
+
+### Features
+
+* trigger release tag for frontend update ([#287](https://github.com/kitabisa/composite-actions/issues/287)) ([3efebc4](https://github.com/kitabisa/composite-actions/commit/3efebc4097bd7c594d5e78af29cfa320b6d8d70b))
+
+## [2.33.1](https://github.com/kitabisa/composite-actions/compare/v2.33.0...v2.33.1) (2025-04-30)
+
+
+### CI
+
+* **test:** removed on error ([c42e557](https://github.com/kitabisa/composite-actions/commit/c42e557c22bfc264f0eed13081311427926305c2))
+
+## [2.33.0](https://github.com/kitabisa/composite-actions/compare/v2.32.0...v2.33.0) (2025-04-30)
+
+
+### Features
+
+* updated ci cache format ([#283](https://github.com/kitabisa/composite-actions/issues/283)) ([7fb0ebe](https://github.com/kitabisa/composite-actions/commit/7fb0ebebc4c41aa02d585ad54203c3b046417c75))
+
+## [2.32.0](https://github.com/kitabisa/composite-actions/compare/v2.31.0...v2.32.0) (2025-04-29)
+
+
+### Features
+
+* removed tools coverage ([09cee7e](https://github.com/kitabisa/composite-actions/commit/09cee7e411485a580c2d486560bf09b2c0b81d68))
+
+
+### CI
+
+* backend cache ([#282](https://github.com/kitabisa/composite-actions/issues/282)) ([966652e](https://github.com/kitabisa/composite-actions/commit/966652ea9c8d1b99d1e9857bc83ed99155fe0bd5))
+
+## [2.31.0](https://github.com/kitabisa/composite-actions/compare/v2.30.0...v2.31.0) (2025-04-25)
+
+
+### Features
+
+* **test:** default unit test command ([d55e0ca](https://github.com/kitabisa/composite-actions/commit/d55e0cab6ba86c29249923149ed99e6e5733256e))
+
+## [2.30.0](https://github.com/kitabisa/composite-actions/compare/v2.29.4...v2.30.0) (2025-04-24)
+
+
+### Features
+
+* added strict and non strict test ([#278](https://github.com/kitabisa/composite-actions/issues/278)) ([469bc40](https://github.com/kitabisa/composite-actions/commit/469bc40a7c5c8826270db4bcd501a0707af02dfa))
+
+## [2.29.4](https://github.com/kitabisa/composite-actions/compare/v2.29.3...v2.29.4) (2025-04-24)
+
+
+### Bugfix
+
+* encoded comment ([67f0148](https://github.com/kitabisa/composite-actions/commit/67f0148cb02cf9c7a1c1725d9909e2179921abc0))
+
+## [2.29.3](https://github.com/kitabisa/composite-actions/compare/v2.29.2...v2.29.3) (2025-04-23)
+
+
+### Bugfix
+
+* **coverage:** no longer need to upload code coverage ([052c3be](https://github.com/kitabisa/composite-actions/commit/052c3be0413b964f396e8166f383de3fc4223b10))
+* **coverage:** removed coverage master ([2d0a763](https://github.com/kitabisa/composite-actions/commit/2d0a76397b759c0981fbd6b5437bea11570c78d1))
+
+## [2.29.2](https://github.com/kitabisa/composite-actions/compare/v2.29.1...v2.29.2) (2025-04-23)
+
+
+### Bugfix
+
+* **deploy:** handle when jira keys empty ([92117e4](https://github.com/kitabisa/composite-actions/commit/92117e45f8bdb9102be5f7c52a446a0f746c6e85))
+
+## [2.29.1](https://github.com/kitabisa/composite-actions/compare/v2.29.0...v2.29.1) (2025-04-23)
+
+
+### Bugfix
+
+* **deploy:** handle when service empty ([e325227](https://github.com/kitabisa/composite-actions/commit/e325227b23964b2c8a4737b1ac7242cdd041f247))
+
+## [2.29.0](https://github.com/kitabisa/composite-actions/compare/v2.28.0...v2.29.0) (2025-04-23)
+
+
+### Features
+
+* **deploy:** add jira callback to deploy ([#273](https://github.com/kitabisa/composite-actions/issues/273)) ([5cc6f6d](https://github.com/kitabisa/composite-actions/commit/5cc6f6dbdfc5bdb5ff0afcd4d2738096dd10db53))
+
+
+### Bugfix
+
+* added back go test in default ([491dec2](https://github.com/kitabisa/composite-actions/commit/491dec2908db1f6a8e48894667f180cc9175910b))
+* comment in gh action ([a81d545](https://github.com/kitabisa/composite-actions/commit/a81d545a8bce176291c0fd8e766c3ae957dcb489))
+
+## [2.28.0](https://github.com/kitabisa/composite-actions/compare/v2.27.1...v2.28.0) (2025-04-23)
+
+
+### Features
+
+* **test:** enhanced UT ([5be26a5](https://github.com/kitabisa/composite-actions/commit/5be26a5fc9c5c8f8872e7380e0ef1e36441ca00f))
+
+
+### Bugfix
+
+* incorrect command unit test ([29f6a8f](https://github.com/kitabisa/composite-actions/commit/29f6a8f065e7be4e5d0fc8a5c7341de46d2aef5f))
+
+## [2.27.1](https://github.com/kitabisa/composite-actions/compare/v2.27.0...v2.27.1) (2025-04-22)
+
+
+### Bugfix
+
+* replace secret token ([05a60ca](https://github.com/kitabisa/composite-actions/commit/05a60cab206f8bc9c5ba87fa9f86289a9109f0c1))
+* replaced set output ([2bd1cca](https://github.com/kitabisa/composite-actions/commit/2bd1ccad7da763984bb478b51460bb29ca8024c6))
+
+
+### CI
+
+* **backend:** enhance unit test ([f9d5572](https://github.com/kitabisa/composite-actions/commit/f9d55729186495fe3af0abd33eb5c6500c660ff5))
+
+## [2.27.0](https://github.com/kitabisa/composite-actions/compare/v2.26.5...v2.27.0) (2025-04-21)
+
+
+### Features
+
+* update preview-url chart v2 ([#268](https://github.com/kitabisa/composite-actions/issues/268)) ([1a58975](https://github.com/kitabisa/composite-actions/commit/1a589756ef50955792fb67ad2f9ee016d2546100))
+
 ## [2.26.5](https://github.com/kitabisa/composite-actions/compare/v2.26.4...v2.26.5) (2025-03-24)
 
 
