@@ -156,6 +156,7 @@ runs:
       shell: bash
 
     - name: Setup Golang cache
+      id: cache-restore   # <-- THIS IS THE MISSING PART
       if: ${{ inputs.setup_action_cache == 'true' }}
       uses: actions/cache/restore@v4
       with:
