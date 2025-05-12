@@ -1,6 +1,10 @@
 name: "CI Build"
 description: "Build and push docker image"
 
+outputs:
+  cache_hit:
+    description: "Indicates whether the Golang cache was hit"
+    value: ${{ steps.cache-restore.outputs.cache-hit }}
 inputs:
   # Required
   artifact_registry_host:
@@ -162,6 +166,10 @@ runs:
         restore-keys: |
           ${{ steps.golang-env.outputs.cache-key-restore }}
           ${{ steps.golang-env.outputs.cache-key }}
+
+    - name: Output cache status
+      shell: bash
+      run: echo "cache_hit=${{ steps.cache-restore.outputs.cache-hit }}" >> "$GITHUB_OUTPUT"
 
     - name: Configure Git for private modules
       env:
