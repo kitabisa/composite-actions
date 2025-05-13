@@ -11,13 +11,13 @@ inputs:
     required: true
     description: "Artifact registry host"
     type: string
-  
+
   dockerfile:
     required: true
     description: "Dockerfile name"
     type: string
     default: 'Dockerfile'
-    
+
   service_account:
     required: true
     description: "Service Account name for workload identity"
@@ -29,7 +29,7 @@ inputs:
     description: "Set working directory"
     default: "."
     type: string
-  
+
   workload_identity_provider:
     required: true
     description: "Workload identity provider"
@@ -69,7 +69,7 @@ runs:
         IMAGE_TAGS=$(grep 'LABEL org.opencontainers.image.version' ${DOCKERFILE} | awk -F'"' '{print $2}')
 
         IMAGES=$(echo $IMAGE_TAGS | tr ',' '\n' | while read -r tag; do echo $IMAGE_NAME:$tag; done | paste -sd ',' -)
-        
+
         echo "image-name=$(echo $IMAGE_NAME)" >> $GITHUB_OUTPUT
         echo "image-tags=$(echo $IMAGES)" >> $GITHUB_OUTPUT
 
