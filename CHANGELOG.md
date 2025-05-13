@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.35.0](https://github.com/kitabisa/composite-actions/compare/v2.34.1...v2.35.0) (2025-05-13)
+
+
+### Features
+
+* add composite dockerfiles ([#291](https://github.com/kitabisa/composite-actions/issues/291)) ([527b186](https://github.com/kitabisa/composite-actions/commit/527b18626c3ea1ac198713224ada3cdb2a956e47))
+
+
+### Bugfix
+
+* trim-trailing-whitespace ([#293](https://github.com/kitabisa/composite-actions/issues/293)) ([13062da](https://github.com/kitabisa/composite-actions/commit/13062dacbcb4cc4bae8932b5e412123e1714258f))
+
 ## [2.34.1](https://github.com/kitabisa/composite-actions/compare/v2.34.0...v2.34.1) (2025-05-09)
 
 
