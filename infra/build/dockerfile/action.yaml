@@ -1,0 +1,85 @@
+name: "Dockerfile"
+description: "Build push dockerfile to artifact registry"
+
+inputs:
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
+
+  artifact_registry_host:
+    required: true
+    description: "Artifact registry host"
+    type: string
+  
+  dockerfile:
+    required: true
+    description: "Dockerfile name"
+    type: string
+    default: 'Dockerfile'
+    
+  service_account:
+    required: true
+    description: "Service Account name for workload identity"
+    type: string
+    default: 'false'
+
+  working_directory:
+    required: true
+    description: "Set working directory"
+    default: "."
+    type: string
+  
+  workload_identity_provider:
+    required: true
+    description: "Workload identity provider"
+    type: string
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Gcloud credential
+      uses: kitabisa/composite-actions/infra/tools/gcloud@v2
+      with:
+        project_id: ${{ inputs.project_id }}
+        artifact_registry_host: ${{ inputs.artifact_registry_host }}
+        workload_identity_provider: ${{ inputs.workload_identity_provider }}
+        service_account: ${{ inputs.service_account }}
+        docker_creds: true
+        artifact_creds: false
+        gke_creds: false
+
+    - name: Setuptools infra
+      uses: kitabisa/composite-actions/infra/tools/setuptools@v2
+      with:
+        setup_buildx: true
+
+    - name: Extract image name and version tags from dockerfile
+      id: tags
+      working-directory: ${{ inputs.working_directory }}
+      env:
+        DOCKERFILE: ${{ inputs.dockerfile }}
+      shell: bash
+      run: |
+        IMAGE_NAME=$(grep 'LABEL org.opencontainers.image.name' ${DOCKERFILE} | awk -F'"' '{print $2}')
+        IMAGE_TAGS=$(grep 'LABEL org.opencontainers.image.version' ${DOCKERFILE} | awk -F'"' '{print $2}')
+
+        IMAGES=$(echo $IMAGE_TAGS | tr ',' '\n' | while read -r tag; do echo $IMAGE_NAME:$tag; done | paste -sd ',' -)
+        
+        echo "image-name=$(echo $IMAGE_NAME)" >> $GITHUB_OUTPUT
+        echo "image-tags=$(echo $IMAGES)" >> $GITHUB_OUTPUT
+
+    - name: Build and push docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ${{ inputs.working_directory }}
+        file: ${{ inputs.working_directory }}/${{ inputs.dockerfile }}
+        push: true
+        pull: true
+        tags: ${{ steps.tags.outputs.image-tags }}
+        cache-from: type=registry,ref=${{ steps.tags.outputs.image-name }}:latest
+        cache-to: type=registry,ref=${{ steps.tags.outputs.image-name }}:latest,mode=max
