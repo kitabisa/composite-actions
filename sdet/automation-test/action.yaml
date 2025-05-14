@@ -213,7 +213,9 @@ runs:
 
     - name: debug
       shell: bash
+      if: always()
       run: |
+        echo "DEBUG >>>"
         echo "FLAG=${{ inputs.custom_command_send_result_to_pr_release_flag }}"
         echo "REPOSITORY=$REPOSITORY"
         echo "REPOSITORY2=${{ env.REPOSITORY }}"
@@ -230,6 +232,6 @@ runs:
       with:
         token: ${{ inputs.gh_token }}
         repository: "${{ github.repository_owner }}/casper"
-        issue-number: "$PR_RELEASE_ID"
+        issue-number: "${{ env.PR_RELEASE_ID }}"
         edit-mode: "append"
         body-path: "comment-body.md"
