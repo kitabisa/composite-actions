@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.35.1](https://github.com/kitabisa/composite-actions/compare/v2.35.0...v2.35.1) (2025-05-14)
+
+
+### Bugfix
+
+* conditional comment preview ([#294](https://github.com/kitabisa/composite-actions/issues/294)) ([4bd8d53](https://github.com/kitabisa/composite-actions/commit/4bd8d53462c3a21f176349c7b0b473eac6d19785))
+
 ## [2.35.0](https://github.com/kitabisa/composite-actions/compare/v2.34.1...v2.35.0) (2025-05-13)
 
 
