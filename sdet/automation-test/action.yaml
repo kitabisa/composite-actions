@@ -219,17 +219,7 @@ runs:
     - name: generate comment body to pr release
       shell: bash
       if: "${{ inputs.custom_command_send_result_to_pr_release_flag == 'true' && always() }}"
-      run: |
-        TARGET_REF=test/sdet-123-comment-pr
-        echo "using ref: $TARGET_REF"
-
-        ${{ inputs.custom_command_send_result_to_pr_release }}
-
-        # gh workflow run -R kitabisa/qorin .github/workflows/comment-pr.yaml \
-        #   -f service_name=${{ inputs.profile }} \
-        #   --ref "$TARGET_REF"
-      env:
-        GITHUB_TOKEN: ${{ inputs.gh_token }}
+      run: ${{ inputs.custom_command_send_result_to_pr_release }}
 
     - name: create comment
       if: "${{ inputs.custom_command_send_result_to_pr_release_flag == 'true' && always() }}"
@@ -238,7 +228,7 @@ runs:
       continue-on-error: true
       with:
         repository: "kitabisa/casper"
-        issue-number: "46"
+        issue-number: 46
         edit-mode: "append"
         body-path: "comment-body.md"
         reactions: "hooray, rocket"
