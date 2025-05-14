@@ -99,18 +99,21 @@ runs:
           -f profile=${{ inputs.service_name }} \
           -f pr_author="${PR_AUTHOR}" \
           -f pr_link="${PR_LINK}" \
+          -f custom_command_send_result_to_pr_release_flag='true'
           --ref "$TARGET_REF"
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
 
-    - name: comment to pr release
-      shell: bash
-      if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
-      run: |
-        TARGET_REF=test/sdet-123-comment-pr
-        echo "using ref: $TARGET_REF"
+    # - name: comment to pr release
+    #   shell: bash
+    #   if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
+    #   run: |
+    #     TARGET_REF=test/sdet-123-comment-pr
+    #     echo "using ref: $TARGET_REF"
 
-        gh workflow run -R kitabisa/qorin .github/workflows/comment-pr.yaml \
-          -f service_name=${{ inputs.service_name }} \
-          -f pr_release_id="${PR_RELEASE_ID}"
-          --ref "$TARGET_REF"
+    #     gh workflow run -R kitabisa/qorin .github/workflows/comment-pr.yaml \
+    #       -f service_name=${{ inputs.service_name }} \
+    #       -f pr_release_id="${PR_RELEASE_ID}"
+    #       --ref "$TARGET_REF"
+    #   env:
+    #     GITHUB_TOKEN: ${{ inputs.gh_token }}

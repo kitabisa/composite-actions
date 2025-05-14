@@ -110,15 +110,9 @@ inputs:
     default: ""
     type: string
 
-  custom_command_send_summary_comment_flag:
+  custom_command_send_result_to_pr_release_flag:
     required: false
-    description: "custom command send summary comment flag"
-    default: ""
-    type: string
-
-  custom_command_send_summary_comment:
-    required: false
-    description: "custom command send summary comment"
+    description: "custom command send result to pr release flag"
     default: ""
     type: string
 
@@ -211,5 +205,21 @@ runs:
         path: summary-id.txt
         key: summary-id-${{ github.run_id }}
 
-    - name: send summary comment
-      if: "${{ inputs.custom_command_send_summary_comment_flag == 'true' && always() }}"
+    - name: debug
+      shell: bash
+      run: |
+        echo "FLAG=${{ inputs.custom_command_send_result_to_pr_release_flag }}"
+
+    - name: send result to pr release
+      shell: bash
+      if: "${{ inputs.custom_command_send_result_to_pr_release_flag == 'true' && always() }}"
+      run: |
+        TARGET_REF=test/sdet-123-comment-pr
+        echo "using ref: $TARGET_REF"
+
+        gh workflow run -R kitabisa/qorin .github/workflows/comment-pr.yaml \
+          -f service_name=${{ inputs.service_name }} \
+          -f pr_release_id="${PR_RELEASE_ID}"
+          --ref "$TARGET_REF"
+      env:
+        GITHUB_TOKEN: ${{ inputs.gh_token }}
