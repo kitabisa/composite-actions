@@ -239,7 +239,7 @@ runs:
       with:
         token: "${{ inputs.gh_token }}"
         repository: "${{ github.repository_owner }}/${{ inputs.profile }}"
-        issue-number: ${{ env.pr_release_id }}
+        issue-number: "${{ env.PR_RELEASE_ID }}"
         edit-mode: "append"
         body-path: "comment-body.md"
         reactions: "hooray, rocket"
