@@ -12,12 +12,6 @@ inputs:
     description: "Artifact registry host"
     type: string
   
-  build_args:
-    required: false
-    description: "Build args for docker build"
-    type: string
-    default: ''
-  
   dockerfile:
     required: true
     description: "Dockerfile name"
@@ -89,4 +83,3 @@ runs:
         tags: ${{ steps.tags.outputs.image-tags }}
         cache-from: type=registry,ref=${{ steps.tags.outputs.image-name }}:cache
         cache-to: type=registry,ref=${{ steps.tags.outputs.image-name }}:cache,mode=max
-        build-args: ${{ inputs.build_args }}
