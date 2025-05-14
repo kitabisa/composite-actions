@@ -27,6 +27,8 @@ SDET composite setup and run automation test
 | custom_command_send_report_to_slack | custom command send report to slack | `false` |  |
 | custom_command_send_report_to_dashboard_flag | custom command send report to dashboard flag | `false` |  |
 | custom_command_send_report_to_dashboard | custom command send report to dashboard | `false` |  |
+| custom_command_send_result_to_pr_release_flag | custom command send result to pr release flag | `false` |  |
+| custom_command_send_result_to_pr_release | custom command send result to pr release | `false` |  |
 <!-- action-docs-inputs -->
 
 <!-- action-docs-runs -->

@@ -97,7 +97,6 @@ runs:
           TARGET_REF=master
         fi
 
-        TARGET_REF=test/sdet-123-comment-pr
         echo "using ref: $TARGET_REF"
 
         gh workflow run -R kitabisa/qorin .github/workflows/trigger-when-deploy.yaml \
