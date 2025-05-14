@@ -121,7 +121,7 @@ runs:
           Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})
 
     - name: Get URL
-      if: ${{ github.event.pull_request.number != '' }}
+      if: ${{ inputs.preview_url == '' && github.event.pull_request.number != '' }}
       id: get-url
       working-directory: ${{ inputs.working_directory }}
       shell: bash
