@@ -216,7 +216,7 @@ runs:
       run: |
         echo "FLAG=${{ inputs.custom_command_send_result_to_pr_release_flag }}"
 
-    - name: send result to pr release
+    - name: generate comment body to pr release
       shell: bash
       if: "${{ inputs.custom_command_send_result_to_pr_release_flag == 'true' && always() }}"
       run: |
@@ -237,7 +237,7 @@ runs:
       id: couc
       continue-on-error: true
       with:
-        token: "${{ secrets.GH_TOKEN }}"
+        token: "${{ inputs.gh_token }}"
         repository: "${{ github.repository_owner }}/${{ inputs.profile }}"
         issue-number: ${{ env.pr_release_id }}
         edit-mode: "append"
