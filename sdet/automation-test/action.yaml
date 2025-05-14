@@ -213,4 +213,3 @@ runs:
 
     - name: send summary comment
       if: "${{ inputs.custom_command_send_summary_comment_flag == 'true' && always() }}"
-
