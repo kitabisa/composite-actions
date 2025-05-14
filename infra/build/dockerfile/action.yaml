@@ -11,7 +11,7 @@ inputs:
     required: true
     description: "Artifact registry host"
     type: string
-
+  
   dockerfile:
     required: true
     description: "Dockerfile name"
@@ -65,7 +65,7 @@ runs:
         DOCKERFILE: ${{ inputs.dockerfile }}
       shell: bash
       run: |
-        IMAGE_NAME=$(grep 'LABEL org.opencontainers.image.name' ${DOCKERFILE} | awk -F'"' '{print $2}')
+        IMAGE_NAME=$(grep 'LABEL org.opencontainers.image.base.name' ${DOCKERFILE} | awk -F'"' '{print $2}')
         IMAGE_TAGS=$(grep 'LABEL org.opencontainers.image.version' ${DOCKERFILE} | awk -F'"' '{print $2}')
 
         IMAGES=$(echo $IMAGE_TAGS | tr ',' '\n' | while read -r tag; do echo $IMAGE_NAME:$tag; done | paste -sd ',' -)
