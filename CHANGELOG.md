@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.37.0](https://github.com/kitabisa/composite-actions/compare/v2.36.0...v2.37.0) (2025-05-14)
+
+
+### Features
+
+* update convention label oci ([#298](https://github.com/kitabisa/composite-actions/issues/298)) ([a56f4ac](https://github.com/kitabisa/composite-actions/commit/a56f4ac127fc41678fa6018a4c727ee4253d2b98))
+
 ## [2.36.0](https://github.com/kitabisa/composite-actions/compare/v2.35.1...v2.36.0) (2025-05-14)
 
 
