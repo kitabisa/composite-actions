@@ -226,15 +226,8 @@ runs:
       uses: peter-evans/create-or-update-comment@v4
       id: couc
       with:
+        token: ${{ inputs.gh_token }}
         repository: "kitabisa/casper"
         issue-number: 46
         edit-mode: "append"
         body-path: "comment-body.md"
-        reactions: |
-          hooray
-          rocket
-
-    - name: check outputs
-      if: "${{ inputs.custom_command_send_result_to_pr_release_flag == 'true' && always() }}"
-      run: |
-        echo "Comment ID - ${{ steps.couc.outputs.comment-id }}"
