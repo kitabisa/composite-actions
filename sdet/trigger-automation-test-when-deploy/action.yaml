@@ -99,7 +99,10 @@ runs:
           -f profile=${{ inputs.service_name }} \
           -f pr_author="${PR_AUTHOR}" \
           -f pr_link="${PR_LINK}" \
-          -f custom_command_send_result_to_pr_release_flag='true'
+          -f pr_release_id="${PR_RELEASE_ID}" \
+          -f server_url="${{ github.server_url }}" \
+          -f repository="${{ github.repository }}" \
+          -f run_id="${{ github.run_id }}" \
           --ref "$TARGET_REF"
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}

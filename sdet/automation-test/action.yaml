@@ -116,6 +116,12 @@ inputs:
     default: ""
     type: string
 
+  custom_command_send_result_to_pr_release:
+    required: false
+    description: "custom command send result to pr release"
+    default: ""
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -217,9 +223,27 @@ runs:
         TARGET_REF=test/sdet-123-comment-pr
         echo "using ref: $TARGET_REF"
 
-        gh workflow run -R kitabisa/qorin .github/workflows/comment-pr.yaml \
-          -f service_name=${{ inputs.service_name }} \
-          -f pr_release_id="${PR_RELEASE_ID}"
-          --ref "$TARGET_REF"
+        ${{ inputs.custom_command_send_result_to_pr_release }}
+
+        # gh workflow run -R kitabisa/qorin .github/workflows/comment-pr.yaml \
+        #   -f service_name=${{ inputs.profile }} \
+        #   --ref "$TARGET_REF"
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
+
+    - name: create comment
+      if: "${{ inputs.custom_command_send_result_to_pr_release_flag == 'true' && always() }}"
+      uses: peter-evans/create-or-update-comment@v4
+      id: couc
+      continue-on-error: true
+      with:
+        token: "${{ secrets.GH_TOKEN }}"
+        repository: "${{ github.repository_owner }}/${{ inputs.profile }}"
+        issue-number: ${{ env.pr_release_id }}
+        edit-mode: "append"
+        body-path: "comment-body.md"
+        reactions: "hooray, rocket"
+
+    - name: check outputs
+      run: |
+        echo "Comment ID - ${{ steps.couc.outputs.comment-id }}"
