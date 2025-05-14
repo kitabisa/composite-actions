@@ -215,6 +215,8 @@ runs:
       shell: bash
       run: |
         echo "FLAG=${{ inputs.custom_command_send_result_to_pr_release_flag }}"
+        echo "REPOSITORY=$REPOSITORY"
+        echo "REPOSITORY2=${{ env.REPOSITORY }}"
 
     - name: generate comment body to pr release
       shell: bash
@@ -227,7 +229,7 @@ runs:
       id: couc
       with:
         token: ${{ inputs.gh_token }}
-        repository: "kitabisa/casper"
-        issue-number: 46
+        repository: "${{ github.repository_owner }}/casper"
+        issue-number: "$PR_RELEASE_ID"
         edit-mode: "append"
         body-path: "comment-body.md"
