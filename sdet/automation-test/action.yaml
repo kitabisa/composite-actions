@@ -170,46 +170,46 @@ runs:
       if: always()
       run: ${{ inputs.custom_command_run }}
 
-    - name: deploy reports to github pages
-      uses: kitabisa/composite-actions/sdet/deploy@v2
-      if: always()
-      with:
-        custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
-        profile: ${{ inputs.custom_command_report_subfolder || inputs.profile }}
+    # - name: deploy reports to github pages
+    #   uses: kitabisa/composite-actions/sdet/deploy@v2
+    #   if: always()
+    #   with:
+    #     custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
+    #     profile: ${{ inputs.custom_command_report_subfolder || inputs.profile }}
 
-    - name: insert result to testrails
-      shell: bash
-      if: "${{ inputs.insert_testrails == 'true' && always() }}"
-      run: bun run insertResultTestrail
+    # - name: insert result to testrails
+    #   shell: bash
+    #   if: "${{ inputs.insert_testrails == 'true' && always() }}"
+    #   run: bun run insertResultTestrail
 
-    - name: build and deploy to gh pages
-      if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
-      uses: kitabisa/composite-actions/sdet/tools/dispatch@v2
-      with:
-        token: ${{ inputs.gh_token }}
-        target_branch: ${{ github.ref }}
-        repository_name: ${{ github.repository }}
-        repository_owner: ${{ github.repository_owner }}
-        target_workflow: build-and-deploy-gh-pages.yaml
-        workflow_timeout_seconds: 300
+    # - name: build and deploy to gh pages
+    #   if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
+    #   uses: kitabisa/composite-actions/sdet/tools/dispatch@v2
+    #   with:
+    #     token: ${{ inputs.gh_token }}
+    #     target_branch: ${{ github.ref }}
+    #     repository_name: ${{ github.repository }}
+    #     repository_owner: ${{ github.repository_owner }}
+    #     target_workflow: build-and-deploy-gh-pages.yaml
+    #     workflow_timeout_seconds: 300
 
-    - name: send report to slack
-      shell: bash
-      if: "${{ inputs.custom_command_send_report_to_slack_flag == 'true' && always() }}"
-      run: ${{ inputs.custom_command_send_report_to_slack }}
+    # - name: send report to slack
+    #   shell: bash
+    #   if: "${{ inputs.custom_command_send_report_to_slack_flag == 'true' && always() }}"
+    #   run: ${{ inputs.custom_command_send_report_to_slack }}
 
-    - name: send report to dashboard
-      shell: bash
-      if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() }}"
-      run: ${{ inputs.custom_command_send_report_to_dashboard }}
-      continue-on-error: true
+    # - name: send report to dashboard
+    #   shell: bash
+    #   if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() }}"
+    #   run: ${{ inputs.custom_command_send_report_to_dashboard }}
+    #   continue-on-error: true
 
-    - name: cache summary id file
-      uses: actions/cache@v4
-      if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() }}"
-      with:
-        path: summary-id.txt
-        key: summary-id-${{ github.run_id }}
+    # - name: cache summary id file
+    #   uses: actions/cache@v4
+    #   if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() }}"
+    #   with:
+    #     path: summary-id.txt
+    #     key: summary-id-${{ github.run_id }}
 
     - name: debug
       shell: bash
