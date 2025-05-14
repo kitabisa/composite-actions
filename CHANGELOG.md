@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.0](https://github.com/kitabisa/composite-actions/compare/v2.35.1...v2.36.0) (2025-05-14)
+
+
+### Features
+
+* specifiec cache dst ([#296](https://github.com/kitabisa/composite-actions/issues/296)) ([1fc9104](https://github.com/kitabisa/composite-actions/commit/1fc91043acaf0be22c75b5c3ca55f73994b8551c))
+
 ## [2.35.1](https://github.com/kitabisa/composite-actions/compare/v2.35.0...v2.35.1) (2025-05-14)
 
 
