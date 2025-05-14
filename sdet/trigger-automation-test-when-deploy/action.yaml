@@ -81,6 +81,11 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
 
+    - name: sleep when pr release not exist
+      shell: bash
+      if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' && env.PR_RELEASE_ID == '' }}"
+      run: sleep 180
+
     - name: trigger automation test api when deploy completed
       shell: bash
       if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
