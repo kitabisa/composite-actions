@@ -225,13 +225,14 @@ runs:
       if: "${{ inputs.custom_command_send_result_to_pr_release_flag == 'true' && always() }}"
       uses: peter-evans/create-or-update-comment@v4
       id: couc
-      continue-on-error: true
       with:
         repository: "kitabisa/casper"
         issue-number: 46
         edit-mode: "append"
         body-path: "comment-body.md"
-        reactions: "hooray, rocket"
+        reactions: |
+          hooray
+          rocket
 
     - name: check outputs
       if: "${{ inputs.custom_command_send_result_to_pr_release_flag == 'true' && always() }}"
