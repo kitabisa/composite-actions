@@ -237,7 +237,7 @@ runs:
       id: couc
       continue-on-error: true
       with:
-        repository: "${{ github.repository_owner }}/${{ inputs.profile }}"
+        repository: "kitabisa/casper"
         issue-number: "46"
         edit-mode: "append"
         body-path: "comment-body.md"
