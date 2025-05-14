@@ -237,9 +237,8 @@ runs:
       id: couc
       continue-on-error: true
       with:
-        token: "${{ inputs.gh_token }}"
         repository: "${{ github.repository_owner }}/${{ inputs.profile }}"
-        issue-number: "${{ env.PR_RELEASE_ID }}"
+        issue-number: "46"
         edit-mode: "append"
         body-path: "comment-body.md"
         reactions: "hooray, rocket"
