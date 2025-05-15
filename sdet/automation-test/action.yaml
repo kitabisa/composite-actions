@@ -50,12 +50,6 @@ inputs:
     default: ""
     type: string
 
-  restore_cache_summary:
-    required: false
-    description: "restore cache summary"
-    default: ""
-    type: string
-
   custom_command_run:
     required: false
     description: "custom command run"
@@ -104,15 +98,27 @@ inputs:
     default: ""
     type: string
 
+  custom_command_send_report_to_dashboard_flag:
+    required: false
+    description: "custom command send report to dashboard flag"
+    default: ""
+    type: string
+
   custom_command_send_report_to_dashboard:
     required: false
     description: "custom command send report to dashboard"
     default: ""
     type: string
 
-  cache_summary:
+  custom_command_send_result_to_pr_release_flag:
     required: false
-    description: "cache summary id"
+    description: "custom command send result to pr release flag"
+    default: ""
+    type: string
+
+  custom_command_send_result_to_pr_release:
+    required: false
+    description: "custom command send result to pr release"
     default: ""
     type: string
 
@@ -152,7 +158,7 @@ runs:
 
     - name: restore cached summary id file
       uses: actions/cache/restore@v4
-      if: "${{ inputs.restore_cache_summary == 'true' && always() && github.run_attempt > 1 }}"
+      if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() && github.run_attempt > 1 }}"
       with:
         path: summary-id.txt
         key: summary-id-${{ github.run_id }}
@@ -194,13 +200,29 @@ runs:
 
     - name: send report to dashboard
       shell: bash
-      if: always()
+      if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() }}"
       run: ${{ inputs.custom_command_send_report_to_dashboard }}
       continue-on-error: true
 
     - name: cache summary id file
       uses: actions/cache@v4
-      if: "${{ inputs.cache_summary == 'true' && always() }}"
+      if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() }}"
       with:
         path: summary-id.txt
         key: summary-id-${{ github.run_id }}
+
+    - name: generate comment body to pr release
+      shell: bash
+      if: "${{ inputs.custom_command_send_result_to_pr_release_flag == 'true' && always() }}"
+      run: ${{ inputs.custom_command_send_result_to_pr_release }}
+
+    - name: create comment
+      if: "${{ inputs.custom_command_send_result_to_pr_release_flag == 'true' && always() }}"
+      uses: peter-evans/create-or-update-comment@v4
+      id: couc
+      with:
+        token: ${{ inputs.gh_token }}
+        repository: "${{ github.repository_owner }}/${{ env.REPOSITORY }}"
+        issue-number: "${{ env.PR_RELEASE_ID }}"
+        edit-mode: "append"
+        body-path: "comment-body.md"
