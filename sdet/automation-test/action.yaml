@@ -222,7 +222,7 @@ runs:
       id: couc
       with:
         token: ${{ inputs.gh_token }}
-        repository: "${{ github.repository_owner }}/${{ env.REPOSITORY }}"
+        repository: "${{ env.REPOSITORY }}"
         issue-number: "${{ env.PR_RELEASE_ID }}"
         edit-mode: "append"
         body-path: "comment-body.md"
