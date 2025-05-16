@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.37.2](https://github.com/kitabisa/composite-actions/compare/v2.37.1...v2.37.2) (2025-05-16)
+
+
+### Bugfix
+
+* update field repo SDET-1488 ([#301](https://github.com/kitabisa/composite-actions/issues/301)) ([7bb06dd](https://github.com/kitabisa/composite-actions/commit/7bb06ddf96adcc752bd5c43c18e78d6a0a0b70d3))
+
 ## [2.37.1](https://github.com/kitabisa/composite-actions/compare/v2.37.0...v2.37.1) (2025-05-15)
 
 
