@@ -24,9 +24,9 @@ inputs:
     type: string
     default: 'Dockerfile'
 
-  secrets:
+  secret-envs:
     required: false
-    description: "Build secrets"
+    description: "Build secret-envs"
     type: string
     default: ''
 
@@ -96,4 +96,4 @@ runs:
         cache-from: type=registry,ref=${{ steps.tags.outputs.image-name }}:cache
         cache-to: type=registry,ref=${{ steps.tags.outputs.image-name }}:cache,mode=max
         build-args: ${{ inputs.build_args }}
-        secrets: ${{ inputs.secrets }}
+        secret-envs: ${{ inputs.secret-envs }}
