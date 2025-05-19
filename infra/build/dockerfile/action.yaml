@@ -11,13 +11,13 @@ inputs:
     required: true
     description: "Artifact registry host"
     type: string
-  
+
   build_args:
     required: false
     description: "Build args"
     type: string
     default: ''
-  
+
   dockerfile:
     required: true
     description: "Dockerfile name"
