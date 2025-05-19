@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.37.1](https://github.com/kitabisa/composite-actions/compare/v2.37.0...v2.37.1) (2025-05-15)
+
+
+### Chore
+
+* send result to pr release SDET-1488 ([#267](https://github.com/kitabisa/composite-actions/issues/267)) ([fcc56b2](https://github.com/kitabisa/composite-actions/commit/fcc56b2aee70a88e924078dda1b4437ea0295508))
+
 ## [2.37.0](https://github.com/kitabisa/composite-actions/compare/v2.36.0...v2.37.0) (2025-05-14)
 
 
