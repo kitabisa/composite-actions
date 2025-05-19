@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.38.0](https://github.com/kitabisa/composite-actions/compare/v2.37.1...v2.38.0) (2025-05-19)
+
+
+### Features
+
+* add build args composite ([#303](https://github.com/kitabisa/composite-actions/issues/303)) ([23fae90](https://github.com/kitabisa/composite-actions/commit/23fae90e57a8ee760baa975937cda097c430258e))
+
+
+### Bugfix
+
+* update field repo SDET-1488 ([#301](https://github.com/kitabisa/composite-actions/issues/301)) ([7bb06dd](https://github.com/kitabisa/composite-actions/commit/7bb06ddf96adcc752bd5c43c18e78d6a0a0b70d3))
+
 ## [2.37.1](https://github.com/kitabisa/composite-actions/compare/v2.37.0...v2.37.1) (2025-05-15)
 
 
