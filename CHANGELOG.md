@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.38.1](https://github.com/kitabisa/composite-actions/compare/v2.38.0...v2.38.1) (2025-05-19)
+
+
+### Bugfix
+
+* whitespace ([#304](https://github.com/kitabisa/composite-actions/issues/304)) ([fdf4693](https://github.com/kitabisa/composite-actions/commit/fdf4693718b16e00a9f7acb816cf1a4081044561))
+
 ## [2.38.0](https://github.com/kitabisa/composite-actions/compare/v2.37.1...v2.38.0) (2025-05-19)
 
 
