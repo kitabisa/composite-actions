@@ -24,6 +24,12 @@ inputs:
     type: string
     default: 'Dockerfile'
 
+  secrets:
+    required: false
+    description: "Build secrets"
+    type: string
+    default: ''
+
   service_account:
     required: true
     description: "Service Account name for workload identity"
@@ -90,3 +96,4 @@ runs:
         cache-from: type=registry,ref=${{ steps.tags.outputs.image-name }}:cache
         cache-to: type=registry,ref=${{ steps.tags.outputs.image-name }}:cache,mode=max
         build-args: ${{ inputs.build_args }}
+        secrets: ${{ inputs.secrets }}
