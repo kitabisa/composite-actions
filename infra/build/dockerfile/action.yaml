@@ -2,11 +2,6 @@ name: "Dockerfile"
 description: "Build push dockerfile to artifact registry"
 
 inputs:
-  project_id:
-    required: true
-    description: "GCP project id"
-    type: string
-
   artifact_registry_host:
     required: true
     description: "Artifact registry host"
@@ -23,6 +18,11 @@ inputs:
     description: "Dockerfile name"
     type: string
     default: 'Dockerfile'
+
+  project_id:
+    required: true
+    description: "GCP project id"
+    type: string
 
   secrets:
     required: false
