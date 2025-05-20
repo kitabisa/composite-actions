@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.39.0](https://github.com/kitabisa/composite-actions/compare/v2.38.1...v2.39.0) (2025-05-20)
+
+
+### Features
+
+* reorder input ([#307](https://github.com/kitabisa/composite-actions/issues/307)) ([4a1f7ef](https://github.com/kitabisa/composite-actions/commit/4a1f7ef95ddf326c093be2aca5fee15ec19424bf))
+
 ## [2.38.1](https://github.com/kitabisa/composite-actions/compare/v2.38.0...v2.38.1) (2025-05-19)
 
 
