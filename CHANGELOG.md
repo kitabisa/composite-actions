@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.40.0](https://github.com/kitabisa/composite-actions/compare/v2.39.0...v2.40.0) (2025-06-17)
+
+
+### Features
+
+* sync image updater ([#309](https://github.com/kitabisa/composite-actions/issues/309)) ([c480c6b](https://github.com/kitabisa/composite-actions/commit/c480c6ba88819e869ffd9b897e2fd17aa1350bf5))
+
 ## [2.39.0](https://github.com/kitabisa/composite-actions/compare/v2.38.1...v2.39.0) (2025-05-20)
 
 
