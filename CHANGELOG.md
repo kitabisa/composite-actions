@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.43.1](https://github.com/kitabisa/composite-actions/compare/v2.43.0...v2.43.1) (2025-06-17)
+
+
+### Bugfix
+
+* retrigger to fix condition ([#319](https://github.com/kitabisa/composite-actions/issues/319)) ([47aff28](https://github.com/kitabisa/composite-actions/commit/47aff2809090ab6992edd4eda6a7cfbec7be8414))
+
 ## [2.43.0](https://github.com/kitabisa/composite-actions/compare/v2.42.0...v2.43.0) (2025-06-17)
 
 
