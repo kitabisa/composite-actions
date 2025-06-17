@@ -95,7 +95,7 @@ runs:
       run: |
         echo ${{ github.actor }}
 
-    - name: Create pull request if dependabot
+    - name: Create pull request if dependabot author
       uses: peter-evans/create-pull-request@v7
       if: ${{ github.actor == 'dependabot[bot]' }}
       with:
