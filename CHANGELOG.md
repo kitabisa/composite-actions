@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.43.2](https://github.com/kitabisa/composite-actions/compare/v2.43.1...v2.43.2) (2025-06-17)
+
+
+### Bugfix
+
+* condition author dependabot not working ([#321](https://github.com/kitabisa/composite-actions/issues/321)) ([68b8b85](https://github.com/kitabisa/composite-actions/commit/68b8b85b3509590d087d80d7d654ee1ba01cae8c))
+
 ## [2.43.1](https://github.com/kitabisa/composite-actions/compare/v2.43.0...v2.43.1) (2025-06-17)
 
 
