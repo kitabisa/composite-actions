@@ -77,6 +77,11 @@ runs:
         DOCKERFILE: ${{ inputs.dockerfile }}
       shell: bash
       run: |
+        if grep -q 'dependabot.auto.version.updater="true"' ${DOCKERFILE}; then
+          FROM_TAG=$(grep '^FROM' ${DOCKERFILE} | awk -F ':' '{print $2}')
+          sed -i "s|org.opencontainers.image.version=.*|org.opencontainers.image.version=\"latest,${FROM_TAG}\"|" ${DOCKERFILE}
+        fi
+
         IMAGE_NAME=$(grep 'LABEL org.opencontainers.image.base.name' ${DOCKERFILE} | awk -F'"' '{print $2}')
         IMAGE_TAGS=$(grep 'LABEL org.opencontainers.image.version' ${DOCKERFILE} | awk -F'"' '{print $2}')
 
@@ -97,3 +102,12 @@ runs:
         cache-to: type=registry,ref=${{ steps.tags.outputs.image-name }}:cache,mode=max
         build-args: ${{ inputs.build_args }}
         secrets: ${{ inputs.secrets }}
+
+    - name: Commit changes
+      shell: bash
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git commit -am "chore: sync label version with FROM tag"
+        git push
+      continue-on-error: true
