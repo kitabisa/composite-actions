@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.41.0](https://github.com/kitabisa/composite-actions/compare/v2.40.0...v2.41.0) (2025-06-17)
+
+
+### Features
+
+* change to dependabot user ([#311](https://github.com/kitabisa/composite-actions/issues/311)) ([0a93bba](https://github.com/kitabisa/composite-actions/commit/0a93bba4d3bcaa509e374ebc4367b702baae9c5b))
+
 ## [2.40.0](https://github.com/kitabisa/composite-actions/compare/v2.39.0...v2.40.0) (2025-06-17)
 
 
