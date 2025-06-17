@@ -99,7 +99,7 @@ runs:
       uses: peter-evans/create-pull-request@v7
       if: ${{ github.actor }} == 'dependabot[bot]'
       with:
-        commit-message: "chore: sync label version with FROM tag"
+        commit-message: "chore: sync docker version with FROM tag"
         title: "chore: update LABEL to match FROM tag"
         body: |
           This PR updates the `LABEL org.opencontainers.image.version` to match the base image tag used in the `FROM` line.
