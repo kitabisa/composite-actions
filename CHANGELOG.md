@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.44.0](https://github.com/kitabisa/composite-actions/compare/v2.43.2...v2.44.0) (2025-06-17)
+
+
+### Features
+
+* update condition ([#323](https://github.com/kitabisa/composite-actions/issues/323)) ([04ba584](https://github.com/kitabisa/composite-actions/commit/04ba5842c489f0c5563fa771f2aa17f8b22845a2))
+
 ## [2.43.2](https://github.com/kitabisa/composite-actions/compare/v2.43.1...v2.43.2) (2025-06-17)
 
 
