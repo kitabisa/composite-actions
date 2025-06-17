@@ -90,8 +90,20 @@ runs:
         echo "image-name=$(echo $IMAGE_NAME)" >> $GITHUB_OUTPUT
         echo "image-tags=$(echo $IMAGES)" >> $GITHUB_OUTPUT
 
+    - name: Create pull request if dependabot
+      uses: peter-evans/create-pull-request@v7
+      if: ${{ github.actor }} == 'dependabot[bot]'
+      with:
+        commit-message: "chore: sync label version with FROM tag"
+        title: "chore: update LABEL to match FROM tag"
+        body: |
+          This PR updates the `LABEL org.opencontainers.image.version` to match the base image tag used in the `FROM` line.
+        branch: "feat/dependabot-sync-label-version"
+        delete-branch: true
+
     - name: Build and push docker image
       uses: docker/build-push-action@v6
+      if: ${{ github.actor }} != 'dependabot[bot]'
       with:
         context: ${{ inputs.working_directory }}
         file: ${{ inputs.working_directory }}/${{ inputs.dockerfile }}
@@ -102,14 +114,3 @@ runs:
         cache-to: type=registry,ref=${{ steps.tags.outputs.image-name }}:cache,mode=max
         build-args: ${{ inputs.build_args }}
         secrets: ${{ inputs.secrets }}
-
-    - name: Commit changes
-      shell: bash
-      run: |
-        git config user.name "dependabot[bot]"
-        git config user.email "49699333+dependabot[bot]@users.noreply.github.com"
-        git fetch origin main
-        git rebase origin/main
-        git commit -am "chore: sync label version with FROM tag"
-        git push
-      continue-on-error: true
