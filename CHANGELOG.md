@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.43.0](https://github.com/kitabisa/composite-actions/compare/v2.42.0...v2.43.0) (2025-06-17)
+
+
+### Features
+
+* update docker label ([#316](https://github.com/kitabisa/composite-actions/issues/316)) ([24b17fc](https://github.com/kitabisa/composite-actions/commit/24b17fc60cd83c1ab1cb0aa54f55a4218ae33631))
+
 ## [2.42.0](https://github.com/kitabisa/composite-actions/compare/v2.41.0...v2.42.0) (2025-06-17)
 
 
