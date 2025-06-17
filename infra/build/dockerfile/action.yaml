@@ -79,7 +79,7 @@ runs:
       run: |
         if grep -q 'dependabot.auto.version.updater="true"' ${DOCKERFILE}; then
           FROM_TAG=$(grep '^FROM' ${DOCKERFILE} | awk -F ':' '{print $2}')
-          sed -i "s|org.opencontainers.image.version=.*|org.opencontainers.image.version=\"latest,${FROM_TAG}\"|" ${DOCKERFILE}
+          sed -i "s|org.opencontainers.image.version=.*|org.opencontainers.image.version=\"${FROM_TAG},latest\"|" ${DOCKERFILE}
         fi
 
         IMAGE_NAME=$(grep 'LABEL org.opencontainers.image.base.name' ${DOCKERFILE} | awk -F'"' '{print $2}')
