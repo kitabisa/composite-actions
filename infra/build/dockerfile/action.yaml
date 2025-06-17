@@ -2,6 +2,12 @@ name: "Dockerfile"
 description: "Build push dockerfile to artifact registry"
 
 inputs:
+  author:
+    required: false
+    description: "Author name for commit"
+    type: string
+    default: "${{ github.actor }}"
+
   artifact_registry_host:
     required: true
     description: "Artifact registry host"
@@ -90,14 +96,9 @@ runs:
         echo "image-name=$(echo $IMAGE_NAME)" >> $GITHUB_OUTPUT
         echo "image-tags=$(echo $IMAGES)" >> $GITHUB_OUTPUT
 
-    - name: Debug
-      shell: bash
-      run: |
-        echo ${{ github.event.pull_request.user.login }}
-
     - name: Create pull request if dependabot author
       uses: peter-evans/create-pull-request@v7
-      if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
+      if: ${{ inputs.author == 'dependabot[bot]' }}
       with:
         commit-message: "chore: sync docker version with FROM tag"
         title: "chore: update LABEL to match FROM tag"
@@ -108,7 +109,7 @@ runs:
 
     - name: Build and push docker image
       uses: docker/build-push-action@v6
-      if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
+      if: ${{ inputs.author != 'dependabot[bot]' }}
       with:
         context: ${{ inputs.working_directory }}
         file: ${{ inputs.working_directory }}/${{ inputs.dockerfile }}
