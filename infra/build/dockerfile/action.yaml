@@ -90,6 +90,11 @@ runs:
         echo "image-name=$(echo $IMAGE_NAME)" >> $GITHUB_OUTPUT
         echo "image-tags=$(echo $IMAGES)" >> $GITHUB_OUTPUT
 
+    - name: Debug
+      shell: bash
+      run: |
+        echo ${{ github.actor }}
+
     - name: Create pull request if dependabot
       uses: peter-evans/create-pull-request@v7
       if: ${{ github.actor }} == 'dependabot[bot]'
