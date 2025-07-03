@@ -12,18 +12,6 @@ inputs:
     description: "Artifact registry project id"
     type: string
 
-  workload_identity_provider:
-    required: false
-    description: "Workload identity provider"
-    type: string
-    default: 'false'
-
-  service_account:
-    required: true
-    description: "Service Account name for workload identity"
-    type: string
-    default: 'false'
-
   credentials_json:
     required: true
     description: "GCP credentials services account"
@@ -91,8 +79,6 @@ runs:
         project_id: ${{ inputs.project_id }}
         credentials_json: ${{ inputs.credentials_json }}
         docker_creds: false
-        workload_identity_provider: false
-        service_account: false
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
 
