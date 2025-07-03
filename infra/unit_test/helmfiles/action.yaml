@@ -62,6 +62,11 @@ runs:
         username: ${{ inputs.docker_username }}
         password: ${{ inputs.docker_password }}
 
+    - name: Setup Helmfile
+      uses: kitabisa/actions/setup-helmfile@master
+      with:
+        version: v0.145.0
+
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
