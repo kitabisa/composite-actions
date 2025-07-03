@@ -89,9 +89,10 @@ runs:
       with:
         artifact_registry_host: ${{ inputs.artifact_registry_host }}
         project_id: ${{ inputs.project_id }}
+        credentials_json: ${{ inputs.credentials_json }}
         docker_creds: false
-        workload_identity_provider: ${{ inputs.workload_identity_provider }}
-        service_account: ${{ inputs.service_account }}
+        workload_identity_provider: false
+        service_account: false
         gke_cluster_name: ${{ inputs.gke_cluster_name }}
         gke_cluster_zone: ${{ inputs.gke_cluster_zone }}
 
