@@ -65,7 +65,7 @@ runs:
     - name: Setup Helmfile
       uses: kitabisa/actions/setup-helmfile@master
       with:
-        version: v0.145.0
+        version: v1.0.0
 
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
