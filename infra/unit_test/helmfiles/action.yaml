@@ -12,6 +12,18 @@ inputs:
     description: "Artifact registry project id"
     type: string
 
+  workload_identity_provider:
+    required: false
+    description: "Workload identity provider"
+    type: string
+    default: 'false'
+
+  service_account:
+    required: true
+    description: "Service Account name for workload identity"
+    type: string
+    default: 'false'
+
   credentials_json:
     required: true
     description: "GCP credentials services account"
