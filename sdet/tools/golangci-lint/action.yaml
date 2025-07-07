@@ -19,7 +19,7 @@ inputs:
     required: false
     description: "go version"
     default: "^1.21"
-  
+
   setup_go_cache:
     required: false
     description: "go version"
