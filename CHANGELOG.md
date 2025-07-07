@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.45.1](https://github.com/kitabisa/composite-actions/compare/v2.45.0...v2.45.1) (2025-07-07)
+
+
+### CI
+
+* add tools golangci-lint ([#328](https://github.com/kitabisa/composite-actions/issues/328)) ([afa7395](https://github.com/kitabisa/composite-actions/commit/afa739587f53ed8231bffce81e336bfbcaf03d5e))
+
 ## [2.45.0](https://github.com/kitabisa/composite-actions/compare/v2.44.0...v2.45.0) (2025-06-17)
 
 
