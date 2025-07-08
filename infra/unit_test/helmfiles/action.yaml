@@ -68,7 +68,7 @@ runs:
     - name: Setup helmfile
       uses: mamezou-tech/setup-helmfile@v2.1.0
       with:
-        additional-helm-plugins: helm plugin install https://github.com/jkroepke/helm-secrets --version v4.6.5
+        additional-helm-plugins: https://github.com/jkroepke/helm-secrets --version v4.6.5
 
     - name: Check helmfile version
       shell: bash
