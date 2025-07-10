@@ -72,7 +72,6 @@ runs:
         helm-plugins: >
           https://github.com/databus23/helm-diff,
           https://github.com/jkroepke/helm-secrets
-        helmfile-args: apply --environment prod
         helmfile-auto-init: "false"
 
     - name: Check helmfile version
