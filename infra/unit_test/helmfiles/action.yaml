@@ -65,10 +65,15 @@ runs:
         username: ${{ inputs.docker_username }}
         password: ${{ inputs.docker_password }}
 
-    - name: Setup helmfile
-      uses: mamezou-tech/setup-helmfile@v2.1.0
+    - name: Setup helm and helmfile
+      uses: helmfile/helmfile-action@v2.0.4
       with:
-        additional-helm-plugins: https://github.com/jkroepke/helm-secrets --version v4.6.5
+        helmfile-version: 'v1.1.2'
+        helm-plugins: >
+          https://github.com/databus23/helm-diff,
+          https://github.com/jkroepke/helm-secrets
+        helmfile-args: apply --environment prod
+        helmfile-auto-init: "false"
 
     - name: Check helmfile version
       shell: bash
