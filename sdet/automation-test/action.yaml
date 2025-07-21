@@ -56,6 +56,12 @@ inputs:
     default: ""
     type: string
 
+  custom_command_post_run:
+    required: false
+    description: "custom command post run"
+    default: ""
+    type: string
+
   create_test_run:
     required: false
     description: "create test run"
@@ -77,6 +83,12 @@ inputs:
   insert_testrails:
     required: false
     description: "insert testrails"
+    default: ""
+    type: string
+
+  insert_testiny:
+    required: false
+    description: "insert testiny"
     default: ""
     type: string
 
@@ -170,6 +182,11 @@ runs:
       if: always()
       run: ${{ inputs.custom_command_run }}
 
+    - name: post run command
+      shell: bash
+      if: always()
+      run: ${{ inputs.custom_command_post_run }}
+
     - name: deploy reports to github pages
       uses: kitabisa/composite-actions/sdet/deploy@v2
       if: always()
@@ -181,6 +198,11 @@ runs:
       shell: bash
       if: "${{ inputs.insert_testrails == 'true' && always() }}"
       run: bun run insertResultTestrail
+
+    - name: insert result to testiny
+      shell: bash
+      if: "${{ inputs.insert_testiny == 'true' && always() }}"
+      run: bun run sendResultTestiny
 
     - name: build and deploy to gh pages
       if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
