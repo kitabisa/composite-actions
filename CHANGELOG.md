@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.45.2](https://github.com/kitabisa/composite-actions/compare/v2.45.1...v2.45.2) (2025-07-22)
+
+
+### Chore
+
+* add send result to testiny and custom command post run ([#330](https://github.com/kitabisa/composite-actions/issues/330)) ([21a307c](https://github.com/kitabisa/composite-actions/commit/21a307cb96732c127c86cbeec43fa7eb929689d9))
+
 ## [2.45.1](https://github.com/kitabisa/composite-actions/compare/v2.45.0...v2.45.1) (2025-07-07)
 
 
