@@ -80,9 +80,9 @@ inputs:
     default: ""
     type: string
 
-  insert_testiny:
+  insert_testiny_flag:
     required: false
-    description: "insert testiny"
+    description: "insert testiny flag"
     default: ""
     type: string
 
@@ -190,7 +190,7 @@ runs:
 
     - name: insert result to testiny
       shell: bash
-      if: "${{ inputs.insert_testiny == 'true' && always() }}"
+      if: "${{ inputs.insert_testiny_flag == 'true' && always() }}"
       run: bun run sendResultTestiny
 
     - name: build and deploy to gh pages
