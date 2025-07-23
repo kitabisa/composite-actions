@@ -37,6 +37,12 @@ inputs:
     description: "trigger automation test api when deploy"
     default: "false"
     type: string
+  
+  target_repo:
+    description: "target repository to trigger (e.g., qorin)"
+    required: false
+    default: "qorin"
+    type: string
 
   pr_author:
     required: false
@@ -90,7 +96,7 @@ runs:
       shell: bash
       if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' && env.PR_AUTHOR != 'kitabisaengineer' }}"
       run: |
-        if gh api repos/kitabisa/qorin/git/refs/heads/${PR_BRANCH} > /dev/null 2>&1; then
+        if gh api repos/kitabisa/${{ inputs.target_repo }}/git/refs/heads/${PR_BRANCH} > /dev/null 2>&1; then
           TARGET_REF=${PR_BRANCH}
         else
           echo "branch ${PR_BRANCH} not found. Using fallback 'master'"
@@ -99,7 +105,7 @@ runs:
 
         echo "using ref: $TARGET_REF"
 
-        gh workflow run -R kitabisa/qorin .github/workflows/trigger-when-deploy.yaml \
+        gh workflow run -R kitabisa/${{ inputs.target_repo }} .github/workflows/trigger-when-deploy.yaml \
           -f profile=${{ inputs.service_name }} \
           -f pr_author="${PR_AUTHOR}" \
           -f pr_link="${PR_LINK}" \
