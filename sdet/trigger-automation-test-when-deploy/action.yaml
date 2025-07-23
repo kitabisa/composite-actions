@@ -32,6 +32,12 @@ inputs:
     default: "false"
     type: string
 
+  target_repo:
+    description: "Target repo to trigger (e.g., kitabisa/qorin)"
+    required: false
+    default: "kitabisa/qorin"
+    type: string
+
   trigger_automation_test_api_when_deploy:
     required: false
     description: "trigger automation test api when deploy"
@@ -57,6 +63,6 @@ runs:
       shell: bash
       if: "${{ inputs.trigger_automation_test_api_when_deploy == 'true' }}"
       run: |
-        gh workflow run -R kitabisa/qorin .github/workflows/trigger-when-deploy.yaml -f profile=${{ inputs.service_name }} --ref master
+        gh workflow run -R ${{ inputs.target_repo }} .github/workflows/trigger-when-deploy.yaml -f profile=${{ inputs.service_name }} --ref master
       env:
         GITHUB_TOKEN: ${{ inputs.gh_token }}
