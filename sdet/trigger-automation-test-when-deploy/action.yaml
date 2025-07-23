@@ -37,7 +37,7 @@ inputs:
     description: "trigger automation test api when deploy"
     default: "false"
     type: string
-  
+
   target_repo:
     description: "target repository to trigger (e.g., qorin)"
     required: false
