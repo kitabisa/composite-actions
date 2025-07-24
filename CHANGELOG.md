@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.45.3](https://github.com/kitabisa/composite-actions/compare/v2.45.2...v2.45.3) (2025-07-24)
+
+
+### CI
+
+* add input target repo for trigger automation when deploy ([#333](https://github.com/kitabisa/composite-actions/issues/333)) ([9fdc6d5](https://github.com/kitabisa/composite-actions/commit/9fdc6d583c23613308858badddf2118956339609))
+
 ## [2.45.2](https://github.com/kitabisa/composite-actions/compare/v2.45.1...v2.45.2) (2025-07-22)
 
 
