@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.45.4](https://github.com/kitabisa/composite-actions/compare/v2.45.3...v2.45.4) (2025-07-25)
+
+
+### Bugfix
+
+* bump cloudflare pages action to v2 ([#335](https://github.com/kitabisa/composite-actions/issues/335)) ([17f2c72](https://github.com/kitabisa/composite-actions/commit/17f2c72e3447df69ea8b1e26911e11a371a206a5))
+
 ## [2.45.3](https://github.com/kitabisa/composite-actions/compare/v2.45.2...v2.45.3) (2025-07-24)
 
 
