@@ -60,7 +60,7 @@ runs:
   steps:
     - name: Deploy
       id: deploy
-      uses: kitabisa/cloudflare-pages-action@v1
+      uses: kitabisa/cloudflare-pages-action@v2
       with:
         api-token: ${{ inputs.cloudflare_api_token }}
         account-id: ${{ inputs.cloudflare_account_id }}
@@ -70,7 +70,7 @@ runs:
         build-directory: ${{ inputs.build_directory }}
         project-name: ${{ inputs.project_name }}
         zone-name: ${{ inputs.project_domain_zone }}
-        custom-domain: ${{ inputs.project_custom_domain }}
+        custom-domains: ${{ inputs.project_custom_domain }}
         working-directory: ${{ inputs.working_directory }}
 
     - name: Comment preview url
