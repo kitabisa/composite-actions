@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.45.5](https://github.com/kitabisa/composite-actions/compare/v2.45.4...v2.45.5) (2025-07-30)
+
+
+### Bugfix
+
+* comment pr when hosts separator with space ([d80af08](https://github.com/kitabisa/composite-actions/commit/d80af081e682316ebcdd01dfb811c2c4e41c7f48))
+
 ## [2.45.4](https://github.com/kitabisa/composite-actions/compare/v2.45.3...v2.45.4) (2025-07-30)
 
 
