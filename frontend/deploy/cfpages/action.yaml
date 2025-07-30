@@ -43,6 +43,7 @@ inputs:
     default: "."
     type: string
 
+  # unused input, next will be remove
   project_domain_zone:
     required: false
     description: "Set project domain zone"
@@ -69,7 +70,6 @@ runs:
         package-manager: ${{ inputs.package_manager }}
         build-directory: ${{ inputs.build_directory }}
         project-name: ${{ inputs.project_name }}
-        zone-name: ${{ inputs.project_domain_zone }}
         custom-domains: ${{ inputs.project_custom_domain }}
         working-directory: ${{ inputs.working_directory }}
 
