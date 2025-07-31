@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.45.6](https://github.com/kitabisa/composite-actions/compare/v2.45.5...v2.45.6) (2025-07-31)
+
+
+### Bugfix
+
+* update comment deployment pr cf pages ([cbaad2e](https://github.com/kitabisa/composite-actions/commit/cbaad2e2f66109ab51e027a3c12cd651ad2fe010))
+
 ## [2.45.5](https://github.com/kitabisa/composite-actions/compare/v2.45.4...v2.45.5) (2025-07-30)
 
 
