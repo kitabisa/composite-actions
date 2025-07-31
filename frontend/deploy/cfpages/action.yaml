@@ -79,4 +79,5 @@ runs:
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body: |
-          Open the application by accessing these URL: \n${{ steps.deploy.outputs.deployment-url }}
+          Open the application by accessing these URL:
+          ${{ steps.deploy.outputs.deployment-url }}
