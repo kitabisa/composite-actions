@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.45.7](https://github.com/kitabisa/composite-actions/compare/v2.45.6...v2.45.7) (2025-07-31)
+
+
+### Bugfix
+
+* log deployment url ([1f83fb4](https://github.com/kitabisa/composite-actions/commit/1f83fb45c761e81e4ce3b423b84cbbb6dea69c8b))
+
 ## [2.45.6](https://github.com/kitabisa/composite-actions/compare/v2.45.5...v2.45.6) (2025-07-31)
 
 
