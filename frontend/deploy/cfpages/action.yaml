@@ -65,6 +65,7 @@ runs:
     - name: Normalize github artifact path directory
       if: "${{ inputs.download_build == 'true' }}"
       id: normalize
+      shell: bash
       run: |
         RAW_PATH="${{ inputs.working_directory }}/${{ inputs.build_directory }}"
         CLEAN_PATH=$(realpath --relative-to=. "$RAW_PATH")
