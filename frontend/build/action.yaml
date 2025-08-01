@@ -102,6 +102,18 @@ inputs:
     default: "true"
     type: string
 
+  upload_build:
+    required: false
+    description: "Upload build to github artifact"
+    default: "false"
+    type: string
+
+  build_directory:
+    required: false
+    description: "Set build directory"
+    default: "."
+    type: string
+
   using_cdn:
     required: false
     description: "Setup cdn for static assets"
@@ -208,6 +220,13 @@ runs:
         package: ${{ inputs.package }}
         using_cdn: ${{ inputs.using_cdn }}
         cdn_keep_latest_version: ${{ inputs.cdn_keep_latest_version }}
+
+    - name: Upload build to github artifact
+      if: "${{ inputs.upload_build == 'true' }}"
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-output
+        path: ${{ inputs.build_directory }}
 
     - name: Build and push image static
       if: "${{ inputs.web_static == 'true' }}"
