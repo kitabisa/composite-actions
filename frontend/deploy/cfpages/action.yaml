@@ -55,6 +55,12 @@ inputs:
     default: ""
     type: string
 
+  npm_token:
+    required: false
+    description: "Set npm token"
+    default: ""
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -77,6 +83,12 @@ runs:
       with:
         name: build-output
         path: ${{ steps.normalize.outputs.build_directory }}
+
+    - name: Setup npm token
+      if: "${{ inputs.npm_token != '' }}"
+      shell: bash
+      run: |
+        echo "//npm.pkg.github.com/:_authToken=${{ inputs.npm_token }}" > ~/.npmrc
 
     - name: Deploy
       id: deploy
