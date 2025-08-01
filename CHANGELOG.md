@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.46.1](https://github.com/kitabisa/composite-actions/compare/v2.46.0...v2.46.1) (2025-08-01)
+
+
+### Bugfix
+
+* working directory ([#342](https://github.com/kitabisa/composite-actions/issues/342)) ([d375e13](https://github.com/kitabisa/composite-actions/commit/d375e139a12ae4957a1a78b2953be4e3e221b62f))
+
 ## [2.46.0](https://github.com/kitabisa/composite-actions/compare/v2.45.7...v2.46.0) (2025-08-01)
 
 
