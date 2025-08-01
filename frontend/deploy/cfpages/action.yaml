@@ -62,12 +62,20 @@ runs:
       if: "${{ inputs.download_build == 'true' }}"
       uses: actions/checkout@v4
 
+    - name: Normalize github artifact path directory
+      if: "${{ inputs.download_build == 'true' }}"
+      id: normalize
+      run: |
+        RAW_PATH="${{ inputs.working_directory }}/${{ inputs.build_directory }}"
+        CLEAN_PATH=$(realpath --relative-to=. "$RAW_PATH")
+        echo "build_directory=$CLEAN_PATH" >> "$GITHUB_OUTPUT"
+
     - name: Download build from github artifact
       if: "${{ inputs.download_build == 'true' }}"
       uses: actions/download-artifact@v4
       with:
         name: build-output
-        path: ${{ inputs.working_directory }}/${{ inputs.build_directory }}
+        path: ${{ steps.normalize.outputs.build_directory }}
 
     - name: Deploy
       id: deploy

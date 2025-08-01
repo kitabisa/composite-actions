@@ -221,12 +221,20 @@ runs:
         using_cdn: ${{ inputs.using_cdn }}
         cdn_keep_latest_version: ${{ inputs.cdn_keep_latest_version }}
 
+    - name: Normalize github artifact path directory
+      if: "${{ inputs.upload_build == 'true' }}"
+      id: normalize
+      run: |
+        RAW_PATH="${{ inputs.working_directory }}/${{ inputs.build_directory }}"
+        CLEAN_PATH=$(realpath --relative-to=. "$RAW_PATH")
+        echo "build_directory=$CLEAN_PATH" >> "$GITHUB_OUTPUT"
+
     - name: Upload build to github artifact
       if: "${{ inputs.upload_build == 'true' }}"
       uses: actions/upload-artifact@v4
       with:
         name: build-output
-        path: ${{ inputs.working_directory }}/${{ inputs.build_directory }}
+        path: ${{ steps.normalize.outputs.build_directory }}
         if-no-files-found: error
 
     - name: Build and push image static
