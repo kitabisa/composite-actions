@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.46.3](https://github.com/kitabisa/composite-actions/compare/v2.46.2...v2.46.3) (2025-08-01)
+
+
+### Bugfix
+
+* property is missing shell ([c7eea91](https://github.com/kitabisa/composite-actions/commit/c7eea91a0373646d3b4845d4c7bbe96920ec03f4))
+
 ## [2.46.2](https://github.com/kitabisa/composite-actions/compare/v2.46.1...v2.46.2) (2025-08-01)
 
 
