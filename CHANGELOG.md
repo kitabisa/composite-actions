@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.46.4](https://github.com/kitabisa/composite-actions/compare/v2.46.3...v2.46.4) (2025-08-01)
+
+
+### Bugfix
+
+* npm token cfpages deploy ([#346](https://github.com/kitabisa/composite-actions/issues/346)) ([3c3ce28](https://github.com/kitabisa/composite-actions/commit/3c3ce28ef5c628aaf846c7587a445bd2eae84e2a))
+
 ## [2.46.3](https://github.com/kitabisa/composite-actions/compare/v2.46.2...v2.46.3) (2025-08-01)
 
 
