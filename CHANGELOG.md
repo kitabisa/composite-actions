@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.46.0](https://github.com/kitabisa/composite-actions/compare/v2.45.7...v2.46.0) (2025-08-01)
+
+
+### Features
+
+* add optional step for upload static build ([#340](https://github.com/kitabisa/composite-actions/issues/340)) ([5297222](https://github.com/kitabisa/composite-actions/commit/52972224a084326ae9fe7cd38f1c3b1c4d69c843))
+
 ## [2.45.7](https://github.com/kitabisa/composite-actions/compare/v2.45.6...v2.45.7) (2025-07-31)
 
 
