@@ -236,6 +236,7 @@ runs:
       with:
         name: build-output
         path: ${{ steps.normalize.outputs.build_directory }}
+        include-hidden-files: true
         if-no-files-found: error
 
     - name: Build and push image static
