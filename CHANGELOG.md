@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.46.5](https://github.com/kitabisa/composite-actions/compare/v2.46.4...v2.46.5) (2025-08-08)
+
+
+### Bugfix
+
+* include hidden file when upload artifact ([48c8a7c](https://github.com/kitabisa/composite-actions/commit/48c8a7cf05f6eebd6bff9475964a9bc3a7bad0a0))
+
 ## [2.46.4](https://github.com/kitabisa/composite-actions/compare/v2.46.3...v2.46.4) (2025-08-01)
 
 
