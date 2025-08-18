@@ -2,6 +2,30 @@ name: "post pr actions"
 description: "execute actions after pr is merged"
 
 inputs:
+  gh_token:
+    required: true
+    description: "gh token"
+    default: "false"
+    type: string
+
+  setup_bun:
+    required: false
+    description: "setup bun"
+    default: "false"
+    type: string
+
+  custom_command_packages:
+    required: false
+    description: "custom command packages"
+    default: ""
+    type: string
+
+  custom_command_setup:
+    required: true
+    description: "custom command setup"
+    default: ""
+    type: string
+
   review_metrics_flag:
     description: "enable pr review metrics sync"
     required: false
