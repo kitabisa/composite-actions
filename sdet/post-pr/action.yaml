@@ -63,7 +63,7 @@ runs:
       run: |
         OWNER="${{ github.repository_owner }}"
         REPO="${{ github.event.repository.name }}"
-        PR_NUMBER="${{ github.event.pull_request.number || env.TEST_PR_NUMBER }}"
+        PR_NUMBER="${{ github.event.pull_request.number || env.PR_NUMBER_DISPATCH }}"
 
         if [ "$DRY_RUN" = "true" ]; then
           echo "🔍 [DRY RUN] Would execute API call:"
@@ -78,7 +78,7 @@ runs:
         else
           echo "🚀 Syncing metrics for PR #${PR_NUMBER} in ${OWNER}/${REPO}"
 
-          curl -X POST "$KRESEK_URL/pr/sync" \
+          curl -X POST \
             -u "$KRESEK_BASIC_AUTH_USERNAME:$KRESEK_BASIC_AUTH_PASSWORD" \
             -H "Content-Type: application/json" \
             -d "{
@@ -86,7 +86,7 @@ runs:
               \"repository_name\": \"${REPO}\",
               \"pr_number\": ${PR_NUMBER}
             }" \
-            --fail-with-body \
-            --show-error
+            "$KRESEK_URL/pr/sync"
+
           echo "✅ Metrics synced successfully"
         fi
