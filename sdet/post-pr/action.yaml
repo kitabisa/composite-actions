@@ -84,6 +84,13 @@ runs:
           curl -k -X POST \
             -u "$KRESEK_BASIC_AUTH_USERNAME:$KRESEK_BASIC_AUTH_PASSWORD" \
             -H "Content-Type: application/json" \
+            -H "X-Ktbs-Api-Version: 1.0.0" \
+            -H "X-Ktbs-Client-Version: 1.0.0" \
+            -H "X-Ktbs-Client-Name: github" \
+            -H "X-Ktbs-Platform-Name: web" \
+            -H "X-Ktbs-Time: 1755592922" \
+            -H "X-Ktbs-Signature: 6d7d1ff8de60d06421328c6c63a4420f462285f76986c55571c2ee8152f1748e" \
+            -H "X-Ktbs-Request-ID: 5755a2a5-a788-40f7-803b-f837d151046d" \
             -d "{
               \"repository_owner\": \"${OWNER}\",
               \"repository_name\": \"${REPO}\",
