@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.47.0](https://github.com/kitabisa/composite-actions/compare/v2.46.5...v2.47.0) (2025-08-20)
+
+
+### Features
+
+* post pr SDET-1662 ([#349](https://github.com/kitabisa/composite-actions/issues/349)) ([967ca75](https://github.com/kitabisa/composite-actions/commit/967ca7528a3ec584d222646eb9c510eef1e48a77))
+
+
+### Bugfix
+
+* ignore ssl cert and load dotenvx ([#350](https://github.com/kitabisa/composite-actions/issues/350)) ([a0b7c9e](https://github.com/kitabisa/composite-actions/commit/a0b7c9e495e083037b388bfb5d89fa274f456864))
+
 ## [2.46.5](https://github.com/kitabisa/composite-actions/compare/v2.46.4...v2.46.5) (2025-08-08)
 
 
