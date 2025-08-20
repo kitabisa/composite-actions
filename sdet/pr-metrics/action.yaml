@@ -1,4 +1,4 @@
-name: "post pr actions"
+name: "pr metrics actions"
 description: "execute actions after pr is merged"
 
 inputs:
@@ -61,6 +61,9 @@ runs:
       if: ${{ inputs.review_metrics_flag == 'true' && always() }}
       shell: bash
       run: |
+        echo "Loading KRESEK credentials from dotenv..."
+        eval $(bunx dotenvx run -f .env -- printenv | grep KRESEK)
+
         OWNER="${{ github.repository_owner }}"
         REPO="${{ github.event.repository.name }}"
         PR_NUMBER="${{ github.event.pull_request.number || env.PR_NUMBER_DISPATCH }}"
@@ -78,9 +81,16 @@ runs:
         else
           echo "🚀 Syncing metrics for PR #${PR_NUMBER} in ${OWNER}/${REPO}"
 
-          curl -X POST \
+          curl -k -X POST \
             -u "$KRESEK_BASIC_AUTH_USERNAME:$KRESEK_BASIC_AUTH_PASSWORD" \
             -H "Content-Type: application/json" \
+            -H "X-Ktbs-Api-Version: 1.0.0" \
+            -H "X-Ktbs-Client-Version: 1.0.0" \
+            -H "X-Ktbs-Client-Name: github" \
+            -H "X-Ktbs-Platform-Name: web" \
+            -H "X-Ktbs-Time: 1755592922" \
+            -H "X-Ktbs-Signature: 6d7d1ff8de60d06421328c6c63a4420f462285f76986c55571c2ee8152f1748e" \
+            -H "X-Ktbs-Request-ID: 5755a2a5-a788-40f7-803b-f837d151046d" \
             -d "{
               \"repository_owner\": \"${OWNER}\",
               \"repository_name\": \"${REPO}\",
