@@ -1,4 +1,4 @@
-name: "post pr actions"
+name: "pr metrics actions"
 description: "execute actions after pr is merged"
 
 inputs:
