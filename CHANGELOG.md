@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.48.0](https://github.com/kitabisa/composite-actions/compare/v2.47.0...v2.48.0) (2025-08-21)
+
+
+### Features
+
+* download cert ([#352](https://github.com/kitabisa/composite-actions/issues/352)) ([b96eff3](https://github.com/kitabisa/composite-actions/commit/b96eff33475250edd58d64bf75282ac8b5913b55))
+
 ## [2.47.0](https://github.com/kitabisa/composite-actions/compare/v2.46.5...v2.47.0) (2025-08-20)
 
 
