@@ -60,6 +60,12 @@ runs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Download cert from github artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: certificates
+        path: ${{ inputs.working_directory }}/certificates
+
     - name: Setup Gcloud credential
       uses: kitabisa/composite-actions/infra/tools/gcloud@v2
       with:
