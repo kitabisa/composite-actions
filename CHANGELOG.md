@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.49.0](https://github.com/kitabisa/composite-actions/compare/v2.48.0...v2.49.0) (2025-08-21)
+
+
+### Features
+
+* move checkout in workflow ([#354](https://github.com/kitabisa/composite-actions/issues/354)) ([58ba58f](https://github.com/kitabisa/composite-actions/commit/58ba58fded59381d9a96ce42b8d066f21c86bd67))
+
 ## [2.48.0](https://github.com/kitabisa/composite-actions/compare/v2.47.0...v2.48.0) (2025-08-21)
 
 
