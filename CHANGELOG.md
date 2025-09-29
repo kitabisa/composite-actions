@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.49.1](https://github.com/kitabisa/composite-actions/compare/v2.49.0...v2.49.1) (2025-09-29)
+
+
+### Bugfix
+
+* add input base branch ([#356](https://github.com/kitabisa/composite-actions/issues/356)) ([dcd3690](https://github.com/kitabisa/composite-actions/commit/dcd369099e1fa36fff38968e224f2f768e56a08d))
+
 ## [2.49.0](https://github.com/kitabisa/composite-actions/compare/v2.48.0...v2.49.0) (2025-08-21)
 
 
