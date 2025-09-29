@@ -111,6 +111,8 @@ tasks:
     desc: Pause True KEDA ScaledObject
     env:
       OUTPUT_FILE: scaledobject-list.yaml
+      FILTER: "{{.FILTER | default \"\"}}"
+      LIST_FILE: "{{.LIST_FILE | default \"scaledobject-list.yaml\"}}"
     cmds:
       - |
         set -euo pipefail
@@ -127,15 +129,15 @@ tasks:
           }
         ' | jq -s '.')
 
+        # Get the count first
+        COUNT=$(echo "$SCALEDOBJECTS" | jq 'length')
+
         # Write to list.yaml file - only process if we have objects
           if [ "$COUNT" -gt 0 ]; then
-            echo "$SCALEDOBJECTS" | jq -r 'group_by(.namespace) | map({key: .[0].namespace, value: map(.name)}) | from_entries' | yq -P > ${{ env.OUTPUT_FILE }}
+            echo "$SCALEDOBJECTS" | jq -r 'group_by(.namespace) | map({key: .[0].namespace, value: map(.name)}) | from_entries' | yq -P > ${OUTPUT_FILE}
           else
-            echo "{}" | yq -P > ${{ env.OUTPUT_FILE }}
+            echo "{}" | yq -P > ${OUTPUT_FILE}
           fi
-
-
-        COUNT=$(echo "$SCALEDOBJECTS" | jq 'length')
         echo "Found $COUNT ScaledObjects matching filter '$FILTER'"
         echo "$SCALEDOBJECTS" | jq -r '.[] | "\(.name)"'
 
@@ -153,8 +155,8 @@ tasks:
 
         for obj in "${OBJECTS[@]}"; do
           echo "Patching $obj in $ns with keda.sh/paused=true and keda.sh/paused-replicas=1"
-          kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused="true" --overwrite
-          kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused-replicas="1" --overwrite
+          # kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused="true" --overwrite
+          # kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused-replicas="1" --overwrite
           echo "Successfully updated $obj in namespace $ns"
         done
         echo "::endgroup::"
