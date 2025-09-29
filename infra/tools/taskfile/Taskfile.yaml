@@ -107,12 +107,13 @@ tasks:
 
         echo "All user databases have been dropped."
 
-  pause-true-scaledobject:
+  pause-scaledobject:
     desc: Pause True KEDA ScaledObject
     env:
       OUTPUT_FILE: scaledobject-list.yaml
       FILTER: "{{.FILTER | default \"\"}}"
       LIST_FILE: "{{.LIST_FILE | default \"scaledobject-list.yaml\"}}"
+      INPUT_PAUSE: "{{.INPUT_PAUSE | default \"true\"}}"
     cmds:
       - |
         set -euo pipefail
@@ -154,9 +155,15 @@ tasks:
         mapfile -t OBJECTS < <(yq -r ".\"$ns\"[]" "$LIST_FILE")
 
         for obj in "${OBJECTS[@]}"; do
-          echo "Patching $obj in $ns with keda.sh/paused=true and keda.sh/paused-replicas=1"
-          # kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused="true" --overwrite
-          # kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused-replicas="1" --overwrite
+          if [ "$INPUT_PAUSE" = "true" ]; then
+            echo "Pausing $obj in $ns with keda.sh/paused=true and keda.sh/paused-replicas=1"
+            # kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused="true" --overwrite
+            # kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused-replicas="1" --overwrite
+          else
+            echo "Unpausing $obj in $ns by removing pause annotations"
+            # kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused- --overwrite
+            # kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused-replicas- --overwrite
+          fi
           echo "Successfully updated $obj in namespace $ns"
         done
         echo "::endgroup::"
