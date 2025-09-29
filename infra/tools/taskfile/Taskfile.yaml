@@ -106,3 +106,56 @@ tasks:
         done
 
         echo "All user databases have been dropped."
+
+  pause-true-scaledobject:
+    desc: Pause True KEDA ScaledObject
+    env:
+      OUTPUT_FILE: scaledobject-list.yaml
+    cmds:
+      - |
+        set -euo pipefail
+
+        # Get all httpscaledobject across all namespaces
+        SCALEDOBJECTS=$(kubectl get httpscaledobject --all-namespaces -o json | \
+        jq -r --arg filter "$FILTER" '
+          .items[] |
+          select(.metadata.name | contains($filter)) |
+          {
+          name: .metadata.name,
+          namespace: .metadata.namespace,
+          paused: (.metadata.annotations["autoscaling.keda.sh/paused"] // "false")
+          }
+        ' | jq -s '.')
+
+        # Write to list.yaml file - only process if we have objects
+          if [ "$COUNT" -gt 0 ]; then
+            echo "$SCALEDOBJECTS" | jq -r 'group_by(.namespace) | map({key: .[0].namespace, value: map(.name)}) | from_entries' | yq -P > ${{ env.OUTPUT_FILE }}
+          else
+            echo "{}" | yq -P > ${{ env.OUTPUT_FILE }}
+          fi
+
+
+        COUNT=$(echo "$SCALEDOBJECTS" | jq 'length')
+        echo "Found $COUNT ScaledObjects matching filter '$FILTER'"
+        echo "$SCALEDOBJECTS" | jq -r '.[] | "\(.name)"'
+
+        if [ ! -f "$LIST_FILE" ]; then
+          echo "File $LIST_FILE not found. Available files:"
+        find . -name "*.yaml" -type f | head -10
+        exit 1
+        fi
+
+        mapfile -t NAMESPACES < <(yq 'keys | .[]' "$LIST_FILE")
+
+        for ns in "${NAMESPACES[@]}"; do
+          echo "::group::Namespace: $ns"
+        mapfile -t OBJECTS < <(yq -r ".\"$ns\"[]" "$LIST_FILE")
+
+        for obj in "${OBJECTS[@]}"; do
+          echo "Patching $obj in $ns with keda.sh/paused=true and keda.sh/paused-replicas=1"
+          kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused="true" --overwrite
+          kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused-replicas="1" --overwrite
+          echo "Successfully updated $obj in namespace $ns"
+        done
+        echo "::endgroup::"
+        done
