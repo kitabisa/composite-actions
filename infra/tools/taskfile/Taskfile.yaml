@@ -157,12 +157,12 @@ tasks:
         for obj in "${OBJECTS[@]}"; do
           if [ "$INPUT_PAUSE" = "true" ]; then
             echo "Pausing $obj in $ns with keda.sh/paused=true and keda.sh/paused-replicas=1"
-            # kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused="true" --overwrite
-            # kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused-replicas="1" --overwrite
+              kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused="true" --overwrite
+              kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused-replicas="1" --overwrite
           else
             echo "Unpausing $obj in $ns by removing pause annotations"
-            # kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused- --overwrite
-            # kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused-replicas- --overwrite
+              kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused- --overwrite
+              kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused-replicas- --overwrite
           fi
           echo "Successfully updated $obj in namespace $ns"
         done
