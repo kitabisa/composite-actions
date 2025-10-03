@@ -68,7 +68,7 @@ runs:
     - name: Setup helm and helmfile
       uses: helmfile/helmfile-action@v2.0.4
       with:
-        helmfile-version: 'v1.1.2'
+        helmfile-version: 'v1.1.7'
         helm-plugins: >
           https://github.com/databus23/helm-diff,
           https://github.com/jkroepke/helm-secrets
