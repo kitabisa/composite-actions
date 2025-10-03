@@ -69,10 +69,11 @@ runs:
       uses: helmfile/helmfile-action@v2.0.4
       with:
         helmfile-version: 'v1.1.7'
-        helm-plugins: >
-          https://github.com/databus23/helm-diff,
-          https://github.com/jkroepke/helm-secrets
-        helmfile-auto-init: "false"
+        # helm-version: 'v3.11.0'
+        # helm-plugins: >
+        #   https://github.com/databus23/helm-diff,
+        #   https://github.com/jkroepke/helm-secrets
+        # helmfile-auto-init: "false"
 
     - name: Check helmfile version
       shell: bash
