@@ -106,3 +106,65 @@ tasks:
         done
 
         echo "All user databases have been dropped."
+
+  pause-scaledobject:
+    desc: Pause True KEDA ScaledObject
+    env:
+      OUTPUT_FILE: scaledobject-list.yaml
+      FILTER: "{{.FILTER | default \"\"}}"
+      LIST_FILE: "{{.LIST_FILE | default \"scaledobject-list.yaml\"}}"
+      INPUT_PAUSE: "{{.INPUT_PAUSE | default \"true\"}}"
+    cmds:
+      - |
+        set -euo pipefail
+
+        # Get all httpscaledobject across all namespaces
+        SCALEDOBJECTS=$(kubectl get httpscaledobject --all-namespaces -o json | \
+        jq -r --arg filter "$FILTER" '
+          .items[] |
+          select(.metadata.name | contains($filter)) |
+          {
+          name: .metadata.name,
+          namespace: .metadata.namespace,
+          paused: (.metadata.annotations["autoscaling.keda.sh/paused"] // "false")
+          }
+        ' | jq -s '.')
+
+        # Get the count first
+        COUNT=$(echo "$SCALEDOBJECTS" | jq 'length')
+
+        # Write to list.yaml file - only process if we have objects
+          if [ "$COUNT" -gt 0 ]; then
+            echo "$SCALEDOBJECTS" | jq -r 'group_by(.namespace) | map({key: .[0].namespace, value: map(.name)}) | from_entries' | yq -P > ${OUTPUT_FILE}
+          else
+            echo "{}" | yq -P > ${OUTPUT_FILE}
+          fi
+        echo "Found $COUNT ScaledObjects matching filter '$FILTER'"
+        echo "$SCALEDOBJECTS" | jq -r '.[] | "\(.name)"'
+
+        if [ ! -f "$LIST_FILE" ]; then
+          echo "File $LIST_FILE not found. Available files:"
+        find . -name "*.yaml" -type f | head -10
+        exit 1
+        fi
+
+        mapfile -t NAMESPACES < <(yq 'keys | .[]' "$LIST_FILE")
+
+        for ns in "${NAMESPACES[@]}"; do
+          echo "::group::Namespace: $ns"
+        mapfile -t OBJECTS < <(yq -r ".\"$ns\"[]" "$LIST_FILE")
+
+        for obj in "${OBJECTS[@]}"; do
+          if [ "$INPUT_PAUSE" = "true" ]; then
+            echo "Pausing $obj in $ns with keda.sh/paused=true and keda.sh/paused-replicas=1"
+              kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused="true" --overwrite
+              kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused-replicas="1" --overwrite
+          else
+            echo "Unpausing $obj in $ns by removing pause annotations"
+              kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused- --overwrite
+              kubectl -n "$ns" annotate scaledobject "$obj" autoscaling.keda.sh/paused-replicas- --overwrite
+          fi
+          echo "Successfully updated $obj in namespace $ns"
+        done
+        echo "::endgroup::"
+        done

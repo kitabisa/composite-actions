@@ -127,7 +127,8 @@ runs:
       shell: bash
       run: |
         app_name=$(make get-app-name)
-        ROUTES=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -E '${{ github.event.pull_request.number }}' | uniq)
+        UNFORMATTED_ROUTES=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -E '${{ github.event.pull_request.number }}' | uniq)
+        ROUTES=$(echo "$UNFORMATTED_ROUTES" | tr ' ' '\n')
         COMMENT="Open the application by accessing these URL: \n"
         HAS_PUBLIC=false
         HAS_PRIVATE=false

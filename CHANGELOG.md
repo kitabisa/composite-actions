@@ -1,5 +1,130 @@
 # Changelog
 
+## [2.49.1](https://github.com/kitabisa/composite-actions/compare/v2.49.0...v2.49.1) (2025-09-29)
+
+
+### Bugfix
+
+* add input base branch ([#356](https://github.com/kitabisa/composite-actions/issues/356)) ([dcd3690](https://github.com/kitabisa/composite-actions/commit/dcd369099e1fa36fff38968e224f2f768e56a08d))
+
+## [2.49.0](https://github.com/kitabisa/composite-actions/compare/v2.48.0...v2.49.0) (2025-08-21)
+
+
+### Features
+
+* move checkout in workflow ([#354](https://github.com/kitabisa/composite-actions/issues/354)) ([58ba58f](https://github.com/kitabisa/composite-actions/commit/58ba58fded59381d9a96ce42b8d066f21c86bd67))
+
+## [2.48.0](https://github.com/kitabisa/composite-actions/compare/v2.47.0...v2.48.0) (2025-08-21)
+
+
+### Features
+
+* download cert ([#352](https://github.com/kitabisa/composite-actions/issues/352)) ([b96eff3](https://github.com/kitabisa/composite-actions/commit/b96eff33475250edd58d64bf75282ac8b5913b55))
+
+## [2.47.0](https://github.com/kitabisa/composite-actions/compare/v2.46.5...v2.47.0) (2025-08-20)
+
+
+### Features
+
+* post pr SDET-1662 ([#349](https://github.com/kitabisa/composite-actions/issues/349)) ([967ca75](https://github.com/kitabisa/composite-actions/commit/967ca7528a3ec584d222646eb9c510eef1e48a77))
+
+
+### Bugfix
+
+* ignore ssl cert and load dotenvx ([#350](https://github.com/kitabisa/composite-actions/issues/350)) ([a0b7c9e](https://github.com/kitabisa/composite-actions/commit/a0b7c9e495e083037b388bfb5d89fa274f456864))
+
+## [2.46.5](https://github.com/kitabisa/composite-actions/compare/v2.46.4...v2.46.5) (2025-08-08)
+
+
+### Bugfix
+
+* include hidden file when upload artifact ([48c8a7c](https://github.com/kitabisa/composite-actions/commit/48c8a7cf05f6eebd6bff9475964a9bc3a7bad0a0))
+
+## [2.46.4](https://github.com/kitabisa/composite-actions/compare/v2.46.3...v2.46.4) (2025-08-01)
+
+
+### Bugfix
+
+* npm token cfpages deploy ([#346](https://github.com/kitabisa/composite-actions/issues/346)) ([3c3ce28](https://github.com/kitabisa/composite-actions/commit/3c3ce28ef5c628aaf846c7587a445bd2eae84e2a))
+
+## [2.46.3](https://github.com/kitabisa/composite-actions/compare/v2.46.2...v2.46.3) (2025-08-01)
+
+
+### Bugfix
+
+* property is missing shell ([c7eea91](https://github.com/kitabisa/composite-actions/commit/c7eea91a0373646d3b4845d4c7bbe96920ec03f4))
+
+## [2.46.2](https://github.com/kitabisa/composite-actions/compare/v2.46.1...v2.46.2) (2025-08-01)
+
+
+### Bugfix
+
+* normalize gh artifact path ([2d25f79](https://github.com/kitabisa/composite-actions/commit/2d25f79f0dc6fcc2ed4c718f36648e28691ff3fe))
+
+## [2.46.1](https://github.com/kitabisa/composite-actions/compare/v2.46.0...v2.46.1) (2025-08-01)
+
+
+### Bugfix
+
+* working directory ([#342](https://github.com/kitabisa/composite-actions/issues/342)) ([d375e13](https://github.com/kitabisa/composite-actions/commit/d375e139a12ae4957a1a78b2953be4e3e221b62f))
+
+## [2.46.0](https://github.com/kitabisa/composite-actions/compare/v2.45.7...v2.46.0) (2025-08-01)
+
+
+### Features
+
+* add optional step for upload static build ([#340](https://github.com/kitabisa/composite-actions/issues/340)) ([5297222](https://github.com/kitabisa/composite-actions/commit/52972224a084326ae9fe7cd38f1c3b1c4d69c843))
+
+## [2.45.7](https://github.com/kitabisa/composite-actions/compare/v2.45.6...v2.45.7) (2025-07-31)
+
+
+### Bugfix
+
+* log deployment url ([1f83fb4](https://github.com/kitabisa/composite-actions/commit/1f83fb45c761e81e4ce3b423b84cbbb6dea69c8b))
+
+## [2.45.6](https://github.com/kitabisa/composite-actions/compare/v2.45.5...v2.45.6) (2025-07-31)
+
+
+### Bugfix
+
+* update comment deployment pr cf pages ([cbaad2e](https://github.com/kitabisa/composite-actions/commit/cbaad2e2f66109ab51e027a3c12cd651ad2fe010))
+
+## [2.45.5](https://github.com/kitabisa/composite-actions/compare/v2.45.4...v2.45.5) (2025-07-30)
+
+
+### Bugfix
+
+* comment pr when hosts separator with space ([d80af08](https://github.com/kitabisa/composite-actions/commit/d80af081e682316ebcdd01dfb811c2c4e41c7f48))
+
+## [2.45.4](https://github.com/kitabisa/composite-actions/compare/v2.45.3...v2.45.4) (2025-07-30)
+
+
+### Bugfix
+
+* bump cloudflare pages action to v2 ([#335](https://github.com/kitabisa/composite-actions/issues/335)) ([17f2c72](https://github.com/kitabisa/composite-actions/commit/17f2c72e3447df69ea8b1e26911e11a371a206a5))
+* remove zone name for cloudflare pages action ([c157041](https://github.com/kitabisa/composite-actions/commit/c157041758c1860709c75800869659423fc6f5c3))
+
+## [2.45.3](https://github.com/kitabisa/composite-actions/compare/v2.45.2...v2.45.3) (2025-07-24)
+
+
+### CI
+
+* add input target repo for trigger automation when deploy ([#333](https://github.com/kitabisa/composite-actions/issues/333)) ([9fdc6d5](https://github.com/kitabisa/composite-actions/commit/9fdc6d583c23613308858badddf2118956339609))
+
+## [2.45.2](https://github.com/kitabisa/composite-actions/compare/v2.45.1...v2.45.2) (2025-07-22)
+
+
+### Chore
+
+* add send result to testiny and custom command post run ([#330](https://github.com/kitabisa/composite-actions/issues/330)) ([21a307c](https://github.com/kitabisa/composite-actions/commit/21a307cb96732c127c86cbeec43fa7eb929689d9))
+
+## [2.45.1](https://github.com/kitabisa/composite-actions/compare/v2.45.0...v2.45.1) (2025-07-07)
+
+
+### CI
+
+* add tools golangci-lint ([#328](https://github.com/kitabisa/composite-actions/issues/328)) ([afa7395](https://github.com/kitabisa/composite-actions/commit/afa739587f53ed8231bffce81e336bfbcaf03d5e))
+
 ## [2.45.0](https://github.com/kitabisa/composite-actions/compare/v2.44.0...v2.45.0) (2025-06-17)
 
 

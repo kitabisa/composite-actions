@@ -1,0 +1,106 @@
+name: "Run golangci-lint"
+description: "Run golangci-lint with optional caching and Go setup"
+
+inputs:
+  gh_user:
+    required: true
+    description: "gh user"
+
+  gh_token:
+    required: true
+    description: "gh token"
+
+  setup_go:
+    required: false
+    description: "Setup Go"
+    default: 'true'
+
+  go_version:
+    required: false
+    description: "go version"
+    default: "^1.21"
+
+  setup_go_cache:
+    required: false
+    description: "go version"
+    default: "false"
+
+  setup_action_cache:
+    required: false
+    description: "setup cache"
+    default: "true"
+
+  cache_key_suffix:
+    required: false
+    description: "Additional suffix for cache key"
+    default: ""
+
+  hash_files:
+    required: false
+    description: "hashFiles location"
+    default: "**"
+
+  run_golangci_lint:
+    required: false
+    description: "Run golangci-lint"
+    default: "true"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.gh_token }}
+
+    - name: Extract Go version
+      id: go-version
+      shell: bash
+      run: |
+        GO_VERSION=$(grep -E '^go [0-9]+\.[0-9]+' go.mod | awk '{print $2}')
+        echo "Go version found: $GO_VERSION"
+        echo "go_version=$GO_VERSION" >> $GITHUB_ENV
+
+    - name: Setup Golang
+      if: "${{ inputs.setup_go == 'true' }}"
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ inputs.go_version }}
+        cache: ${{ inputs.setup_go_cache }}
+
+    - name: Determine Golang cache paths and construct cache key
+      id: golang-env
+      run: |
+        echo "build-cache-path=$(go env GOCACHE)" >>"$GITHUB_OUTPUT"
+        echo "module-cache-path=$(go env GOMODCACHE)" >>"$GITHUB_OUTPUT"
+        cacheKeyRoot="${{ runner.os }}-golang${{ inputs.cache_key_suffix && format('-{0}',inputs.cache_key_suffix) }}-"
+        echo "cache-key-restore=$cacheKeyRoot" >>"$GITHUB_OUTPUT"
+        echo "cache-key=${cacheKeyRoot}${{ hashFiles(format('{0}/{1}',inputs.hash_files,'go.sum')) }}" >>"$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Setup Golang cache
+      if: ${{ inputs.setup_action_cache == 'true' }}
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          ${{ steps.golang-env.outputs.build-cache-path }}
+          ${{ steps.golang-env.outputs.module-cache-path }}
+        key: ${{ steps.golang-env.outputs.cache-key }}
+        restore-keys: |
+          ${{ steps.golang-env.outputs.cache-key-restore }}
+          ${{ steps.golang-env.outputs.cache-key }}
+
+    - name: Configure Git for private modules
+      env:
+        USER: ${{ inputs.gh_user }}
+        TOKEN: ${{ inputs.gh_token }}
+      shell: bash
+      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
+
+    - name: Run golangci-lint
+      if: "${{ inputs.run_golangci_lint == 'true' }}"
+      uses: golangci/golangci-lint-action@v8
+      with:
+        version: latest
+        args: --config .golangci.yaml --verbose --timeout=10m
