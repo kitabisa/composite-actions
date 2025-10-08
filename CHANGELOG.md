@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.51.0](https://github.com/kitabisa/composite-actions/compare/v2.50.0...v2.51.0) (2025-10-08)
+
+
+### Features
+
+* **frontend:** add dockerhub auth ([#361](https://github.com/kitabisa/composite-actions/issues/361)) ([aa216af](https://github.com/kitabisa/composite-actions/commit/aa216af7e93a32e4d0dbdcd7e3929283eae32ab9))
+
+## [2.50.0](https://github.com/kitabisa/composite-actions/compare/v2.49.1...v2.50.0) (2025-10-08)
+
+
+### Features
+
+* **infra:** ID-888 add dockerhub auth ([#359](https://github.com/kitabisa/composite-actions/issues/359)) ([f5c31c0](https://github.com/kitabisa/composite-actions/commit/f5c31c0af53329e7cbfdbce901065fd8583a88f5))
+
 ## [2.49.1](https://github.com/kitabisa/composite-actions/compare/v2.49.0...v2.49.1) (2025-09-29)
 
 
