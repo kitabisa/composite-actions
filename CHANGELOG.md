@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.51.1](https://github.com/kitabisa/composite-actions/compare/v2.51.0...v2.51.1) (2025-10-08)
+
+
+### Bugfix
+
+* **ci:** unit test v2 ([c8ae779](https://github.com/kitabisa/composite-actions/commit/c8ae779448757da629483b711f6c8a52539951d4))
+
 ## [2.51.0](https://github.com/kitabisa/composite-actions/compare/v2.50.0...v2.51.0) (2025-10-08)
 
 
