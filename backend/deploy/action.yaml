@@ -7,6 +7,16 @@ inputs:
     required: true
     description: "Github token"
 
+  docker_username:
+    required: true
+    description: "docker username"
+    type: string
+
+  docker_password:
+    required: true
+    description: "docker password"
+    type: string
+
   artifact_registry_host:
     required: true
     description: "Artifact registry host"
@@ -131,6 +141,12 @@ runs:
       if: ${{ inputs.custom_command_flag == 'true' }}
       shell: bash
       run: ${{ inputs.custom_command }}
+
+    - name: Setup dockerhub credential
+      uses: kitabisa/composite-actions/infra/tools/dockerhub-credential@v2
+      with:
+        docker_username: ${{ inputs.docker_username }}
+        docker_password: ${{ inputs.docker_password }}
 
     - name: Setup GHCR credential
       uses: kitabisa/composite-actions/infra/tools/ghcr-credential@v2

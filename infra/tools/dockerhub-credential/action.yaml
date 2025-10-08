@@ -1,0 +1,23 @@
+name: "Dockerhub Auth"
+description: "Dockerhub authentication for pull image"
+
+inputs:
+  # Required
+  docker_username:
+    required: true
+    description: "docker username"
+    type: string
+
+  docker_password:
+    required: true
+    description: "docker password"
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Login to DockerHub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ inputs.docker_username }}
+        password: ${{ inputs.docker_password }}
