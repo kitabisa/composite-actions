@@ -122,68 +122,136 @@ runs:
         restore-keys: |
           ${{ steps.golang-env.outputs.cache-key-restore }}
 
+    # --- configure git for private modules (skip on forks to avoid secret leakage) ---
     - name: Configure Git for private modules
+      if: ${{ !github.event.pull_request.head.repo.fork }}
       env:
         USER: ${{ inputs.gh_user }}
         TOKEN: ${{ inputs.gh_token }}
       shell: bash
-      run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
+      run: |
+        git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
+    # --- base env values (fallbacks) ---
     - name: Set base value
       shell: bash
       run: |
-        echo "current_coverage=0" >> $GITHUB_ENV
-        echo "master_coverage=0" >> $GITHUB_ENV
+        {
+          echo "current_coverage=0"
+          echo "master_coverage=0"
+        } >> "$GITHUB_ENV"
 
+    # --- master coverage (graceful if file missing) ---
     - name: Generate Master Coverage
       id: unit-test-master
       shell: bash
       working-directory: ${{ inputs.working_directory }}
-      run: |-
-        echo "master_coverage=$(cat coverage-master.txt)" >> $GITHUB_ENV
+      run: |
+        if [[ -s coverage-master.txt ]]; then
+          echo "master_coverage=$(cat coverage-master.txt)" >> "$GITHUB_ENV"
+        else
+          echo "coverage-master.txt not found; defaulting master_coverage=0"
+        fi
 
+    # --- optional pre-step command ---
     - name: Custom Command
       shell: bash
       working-directory: ${{ inputs.working_directory }}
-      if: "${{ inputs.custom_command_flag == 'true' }}"
+      if: ${{ inputs.custom_command_flag == 'true' }}
       run: ${{ inputs.custom_command }}
 
+    # --- run tests (default/custom) ---
     - name: Run Default Unit Test
       id: unit-test-current
-      if: "${{ inputs.default_unit_test == 'true' }}"
+      if: ${{ inputs.default_unit_test == 'true' }}
       shell: bash
       working-directory: ${{ inputs.working_directory }}
-      run: |-
+      run: |
+        set -euo pipefail
+        # Your command should create coverage.out or inputs.coverage_file
         ${{ inputs.unit_test_command }}
 
     - name: Run Custom Unit Test
-      if: "${{ inputs.default_unit_test == 'false' }}"
+      if: ${{ inputs.default_unit_test == 'false' }}
       uses: robherley/go-test-action@v0
       with:
         moduleDirectory: ${{ inputs.working_directory }}
         testArguments: ${{ inputs.unit_test_command }}
 
-    - name: generate diff
+    # --- make sure we have both refs locally, then build a robust diff ---
+    - name: Prepare refs for diff
       shell: bash
       run: |
-       git diff origin/${{ github.base_ref }}...origin/${{ github.head_ref }} > ${{ inputs.diff_file }}
+        set -euo pipefail
+        git fetch --no-tags --prune origin "+refs/heads/*:refs/remotes/origin/*"
+        # If this is a PR from a fork, base/head may not be present as origin refs. Try to fetch explicit SHAs.
+        if [[ -n "${{ github.base_ref }}" && -n "${{ github.head_ref }}" ]]; then
+          echo "Base ref: ${{ github.base_ref }} | Head ref: ${{ github.head_ref }}"
+        fi
 
+    - name: Generate diff
+      shell: bash
+      run: |
+        set -euo pipefail
+        BASE="origin/${{ github.base_ref }}"
+        HEAD="origin/${{ github.head_ref }}"
+        # Fallbacks if refs aren't present (e.g., direct push)
+        [[ -z "${{ github.base_ref }}" ]] && BASE="$(git merge-base HEAD HEAD~1 || echo HEAD~1)"
+        [[ -z "${{ github.head_ref }}" ]] && HEAD="HEAD"
+        echo "Diffing $BASE...$HEAD"
+        git diff --diff-filter=AM "$BASE...$HEAD" > "${{ inputs.diff_file }}"
+        echo "Wrote diff to ${{ inputs.diff_file }} (size: $(wc -c < ${{ inputs.diff_file }}) bytes)"
+
+    # --- coverage analysis with outputs and size guards ---
     - name: Run coverage analysis
       id: coverage_analysis
-      run: |
-        # Run the script and capture its output
-        cat <<EOF | tee comment.txt
-        Coverage Analysis Results:
-        $(go run ${{ github.action_path }}/calc_new_code_coverage/new_code_coverage.go ${{ inputs.diff_file }} ${{ inputs.coverage_file }} ${{ inputs.unit_test_folder }})
-        EOF
-
-        if cat comment.txt | grep -q "below" ; then
-        echo "::set-output name=below_threshold::true"
-        fi
       shell: bash
+      run: |
+        set -euo pipefail
+        : > comment.txt
+        {
+          echo "## Coverage Analysis Results"
+          echo
+          echo "\`\`\`"
+          go run "${{ github.action_path }}/calc_new_code_coverage/new_code_coverage.go" \
+            "${{ inputs.diff_file }}" \
+            "${{ inputs.coverage_file }}" \
+            "${{ inputs.unit_test_folder }}"
+          echo "\`\`\`"
+        } | tee comment.txt
 
+        # derive result for subsequent steps using GITHUB_OUTPUT
+        if grep -qiE "\bbelow\b" comment.txt; then
+          echo "below_threshold=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "below_threshold=" >> "$GITHUB_OUTPUT"
+        fi
+
+        # Ensure PR comment isn't huge (trim to ~200KB if necessary)
+        MAX=200000
+        ACTUAL=$(wc -c < comment.txt || echo 0)
+        if (( ACTUAL > MAX )); then
+          echo -e "\n\n---\n*(Output truncated to keep PR comment small; full report uploaded as artifact.)*" >> comment.txt
+          # Smart trim: keep header + tail
+          head -c $((MAX/2)) comment.txt > comment.head || true
+          tail -c $((MAX/2 - 200)) comment.txt > comment.tail || true
+          printf "\n\n...[snip]...\n\n" > comment.sep
+          cat comment.head comment.sep comment.tail > comment.txt
+          rm -f comment.head comment.sep comment.tail
+        fi
+
+    # --- tiny job summary (kept well under 1 MB) ---
+    - name: Job Summary
+      if: always()
+      shell: bash
+      run: |
+        echo "### Unit Test / Coverage Summary" >> "$GITHUB_STEP_SUMMARY"
+        echo "- Master coverage: **${{ env.master_coverage }}**" >> "$GITHUB_STEP_SUMMARY"
+        echo "- Diff coverage result recorded below; see PR comment and artifacts." >> "$GITHUB_STEP_SUMMARY"
+
+    # --- comment on PR (sticky) ---
     - name: Comment PR for below threshold Result
-      if: steps.coverage_analysis.outputs.below_threshold != ''
+      if: ${{ steps.coverage_analysis.outputs.below_threshold == 'true' }}
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         header: 'diff-coverage'
@@ -194,22 +262,31 @@ runs:
           Coverage below threshold
 
     - name: Exit when below threshold
+      if: ${{ steps.coverage_analysis.outputs.below_threshold == 'true' }}
       shell: bash
       run: |
-        # Check if the output contains the string "Below"
-        if cat comment.txt | grep -q "below" ; then
-          echo "Below threshold detected"
-          exit 1
-        fi
-
+        echo "Below threshold detected"
+        exit 1
 
     - name: Comment PR for above threshold Result
-      if: steps.coverage_analysis.outputs.below_threshold == ''
+      if: ${{ steps.coverage_analysis.outputs.below_threshold != 'true' }}
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         header: 'diff-coverage'
         recreate: true
         path: comment.txt
         message: |
-          ##  ✅✅ Unit Test Coverage ✅✅
+          ## ✅✅ Unit Test Coverage ✅✅
           All new code passed the coverage threshold.
+
+    # --- upload artifacts for deep dive (so we don't bloat the summary/comment) ---
+    - name: Upload coverage & analysis artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-and-analysis
+        path: |
+          ${{ inputs.working_directory }}/coverage.out
+          ${{ inputs.diff_file }}
+          comment.txt
+        if-no-files-found: ignore
