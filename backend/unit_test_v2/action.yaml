@@ -173,10 +173,14 @@ runs:
 
     - name: Run Custom Unit Test
       if: ${{ inputs.default_unit_test == 'false' }}
-      uses: robherley/go-test-action@v0
-      with:
-        moduleDirectory: ${{ inputs.working_directory }}
-        testArguments: ${{ inputs.unit_test_command }}
+      shell: bash
+      run: |
+        go test -q  ${{ inputs.unit_test_command }}
+
+    #      uses: robherley/go-test-action@v0
+    #      with:
+    #        moduleDirectory: ${{ inputs.working_directory }}
+    #        testArguments: ${{ inputs.unit_test_command }}
 
     # --- make sure we have both refs locally, then build a robust diff ---
     - name: Prepare refs for diff
