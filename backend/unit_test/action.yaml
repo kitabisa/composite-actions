@@ -144,12 +144,11 @@ runs:
       run: |-
         ${{ inputs.unit_test_command }}
 
-    - name: Run Go Test Action
-      if: "${{ inputs.default_unit_test == 'false' }}"
-      uses: robherley/go-test-action@v0
-      with:
-        moduleDirectory: ${{ inputs.working_directory }}
-        testArguments: ${{ inputs.unit_test_command }}
+    - name: Run Custom Unit Test
+      if: ${{ inputs.default_unit_test == 'false' }}
+      shell: bash
+      run: |
+        go test -q  ${{ inputs.unit_test_command }}
 
     - name: Annotate missing test coverage
       id: annotate
