@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.51.2](https://github.com/kitabisa/composite-actions/compare/v2.51.1...v2.51.2) (2025-10-29)
+
+
+### Bugfix
+
+* quiet unit test for less stderr log ([571c940](https://github.com/kitabisa/composite-actions/commit/571c940a9771d7e91055e44ae29e8c5f8f39b972))
+
 ## [2.51.1](https://github.com/kitabisa/composite-actions/compare/v2.51.0...v2.51.1) (2025-10-08)
 
 
