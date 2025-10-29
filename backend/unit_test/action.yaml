@@ -148,7 +148,7 @@ runs:
       if: ${{ inputs.default_unit_test == 'false' }}
       shell: bash
       run: |
-        go test -q  ${{ inputs.unit_test_command }}
+        go test -short ${{ inputs.unit_test_command }}
 
     - name: Annotate missing test coverage
       id: annotate
