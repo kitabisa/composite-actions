@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.51.3](https://github.com/kitabisa/composite-actions/compare/v2.51.2...v2.51.3) (2025-10-29)
+
+
+### CI
+
+* remove unit test go-test-action ([86a1d26](https://github.com/kitabisa/composite-actions/commit/86a1d2605c3b98c4a0c48acbd1bc3649b481a533))
+
 ## [2.51.2](https://github.com/kitabisa/composite-actions/compare/v2.51.1...v2.51.2) (2025-10-29)
 
 
