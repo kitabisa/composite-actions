@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.51.4](https://github.com/kitabisa/composite-actions/compare/v2.51.3...v2.51.4) (2025-10-29)
+
+
+### CI
+
+* fix using go test short ([8676e23](https://github.com/kitabisa/composite-actions/commit/8676e23fa9698ca729ce094d379a3a4d39e8666d))
+
 ## [2.51.3](https://github.com/kitabisa/composite-actions/compare/v2.51.2...v2.51.3) (2025-10-29)
 
 
