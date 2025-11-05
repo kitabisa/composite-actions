@@ -3,11 +3,6 @@ description: "Gcloud authentication"
 
 inputs:
   # Required
-  credentials_json:
-    required: true
-    description: "GCP credentials services account"
-    type: string
-
   project_id:
     required: true
     description: "GCP project id"
@@ -24,6 +19,11 @@ inputs:
     description: "Authentication gcloud"
     type: string
     default: 'true'
+
+  credentials_json:
+    required: false
+    description: "GCP credentials services account"
+    type: string
 
   docker_creds:
     required: false
