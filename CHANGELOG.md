@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.52.0](https://github.com/kitabisa/composite-actions/compare/v2.51.4...v2.52.0) (2025-11-05)
+
+
+### Features
+
+* disable cred json ([#367](https://github.com/kitabisa/composite-actions/issues/367)) ([685101e](https://github.com/kitabisa/composite-actions/commit/685101ead1fce8834dd4155a5a3309e2933c5b2d))
+
 ## [2.51.4](https://github.com/kitabisa/composite-actions/compare/v2.51.3...v2.51.4) (2025-10-29)
 
 
