@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.53.0](https://github.com/kitabisa/composite-actions/compare/v2.52.1...v2.53.0) (2025-12-01)
+
+
+### Features
+
+* upgrade google auth action ([65a51ca](https://github.com/kitabisa/composite-actions/commit/65a51ca7161fc78e6ee16dad37caba73dfd8b1c4))
+
 ## [2.52.1](https://github.com/kitabisa/composite-actions/compare/v2.52.0...v2.52.1) (2025-12-01)
 
 
