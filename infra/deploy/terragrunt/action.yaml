@@ -18,16 +18,14 @@ inputs:
     type: string
 
   workload_identity_provider:
-    required: false
+    required: true
     description: "Workload identity pool"
     type: string
-    default: "false"
 
   service_account:
-    required: false
+    required: true
     description: "SA used in workload identity pool"
     type: string
-    default: "false"
 
 runs:
   using: "composite"
@@ -40,13 +38,10 @@ runs:
       run: git config --global url."https://${{ inputs.git_user }}:${{ inputs.git_token }}@github.com".insteadOf "https://github.com"
 
     - name: Authenticate to Google Cloud with Workload Identity
-      if: "${{ (inputs.workload_identity_provider != 'false') && (inputs.service_account != 'false') }}"
       uses: google-github-actions/auth@v3
       with:
         workload_identity_provider: ${{ inputs.workload_identity_provider }}
         service_account: ${{ inputs.service_account }}
-        create_credentials_file: true
-        export_environment_variables: true
 
     - name: Terragrunt Validation
       shell: bash
