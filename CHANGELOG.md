@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.52.1](https://github.com/kitabisa/composite-actions/compare/v2.52.0...v2.52.1) (2025-12-01)
+
+
+### Bugfix
+
+* set default value input ([fc9fa14](https://github.com/kitabisa/composite-actions/commit/fc9fa1431f24c69d979f260c2a048732181bcae4))
+
 ## [2.52.0](https://github.com/kitabisa/composite-actions/compare/v2.51.4...v2.52.0) (2025-11-05)
 
 
