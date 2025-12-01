@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.55.0](https://github.com/kitabisa/composite-actions/compare/v2.54.0...v2.55.0) (2025-12-01)
+
+
+### Features
+
+* update input ([37f83c4](https://github.com/kitabisa/composite-actions/commit/37f83c4a07c079a4be3640cfefb3ad2c56a8aad9))
+
 ## [2.54.0](https://github.com/kitabisa/composite-actions/compare/v2.53.0...v2.54.0) (2025-12-01)
 
 
