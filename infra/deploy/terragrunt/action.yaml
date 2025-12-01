@@ -21,13 +21,13 @@ inputs:
     required: false
     description: "Workload identity pool"
     type: string
-    default: 'false'
+    default: "false"
 
   service_account:
     required: false
     description: "SA used in workload identity pool"
     type: string
-    default: 'false'
+    default: "false"
 
 runs:
   using: "composite"
@@ -45,9 +45,10 @@ runs:
       with:
         workload_identity_provider: ${{ inputs.workload_identity_provider }}
         service_account: ${{ inputs.service_account }}
+        create_credentials_file: true
+        export_environment_variables: true
 
     - name: Terragrunt Validation
-      id: validate
       shell: bash
       run: |
         cd ${{ inputs.path }}
