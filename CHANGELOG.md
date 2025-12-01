@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.54.0](https://github.com/kitabisa/composite-actions/compare/v2.53.0...v2.54.0) (2025-12-01)
+
+
+### Features
+
+* add gcloud export input composite ([d2d3808](https://github.com/kitabisa/composite-actions/commit/d2d38083d0581af870924d7cb91efe0c25b688f5))
+
 ## [2.53.0](https://github.com/kitabisa/composite-actions/compare/v2.52.1...v2.53.0) (2025-12-01)
 
 
