@@ -21,11 +21,13 @@ inputs:
     required: false
     description: "Workload identity pool"
     type: string
+    default: 'false'
 
   service_account:
     required: false
     description: "SA used in workload identity pool"
     type: string
+    default: 'false'
 
 runs:
   using: "composite"
@@ -38,7 +40,7 @@ runs:
       run: git config --global url."https://${{ inputs.git_user }}:${{ inputs.git_token }}@github.com".insteadOf "https://github.com"
 
     - name: Authenticate to Google Cloud with Workload Identity
-      if: "${{ (inputs.workload_identity_provider != '') && (inputs.service_account != '') }}"
+      if: "${{ (inputs.workload_identity_provider != 'false') && (inputs.service_account != 'false') }}"
       uses: google-github-actions/auth@v2
       with:
         workload_identity_provider: ${{ inputs.workload_identity_provider }}
