@@ -68,22 +68,6 @@ inputs:
     description: "environment to deploy to"
     default: "dev"
 
-  rancher_host:
-    required: true
-    description: "Rancher host"
-
-  rancher_access_key:
-    required: true
-    description: "Rancher access key"
-
-  rancher_secret_key:
-    required: true
-    description: "Rancher secret key"
-
-  rancher_cluster_id:
-    required: true
-    description: "Rancher cluster id"
-
   working_directory:
     required: false
     description: "Set working directory"
