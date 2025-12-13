@@ -174,19 +174,6 @@ runs:
         deploy-kj: ${{ inputs.deploy-kj }}
         deploy_test: ${{ inputs.deploy_test }}
 
-    - name: Rancher ns mover
-      if: "${{ inputs.deploy_test != 'true' }}"
-      uses: kitabisa/composite-actions/infra/tools/rancher@v2
-      with:
-        working_directory: ${{ inputs.working_directory }}
-        param: ${{ inputs.param }}
-        deploy: ${{ inputs.deploy }}
-        deploy-kj: ${{ inputs.deploy-kj }}
-        rancher_host: ${{ inputs.rancher_host }}
-        rancher_access_key: ${{ inputs.rancher_access_key }}
-        rancher_secret_key: ${{ inputs.rancher_secret_key }}
-        rancher_cluster_id: ${{ inputs.rancher_cluster_id }}
-
     - uses: chrnorm/deployment-status@v2
       if: success()
       name: Set env deployment success
