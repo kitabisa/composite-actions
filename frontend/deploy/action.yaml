@@ -49,26 +49,6 @@ inputs:
     default: "false"
     type: string
 
-  rancher_host:
-    required: true
-    description: "Rancher host"
-    type: string
-
-  rancher_access_key:
-    required: true
-    description: "Rancher access key"
-    type: string
-
-  rancher_secret_key:
-    required: true
-    description: "Rancher secret key"
-    type: string
-
-  rancher_cluster_id:
-    required: true
-    description: "Rancher cluster id"
-    type: string
-
   preview_url:
     required: false
     description: "Manual input preview url"
