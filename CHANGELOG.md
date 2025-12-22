@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.56.0](https://github.com/kitabisa/composite-actions/compare/v2.55.0...v2.56.0) (2025-12-22)
+
+
+### Features
+
+* make DockerHub credentials optional and conditionally set up. ([#375](https://github.com/kitabisa/composite-actions/issues/375)) ([6b069e8](https://github.com/kitabisa/composite-actions/commit/6b069e81fd5e8992e22d9b099f7f6b7e9a847a33))
+* remove rancher from composite ([#374](https://github.com/kitabisa/composite-actions/issues/374)) ([624d812](https://github.com/kitabisa/composite-actions/commit/624d812cefcf0f53dc1461f0409f9d527f343ad4))
+
+
+### Bugfix
+
+* remove rancher inputs on backend deploy ([273f819](https://github.com/kitabisa/composite-actions/commit/273f819055718979b4cef1787b3ad2637c336f81))
+* take out rancher job from deploy backend ([ff6ecab](https://github.com/kitabisa/composite-actions/commit/ff6ecab9043aca4aac0fdb4b1204c0053556d903))
+* take out rancher job from deploy frontend ([c00c208](https://github.com/kitabisa/composite-actions/commit/c00c20841512ca008db908557024eb015f4dff76))
+
 ## [2.55.0](https://github.com/kitabisa/composite-actions/compare/v2.54.0...v2.55.0) (2025-12-01)
 
 
