@@ -11,11 +11,13 @@ inputs:
     required: false
     description: "docker username"
     type: string
+    default: ""
 
   docker_password:
     required: false
     description: "docker password"
     type: string
+    default: ""
 
   artifact_registry_host:
     required: true
