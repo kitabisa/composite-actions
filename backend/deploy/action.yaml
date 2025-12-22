@@ -8,14 +8,16 @@ inputs:
     description: "Github token"
 
   docker_username:
-    required: true
+    required: false
     description: "docker username"
     type: string
+    default: ""
 
   docker_password:
-    required: true
+    required: false
     description: "docker password"
     type: string
+    default: ""
 
   artifact_registry_host:
     required: true
@@ -127,6 +129,7 @@ runs:
       run: ${{ inputs.custom_command }}
 
     - name: Setup dockerhub credential
+      if: ${{ inputs.docker_username != '' && inputs.docker_password != '' }}
       uses: kitabisa/composite-actions/infra/tools/dockerhub-credential@v2
       with:
         docker_username: ${{ inputs.docker_username }}
