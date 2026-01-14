@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.56.1](https://github.com/kitabisa/composite-actions/compare/v2.56.0...v2.56.1) (2026-01-14)
+
+
+### Bugfix
+
+* disable PR comment script frontend ([#376](https://github.com/kitabisa/composite-actions/issues/376)) ([bd95d72](https://github.com/kitabisa/composite-actions/commit/bd95d72dbbdc4d8b15944025511f897d48cb9b85))
+
 ## [2.56.0](https://github.com/kitabisa/composite-actions/compare/v2.55.0...v2.56.0) (2025-12-22)
 
 
