@@ -10,13 +10,16 @@ SDET composite build
 
 ## Inputs
 
-| parameter               | description                  | required | default |
-| ----------------------- | ---------------------------- | -------- | ------- |
-| checkout                | checkout repository          | `false`  | true    |
-| setup_pnpm              | setup pnpm and cache modules | `false`  | false   |
-| setup_bun               | setup bun and cache modules  | `false`  | false   |
-| custom_command_packages | custom command packages      | `false`  |         |
-| custom_command_config   | custom command config        | `false`  |         |
+| parameter               | description             | required | default |
+| ----------------------- | ----------------------- | -------- | ------- |
+| checkout                | checkout repository     | `false`  | true    |
+| fetch_depth             | git fetch depth         | `false`  | 1       |
+| setup_pnpm              | setup pnpm              | `false`  | false   |
+| setup_gh_cli            | setup gh cli            | `false`  | false   |
+| setup_bun               | setup bun               | `false`  | false   |
+| bun_version             | bun version             | `false`  | latest  |
+| custom_command_packages | custom command packages | `false`  |         |
+| custom_command_config   | custom command config   | `false`  |         |
 
 <!-- action-docs-inputs -->
 
