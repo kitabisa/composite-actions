@@ -5,7 +5,7 @@ inputs:
   gh_token:
     required: true
     description: "gh token"
-    default: "false"
+    default: ""
     type: string
 
   profile:
@@ -141,6 +141,7 @@ runs:
       uses: kitabisa/composite-actions/sdet/build@v2
       with:
         fetch_depth: 0
+        gh_token: ${{ inputs.gh_token }}
         setup_pnpm: ${{ inputs.setup_pnpm }}
         setup_bun: ${{ inputs.setup_bun }}
         bun_version: ${{ inputs.bun_version }}
