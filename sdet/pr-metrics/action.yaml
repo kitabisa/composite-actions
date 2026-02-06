@@ -3,9 +3,9 @@ description: "execute actions after pr is merged"
 
 inputs:
   gh_token:
-    required: true
+    required: false
     description: "gh token"
-    default: "false"
+    default: ""
     type: string
 
   setup_bun:
@@ -44,6 +44,7 @@ runs:
       uses: kitabisa/composite-actions/sdet/build@v2
       with:
         fetch_depth: 0
+        gh_token: ${{ inputs.gh_token }}
         setup_bun: ${{ inputs.setup_bun }}
         bun_version: ${{ inputs.bun_version }}
         custom_command_packages: ${{ inputs.custom_command_packages }}
