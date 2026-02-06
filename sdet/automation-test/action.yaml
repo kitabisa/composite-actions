@@ -146,6 +146,8 @@ runs:
 
     - name: install packages
       shell: bash
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: ${{ inputs.custom_command_packages }}
 
     - name: setup env variables
@@ -183,7 +185,7 @@ runs:
 
     - name: deploy reports to github pages
       uses: kitabisa/composite-actions/sdet/deploy@v2
-      if: always()
+      if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
       with:
         custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
         profile: ${{ inputs.custom_command_report_subfolder || inputs.profile }}
@@ -194,8 +196,8 @@ runs:
       run: bun run sendResultTestiny
 
     - name: build and deploy to gh pages
-      if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
       uses: kitabisa/composite-actions/sdet/tools/dispatch@v2
+      if: "${{ inputs.deploy_gh_pages == 'true' && always() }}"
       with:
         token: ${{ inputs.gh_token }}
         target_branch: ${{ github.ref }}

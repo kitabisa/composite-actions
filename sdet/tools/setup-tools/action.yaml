@@ -14,6 +14,12 @@ inputs:
     default: "false"
     type: string
 
+  bun_version:
+    required: false
+    description: "bun version"
+    default: "latest"
+    type: string
+
   setup_gh_cli:
     required: false
     description: "setup gh cli"
@@ -30,6 +36,8 @@ runs:
     - name: setup bun
       if: "${{ inputs.setup_bun == 'true' }}"
       uses: kitabisa/composite-actions/sdet/tools/bun@v2
+      with:
+        bun_version: ${{ inputs.bun_version }}
 
     - name: setup github cli
       if: "${{ inputs.setup_gh_cli == 'true' }}"

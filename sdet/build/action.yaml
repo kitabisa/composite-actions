@@ -2,6 +2,12 @@ name: "sdet build"
 description: "sdet composite build"
 
 inputs:
+  checkout:
+    required: false
+    description: "checkout repository"
+    default: "true"
+    type: string
+
   setup_pnpm:
     required: false
     description: "setup pnpm"
@@ -14,9 +20,21 @@ inputs:
     default: "false"
     type: string
 
+  bun_version:
+    required: false
+    description: "bun version"
+    default: "latest"
+    type: string
+
   custom_command_packages:
     required: false
     description: "custom command packages"
+    default: ""
+    type: string
+
+  custom_command_config:
+    required: false
+    description: "custom command config"
     default: ""
     type: string
 
@@ -24,14 +42,22 @@ runs:
   using: "composite"
   steps:
     - name: checking out repository
-      uses: actions/checkout@v4
+      if: ${{ inputs.checkout == 'true' }}
+      uses: actions/checkout@v5
 
     - name: setup tools sdet
       uses: kitabisa/composite-actions/sdet/tools/setup-tools@v2
       with:
         setup_pnpm: ${{ inputs.setup_pnpm }}
         setup_bun: ${{ inputs.setup_bun }}
+        bun_version: ${{ inputs.bun_version }}
 
     - name: install packages
+      if: ${{ inputs.custom_command_packages != '' }}
       shell: bash
       run: ${{ inputs.custom_command_packages }}
+
+    - name: generate config
+      if: ${{ inputs.custom_command_config != '' }}
+      shell: bash
+      run: ${{ inputs.custom_command_config }}
