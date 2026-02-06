@@ -77,7 +77,7 @@ runs:
     - name: install packages
       if: ${{ inputs.custom_command_packages != '' }}
       env:
-        NPM_TOKEN: ${{ inputs.gh_token }}
+        GH_TOKEN: ${{ inputs.gh_token }}
       shell: bash
       run: ${{ inputs.custom_command_packages }}
 
