@@ -44,9 +44,9 @@ inputs:
     default: ""
     type: string
 
-  custom_command_config:
+  custom_command_setup:
     required: false
-    description: "custom command config"
+    description: "custom command setup"
     default: ""
     type: string
 
@@ -75,7 +75,7 @@ runs:
       shell: bash
       run: ${{ inputs.custom_command_packages }}
 
-    - name: generate config
-      if: ${{ inputs.custom_command_config != '' }}
+    - name: custom command setup
+      if: ${{ inputs.custom_command_setup != '' }}
       shell: bash
-      run: ${{ inputs.custom_command_config }}
+      run: ${{ inputs.custom_command_setup }}

@@ -19,7 +19,7 @@ SDET composite build
 | setup_bun               | setup bun               | `false`  | false   |
 | bun_version             | bun version             | `false`  | latest  |
 | custom_command_packages | custom command packages | `false`  |         |
-| custom_command_config   | custom command config   | `false`  |         |
+| custom_command_setup    | custom command setup    | `false`  |         |
 
 <!-- action-docs-inputs -->
 

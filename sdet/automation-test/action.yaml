@@ -146,7 +146,7 @@ runs:
         bun_version: ${{ inputs.bun_version }}
         setup_gh_cli: ${{ inputs.setup_gh_cli }}
         custom_command_packages: ${{ inputs.custom_command_packages }}
-        custom_command_config: |
+        custom_command_setup: |
           echo "environment setup complete with secret key."
           ${{ inputs.custom_command_setup }}
 
