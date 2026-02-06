@@ -14,6 +14,12 @@ inputs:
     default: "false"
     type: string
 
+  bun_version:
+    required: false
+    description: "bun version"
+    default: "latest"
+    type: string
+
   custom_command_packages:
     required: false
     description: "custom command packages"
@@ -34,28 +40,16 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: checkout
-      uses: actions/checkout@v4
+    - name: setup build environment
+      uses: kitabisa/composite-actions/sdet/build@v2
       with:
-        fetch-depth: 0
-        token: ${{ inputs.gh_token }}
-
-    - name: setup tools sdet
-      uses: kitabisa/composite-actions/sdet/tools/setup-tools@v2
-      with:
-        setup_pnpm: ${{ inputs.setup_pnpm }}
+        fetch_depth: 0
         setup_bun: ${{ inputs.setup_bun }}
-        setup_gh_cli: ${{ inputs.setup_gh_cli }}
-
-    - name: install packages
-      shell: bash
-      run: ${{ inputs.custom_command_packages }}
-
-    - name: setup env variables
-      shell: bash
-      run: |
-        echo "environment setup complete with secret key."
-        ${{ inputs.custom_command_setup }}
+        bun_version: ${{ inputs.bun_version }}
+        custom_command_packages: ${{ inputs.custom_command_packages }}
+        custom_command_setup: |
+          echo "environment setup complete with secret key."
+          ${{ inputs.custom_command_setup }}
 
     - name: sync pr review metrics
       if: ${{ inputs.review_metrics_flag == 'true' && always() }}

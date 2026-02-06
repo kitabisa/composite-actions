@@ -38,6 +38,12 @@ inputs:
     default: "false"
     type: string
 
+  bun_version:
+    required: false
+    description: "bun version"
+    default: "latest"
+    type: string
+
   custom_command_packages:
     required: false
     description: "custom command packages"
@@ -131,33 +137,21 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: checkout
-      uses: actions/checkout@v4
+    - name: setup build environment
+      uses: kitabisa/composite-actions/sdet/build@v2
       with:
-        fetch-depth: 0
-        token: ${{ inputs.gh_token }}
-
-    - name: setup tools sdet
-      uses: kitabisa/composite-actions/sdet/tools/setup-tools@v2
-      with:
+        fetch_depth: 0
         setup_pnpm: ${{ inputs.setup_pnpm }}
         setup_bun: ${{ inputs.setup_bun }}
+        bun_version: ${{ inputs.bun_version }}
         setup_gh_cli: ${{ inputs.setup_gh_cli }}
+        custom_command_packages: ${{ inputs.custom_command_packages }}
+        custom_command_setup: |
+          echo "environment setup complete with secret key."
+          ${{ inputs.custom_command_setup }}
 
-    - name: install packages
-      shell: bash
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      run: ${{ inputs.custom_command_packages }}
-
-    - name: setup env variables
-      shell: bash
-      run: |
-        echo "environment setup complete with secret key."
-        ${{ inputs.custom_command_setup }}
-
-        echo "TEST_TYPE=${{ inputs.profile }}" >> $GITHUB_ENV
-        echo "RUN_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
+          echo "TEST_TYPE=${{ inputs.profile }}" >> $GITHUB_ENV
+          echo "RUN_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
 
     - name: create test run on testrails
       shell: bash
