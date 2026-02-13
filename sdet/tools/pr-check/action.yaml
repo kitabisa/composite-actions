@@ -191,7 +191,7 @@ runs:
           const { repo, payload } = context;
           const headbranch = payload.pull_request.head.ref;
           const jiraBaseUrl = process.env.JIRA_BASE_URL;
-          
+
           let ticket = null;
           let type = null;
 
