@@ -1,0 +1,277 @@
+name: "PR Opened"
+description: "Validate PR branch naming convention, check JIRA/GitHub tickets, and auto-update PR body and title"
+
+inputs:
+  branch_regex:
+    required: false
+    description: "Regex pattern for branch name validation"
+    default: '^([a-z]+)[\/]+(([a-z\-]+)-)?([0-9]{1,5})(\.[a-z]+|(-[a-z0-9\-]+)?)$'
+    type: string
+
+  allowed_prefixes:
+    required: false
+    description: "Comma-separated list of allowed branch prefixes"
+    default: "feat/,fix/,docs/,chore/,ci/,test/,refactor/"
+    type: string
+
+  ignore_branches:
+    required: false
+    description: "Branches to ignore from validation"
+    default: "master,main"
+    type: string
+
+  jira_base_url:
+    required: false
+    description: "Base URL for JIRA ticket links"
+    default: "https://kitabisa.atlassian.net/browse"
+    type: string
+
+  auto_update_body:
+    required: false
+    description: "Automatically update PR body with ticket link"
+    default: "true"
+    type: string
+
+  auto_update_title:
+    required: false
+    description: "Automatically update PR title with ticket ID"
+    default: "true"
+    type: string
+
+  github_token:
+    required: true
+    description: "GitHub token for API operations"
+    type: string
+
+  check_branch_name:
+    required: false
+    description: "Enable branch naming convention validation"
+    default: "true"
+    type: string
+
+outputs:
+  branch_name:
+    description: "The current branch name"
+    value: ${{ steps.branch-name.outputs.current_branch }}
+
+  ticket_type:
+    description: "Type of ticket detected (JIRA or GITHUB)"
+    value: ${{ steps.check-pr-updated.outputs.ticket_type }}
+
+  ticket_id:
+    description: "The detected ticket ID"
+    value: ${{ steps.check-pr-updated.outputs.ticket_id }}
+
+  body_updated:
+    description: "Whether PR body was updated"
+    value: ${{ steps.check-pr-updated.outputs.body_updated }}
+
+  title_updated:
+    description: "Whether PR title was updated"
+    value: ${{ steps.check-pr-updated.outputs.title_updated }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get branch name
+      id: branch-name
+      uses: tj-actions/branch-names@v8
+
+    - name: Check branch name
+      id: check-branch-name
+      if: ${{ inputs.check_branch_name == 'true' }}
+      uses: deepakputhraya/action-branch-name@master
+      with:
+        regex: ${{ inputs.branch_regex }}
+        allowed_prefixes: ${{ inputs.allowed_prefixes }}
+        ignore: ${{ inputs.ignore_branches }}
+
+    - name: Fail and comment on PR if branch name is incorrect
+      if: ${{ inputs.check_branch_name == 'true' && failure() }}
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ inputs.github_token }}
+        script: |
+          const branchName = context.payload.pull_request.head.ref;
+          const message = `🚫 The branch name '${branchName}' does not match the required pattern. Please follow our standard like feat/sdet-123-wakaf OR feat/123-wakaf`
+
+          await github.rest.issues.createComment({
+            ...context.repo,
+            issue_number: context.payload.pull_request.number,
+            body: message
+          });
+
+    - name: Check branch pattern
+      id: check-branch
+      shell: bash
+      run: |
+        if [[ ${{ github.head_ref }} =~ ^.+?(([A-Za-z]+)-)?[0-9]+.*$ ]]; then
+          echo "match=true" >> $GITHUB_OUTPUT
+        else
+          echo "match=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Check PR body when contains JIRA ticket or Github Issue
+      id: check-pr-body
+      shell: bash
+      run: |
+        headbranch='${{ github.event.pull_request.head.ref }}'
+        # Match Jira (KEY-123) or GitHub (123)
+        ticket=$(echo "$headbranch" | grep -Eo '([A-Za-z]+-[0-9]{1,5})|^[^\/]+\/[0-9]{1,5}' | grep -Eo '([A-Za-z]+-[0-9]{1,5})|[0-9]{1,5}')
+        
+        # If grep failed or empty check stricter github issue
+        if [[ -z "$ticket" ]]; then
+           ticket=$(echo "$headbranch" | grep -Eo '/[0-9]+-' | grep -Eo '[0-9]+')
+        fi
+
+        body='${{ github.event.pull_request.body }}'
+        if [[ "$body" == *"$ticket"* ]]; then
+          echo "contains_ticket=true" >> $GITHUB_OUTPUT
+        else
+          echo "contains_ticket=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Check PR body and title for JIRA/Github ticket
+      id: check-pr-updated
+      shell: bash
+      run: |
+        headbranch="${{ github.event.pull_request.head.ref }}"
+        
+        # Identify type and ticket
+        if [[ "$headbranch" =~ \/([A-Za-z]+)-([0-9]+) ]]; then
+           TYPE="JIRA"
+           TICKET="${BASH_REMATCH[1]}-${BASH_REMATCH[2]}"
+        elif [[ "$headbranch" =~ \/([0-9]+)- ]]; then
+           TYPE="GITHUB"
+           TICKET="${BASH_REMATCH[1]}"
+        else
+           echo "error: No ticket found in branch: $headbranch" >&2
+           echo "body_updated=false" >> $GITHUB_OUTPUT
+           echo "title_updated=false" >> $GITHUB_OUTPUT
+           echo "ticket_type=" >> $GITHUB_OUTPUT
+           echo "ticket_id=" >> $GITHUB_OUTPUT
+           exit 0
+        fi
+
+        body=$(printf "%q" "${{ github.event.pull_request.body }}")
+        title=$(printf "%q" "${{ github.event.pull_request.title }}")
+
+        echo "Detected Type: $TYPE"
+        echo "Detected Ticket: $TICKET"
+        echo "ticket_type=$TYPE" >> $GITHUB_OUTPUT
+        echo "ticket_id=$TICKET" >> $GITHUB_OUTPUT
+        
+        # Check Body
+        if [[ "$TYPE" == "JIRA" ]]; then
+            if grep -q "${{ inputs.jira_base_url }}/$TICKET" <<< "$body"; then
+                echo "body_updated=true" >> $GITHUB_OUTPUT
+            else
+                echo "body_updated=false" >> $GITHUB_OUTPUT
+            fi
+        else
+            # Github - check for #ticket pattern
+            if grep -q "#$TICKET" <<< "$body"; then
+                echo "body_updated=true" >> $GITHUB_OUTPUT
+            else
+                echo "body_updated=false" >> $GITHUB_OUTPUT
+            fi
+        fi
+
+        # Check Title
+        if [[ "$TYPE" == "GITHUB" ]]; then
+          echo "title_updated=true" >> $GITHUB_OUTPUT
+        elif echo "$title" | grep -q -i "$TICKET"; then
+          echo "title_updated=true" >> $GITHUB_OUTPUT
+        else
+          echo "title_updated=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Update PR body
+      if: ${{ inputs.auto_update_body == 'true' && steps.check-pr-updated.outputs.body_updated == 'false' }}
+      uses: actions/github-script@v7
+      env:
+        JIRA_BASE_URL: ${{ inputs.jira_base_url }}
+      with:
+        github-token: ${{ inputs.github_token }}
+        script: |
+          const { repo, payload } = context;
+          const headbranch = payload.pull_request.head.ref;
+          const jiraBaseUrl = process.env.JIRA_BASE_URL;
+          
+          let ticket = null;
+          let type = null;
+
+          // Regex for Jira: prefix/KEY-123-suffix
+          const jiraMatch = headbranch.match(/\/([a-zA-Z]+)-(\d+)/);
+          // Regex for GitHub: prefix/123-suffix (ensure no letters immediately before number)
+          const githubMatch = headbranch.match(/\/(\d+)-/);
+
+          if (jiraMatch) {
+              type = 'JIRA';
+              ticket = `${jiraMatch[1].toUpperCase()}-${jiraMatch[2]}`;
+          } else if (githubMatch) {
+              type = 'GITHUB';
+              ticket = githubMatch[1];
+          } else {
+              console.log('No ticket found in branch name');
+              return;
+          }
+
+          let newSection = '';
+          if (type === 'JIRA') {
+              newSection = `## :tickets: JIRA Ticket\n[${ticket}](${jiraBaseUrl}/${ticket})`;
+          } else {
+              // Use # format for linking to GitHub issue
+              newSection = `## :tickets: Github Ticket\n#${ticket}`;
+          }
+
+          const currentBody = payload.pull_request.body || '';
+          let updatedBody = currentBody;
+
+          const header = type === 'JIRA' ? '## :tickets: JIRA Ticket' : '## :tickets: Github Ticket';
+          
+          if (currentBody.includes(header)) {
+               const regex = new RegExp(`${header}[^#]*`, 'i');
+               updatedBody = currentBody.replace(regex, `${newSection}\n\n`);
+          } else {
+               updatedBody = `${newSection}\n\n${currentBody}`;
+          }
+
+          await github.rest.pulls.update({
+            owner: repo.owner,
+            repo: repo.repo,
+            pull_number: payload.pull_request.number,
+            body: updatedBody
+          });
+
+    - name: Update PR title
+      if: ${{ inputs.auto_update_title == 'true' && steps.check-pr-updated.outputs.title_updated == 'false' }}
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ inputs.github_token }}
+        script: |
+          const { repo, payload } = context;
+          const headbranch = payload.pull_request.head.ref;
+          
+          let ticket = null;
+          
+          const jiraMatch = headbranch.match(/\/([a-zA-Z]+)-(\d+)/);
+          const githubMatch = headbranch.match(/\/(\d+)-/);
+
+          if (jiraMatch) {
+              ticket = `${jiraMatch[1].toUpperCase()}-${jiraMatch[2]}`;
+          } else if (githubMatch) {
+              ticket = githubMatch[1];
+          } else {
+              return;
+          }
+
+          const currentTitle = payload.pull_request.title;
+          if (currentTitle.includes(ticket)) return;
+
+          await github.rest.pulls.update({
+            owner: repo.owner,
+            repo: repo.repo,
+            pull_number: payload.pull_request.number,
+            title: `${currentTitle} ${ticket}`
+          });
