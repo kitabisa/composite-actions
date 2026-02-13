@@ -23,7 +23,7 @@ Features:
 | jira_base_url | Base URL for JIRA ticket links | `false` | `https://kitabisa.atlassian.net/browse` |
 | auto_update_body | Automatically update PR body with ticket link | `false` | `true` |
 | auto_update_title | Automatically update PR title with ticket ID | `false` | `true` |
-| github_token | GitHub token for API operations | `true` | - |
+| gh_token | GitHub token for API operations | `true` | - |
 | check_branch_name | Enable branch naming convention validation | `false` | `true` |
 <!-- action-docs-inputs -->
 
@@ -65,7 +65,7 @@ jobs:
       - name: PR Check
         uses: kitabisa/composite-actions/sdet/tools/pr-check@main
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          gh_token: ${{ secrets.GH_TOKEN }}
 ```
 
 ### Custom Configuration
@@ -86,7 +86,7 @@ jobs:
       - name: PR Check
         uses: kitabisa/composite-actions/sdet/tools/pr-check@main
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          gh_token: ${{ secrets.GH_TOKEN }}
           branch_regex: '^([a-z]+)[\/]+(([a-z\-]+)-)?([0-9]{1,5})(\.[a-z]+|(-[a-z0-9\-]+)?)$'
           allowed_prefixes: 'feat/,fix/,docs/,chore/,ci/,test/,refactor/,hotfix/'
           ignore_branches: 'master,main,develop'
@@ -102,7 +102,7 @@ jobs:
 - name: PR Check (validation only)
   uses: kitabisa/composite-actions/sdet/tools/pr-check@main
   with:
-    github_token: ${{ secrets.GITHUB_TOKEN }}
+    gh_token: ${{ secrets.GH_TOKEN }}
     auto_update_body: 'false'
     auto_update_title: 'false'
 ```
