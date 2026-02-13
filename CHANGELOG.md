@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.57.0](https://github.com/kitabisa/composite-actions/compare/v2.56.2...v2.57.0) (2026-02-13)
+
+
+### Features
+
+* update automation test using build ([#382](https://github.com/kitabisa/composite-actions/issues/382)) ([fa72d5e](https://github.com/kitabisa/composite-actions/commit/fa72d5e6627529322df4a3241bfcd595c2c07400))
+* update build ([#380](https://github.com/kitabisa/composite-actions/issues/380)) ([ba21eba](https://github.com/kitabisa/composite-actions/commit/ba21ebac09e2951f145a8b61248a998284a820d4))
+* update input token ([#383](https://github.com/kitabisa/composite-actions/issues/383)) ([1e7c4ef](https://github.com/kitabisa/composite-actions/commit/1e7c4efa0f4c0a3701123c94f94b001fb68f010e))
+
+
+### CI
+
+* check pr opened ([#384](https://github.com/kitabisa/composite-actions/issues/384)) ([3e13f9b](https://github.com/kitabisa/composite-actions/commit/3e13f9bd1dbcc44e770312516ac5129b7d41ebcd))
+
 ## [2.56.2](https://github.com/kitabisa/composite-actions/compare/v2.56.1...v2.56.2) (2026-01-15)
 
 
