@@ -116,10 +116,8 @@ runs:
       shell: bash
       run: |
         headbranch='${{ github.event.pull_request.head.ref }}'
-        # Match Jira (KEY-123) or GitHub (123)
         ticket=$(echo "$headbranch" | grep -Eo '([A-Za-z]+-[0-9]{1,5})|^[^\/]+\/[0-9]{1,5}' | grep -Eo '([A-Za-z]+-[0-9]{1,5})|[0-9]{1,5}')
-        
-        # If grep failed or empty check stricter github issue
+
         if [[ -z "$ticket" ]]; then
            ticket=$(echo "$headbranch" | grep -Eo '/[0-9]+-' | grep -Eo '[0-9]+')
         fi
@@ -136,8 +134,7 @@ runs:
       shell: bash
       run: |
         headbranch="${{ github.event.pull_request.head.ref }}"
-        
-        # Identify type and ticket
+
         if [[ "$headbranch" =~ \/([A-Za-z]+)-([0-9]+) ]]; then
            TYPE="JIRA"
            TICKET="${BASH_REMATCH[1]}-${BASH_REMATCH[2]}"
@@ -160,24 +157,21 @@ runs:
         echo "Detected Ticket: $TICKET"
         echo "ticket_type=$TYPE" >> $GITHUB_OUTPUT
         echo "ticket_id=$TICKET" >> $GITHUB_OUTPUT
-        
-        # Check Body
+
         if [[ "$TYPE" == "JIRA" ]]; then
-            if grep -q "${{ inputs.jira_base_url }}/$TICKET" <<< "$body"; then
-                echo "body_updated=true" >> $GITHUB_OUTPUT
-            else
-                echo "body_updated=false" >> $GITHUB_OUTPUT
-            fi
+          if grep -q "${{ inputs.jira_base_url }}/$TICKET" <<< "$body"; then
+              echo "body_updated=true" >> $GITHUB_OUTPUT
+          else
+              echo "body_updated=false" >> $GITHUB_OUTPUT
+          fi
         else
-            # Github - check for #ticket pattern
-            if grep -q "#$TICKET" <<< "$body"; then
-                echo "body_updated=true" >> $GITHUB_OUTPUT
-            else
-                echo "body_updated=false" >> $GITHUB_OUTPUT
-            fi
+          if grep -q "#$TICKET" <<< "$body"; then
+            echo "body_updated=true" >> $GITHUB_OUTPUT
+          else
+            echo "body_updated=false" >> $GITHUB_OUTPUT
+          fi
         fi
 
-        # Check Title
         if [[ "$TYPE" == "GITHUB" ]]; then
           echo "title_updated=true" >> $GITHUB_OUTPUT
         elif echo "$title" | grep -q -i "$TICKET"; then
@@ -201,14 +195,12 @@ runs:
           let ticket = null;
           let type = null;
 
-          // Regex for Jira: prefix/KEY-123-suffix
           const jiraMatch = headbranch.match(/\/([a-zA-Z]+)-(\d+)/);
-          // Regex for GitHub: prefix/123-suffix (ensure no letters immediately before number)
           const githubMatch = headbranch.match(/\/(\d+)-/);
 
           if (jiraMatch) {
-              type = 'JIRA';
-              ticket = `${jiraMatch[1].toUpperCase()}-${jiraMatch[2]}`;
+            type = 'JIRA';
+            ticket = `${jiraMatch[1].toUpperCase()}-${jiraMatch[2]}`;
           } else if (githubMatch) {
               type = 'GITHUB';
               ticket = githubMatch[1];
@@ -221,7 +213,6 @@ runs:
           if (type === 'JIRA') {
               newSection = `## :tickets: JIRA Ticket\n[${ticket}](${jiraBaseUrl}/${ticket})`;
           } else {
-              // Use # format for linking to GitHub issue
               newSection = `## :tickets: Github Ticket\n#${ticket}`;
           }
 
@@ -229,12 +220,12 @@ runs:
           let updatedBody = currentBody;
 
           const header = type === 'JIRA' ? '## :tickets: JIRA Ticket' : '## :tickets: Github Ticket';
-          
+
           if (currentBody.includes(header)) {
-               const regex = new RegExp(`${header}[^#]*`, 'i');
-               updatedBody = currentBody.replace(regex, `${newSection}\n\n`);
+            const regex = new RegExp(`${header}[^#]*`, 'i');
+            updatedBody = currentBody.replace(regex, `${newSection}\n\n`);
           } else {
-               updatedBody = `${newSection}\n\n${currentBody}`;
+              updatedBody = `${newSection}\n\n${currentBody}`;
           }
 
           await github.rest.pulls.update({
@@ -252,14 +243,14 @@ runs:
         script: |
           const { repo, payload } = context;
           const headbranch = payload.pull_request.head.ref;
-          
+
           let ticket = null;
-          
+
           const jiraMatch = headbranch.match(/\/([a-zA-Z]+)-(\d+)/);
           const githubMatch = headbranch.match(/\/(\d+)-/);
 
           if (jiraMatch) {
-              ticket = `${jiraMatch[1].toUpperCase()}-${jiraMatch[2]}`;
+            ticket = `${jiraMatch[1].toUpperCase()}-${jiraMatch[2]}`;
           } else if (githubMatch) {
               ticket = githubMatch[1];
           } else {
