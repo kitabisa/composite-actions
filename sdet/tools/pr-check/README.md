@@ -95,7 +95,7 @@ jobs:
           auto_update_body: 'true'
           auto_update_title: 'true'
           check_branch_name: 'true'
-          github_issue_keyword: 'Fix'
+          github_issue_keyword: 'Resolve'
 ```
 
 ### Disable Auto-Updates
@@ -105,7 +105,7 @@ jobs:
   uses: kitabisa/composite-actions/sdet/tools/pr-check@main
   with:
     gh_token: ${{ secrets.GH_TOKEN }}
-    github_issue_keyword: 'Close'
+    github_issue_keyword: 'Resolve'
     auto_update_body: 'false'
     auto_update_title: 'false'
 ```
