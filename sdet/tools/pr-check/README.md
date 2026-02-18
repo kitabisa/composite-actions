@@ -25,6 +25,7 @@ Features:
 | auto_update_title | Automatically update PR title with ticket ID | `false` | `true` |
 | gh_token | GitHub token for API operations | `true` | - |
 | check_branch_name | Enable branch naming convention validation | `false` | `true` |
+| github_issue_keyword | Keyword for GitHub issue linking (e.g., Resolve, Fix, Close) | `false` | `Resolve` |
 <!-- action-docs-inputs -->
 
 <!-- action-docs-outputs -->
@@ -94,6 +95,7 @@ jobs:
           auto_update_body: 'true'
           auto_update_title: 'true'
           check_branch_name: 'true'
+          github_issue_keyword: 'Fix'
 ```
 
 ### Disable Auto-Updates
@@ -103,6 +105,7 @@ jobs:
   uses: kitabisa/composite-actions/sdet/tools/pr-check@main
   with:
     gh_token: ${{ secrets.GH_TOKEN }}
+    github_issue_keyword: 'Close'
     auto_update_body: 'false'
     auto_update_title: 'false'
 ```
@@ -140,8 +143,10 @@ For JIRA tickets:
 [SDET-123](https://kitabisa.atlassian.net/browse/SDET-123)
 ```
 
-For GitHub issues:
+For GitHub issues (example with `github_issue_keyword: 'Resolve'`):
 ```markdown
 ## :tickets: Github Ticket
-#123
+Resolve #123
 ```
+
+> Note: Set `github_issue_keyword` to your preferred keyword. Supported: `Close`, `Closes`, `Closed`, `Fix`, `Fixes`, `Fixed`, `Resolve`, `Resolves`, `Resolved`. These will auto-close the linked issue when PR is merged.
