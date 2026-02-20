@@ -96,7 +96,7 @@ runs:
       if: ${{ inputs.check_branch_name == 'true' && failure() }}
       uses: actions/github-script@v7
       with:
-        gh-token: ${{ inputs.gh_token }}
+        github-token: ${{ inputs.gh_token }}
         script: |
           const branchName = context.payload.pull_request.head.ref;
           const message = `🚫 The branch name '${branchName}' does not match the required pattern. Please follow our standard like feat/sdet-123-wakaf OR feat/123-wakaf`
@@ -193,7 +193,7 @@ runs:
         JIRA_BASE_URL: ${{ inputs.jira_base_url }}
         GITHUB_ISSUE_KEYWORD: ${{ inputs.github_issue_keyword }}
       with:
-        gh-token: ${{ inputs.gh_token }}
+        github-token: ${{ inputs.gh_token }}
         script: |
           const { repo, payload } = context;
           const headbranch = payload.pull_request.head.ref;
@@ -246,7 +246,7 @@ runs:
       if: ${{ inputs.auto_update_title == 'true' && steps.check-pr-updated.outputs.title_updated == 'false' }}
       uses: actions/github-script@v7
       with:
-        gh-token: ${{ inputs.gh_token }}
+        github-token: ${{ inputs.gh_token }}
         script: |
           const { repo, payload } = context;
           const headbranch = payload.pull_request.head.ref;
