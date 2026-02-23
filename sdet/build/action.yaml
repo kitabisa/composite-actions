@@ -5,7 +5,7 @@ inputs:
   gh_token:
     required: false
     description: "github token for checkout"
-    default: ""
+    default: "${{ github.token }}"
     type: string
 
   checkout:
