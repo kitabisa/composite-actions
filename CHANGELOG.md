@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.57.1](https://github.com/kitabisa/composite-actions/compare/v2.57.0...v2.57.1) (2026-02-23)
+
+
+### Bugfix
+
+* add default input gh token in sdet build ([#386](https://github.com/kitabisa/composite-actions/issues/386)) ([b3a2c4c](https://github.com/kitabisa/composite-actions/commit/b3a2c4c911e4d52b382717f857501a001b9ab5c1))
+
 ## [2.57.0](https://github.com/kitabisa/composite-actions/compare/v2.56.2...v2.57.0) (2026-02-13)
 
 
