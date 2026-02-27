@@ -134,6 +134,18 @@ inputs:
     default: ""
     type: string
 
+  app_id:
+    required: false
+    description: "GitHub App ID for generating token to create verified commits"
+    default: ""
+    type: string
+
+  app_private_key:
+    required: false
+    description: "GitHub App private key for generating token to create verified commits"
+    default: ""
+    type: string
+
 runs:
   using: "composite"
   steps:
@@ -184,6 +196,8 @@ runs:
       with:
         custom_command_report_folder: ${{ inputs.custom_command_report_folder }}
         profile: ${{ inputs.custom_command_report_subfolder || inputs.profile }}
+        app_id: ${{ inputs.app_id }}
+        app_private_key: ${{ inputs.app_private_key }}
 
     - name: insert result to testiny
       shell: bash

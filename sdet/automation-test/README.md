@@ -34,6 +34,8 @@ SDET composite setup and run automation test
 | custom_command_send_report_to_dashboard       | custom command send report to dashboard       | `false`  |         |
 | custom_command_send_result_to_pr_release_flag | custom command send result to pr release flag | `false`  |         |
 | custom_command_send_result_to_pr_release      | custom command send result to pr release      | `false`  |         |
+| app_id                                        | GitHub App ID for generating token to create verified commits | `false`  |         |
+| app_private_key                               | GitHub App private key for generating token to create verified commits | `false`  |         |
 
 <!-- action-docs-inputs -->
 

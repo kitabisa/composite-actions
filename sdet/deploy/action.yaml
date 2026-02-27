@@ -14,31 +14,28 @@ inputs:
     default: ""
     type: string
 
-  gpg_private_key:
+  app_id:
     required: false
-    description: "GPG private key exported as ASCII armored version for commit signing"
+    description: "GitHub App ID for generating token to create verified commits"
     default: ""
     type: string
 
-  gpg_passphrase:
+  app_private_key:
     required: false
-    description: "Passphrase of the GPG private key"
+    description: "GitHub App private key for generating token to create verified commits"
     default: ""
     type: string
 
 runs:
   using: "composite"
   steps:
-    - name: import GPG key
-      if: inputs.gpg_private_key != ''
-      uses: crazy-max/ghaction-import-gpg@v6
-      id: import_gpg
+    - name: generate github app token
+      if: ${{ inputs.app_id != '' }}
+      uses: actions/create-github-app-token@v1
+      id: app-token
       with:
-        gpg_private_key: ${{ inputs.gpg_private_key }}
-        passphrase: ${{ inputs.gpg_passphrase }}
-        git_config_global: true
-        git_user_signingkey: true
-        git_commit_gpgsign: true
+        app-id: ${{ inputs.app_id }}
+        private-key: ${{ inputs.app_private_key }}
 
     - name: report history action
       uses: kitabisa/report-history-action@master
@@ -49,19 +46,18 @@ runs:
         gh_pages: gh-pages
         report_history: report-history
 
-    - name: deploy reports to github pages
-      if: inputs.gpg_private_key != ''
+    - name: deploy reports to github pages (verified)
+      if: ${{ inputs.app_id != '' }}
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages
         folder: report-history
         clean: true
         single-commit: true
-        git-config-name: ${{ steps.import_gpg.outputs.name }}
-        git-config-email: ${{ steps.import_gpg.outputs.email }}
+        token: ${{ steps.app-token.outputs.token }}
 
     - name: deploy reports to github pages
-      if: inputs.gpg_private_key == ''
+      if: ${{ inputs.app_id == '' }}
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages
