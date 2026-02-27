@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.57.3](https://github.com/kitabisa/composite-actions/compare/v2.57.2...v2.57.3) (2026-02-27)
+
+
+### Bugfix
+
+* add github app token steps for handle verified commit ([#390](https://github.com/kitabisa/composite-actions/issues/390)) ([7c8ac46](https://github.com/kitabisa/composite-actions/commit/7c8ac46503fb2270fbe3a1a21fc7cbe0076e7776))
+
 ## [2.57.2](https://github.com/kitabisa/composite-actions/compare/v2.57.1...v2.57.2) (2026-02-27)
 
 
