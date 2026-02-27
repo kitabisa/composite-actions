@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.57.2](https://github.com/kitabisa/composite-actions/compare/v2.57.1...v2.57.2) (2026-02-27)
+
+
+### Bugfix
+
+* add step verified commit ([#388](https://github.com/kitabisa/composite-actions/issues/388)) ([5439e81](https://github.com/kitabisa/composite-actions/commit/5439e812c06d36b3eb47ab9080820cfea46ed00e))
+
 ## [2.57.1](https://github.com/kitabisa/composite-actions/compare/v2.57.0...v2.57.1) (2026-02-23)
 
 
