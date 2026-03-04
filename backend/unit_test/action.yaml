@@ -150,6 +150,25 @@ runs:
       run: |
         go test -short ${{ inputs.unit_test_command }}
 
+    - name: Filter mock files from coverage
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        if [[ -f coverage.out ]]; then
+          echo "Filtering mock files from coverage.out..."
+          # Preserve header and filter out mock-related lines
+          head -1 coverage.out > coverage_filtered.out
+          grep -vE '/mock/|/mocks/|_mock\.go:|mock_.*\.go:' coverage.out >> coverage_filtered.out
+          
+          # Show what was filtered
+          total_lines=$(wc -l < coverage.out)
+          filtered_lines=$(wc -l < coverage_filtered.out)
+          removed=$((total_lines - filtered_lines))
+          echo "Removed $removed mock-related lines from coverage.out"
+          
+          mv coverage_filtered.out coverage.out
+        fi
+
     - name: Annotate missing test coverage
       id: annotate
       if: github.event.pull_request.base.sha != ''

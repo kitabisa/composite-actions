@@ -34,5 +34,5 @@ with:
   cache_key_suffix: "kulonuwun"
   default_unit_test: false
   custom_command: "cp ./params/.env.example ./params/.env && cp ./params/firebase.json.sample ./params/firebase.json"
-  unit_test_command: "./... -json -coverpkg=./... -coverprofile=coverage.out -covermode=atomic"
+  unit_test_command: "./... -coverpkg=./... -coverprofile=coverage.out -covermode=atomic"
 ```
