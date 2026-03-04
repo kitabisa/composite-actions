@@ -156,17 +156,51 @@ runs:
       run: |
         if [[ -f coverage.out ]]; then
           echo "Filtering mock files from coverage.out..."
-          # Preserve header and filter out mock-related lines
-          head -1 coverage.out > coverage_filtered.out
-          grep -vE '/mock/|/mocks/|_mock\.go:|mock_.*\.go:' coverage.out >> coverage_filtered.out
-          
+          # Preserve header and filter out mock-related lines (and empty lines)
+          {
+            head -n 1 coverage.out
+            tail -n +2 coverage.out | grep -vE '^\s*$|/mock/|/mocks/|_mock\.go:|mock_.*\.go:'
+          } > coverage_filtered.out
+
           # Show what was filtered
           total_lines=$(wc -l < coverage.out)
-          filtered_lines=$(wc -l < coverage_filtered.out)
-          removed=$((total_lines - filtered_lines))
+          filtered_lines=$(wc -c < coverage_filtered.out)
+          if [[ "$filtered_lines" -gt 0 ]]; then
+            filtered_data_lines=$(tail -n +2 coverage_filtered.out | wc -l)
+          else
+            filtered_data_lines=0
+          fi
+          removed=$((total_lines - 1 - filtered_data_lines))
           echo "Removed $removed mock-related lines from coverage.out"
-          
+
           mv coverage_filtered.out coverage.out
+        fi
+
+    - name: Validate coverage file format
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        if [[ -f coverage.out ]]; then
+          # Check file is non-empty and has valid header
+          if [[ ! -s coverage.out ]]; then
+            echo "❌ Error: coverage.out is empty after filtering"
+            exit 1
+          fi
+
+          # Check first line starts with mode:
+          header=$(head -n 1 coverage.out)
+          if [[ ! "$header" =~ ^mode: ]]; then
+            echo "❌ Error: coverage.out missing valid 'mode:' header (found: $header)"
+            exit 1
+          fi
+
+          # Check for any empty lines in data section
+          if tail -n +2 coverage.out | grep -qE '^\s*$'; then
+            echo "❌ Error: coverage.out contains empty lines in data section"
+            exit 1
+          fi
+
+          echo "✅ coverage.out format validated"
         fi
 
     - name: Annotate missing test coverage
