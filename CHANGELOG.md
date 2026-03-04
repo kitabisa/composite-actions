@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.57.4](https://github.com/kitabisa/composite-actions/compare/v2.57.3...v2.57.4) (2026-03-04)
+
+
+### Bugfix
+
+* **test:** filter out mock ([#392](https://github.com/kitabisa/composite-actions/issues/392)) ([143b158](https://github.com/kitabisa/composite-actions/commit/143b158dfd9e77cd3186630741d0f8221c5c7b42))
+
 ## [2.57.3](https://github.com/kitabisa/composite-actions/compare/v2.57.2...v2.57.3) (2026-02-27)
 
 
