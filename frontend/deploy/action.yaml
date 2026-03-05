@@ -161,7 +161,7 @@ runs:
 
           if [[ "$line" == *.xyz || "$line" == *.com ]]; then
             HAS_PUBLIC=true
-          elif [[ "$line" == *.kt.bs ]]; then
+          elif [[ "$line" == *.kt.bs || "$line" == *.kt.jg || "$line" == *.kt.bl ]]; then
             HAS_PRIVATE=true
           fi
         done <<< "$ROUTES"
@@ -181,7 +181,7 @@ runs:
               COMMENT+="[$line](https://$line)\n"
             fi
           elif [[ "$HAS_PRIVATE" == true ]]; then
-            if [[ "$line" == *.kt.bs ]]; then
+            if [[ "$line" == *.kt.bs || "$line" == *.kt.jg || "$line" == *.kt.bl ]]; then
               COMMENT+="[$line](http://$line)\n"
             fi
           elif [[ "$HAS_PUBLIC" == true ]]; then
