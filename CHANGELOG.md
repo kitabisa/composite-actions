@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.57.5](https://github.com/kitabisa/composite-actions/compare/v2.57.4...v2.57.5) (2026-03-05)
+
+
+### Bugfix
+
+* comment pr dev ([#395](https://github.com/kitabisa/composite-actions/issues/395)) ([8490e85](https://github.com/kitabisa/composite-actions/commit/8490e8598f48f8016401b37c68245cb9036cf6a5))
+* **frontend:** ID-1322 temporary disable comment preview url ([#394](https://github.com/kitabisa/composite-actions/issues/394)) ([c1c1b83](https://github.com/kitabisa/composite-actions/commit/c1c1b833933a207454e0d41bae22938419f10473))
+
 ## [2.57.4](https://github.com/kitabisa/composite-actions/compare/v2.57.3...v2.57.4) (2026-03-04)
 
 
