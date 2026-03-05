@@ -100,68 +100,114 @@ runs:
         prune: ${{ inputs.prune }}
         deploy: true
 
-    # - name: Comment preview url
-    #   if: "${{ inputs.preview_url != '' && github.event.pull_request.number != '' }}"
-    #   uses: peter-evans/create-or-update-comment@v4
-    #   with:
-    #     issue-number: ${{ github.event.pull_request.number }}
-    #     body: |
-    #       Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})
+    - name: Comment preview url
+      if: ${{ inputs.preview_url != '' && github.event.pull_request.number != '' }}
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          Open the application by accessing these URL: [${{ inputs.preview_url }}](https://${{ inputs.preview_url }})
 
-    # - name: Get URL
-    #   if: ${{ inputs.preview_url == '' && github.event.pull_request.number != '' }}
-    #   id: get-url
-    #   working-directory: ${{ inputs.working_directory }}
-    #   shell: bash
-    #   run: |
-    #     app_name=$(make get-app-name)
-    #     UNFORMATTED_ROUTES=$(kubectl get httproutes --namespace "$app_name" -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' | grep -E '${{ github.event.pull_request.number }}' | uniq)
-    #     ROUTES=$(echo "$UNFORMATTED_ROUTES" | tr ' ' '\n')
-    #     COMMENT="Open the application by accessing these URL: \n"
-    #     HAS_PUBLIC=false
-    #     HAS_PRIVATE=false
+    - name: Get URL
+      if: ${{ inputs.preview_url == '' && github.event.pull_request.number != '' }}
+      id: get-url
+      working-directory: ${{ inputs.working_directory }}
+      shell: bash
+      run: |
+        set -e
+        set -o pipefail
+        set -u
 
-    #     echo "$ROUTES"
+        APP_NAME=$(make get-app-name)
+        PR_NUMBER="${{ github.event.pull_request.number }}"
 
-    #     I=1
-    #     while read -r line; do
-    #       [ -z "$line" ] && continue
-    #       if [[ ("$line" == *".xyz") || ("$line" == *".com") ]]; then
-    #         HAS_PUBLIC=true
-    #         COMMENT+="[$line](https://$line)\n"
-    #       elif [[ "$line" == *".kt.bs" ]]; then
-    #         HAS_PRIVATE=true
-    #         COMMENT+="[$line](http://$line)\n"
-    #       fi
-    #       ((I++))
-    #     done <<< "$ROUTES"
+        echo "App name: $APP_NAME"
+        echo "PR number: ${PR_NUMBER:-<empty>}"
 
-    #     if [[ "$HAS_PUBLIC" == true && "$HAS_PRIVATE" == true ]]; then
-    #       COMMENT="Open the application by accessing these URLs: \n"
-    #       while read -r line; do
-    #         [ -z "$line" ] && continue
-    #         if [[ "$line" == *".xyz" || "$line" == *".com" ]]; then
-    #           COMMENT+="[$line](https://$line)\n"
-    #         fi
-    #       done <<< "$ROUTES"
-    #     elif [[ "$HAS_PUBLIC" == false && "$HAS_PRIVATE" == true ]]; then
-    #       COMMENT="Open the application by accessing these URLs: \n"
-    #       while read -r line; do
-    #         [ -z "$line" ] && continue
-    #         if [[ "$line" == *".kt.bs" ]]; then
-    #           COMMENT+="[$line](http://$line)\n"
-    #         fi
-    #       done <<< "$ROUTES"
-    #     fi
+        # Get routes safely (do not fail if grep finds nothing)
+        UNFORMATTED_ROUTES=$(
+          kubectl get httproutes --namespace "$APP_NAME" \
+            -o jsonpath='{range .items[*]}{.spec.hostnames[*]}{"\n"}{end}' 2>/dev/null \
+          | grep -E "$PR_NUMBER" || true
+        )
 
-    #     # Set output so we can use it in the next step
-    #     echo "comment<<EOF" >> $GITHUB_OUTPUT
-    #     echo -e "$COMMENT" >> $GITHUB_OUTPUT
-    #     echo "EOF" >> $GITHUB_OUTPUT
+        # Remove duplicates safely
+        UNFORMATTED_ROUTES=$(echo "$UNFORMATTED_ROUTES" | uniq || true)
 
-    # - name: Comment preview url
-    #   if: "${{ steps.get-url.outputs.comment != '' && github.event.pull_request.number != '' }}"
-    #   uses: peter-evans/create-or-update-comment@v4
-    #   with:
-    #     issue-number: ${{ github.event.pull_request.number }}
-    #     body: ${{ steps.get-url.outputs.comment }}
+        # Convert space separated hostnames to newline
+        ROUTES=$(echo "$UNFORMATTED_ROUTES" | tr ' ' '\n' || true)
+
+        # If no routes found, exit safely
+        if [ -z "$ROUTES" ]; then
+          echo "No routes found for PR $PR_NUMBER"
+          {
+            echo "comment<<EOF"
+            echo "No preview URL available."
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        echo "Routes found:"
+        echo "$ROUTES"
+
+        COMMENT="Open the application by accessing these URL: \n"
+        HAS_PUBLIC=false
+        HAS_PRIVATE=false
+
+        # First pass — detect what types exist
+        while read -r line; do
+          [ -z "$line" ] && continue
+
+          if [[ "$line" == *.xyz || "$line" == *.com ]]; then
+            HAS_PUBLIC=true
+          elif [[ "$line" == *.kt.bs || "$line" == *.kt.jg || "$line" == *.kt.bl ]]; then
+            HAS_PRIVATE=true
+          fi
+        done <<< "$ROUTES"
+
+        # Reset comment header if needed
+        if [[ "$HAS_PUBLIC" == true || "$HAS_PRIVATE" == true ]]; then
+          COMMENT="Open the application by accessing these URLs: \n"
+        fi
+
+        # Second pass — build comment safely
+        while read -r line; do
+          [ -z "$line" ] && continue
+
+          if [[ "$HAS_PUBLIC" == true && "$HAS_PRIVATE" == true ]]; then
+            # If both exist → only show public
+            if [[ "$line" == *.xyz || "$line" == *.com ]]; then
+              COMMENT+="[$line](https://$line)\n"
+            fi
+          elif [[ "$HAS_PRIVATE" == true ]]; then
+            if [[ "$line" == *.kt.bs || "$line" == *.kt.jg || "$line" == *.kt.bl ]]; then
+              COMMENT+="[$line](http://$line)\n"
+            fi
+          elif [[ "$HAS_PUBLIC" == true ]]; then
+            if [[ "$line" == *.xyz || "$line" == *.com ]]; then
+              COMMENT+="[$line](https://$line)\n"
+            fi
+          fi
+        done <<< "$ROUTES"
+
+        # Final safety fallback
+        if [ -z "$COMMENT" ]; then
+          COMMENT="No preview URL available."
+        fi
+
+        # Set output safely
+        {
+          echo "comment<<EOF"
+          echo -e "$COMMENT"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
+
+        echo "Comment generated successfully."
+
+    - name: Comment preview url
+      if: ${{ steps.get-url.outputs.comment != '' && github.event.pull_request.number != '' }}
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: ${{ steps.get-url.outputs.comment }}
