@@ -85,7 +85,7 @@ runs:
 
     - name: Check branch name
       id: check-branch-name
-      if: ${{ inputs.check_branch_name == 'true' }}
+      if: ${{ inputs.check_branch_name == 'true' && !contains(github.head_ref, 'release-please') }}
       uses: deepakputhraya/action-branch-name@master
       with:
         regex: ${{ inputs.branch_regex }}
@@ -93,7 +93,7 @@ runs:
         ignore: ${{ inputs.ignore_branches }}
 
     - name: Fail and comment on PR if branch name is incorrect
-      if: ${{ inputs.check_branch_name == 'true' && failure() }}
+      if: ${{ inputs.check_branch_name == 'true' && !contains(github.head_ref, 'release-please') && failure() }}
       uses: actions/github-script@v7
       with:
         github-token: ${{ inputs.gh_token }}
