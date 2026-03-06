@@ -110,8 +110,10 @@ runs:
     - name: Check branch pattern
       id: check-branch
       shell: bash
+      env:
+        HEAD_REF: ${{ github.head_ref }}
       run: |
-        if [[ ${{ github.head_ref }} =~ ^.+?(([A-Za-z]+)-)?[0-9]+.*$ ]]; then
+        if [[ "$HEAD_REF" =~ ^.+?(([A-Za-z]+)-)?[0-9]+.*$ ]]; then
           echo "match=true" >> $GITHUB_OUTPUT
         else
           echo "match=false" >> $GITHUB_OUTPUT
@@ -120,15 +122,18 @@ runs:
     - name: Check PR body when contains JIRA ticket or Github Issue
       id: check-pr-body
       shell: bash
+      env:
+        PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        PR_BODY: ${{ github.event.pull_request.body }}
       run: |
-        headbranch='${{ github.event.pull_request.head.ref }}'
+        headbranch="$PR_HEAD_REF"
         ticket=$(echo "$headbranch" | grep -Eo '([A-Za-z]+-[0-9]{1,5})|^[^\/]+\/[0-9]{1,5}' | grep -Eo '([A-Za-z]+-[0-9]{1,5})|[0-9]{1,5}')
 
         if [[ -z "$ticket" ]]; then
           ticket=$(echo "$headbranch" | grep -Eo '/[0-9]+-' | grep -Eo '[0-9]+')
         fi
 
-        body='${{ github.event.pull_request.body }}'
+        body="$PR_BODY"
         if [[ "$body" == *"$ticket"* ]]; then
           echo "contains_ticket=true" >> $GITHUB_OUTPUT
         else
@@ -138,8 +143,13 @@ runs:
     - name: Check PR body and title for JIRA/Github ticket
       id: check-pr-updated
       shell: bash
+      env:
+        PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        PR_BODY: ${{ github.event.pull_request.body }}
+        PR_TITLE: ${{ github.event.pull_request.title }}
+        JIRA_BASE_URL: ${{ inputs.jira_base_url }}
       run: |
-        headbranch="${{ github.event.pull_request.head.ref }}"
+        headbranch="$PR_HEAD_REF"
 
         if [[ "$headbranch" =~ \/([A-Za-z]+)-([0-9]+) ]]; then
           TYPE="JIRA"
@@ -156,8 +166,8 @@ runs:
           exit 0
         fi
 
-        body=$(printf "%q" "${{ github.event.pull_request.body }}")
-        title=$(printf "%q" "${{ github.event.pull_request.title }}")
+        body="$PR_BODY"
+        title="$PR_TITLE"
 
         echo "Detected Type: $TYPE"
         echo "Detected Ticket: $TICKET"
@@ -165,7 +175,7 @@ runs:
         echo "ticket_id=$TICKET" >> $GITHUB_OUTPUT
 
         if [[ "$TYPE" == "JIRA" ]]; then
-          if grep -q "${{ inputs.jira_base_url }}/$TICKET" <<< "$body"; then
+          if grep -q "$JIRA_BASE_URL/$TICKET" <<< "$body"; then
             echo "body_updated=true" >> $GITHUB_OUTPUT
           else
             echo "body_updated=false" >> $GITHUB_OUTPUT
