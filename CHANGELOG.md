@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.57.6](https://github.com/kitabisa/composite-actions/compare/v2.57.5...v2.57.6) (2026-03-06)
+
+
+### Bugfix
+
+* comment pr dev ([#395](https://github.com/kitabisa/composite-actions/issues/395)) ([8490e85](https://github.com/kitabisa/composite-actions/commit/8490e8598f48f8016401b37c68245cb9036cf6a5))
+* exclude branch name release from pr check ([#398](https://github.com/kitabisa/composite-actions/issues/398)) ([47bec3f](https://github.com/kitabisa/composite-actions/commit/47bec3ff3c0a4ecb4d6b3b074eb80ac97df1861f))
+
+
+### Chore
+
+* **main:** release 2.57.5 ([#396](https://github.com/kitabisa/composite-actions/issues/396)) ([d15c2a3](https://github.com/kitabisa/composite-actions/commit/d15c2a3d5bce06b0a2851f24ada809a600b23a1a))
+
 ## [2.57.5](https://github.com/kitabisa/composite-actions/compare/v2.57.4...v2.57.5) (2026-03-05)
 
 
