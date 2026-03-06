@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.57.7](https://github.com/kitabisa/composite-actions/compare/v2.57.6...v2.57.7) (2026-03-06)
+
+
+### Bugfix
+
+* **pr-check:** prevent bash syntax errors by passing pr strings through env ([#399](https://github.com/kitabisa/composite-actions/issues/399)) ([032f220](https://github.com/kitabisa/composite-actions/commit/032f22097cfe2cb72bd1b68d629934db4e98fb4f))
+
 ## [2.57.6](https://github.com/kitabisa/composite-actions/compare/v2.57.5...v2.57.6) (2026-03-06)
 
 
