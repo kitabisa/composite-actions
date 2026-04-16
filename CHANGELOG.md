@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.57.8](https://github.com/kitabisa/composite-actions/compare/v2.57.7...v2.57.8) (2026-04-16)
+
+
+### Bugfix
+
+* **terragrunt:** migrate to terragrunt run command syntax ([#403](https://github.com/kitabisa/composite-actions/issues/403)) ([bc13f9f](https://github.com/kitabisa/composite-actions/commit/bc13f9ff1efa8e49f5254a1c33813111f9ee0fa5))
+
 ## [2.57.7](https://github.com/kitabisa/composite-actions/compare/v2.57.6...v2.57.7) (2026-03-06)
 
 
