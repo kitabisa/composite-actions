@@ -69,7 +69,8 @@ runs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body:
+            body: output
+          })
     - name: terragrunt apply
       id: apply
       if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'release'
