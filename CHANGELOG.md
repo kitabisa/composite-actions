@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.57.9](https://github.com/kitabisa/composite-actions/compare/v2.57.8...v2.57.9) (2026-04-16)
+
+
+### Bugfix
+
+* **terragrunt:** update action to use run-all commands ([#405](https://github.com/kitabisa/composite-actions/issues/405)) ([4f87e9c](https://github.com/kitabisa/composite-actions/commit/4f87e9c9250636c37c6e986f4641ba31c8ee6f22))
+
 ## [2.57.8](https://github.com/kitabisa/composite-actions/compare/v2.57.7...v2.57.8) (2026-04-16)
 
 
