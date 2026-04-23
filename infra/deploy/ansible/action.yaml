@@ -23,11 +23,27 @@ inputs:
     description: "Vault password"
     type: string
 
+  workload_identity_provider:
+    required: true
+    description: "Workload identity pool"
+    type: string
+
+  service_account:
+    required: true
+    description: "SA used in workload identity pool"
+    type: string
+
 runs:
   using: "composite"
   steps:
     - name: Checkout
       uses: actions/checkout@v6
+
+    - name: authenticate to google cloud with workload identity
+      uses: google-github-actions/auth@v3
+      with:
+        workload_identity_provider: ${{ inputs.workload_identity_provider }}
+        service_account: ${{ inputs.service_account }}
 
     - name: Decrypt secrets
       shell: bash
