@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.59.0](https://github.com/kitabisa/composite-actions/compare/v2.58.0...v2.59.0) (2026-04-23)
+
+
+### Features
+
+* deprecated vault ([#407](https://github.com/kitabisa/composite-actions/issues/407)) ([a3cc49b](https://github.com/kitabisa/composite-actions/commit/a3cc49b59c1d929f16e6bbe12c7061c69177af90))
+
+
+### Bugfix
+
+* comment pr dev ([#395](https://github.com/kitabisa/composite-actions/issues/395)) ([8490e85](https://github.com/kitabisa/composite-actions/commit/8490e8598f48f8016401b37c68245cb9036cf6a5))
+* exclude branch name release from pr check ([#398](https://github.com/kitabisa/composite-actions/issues/398)) ([47bec3f](https://github.com/kitabisa/composite-actions/commit/47bec3ff3c0a4ecb4d6b3b074eb80ac97df1861f))
+* **pr-check:** prevent bash syntax errors by passing pr strings through env ([#399](https://github.com/kitabisa/composite-actions/issues/399)) ([032f220](https://github.com/kitabisa/composite-actions/commit/032f22097cfe2cb72bd1b68d629934db4e98fb4f))
+* **terragrunt:** migrate to terragrunt run command syntax ([#403](https://github.com/kitabisa/composite-actions/issues/403)) ([bc13f9f](https://github.com/kitabisa/composite-actions/commit/bc13f9ff1efa8e49f5254a1c33813111f9ee0fa5))
+* **terragrunt:** update action to use run-all commands ([#405](https://github.com/kitabisa/composite-actions/issues/405)) ([4f87e9c](https://github.com/kitabisa/composite-actions/commit/4f87e9c9250636c37c6e986f4641ba31c8ee6f22))
+
+
+### Chore
+
+* **main:** release 2.57.5 ([#396](https://github.com/kitabisa/composite-actions/issues/396)) ([d15c2a3](https://github.com/kitabisa/composite-actions/commit/d15c2a3d5bce06b0a2851f24ada809a600b23a1a))
+* **main:** release 2.57.6 ([#397](https://github.com/kitabisa/composite-actions/issues/397)) ([a63e273](https://github.com/kitabisa/composite-actions/commit/a63e2739c82ae13c590bd9ea51a66fb69cac2798))
+* **main:** release 2.57.7 ([#400](https://github.com/kitabisa/composite-actions/issues/400)) ([2c3f98b](https://github.com/kitabisa/composite-actions/commit/2c3f98b1301db1ee426055035cc6a36722ddebee))
+* **main:** release 2.57.8 ([#404](https://github.com/kitabisa/composite-actions/issues/404)) ([2532f1e](https://github.com/kitabisa/composite-actions/commit/2532f1ee08052b3d23ad4b97662796589193bbe3))
+* **main:** release 2.57.9 ([#406](https://github.com/kitabisa/composite-actions/issues/406)) ([db4e189](https://github.com/kitabisa/composite-actions/commit/db4e189790aa812da81fb54bde0258f2bda0e123))
+* **main:** release 2.58.0 ([#408](https://github.com/kitabisa/composite-actions/issues/408)) ([4c2f108](https://github.com/kitabisa/composite-actions/commit/4c2f1087df12365e0159c09e2fb03ead910d5fa9))
+
 ## [2.58.0](https://github.com/kitabisa/composite-actions/compare/v2.57.9...v2.58.0) (2026-04-23)
 
 
