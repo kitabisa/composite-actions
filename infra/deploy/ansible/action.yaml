@@ -33,7 +33,8 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.path }}
-        sops -d secret.yaml > secret.yaml
+        mv secret.yaml secret.yaml.enc
+        sops -d secret.yaml.enc > secret.yaml
 
     - name: Provisioning Server
       uses: dawidd6/action-ansible-playbook@v2
