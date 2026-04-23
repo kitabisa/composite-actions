@@ -49,7 +49,9 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.path }}
+        cat secret.yaml
         mv secret.yaml secret.yaml.enc
+        cat secret.yaml.enc
         sops -d secret.yaml.enc > secret.yaml
 
     - name: Provisioning Server
