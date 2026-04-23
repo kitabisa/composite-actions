@@ -50,6 +50,7 @@ runs:
       run: |
         cd ${{ inputs.path }}
         mv secret.yaml secret.yaml.enc
+        cat secret.yaml.enc
         sops -d secret.yaml.enc > secret.yaml
 
     - name: Provisioning Server
