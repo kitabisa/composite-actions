@@ -27,7 +27,13 @@ runs:
   using: "composite"
   steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
+
+    - name: Decrypt secrets
+      shell: bash
+      run: |
+        cd ${{ inputs.path }}
+        sops -d secret.yaml > secret.yaml
 
     - name: Provisioning Server
       uses: dawidd6/action-ansible-playbook@v2
@@ -36,4 +42,4 @@ runs:
         directory: ${{ inputs.path }}
         key: ${{ inputs.ssh_private_key }}
         requirements: requirements.yaml
-        vault_password: ${{ inputs.vault_password }}
+        #vault_password: ${{ inputs.vault_password }}
