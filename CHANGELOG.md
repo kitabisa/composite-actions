@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.58.0](https://github.com/kitabisa/composite-actions/compare/v2.57.9...v2.58.0) (2026-04-23)
+
+
+### Features
+
+* deprecated vault ([#407](https://github.com/kitabisa/composite-actions/issues/407)) ([a3cc49b](https://github.com/kitabisa/composite-actions/commit/a3cc49b59c1d929f16e6bbe12c7061c69177af90))
+
 ## [2.57.9](https://github.com/kitabisa/composite-actions/compare/v2.57.8...v2.57.9) (2026-04-16)
 
 
