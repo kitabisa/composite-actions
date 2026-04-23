@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.61.0](https://github.com/kitabisa/composite-actions/compare/v2.60.0...v2.61.0) (2026-04-23)
+
+
+### Features
+
+* retrigger ([#415](https://github.com/kitabisa/composite-actions/issues/415)) ([00f0c2c](https://github.com/kitabisa/composite-actions/commit/00f0c2c9a66f2f204a1a05057718d56fa546bcfa))
+
 ## [2.60.0](https://github.com/kitabisa/composite-actions/compare/v2.59.1...v2.60.0) (2026-04-23)
 
 
