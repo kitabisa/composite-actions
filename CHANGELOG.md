@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.60.0](https://github.com/kitabisa/composite-actions/compare/v2.59.1...v2.60.0) (2026-04-23)
+
+
+### Features
+
+* add workfload identitiy on ansible ([#412](https://github.com/kitabisa/composite-actions/issues/412)) ([2180dac](https://github.com/kitabisa/composite-actions/commit/2180dacada4e67f3cc07b74d26b3cfbce1ea2ed3))
+
 ## [2.59.1](https://github.com/kitabisa/composite-actions/compare/v2.59.0...v2.59.1) (2026-04-23)
 
 
