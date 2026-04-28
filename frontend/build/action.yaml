@@ -199,9 +199,11 @@ runs:
         GH_TOKEN: ${{ inputs.gh_token }}
       shell: bash
       run: |
+        set -euo pipefail
+
         AUTH_HEADER="Authorization: Basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 | tr -d '\n')"
 
-        if git -c http.extraheader="$AUTH_HEADER" ls-remote --exit-code --heads "$ROOT_REPO_URL" "$TARGET_BRANCH" > /dev/null 2>&1; then
+        if git -c http.extraheader="$AUTH_HEADER" ls-remote --exit-code --heads "$ROOT_REPO_URL" "$TARGET_BRANCH" > /dev/null; then
           BRANCH=$TARGET_BRANCH
         else
           BRANCH=main
@@ -211,14 +213,20 @@ runs:
 
         APP_NAME=$(make get-app-name)
 
-        git -c http.extraheader="$AUTH_HEADER" clone --depth=1 --filter=blob:none --no-checkout \
-          --branch "$BRANCH" \
-          "$ROOT_REPO_URL" .root
-
+        mkdir .root
         cd .root
+        git init -q
+
+        # Persist auth header in local config so partial-clone promisor fetches inherit it.
+        # Trap guarantees the token is scrubbed from .git/config even if a step below fails.
+        trap 'git config --unset http.extraheader 2>/dev/null || true' EXIT
+        git config http.extraheader "$AUTH_HEADER"
+
+        git remote add origin "$ROOT_REPO_URL"
         git sparse-checkout init --cone
-        git sparse-checkout set infrastructure/kubernetes/apps/deploy/kitabisa-${ENV}/${APP_NAME}
-        git checkout "$BRANCH"
+        git sparse-checkout set "infrastructure/kubernetes/apps/deploy/kitabisa-${ENV}/${APP_NAME}"
+        git fetch --depth=1 --filter=blob:none origin "$BRANCH"
+        git checkout FETCH_HEAD
 
     - name: Setuptools frontend
       if: "${{ inputs.web_static != 'true' }}"
