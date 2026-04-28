@@ -168,6 +168,18 @@ inputs:
     default: "2"
     type: string
 
+  root_config:
+    required: false
+    description: "Run make config with root config"
+    default: "false"
+    type: string
+
+  gh_token:
+    required: false
+    description: "Github token for access root config"
+    default: ""
+    type: string
+
 outputs:
   build-time:
     description: "Define build time"
@@ -178,6 +190,35 @@ runs:
   steps:
     - name: Checking out repository
       uses: actions/checkout@v4
+
+    - name: Checkout config from root repo
+      if: "${{ inputs.config == 'true' && inputs.root_config == 'true' }}"
+      env:
+        TARGET_BRANCH: ${{ github.ref_name }}
+        ROOT_REPO_URL: https://github.com/kitabisa/root.git
+        GH_TOKEN: ${{ inputs.gh_token }}
+      shell: bash
+      run: |
+        AUTH_HEADER="Authorization: Basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 | tr -d '\n')"
+
+        if git -c http.extraheader="$AUTH_HEADER" ls-remote --exit-code --heads "$ROOT_REPO_URL" "$TARGET_BRANCH" > /dev/null 2>&1; then
+          BRANCH=$TARGET_BRANCH
+        else
+          BRANCH=main
+        fi
+
+        echo "Using root branch: $BRANCH"
+
+        APP_NAME=$(make get-app-name)
+
+        git -c http.extraheader="$AUTH_HEADER" clone --depth=1 --filter=blob:none --no-checkout \
+          --branch "$BRANCH" \
+          "$ROOT_REPO_URL" .root
+
+        cd .root
+        git sparse-checkout init --cone
+        git sparse-checkout set infrastructure/kubernetes/apps/deploy/kitabisa-${ENV}/${APP_NAME}
+        git checkout "$BRANCH"
 
     - name: Setuptools frontend
       if: "${{ inputs.web_static != 'true' }}"
