@@ -19,8 +19,8 @@ git clone --depth=1 --branch main "$INFRA_REPO_URL" tmp-root
 cd tmp-root
 
 # Set git config user
-git config user.name "github-actions[bot]"
-git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+git config user.name "kitabisa-release-bot[bot]"
+git config user.email "262546746+kitabisa-release-bot[bot]@users.noreply.github.com"
 
 # Switch to target branch (use existing remote branch if available, otherwise branch off main)
 if [[ "$BRANCH_TARGET" != "main" ]]; then
@@ -32,9 +32,11 @@ if [[ "$BRANCH_TARGET" != "main" ]]; then
   fi
 fi
 
-# Sync to root repo
+# Sync only secret.env and config.env to root repo
 mkdir -p "$CONFIG_TARGET"
-rsync -a --delete "$CONFIG_SOURCE"/ "$CONFIG_TARGET"/
+rm -f "$CONFIG_TARGET/secret.env" "$CONFIG_TARGET/config.env"
+cp "$CONFIG_SOURCE/secret.env" "$CONFIG_TARGET/secret.env"
+cp "$CONFIG_SOURCE/config.env" "$CONFIG_TARGET/config.env"
 
 # Commit & push to root repo
 git add "$CONFIG_TARGET"
