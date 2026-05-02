@@ -168,6 +168,18 @@ inputs:
     default: "2"
     type: string
 
+  sync_root_config:
+    required: false
+    description: "Sync config to root config"
+    default: "false"
+    type: string
+
+  gh_token:
+    required: false
+    description: "Github token for access root config"
+    default: ""
+    type: string
+
 outputs:
   build-time:
     description: "Define build time"
@@ -220,6 +232,12 @@ runs:
         package: ${{ inputs.package }}
         using_cdn: ${{ inputs.using_cdn }}
         cdn_keep_latest_version: ${{ inputs.cdn_keep_latest_version }}
+
+    - name: Sync config to infra repo
+      if: "${{ inputs.gh_token != '' && inputs.config == 'true' && inputs.sync_root_config == 'true' }}"
+      uses: kitabisa/composite-actions/infra/tools/sync-root-config@v2
+      with:
+        gh_token: ${{ inputs.gh_token }}
 
     - name: Normalize github artifact path directory
       if: "${{ inputs.upload_build == 'true' }}"
