@@ -168,9 +168,9 @@ inputs:
     default: "2"
     type: string
 
-  root_config:
+  sync_root_config:
     required: false
-    description: "Run make config with root config"
+    description: "Sync config to root config"
     default: "false"
     type: string
 
@@ -190,12 +190,6 @@ runs:
   steps:
     - name: Checking out repository
       uses: actions/checkout@v4
-
-    - name: Sync config to infra repo
-      if: "${{ inputs.config == 'true' && inputs.root_config == 'true' }}"
-      uses: kitabisa/composite-actions/infra/tools/sync-root-config@feat/root-config
-      with:
-        gh_token: ${{ inputs.gh_token }}
 
     - name: Setuptools frontend
       if: "${{ inputs.web_static != 'true' }}"
@@ -238,6 +232,12 @@ runs:
         package: ${{ inputs.package }}
         using_cdn: ${{ inputs.using_cdn }}
         cdn_keep_latest_version: ${{ inputs.cdn_keep_latest_version }}
+
+    - name: Sync config to infra repo
+      if: "${{ inputs.gh_token != '' && inputs.config == 'true' && inputs.sync_root_config == 'true' }}"
+      uses: kitabisa/composite-actions/infra/tools/sync-root-config@v2
+      with:
+        gh_token: ${{ inputs.gh_token }}
 
     - name: Normalize github artifact path directory
       if: "${{ inputs.upload_build == 'true' }}"

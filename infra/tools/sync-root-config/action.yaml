@@ -1,18 +1,99 @@
 name: "Sync root config"
-description: "Sync app secrets/config to the root infrastructure repository"
+description: "Sync app secrets/config to the root infrastructure repository (signed commits via API)"
 
 inputs:
   gh_token:
     required: true
-    description: "GitHub token with access to the root infra repository"
+    description: "GitHub App installation token (required for auto-signed commits)"
     type: string
 
 runs:
   using: "composite"
   steps:
+    - name: Resolve app name
+      id: app
+      shell: bash
+      run: echo "name=$(make get-app-name)" >> "$GITHUB_OUTPUT"
+
     - name: Sync config to infra repo
+      uses: actions/github-script@v7
       env:
         ENV: ${{ env.ENV }}
-        INFRA_REPO_URL: https://x-token:${{ inputs.gh_token }}@github.com/kitabisa/root.git
-      shell: bash
-      run: $GITHUB_ACTION_PATH/main.sh
+        APP_NAME: ${{ steps.app.outputs.name }}
+      with:
+        github-token: ${{ inputs.gh_token }}
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+
+          const owner = 'kitabisa';
+          const repo = 'root';
+          const env = process.env.ENV;
+          const appName = process.env.APP_NAME;
+          const branch = env === 'prod' ? `${appName}-image-updates` : 'main';
+          const targetDir = `infrastructure/kubernetes/apps/${appName}/${env}/common`;
+          const sourceDir = path.resolve('.infra/secrets', env);
+          const files = ['secret.env', 'config.env'];
+
+          // Resolve parent SHA (branch may not exist yet → fallback to main)
+          let parentSha;
+          let branchExists = true;
+          try {
+            const { data } = await github.rest.git.getRef({ owner, repo, ref: `heads/${branch}` });
+            parentSha = data.object.sha;
+          } catch (e) {
+            if (e.status !== 404) throw e;
+            branchExists = false;
+            const { data } = await github.rest.git.getRef({ owner, repo, ref: 'heads/main' });
+            parentSha = data.object.sha;
+          }
+
+          // Get parent commit's tree
+          const { data: parentCommit } = await github.rest.git.getCommit({
+            owner, repo, commit_sha: parentSha,
+          });
+
+          // Create blob for each file
+          const treeItems = [];
+          for (const f of files) {
+            const content = fs.readFileSync(path.join(sourceDir, f)).toString('base64');
+            const { data: blob } = await github.rest.git.createBlob({
+              owner, repo, content, encoding: 'base64',
+            });
+            treeItems.push({
+              path: `${targetDir}/${f}`,
+              mode: '100644',
+              type: 'blob',
+              sha: blob.sha,
+            });
+          }
+
+          // Create new tree (base = parent's tree to preserve other files in target)
+          const { data: newTree } = await github.rest.git.createTree({
+            owner, repo, base_tree: parentCommit.tree.sha, tree: treeItems,
+          });
+
+          // Skip if no actual changes
+          if (newTree.sha === parentCommit.tree.sha) {
+            core.info('No config changes, skipping commit');
+            return;
+          }
+
+          // Create signed commit (auto-signed by GitHub when using App installation token)
+          const message = `chore(${appName}): sync config ${env} from app repository @ ${context.sha}`;
+          const { data: commit } = await github.rest.git.createCommit({
+            owner, repo, message, tree: newTree.sha, parents: [parentSha],
+          });
+
+          // Update or create ref
+          if (branchExists) {
+            await github.rest.git.updateRef({
+              owner, repo, ref: `heads/${branch}`, sha: commit.sha,
+            });
+          } else {
+            await github.rest.git.createRef({
+              owner, repo, ref: `refs/heads/${branch}`, sha: commit.sha,
+            });
+          }
+
+          core.info(`Created signed commit ${commit.sha} on ${branch}`);
