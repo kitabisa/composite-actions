@@ -1,5 +1,5 @@
 name: "CI Build"
-description: "Build and push docker image"
+description: "⚠️ DEPRECATED — replaced by backend-go-build-push-*-v2.yaml reusable workflows. No new features; will be removed after all services migrate."
 
 inputs:
   # Required
