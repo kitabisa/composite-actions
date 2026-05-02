@@ -80,7 +80,7 @@ runs:
           }
 
           // Create signed commit (auto-signed by GitHub when using App installation token)
-          const message = `chore(${appName}): sync config ${env} from app repository @ ${context.sha}`;
+          const message = `deploy(${appName}): automated ${env} config sync from ${context.repo.owner}/${context.repo.repo}`;
           const { data: commit } = await github.rest.git.createCommit({
             owner, repo, message, tree: newTree.sha, parents: [parentSha],
           });
