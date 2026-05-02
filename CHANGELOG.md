@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.62.0](https://github.com/kitabisa/composite-actions/compare/v2.61.0...v2.62.0) (2026-05-02)
+
+
+### Features
+
+* sync root config ([#417](https://github.com/kitabisa/composite-actions/issues/417)) ([a090055](https://github.com/kitabisa/composite-actions/commit/a090055d9ac1328527afba7af9be6e2aaf144417))
+
 ## [2.61.0](https://github.com/kitabisa/composite-actions/compare/v2.60.0...v2.61.0) (2026-04-23)
 
 
