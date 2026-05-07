@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.62.2](https://github.com/kitabisa/composite-actions/compare/v2.62.1...v2.62.2) (2026-05-07)
+
+
+### Chore
+
+* **taskfile:** remove dev-related tasks (destroy-dev, DB create/delete tasks) ([#421](https://github.com/kitabisa/composite-actions/issues/421)) ([284baf7](https://github.com/kitabisa/composite-actions/commit/284baf71865504e8c470f2e63e3782a7eaa88d57))
+
 ## [2.62.1](https://github.com/kitabisa/composite-actions/compare/v2.62.0...v2.62.1) (2026-05-02)
 
 
