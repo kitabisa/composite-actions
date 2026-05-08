@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.63.0](https://github.com/kitabisa/composite-actions/compare/v2.62.2...v2.63.0) (2026-05-08)
+
+
+### Features
+
+* disable sops ([#423](https://github.com/kitabisa/composite-actions/issues/423)) ([e5ee866](https://github.com/kitabisa/composite-actions/commit/e5ee8661bf5e70839b7cbfe8f62ce21e92215085))
+
 ## [2.62.2](https://github.com/kitabisa/composite-actions/compare/v2.62.1...v2.62.2) (2026-05-07)
 
 
