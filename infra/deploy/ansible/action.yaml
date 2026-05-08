@@ -45,15 +45,6 @@ runs:
         workload_identity_provider: ${{ inputs.workload_identity_provider }}
         service_account: ${{ inputs.service_account }}
 
-    - name: Decrypt secrets
-      shell: bash
-      run: |
-        cd ${{ inputs.path }}
-        cat secret.yaml
-        mv secret.yaml secret.yaml.enc
-        cat secret.yaml.enc
-        sops -d secret.yaml.enc > secret.yaml
-
     - name: Provisioning Server
       uses: dawidd6/action-ansible-playbook@v2
       with:
@@ -61,4 +52,4 @@ runs:
         directory: ${{ inputs.path }}
         key: ${{ inputs.ssh_private_key }}
         requirements: requirements.yaml
-        # vault_password: ${{ inputs.vault_password }}
+        vault_password: ${{ inputs.vault_password }}
