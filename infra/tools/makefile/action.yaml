@@ -1,5 +1,5 @@
 name: "Makefile build push deploy"
-description: "Makefile build push deploy"
+description: "⚠️ DEPRECATED — replaced by direct run: steps with user-provided commands in reusable workflows. No new features; will be removed after all services migrate."
 
 inputs:
   project_id:
