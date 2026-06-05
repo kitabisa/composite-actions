@@ -175,7 +175,9 @@ runs:
       uses: actions/cache/restore@v4
       if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() && github.run_attempt > 1 }}"
       with:
-        path: summary-id.txt
+        path: |
+          summary-id.txt
+          out/summary-id.txt
         key: summary-id-${{ github.run_id }}
         restore-keys: |
           summary-id-
@@ -230,7 +232,9 @@ runs:
       uses: actions/cache@v4
       if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() }}"
       with:
-        path: summary-id.txt
+        path: |
+          summary-id.txt
+          out/summary-id.txt
         key: summary-id-${{ github.run_id }}
 
     - name: generate comment body to pr release
