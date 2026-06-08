@@ -172,10 +172,12 @@ runs:
       run: bun run createTestrunTestrail
 
     - name: restore cached summary id file
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() && github.run_attempt > 1 }}"
       with:
-        path: summary-id.txt
+        path: |
+          summary-id.txt
+          out/summary-id.txt
         key: summary-id-${{ github.run_id }}
         restore-keys: |
           summary-id-
@@ -227,10 +229,12 @@ runs:
       continue-on-error: true
 
     - name: cache summary id file
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() }}"
       with:
-        path: summary-id.txt
+        path: |
+          summary-id.txt
+          out/summary-id.txt
         key: summary-id-${{ github.run_id }}
 
     - name: generate comment body to pr release

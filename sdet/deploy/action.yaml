@@ -31,7 +31,7 @@ runs:
   steps:
     - name: generate github app token
       if: ${{ inputs.app_id != '' }}
-      uses: actions/create-github-app-token@v1
+      uses: actions/create-github-app-token@v3
       id: app-token
       with:
         app-id: ${{ inputs.app_id }}
