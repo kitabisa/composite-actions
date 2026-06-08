@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.63.1](https://github.com/kitabisa/composite-actions/compare/v2.63.0...v2.63.1) (2026-06-08)
+
+
+### Chore
+
+* sdet node24 action upgrade and update outfile ([#425](https://github.com/kitabisa/composite-actions/issues/425)) ([8c1304b](https://github.com/kitabisa/composite-actions/commit/8c1304be5a0a01a5ac00374f37db2d501fa6d11d))
+
 ## [2.63.0](https://github.com/kitabisa/composite-actions/compare/v2.62.2...v2.63.0) (2026-05-08)
 
 
