@@ -1,0 +1,21 @@
+frontend/deploy/action.yaml
+  s_142a71b288f177::t_3eb5849bbd09ca 2
+frontend/build/action.yaml
+  s_142a71b288f177::t_31c978a705f65e 2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.12",
+  "base_commit_sha": "27f56aedbb2f13f0767e918c06b45332e5f58420",
+  "prompts": {},
+  "sessions": {
+    "s_142a71b288f177": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a858ab3-cc9b-4fc3-8530-ef3c7af3380b",
+        "model": "claude-haiku-4-5-20251001"
+      },
+      "human_author": "Sactio Swastioyono <email.tyo@gmail.com>"
+    }
+  }
+}
