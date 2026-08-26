@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.63.2](https://github.com/kitabisa/composite-actions/compare/v2.63.1...v2.63.2) (2026-08-26)
+
+
+### Bugfix
+
+* **unit_test_v2:** restore deleted new_code_coverage.go referenced by action.yaml ([#427](https://github.com/kitabisa/composite-actions/issues/427)) ([7ba70c4](https://github.com/kitabisa/composite-actions/commit/7ba70c4a14dfb468bb36ec11f3fdeb271d8e3886))
+
+
+### CI
+
+* add params for analyze report ([#430](https://github.com/kitabisa/composite-actions/issues/430)) ([de06ec1](https://github.com/kitabisa/composite-actions/commit/de06ec1cfb0e4d5bc08fdf8518ad9ef8b3e6d7c6))
+
 ## [2.63.1](https://github.com/kitabisa/composite-actions/compare/v2.63.0...v2.63.1) (2026-06-08)
 
 
