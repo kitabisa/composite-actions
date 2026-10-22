@@ -32,21 +32,22 @@ runs:
   using: "composite"
   steps:
     - name: Checking out repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Add comment to PR
       id: loading_budget_comment_to_pr
-      uses: marocchino/sticky-pull-request-comment@v2
+      uses: marocchino/sticky-pull-request-comment@v3
       with:
         header: budget
         message: |
           ⏱ Running budget checks...
 
     - name: Setup node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version-file: "${{ inputs.working_directory }}/.nvmrc"
         check-latest: true
+        package-manager-cache: false
 
     - name: Setup lib for chrome
       shell: bash
@@ -68,7 +69,7 @@ runs:
 
     - name: Run Lighthouse and test budgets
       id: lighthouse_audit
-      uses: treosh/lighthouse-ci-action@v9
+      uses: treosh/lighthouse-ci-action@v12
       env:
         CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
         LHCI_GITHUB_TOKEN: ${{ inputs.gh_token }}
@@ -82,7 +83,7 @@ runs:
     - name: Format budget result
       id: budget_result
       if: ${{ always() }}
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         github-token: ${{ inputs.gh_token }}
         script: |
@@ -105,7 +106,7 @@ runs:
     - name: Add Budget comment to PR
       id: budget_comment_to_pr
       if: ${{ always() }}
-      uses: marocchino/sticky-pull-request-comment@v2
+      uses: marocchino/sticky-pull-request-comment@v3
       with:
         header: budget
         message: |

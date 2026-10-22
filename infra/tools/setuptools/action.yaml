@@ -35,17 +35,17 @@ runs:
   steps:
     - name: Setup docker buildx
       if: "${{ inputs.setup_buildx == 'true' }}"
-      uses: docker/setup-buildx-action@v3
+      uses: docker/setup-buildx-action@v4
 
     - name: Setup Taskfile
       if: "${{ inputs.setup_task == 'true' }}"
-      uses: arduino/setup-task@v2
+      uses: arduino/setup-task@v3
       with:
         version: 3.34.1
 
     - name: Setup Helm
       if: "${{ inputs.setup_helm == 'true' }}"
-      uses: azure/setup-helm@v3
+      uses: azure/setup-helm@v5
       with:
         version: v3.13.3
 
@@ -57,18 +57,18 @@ runs:
 
     - name: Sops Binary Installer
       if: "${{ inputs.setup_sops == 'true' }}"
-      uses: mdgreenwald/mozilla-sops-action@v1.4.1
+      uses: mdgreenwald/mozilla-sops-action@v2
       with:
         version: v3.7.3
 
     - name: Setup Terraform
       if: "${{ inputs.setup_terraform == 'true' }}"
-      uses: hashicorp/setup-terraform@v3.0.0
+      uses: hashicorp/setup-terraform@v4
       with:
         terraform_wrapper: false
 
     - name: Setup Terragrunt
       if: "${{ inputs.setup_terragrunt == 'true' }}"
-      uses: autero1/action-terragrunt@v1.3.2
+      uses: autero1/action-terragrunt@v3
       with:
-        terragrunt_version: 0.43.2
+        terragrunt-version: 0.43.2

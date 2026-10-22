@@ -39,13 +39,13 @@ runs:
       working-directory: ${{ inputs.working_directory }}
 
     - name: Upload bundle
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: bundle
         path: ${{ inputs.working_directory }}/.next/analyze/__bundle_analysis.json
 
     - name: Download base branch bundle stats
-      uses: dawidd6/action-download-artifact@v3
+      uses: dawidd6/action-download-artifact@v27
       id: base_bundle
       if: success() && inputs.pr_number != ''
       with:
@@ -65,7 +65,7 @@ runs:
     - name: Get comment body
       id: get-comment-body
       if: success() && inputs.pr_number != '' && steps.base_bundle.outputs.found_artifact == 'true'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         result-encoding: string
         script: |
@@ -74,7 +74,7 @@ runs:
           core.setOutput('body', comment)
 
     - name: Find Comment
-      uses: peter-evans/find-comment@v2
+      uses: peter-evans/find-comment@v4
       if: success() && inputs.pr_number != '' && steps.base_bundle.outputs.found_artifact == 'true'
       id: fc
       with:
@@ -82,14 +82,14 @@ runs:
         body-includes: "${{ inputs.comment_header }}"
 
     - name: Create Comment
-      uses: peter-evans/create-or-update-comment@v2
+      uses: peter-evans/create-or-update-comment@v5
       if: success() && inputs.pr_number != '' && steps.fc.outputs.comment-id == 0 && steps.base_bundle.outputs.found_artifact == 'true'
       with:
         issue-number: ${{ inputs.pr_number }}
         body: ${{ steps.get-comment-body.outputs.body }}
 
     - name: Update Comment
-      uses: peter-evans/create-or-update-comment@v2
+      uses: peter-evans/create-or-update-comment@v5
       if: success() && inputs.pr_number != '' && steps.fc.outputs.comment-id != 0 && steps.base_bundle.outputs.found_artifact == 'true'
       with:
         issue-number: ${{ inputs.pr_number }}

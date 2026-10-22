@@ -54,13 +54,13 @@ runs:
   using: "composite"
   steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
     - name: Setup docker buildx
-      uses: docker/setup-buildx-action@v3
+      uses: docker/setup-buildx-action@v4
 
     - name: Configure Git for private modules
       if: "${{ inputs.setup_git == 'true' }}"
@@ -71,7 +71,7 @@ runs:
       run: git config --global url."https://${USER}:${TOKEN}@github.com".insteadOf "https://github.com"
 
     - name: Setup Golang
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@v7
       if: "${{ inputs.setup_go == 'true' }}"
       with:
         go-version: ${{ inputs.go_version }}
@@ -79,7 +79,7 @@ runs:
 
     - name: Setup Golang caches
       if: "${{ inputs.cache == 'true' }}"
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: |
           ~/.cache/go-build
@@ -102,7 +102,7 @@ runs:
 
     - name: Setup Golang cache
       if: "${{ inputs.enhanced_cache == 'true' }}"
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v6
       with:
         path: |
           ${{ steps.golang-env.outputs.build-cache-path }}

@@ -94,7 +94,7 @@ runs:
         echo "image-tags=$(echo $IMAGES)" >> $GITHUB_OUTPUT
 
     - name: Create pull request if dependabot author
-      uses: peter-evans/create-pull-request@v7
+      uses: peter-evans/create-pull-request@v8
       if: ${{ inputs.author == 'dependabot[bot]' }}
       with:
         commit-message: "chore: sync docker version with FROM tag"
@@ -105,7 +105,7 @@ runs:
         delete-branch: true
 
     - name: Build and push docker image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       if: ${{ inputs.author != 'dependabot[bot]' }}
       with:
         context: ${{ inputs.working_directory }}

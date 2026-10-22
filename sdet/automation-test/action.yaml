@@ -184,7 +184,7 @@ runs:
       run: bun run createTestrunTestrail
 
     - name: restore cached summary id file
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@v6
       if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() && github.run_attempt > 1 }}"
       with:
         path: |
@@ -241,7 +241,7 @@ runs:
       continue-on-error: true
 
     - name: cache summary id file
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       if: "${{ inputs.custom_command_send_report_to_dashboard_flag == 'true' && always() }}"
       with:
         path: |
@@ -262,7 +262,7 @@ runs:
 
     - name: create comment
       if: "${{ inputs.custom_command_send_result_to_pr_release_flag == 'true' && always() }}"
-      uses: peter-evans/create-or-update-comment@v4
+      uses: peter-evans/create-or-update-comment@v5
       id: couc
       with:
         token: ${{ inputs.gh_token }}

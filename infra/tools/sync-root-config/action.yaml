@@ -16,7 +16,7 @@ runs:
       run: echo "name=$(make get-app-name)" >> "$GITHUB_OUTPUT"
 
     - name: Sync config to infra repo
-      uses: actions/github-script@v7
+      uses: actions/github-script@v9
       env:
         ENV: ${{ env.ENV }}
         APP_NAME: ${{ steps.app.outputs.name }}

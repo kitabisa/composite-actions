@@ -49,10 +49,11 @@ runs:
   steps:
     - name: Setup node.js by nvmrc
       if: "${{ inputs.setup_nvmrc == 'true' }}"
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         check-latest: true
         node-version-file: "${{ inputs.working_directory }}/.nvmrc"
+        package-manager-cache: false
 
     - name: Setup yarn
       if: "${{ inputs.setup_yarn == 'true' }}"

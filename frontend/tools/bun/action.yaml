@@ -24,13 +24,13 @@ runs:
   using: "composite"
   steps:
     - name: Install bun
-      uses: oven-sh/setup-bun@v1
+      uses: oven-sh/setup-bun@v2
       with:
         bun-version: latest
 
     - name: Cache bun modules
       if: "${{ inputs.cache == 'true' }}"
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/.bun/install/cache
         key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
@@ -51,7 +51,7 @@ runs:
 
     - name: Cache Next.js
       if: "${{ (inputs.using_nextjs == 'true' && inputs.cache == 'true') }}"
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ${{ steps.path.outputs.cache-path }}
         key: ${{ runner.os }}-nextjs-${{ hashFiles('**/bun.lockb') }}

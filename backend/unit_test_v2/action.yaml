@@ -80,13 +80,13 @@ runs:
   using: "composite"
   steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
 
     - name: Setup Golang
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@v7
       with:
         cache: ${{ inputs.setup_go_cache }}
         go-version: ${{ inputs.go_version }}
@@ -113,7 +113,7 @@ runs:
 
     - name: Setup Golang cache
       if: ${{ inputs.setup_action_cache == 'true' }}
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v6
       with:
         path: |
           ${{ steps.golang-env.outputs.build-cache-path }}
@@ -256,7 +256,7 @@ runs:
     # --- comment on PR (sticky) ---
     - name: Comment PR for below threshold Result
       if: ${{ steps.coverage_analysis.outputs.below_threshold == 'true' }}
-      uses: marocchino/sticky-pull-request-comment@v2
+      uses: marocchino/sticky-pull-request-comment@v3
       with:
         header: 'diff-coverage'
         recreate: true
@@ -274,7 +274,7 @@ runs:
 
     - name: Comment PR for above threshold Result
       if: ${{ steps.coverage_analysis.outputs.below_threshold != 'true' }}
-      uses: marocchino/sticky-pull-request-comment@v2
+      uses: marocchino/sticky-pull-request-comment@v3
       with:
         header: 'diff-coverage'
         recreate: true
@@ -286,7 +286,7 @@ runs:
     # --- upload artifacts for deep dive (so we don't bloat the summary/comment) ---
     - name: Upload coverage & analysis artifacts
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: coverage-and-analysis
         path: |

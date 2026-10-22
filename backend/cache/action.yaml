@@ -44,7 +44,7 @@ runs:
   using: "composite"
   steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         repository: ${{ inputs.service_name }}
         fetch-depth: 0
@@ -64,7 +64,7 @@ runs:
         version: 2.57.0
 
     - name: Setup Golang
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@v7
       with:
         cache: false
         go-version: ${{ env.go_version }}
@@ -86,7 +86,7 @@ runs:
       shell: bash
 
     - name: Setup Golang cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: |
           ${{ steps.golang-env.outputs.build-cache-path }}

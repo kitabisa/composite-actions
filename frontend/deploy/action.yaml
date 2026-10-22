@@ -71,7 +71,7 @@ runs:
   using: "composite"
   steps:
     - name: Checking out repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Setup Dockerhub credentials
       if: ${{ inputs.docker_username != '' && inputs.docker_password != '' }}
@@ -102,7 +102,7 @@ runs:
 
     - name: Comment preview url
       if: ${{ inputs.preview_url != '' && github.event.pull_request.number != '' }}
-      uses: peter-evans/create-or-update-comment@v4
+      uses: peter-evans/create-or-update-comment@v5
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body: |
@@ -207,7 +207,7 @@ runs:
 
     - name: Comment preview url
       if: ${{ steps.get-url.outputs.comment != '' && github.event.pull_request.number != '' }}
-      uses: peter-evans/create-or-update-comment@v4
+      uses: peter-evans/create-or-update-comment@v5
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body: ${{ steps.get-url.outputs.comment }}

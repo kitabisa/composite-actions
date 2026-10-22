@@ -5,6 +5,6 @@ runs:
   using: "composite"
   steps:
     - name: install github cli
-      uses: sersoft-gmbh/setup-gh-cli-action@v2
+      uses: sersoft-gmbh/setup-gh-cli-action@v3
       with:
         version: stable
