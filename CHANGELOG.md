@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.63.3](https://github.com/kitabisa/composite-actions/compare/v2.63.2...v2.63.3) (2026-10-23)
+
+
+### Chore
+
+* upgrade actions to latest version ([#431](https://github.com/kitabisa/composite-actions/issues/431)) ([d94455f](https://github.com/kitabisa/composite-actions/commit/d94455f01f8a57693d15a128b889a20e0cb9bf71))
+
 ## [2.63.2](https://github.com/kitabisa/composite-actions/compare/v2.63.1...v2.63.2) (2026-08-26)
 
 
