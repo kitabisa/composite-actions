@@ -115,7 +115,7 @@ runs:
   steps:
     - name: Checkout
       if: ${{ inputs.setup_checkout == 'true' }}
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
         token: ${{ inputs.gh_token }}
@@ -130,7 +130,7 @@ runs:
 
     - name: Setup Golang
       if: ${{ inputs.setup_go == 'true' }}
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@v7
       with:
         cache: ${{ inputs.setup_go_cache }}
         go-version: ${{ env.go_version }}
@@ -153,7 +153,7 @@ runs:
 
     - name: Setup Golang cache
       if: ${{ inputs.setup_action_cache == 'true' }}
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v6
       with:
         path: |
           ${{ steps.golang-env.outputs.build-cache-path }}

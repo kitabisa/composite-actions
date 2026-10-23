@@ -21,10 +21,10 @@ runs:
   using: "composite"
   steps:
     - name: Setup kubectl
-      uses: azure/setup-kubectl@v3
+      uses: azure/setup-kubectl@v5
 
     - name: Get GKE credential
-      uses: google-github-actions/get-gke-credentials@v2
+      uses: google-github-actions/get-gke-credentials@v3
       with:
         cluster_name: ${{ inputs.gke_cluster_name }}
         location: ${{ inputs.gke_cluster_zone }}

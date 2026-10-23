@@ -54,10 +54,10 @@ runs:
   using: "composite"
   steps:
     - name: Checking out repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Login to Docker Hub
-      uses: docker/login-action@v3
+      uses: docker/login-action@v4
       with:
         username: ${{ inputs.docker_username }}
         password: ${{ inputs.docker_password }}
@@ -80,7 +80,7 @@ runs:
         make diff > /tmp/stdout-helmfile-diff-stg.log
 
     - name: Print helmfile diff
-      uses: actions/github-script@v7
+      uses: actions/github-script@v9
       with:
         github-token: ${{ inputs.gh_token }}
         script: |

@@ -37,7 +37,7 @@ runs:
   using: "composite"
   steps:
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: authenticate to google cloud with workload identity
       uses: google-github-actions/auth@v3

@@ -5,6 +5,6 @@ runs:
   using: "composite"
   steps:
     - name: install pnpm
-      uses: pnpm/action-setup@v4.0.0
+      uses: pnpm/action-setup@v6
       with:
         pnpm-version: latest
