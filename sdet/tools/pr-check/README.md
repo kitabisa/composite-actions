@@ -1,14 +1,14 @@
 <!-- action-docs-description -->
 ## Description
 
-PR Opened composite action for validating PR branch naming convention, checking JIRA/GitHub tickets in PR body and title, and auto-updating PR body and title with ticket information.
+PR Opened composite action for validating PR branch naming convention, checking GitHub issue or JIRA tickets in PR body and title, and auto-updating PR body and title with ticket information.
 
 Features:
 - Validates branch name against configurable regex pattern
 - Checks for allowed branch prefixes (feat/, fix/, docs/, etc.)
-- Detects JIRA or GitHub issue tickets from branch name
-- Auto-updates PR body with ticket link (JIRA or GitHub)
-- Auto-updates PR title with ticket ID
+- Detects GitHub issue or JIRA tickets from branch name
+- Auto-updates PR body with ticket link (GitHub issue or JIRA)
+- Auto-updates PR title with ticket ID (JIRA only, GitHub issues are linked via the PR body)
 - Comments on PR if branch name is incorrect
 <!-- action-docs-description -->
 
@@ -17,10 +17,10 @@ Features:
 
 | parameter | description | required | default |
 | --- | --- | --- | --- |
-| branch_regex | Regex pattern for branch name validation | `false` | `^([a-z]+)[\/]+(([a-z\-]+)-)?([0-9]{1,5})(\.[a-z]+\|(-[a-z0-9\-]+)?)$` |
+| branch_regex | Regex pattern for branch name validation | `false` | `^([a-z]+)[\/]+(([a-zA-Z\-]+)-)?([0-9]{1,5})(\.[a-z]+\|(-[a-z0-9\-]+)?)$` |
 | allowed_prefixes | Comma-separated list of allowed branch prefixes | `false` | `feat/,fix/,docs/,chore/,ci/,test/,refactor/` |
 | ignore_branches | Branches to ignore from validation | `false` | `master,main` |
-| jira_base_url | Base URL for JIRA ticket links | `false` | `https://kitabisa.atlassian.net/browse` |
+| jira_base_url | Base URL for JIRA ticket links (only used for JIRA branches) | `false` | `https://kitabisa.atlassian.net/browse` |
 | auto_update_body | Automatically update PR body with ticket link | `false` | `true` |
 | auto_update_title | Automatically update PR title with ticket ID | `false` | `true` |
 | gh_token | GitHub token for API operations | `true` | - |
@@ -34,7 +34,7 @@ Features:
 | output | description |
 | --- | --- |
 | branch_name | The current branch name |
-| ticket_type | Type of ticket detected (JIRA or GITHUB) |
+| ticket_type | Type of ticket detected (GITHUB or JIRA) |
 | ticket_id | The detected ticket ID |
 | body_updated | Whether PR body was updated |
 | title_updated | Whether PR title was updated |
@@ -88,7 +88,7 @@ jobs:
         uses: kitabisa/composite-actions/sdet/tools/pr-check@main
         with:
           gh_token: ${{ secrets.GH_TOKEN }}
-          branch_regex: '^([a-z]+)[\/]+(([a-z\-]+)-)?([0-9]{1,5})(\.[a-z]+|(-[a-z0-9\-]+)?)$'
+          branch_regex: '^([a-z]+)[\/]+(([a-zA-Z\-]+)-)?([0-9]{1,5})(\.[a-z]+|(-[a-z0-9\-]+)?)$'
           allowed_prefixes: 'feat/,fix/,docs/,chore/,ci/,test/,refactor/,hotfix/'
           ignore_branches: 'master,main,develop'
           jira_base_url: 'https://your-org.atlassian.net/browse'
@@ -114,8 +114,10 @@ jobs:
 
 The action expects branch names to follow this pattern:
 
-- `feat/SDET-123-description` (JIRA ticket)
-- `fix/123-description` (GitHub issue)
+- `feat/123-description` (GitHub issue)
+- `fix/SDET-123-description` (JIRA ticket, case-insensitive)
+
+The ticket must come right after the prefix. To make the ticket optional, override `branch_regex`, e.g. `^[a-z]+\/[A-Za-z0-9._\-]+$`. Branches without a ticket pass and the PR body and title are left untouched.
 
 ### Supported Prefixes (default)
 - `feat/` - New features
@@ -129,24 +131,24 @@ The action expects branch names to follow this pattern:
 ## What Happens
 
 1. **Branch Validation**: Validates the branch name against the configured regex and allowed prefixes
-2. **Ticket Detection**: Extracts JIRA or GitHub issue ticket from branch name
+2. **Ticket Detection**: Extracts GitHub issue or JIRA ticket from branch name
 3. **PR Body Check**: Checks if PR body already contains the ticket link
 4. **PR Title Check**: Checks if PR title already contains the ticket ID
 5. **Auto-Update Body**: Adds ticket section to PR body if missing
-6. **Auto-Update Title**: Appends ticket ID to PR title if missing
+6. **Auto-Update Title**: Appends JIRA ticket ID to PR title if missing (GitHub issues are not added to the title)
 
 ### PR Body Format
-
-For JIRA tickets:
-```markdown
-## :tickets: JIRA Ticket
-[SDET-123](https://kitabisa.atlassian.net/browse/SDET-123)
-```
 
 For GitHub issues (example with `github_issue_keyword: 'Resolve'`):
 ```markdown
 ## :tickets: Github Ticket
 Resolve #123
+```
+
+For JIRA tickets:
+```markdown
+## :tickets: JIRA Ticket
+[SDET-123](https://kitabisa.atlassian.net/browse/SDET-123)
 ```
 
 > Note: Set `github_issue_keyword` to your preferred keyword. Supported: `Close`, `Closes`, `Closed`, `Fix`, `Fixes`, `Fixed`, `Resolve`, `Resolves`, `Resolved`. These will auto-close the linked issue when PR is merged.
