@@ -90,7 +90,7 @@ runs:
     - name: Check branch name
       id: check-branch-name
       if: ${{ inputs.check_branch_name == 'true' && !contains(github.head_ref, 'release-please') }}
-      uses: deepakputhraya/action-branch-name@v1.0.0
+      uses: deepakputhraya/action-branch-name@master
       with:
         regex: ${{ inputs.branch_regex }}
         allowed_prefixes: ${{ inputs.allowed_prefixes }}
