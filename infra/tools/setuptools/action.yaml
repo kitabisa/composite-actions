@@ -57,7 +57,7 @@ runs:
 
     - name: Sops Binary Installer
       if: "${{ inputs.setup_sops == 'true' }}"
-      uses: mdgreenwald/mozilla-sops-action@v2
+      uses: mdgreenwald/mozilla-sops-action@v2.1.3
       with:
         version: v3.7.3
 
