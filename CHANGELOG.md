@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.64.0](https://github.com/kitabisa/composite-actions/compare/v2.63.2...v2.64.0) (2026-11-17)
+
+
+### Features
+
+* **security:** add govulnbump action ([#435](https://github.com/kitabisa/composite-actions/issues/435)) ([2b8afb5](https://github.com/kitabisa/composite-actions/commit/2b8afb567e349aa2a90e2b1c45f53872d959fb2e)), closes [#434](https://github.com/kitabisa/composite-actions/issues/434)
+
+
+### Bugfix
+
+* **pr-check:** support branches without ticket and remove jira ([#433](https://github.com/kitabisa/composite-actions/issues/433)) ([c0427f8](https://github.com/kitabisa/composite-actions/commit/c0427f8b0b63c48ad74f518f2ebb1999459e3707))
+
+
+### Chore
+
+* **codeowners:** replace system-squad with do team ([#437](https://github.com/kitabisa/composite-actions/issues/437)) ([a8ae3d6](https://github.com/kitabisa/composite-actions/commit/a8ae3d65f6f3511dd9c0efa3a90d294815656fcb)), closes [#436](https://github.com/kitabisa/composite-actions/issues/436)
+* upgrade actions to latest version ([#431](https://github.com/kitabisa/composite-actions/issues/431)) ([d94455f](https://github.com/kitabisa/composite-actions/commit/d94455f01f8a57693d15a128b889a20e0cb9bf71))
+
 ## [2.63.2](https://github.com/kitabisa/composite-actions/compare/v2.63.1...v2.63.2) (2026-08-26)
 
 
