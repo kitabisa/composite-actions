@@ -13,11 +13,11 @@ jobs:
     steps:
       - name: Release please
         id: release
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@v4.4.1
 
       - name: Checkout repository
         if: ${{ steps.release.outputs.release_created }}
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Create tag major version
         if: ${{ steps.release.outputs.release_created }}
