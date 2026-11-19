@@ -23,4 +23,4 @@ jobs:
 
     - name: pre-commit check
       if: steps.branch-name.outputs.current_branch != 'release-please--branches--main'
-      uses: cloudposse/github-action-pre-commit@v4.0.0
+      uses: cloudposse/github-action-pre-commit@v4.1.0
