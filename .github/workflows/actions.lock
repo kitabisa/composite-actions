@@ -12,7 +12,7 @@ workflows:
         - 'cloudposse/github-action-pre-commit@v4.0.0'
     '.github/workflows/release-please-main.yaml':
         - 'actions/checkout@v7.0.1'
-        - 'googleapis/release-please-action@v4.4.1'
+        - 'googleapis/release-please-action@v5.0.0'
 dependencies:
     'actions/checkout@v7.0.1':
         ref: 'v7.0.1'
@@ -29,9 +29,9 @@ dependencies:
         commit: 'sha1-828247764461bc41b2bd267e24d76e91a279b093'
         owner_id: 16398900
         repo_id: 401822967
-    'googleapis/release-please-action@v4.4.1':
-        ref: 'v4.4.1'
-        commit: 'sha1-5c625bfb5d1ff62eadeeb3772007f7f66fdcf071'
+    'googleapis/release-please-action@v5.0.0':
+        ref: 'v5.0.0'
+        commit: 'sha1-45996ed1f6d02564a971a2fa1b5860e934307cf7'
         owner_id: 16785467
         repo_id: 262236530
     'peter-evans/create-pull-request@v8.1.3':
