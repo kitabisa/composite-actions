@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.64.1](https://github.com/kitabisa/composite-actions/compare/v2.64.0...v2.64.1) (2026-11-19)
+
+
+### Bugfix
+
+* **setuptools:** pin mozilla-sops-action to v2.1.3 ([#438](https://github.com/kitabisa/composite-actions/issues/438)) ([ef3a94a](https://github.com/kitabisa/composite-actions/commit/ef3a94a1285e9d7861f29b632425eecc01524fd4))
+
+
+### CI
+
+* lock GitHub Actions dependencies with gh-actions-lock ([#441](https://github.com/kitabisa/composite-actions/issues/441)) ([289dc41](https://github.com/kitabisa/composite-actions/commit/289dc41cda428195be404900860772f3f73bb96d)), closes [#440](https://github.com/kitabisa/composite-actions/issues/440)
+
 ## [2.64.0](https://github.com/kitabisa/composite-actions/compare/v2.63.2...v2.64.0) (2026-11-17)
 
 
