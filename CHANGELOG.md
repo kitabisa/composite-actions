@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.65.0](https://github.com/kitabisa/composite-actions/compare/v2.64.0...v2.65.0) (2026-11-22)
+
+
+### Features
+
+* **security:** add pr-args input to govulnbump ([#448](https://github.com/kitabisa/composite-actions/issues/448)) ([3237039](https://github.com/kitabisa/composite-actions/commit/3237039d93d618cb0afcea7f3d89190a722a4eef)), closes [#447](https://github.com/kitabisa/composite-actions/issues/447)
+
+
+### Bugfix
+
+* **setuptools:** pin mozilla-sops-action to v2.1.3 ([#438](https://github.com/kitabisa/composite-actions/issues/438)) ([ef3a94a](https://github.com/kitabisa/composite-actions/commit/ef3a94a1285e9d7861f29b632425eecc01524fd4))
+
+
+### CI
+
+* lock GitHub Actions dependencies with gh-actions-lock ([#441](https://github.com/kitabisa/composite-actions/issues/441)) ([289dc41](https://github.com/kitabisa/composite-actions/commit/289dc41cda428195be404900860772f3f73bb96d)), closes [#440](https://github.com/kitabisa/composite-actions/issues/440)
+* skip branch-convention on dependabot pull requests ([#443](https://github.com/kitabisa/composite-actions/issues/443)) ([70dbe08](https://github.com/kitabisa/composite-actions/commit/70dbe087e636b15b0e4c9e0cdc21a18c40b6e8e9)), closes [#442](https://github.com/kitabisa/composite-actions/issues/442)
+
 ## [2.64.0](https://github.com/kitabisa/composite-actions/compare/v2.63.2...v2.64.0) (2026-11-17)
 
 
