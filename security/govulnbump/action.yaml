@@ -18,6 +18,10 @@ inputs:
     description: "Commit the upgrades and open or update a pull request with govulnbump's report"
     required: false
     default: 'false'
+  pr-args:
+    description: 'Flags for `gh pr create` when create-pr opens a new pull request, such as `--label`, `--assignee`, `--reviewer`, `--milestone` or `--draft`'
+    required: false
+    default: ''
   token:
     description: 'GitHub token for create-pr, with `contents: write` and `pull-requests: write` permissions'
     required: false
@@ -70,6 +74,7 @@ runs:
       run: '"${GITHUB_ACTION_PATH}/create-pr.sh"'
       env:
         GH_TOKEN: '${{ inputs.token }}'
+        PR_ARGS: '${{ inputs.pr-args }}'
         TEMP_DIR: '${{ steps.install.outputs.dir }}'
       working-directory: '${{ inputs.working-directory }}'
       shell: bash

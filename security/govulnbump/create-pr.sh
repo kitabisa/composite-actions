@@ -30,6 +30,15 @@ if [[ -z "${title}" ]]; then
 	exit 0
 fi
 
+# Split pr-args with xargs, which honors quotes without running anything:
+# labels such as "Type: Maintenance" contain spaces. Do it before pushing, so
+# that a quoting mistake doesn't leave a branch without a pull request.
+xargs -r printf '%s\0' <<<"${PR_ARGS}" >"${tmp}/pr-args"
+pr_args=()
+while IFS= read -r -d '' arg; do
+	pr_args+=("${arg}")
+done <"${tmp}/pr-args"
+
 # The step runs in working-directory, so go finds the module that govulnbump
 # upgraded, unless -C in args sent govulnbump elsewhere. dir is the module's
 # directory in the repository, with a trailing slash, or empty at the root.
@@ -152,5 +161,9 @@ if [[ -n "${number}" ]]; then
 	# gh pr edit fails on older gh releases that query Projects (classic).
 	gh api -X PATCH "repos/${repo}/pulls/${number}" -f title="${title}" -F body=@"${body}" --jq .html_url
 else
-	gh pr create --repo "${repo}" --head "${branch}" --base "${base}" --title "${title}" --body-file "${body}"
+	# pr-args apply only to a new pull request, so that later runs don't undo
+	# what maintainers changed. The flags after them win over any that
+	# pr-args repeats.
+	gh pr create ${pr_args[@]+"${pr_args[@]}"} \
+		--repo "${repo}" --head "${branch}" --base "${base}" --title "${title}" --body-file "${body}"
 fi
