@@ -1,5 +1,5 @@
 name: "Frontend deploy"
-description: "Frontend composite deployment"
+description: "⚠️ DEPRECATED — replaced by frontend-deploy-*-v2.yaml reusable workflows. No new features; will be removed after all services migrate."
 
 inputs:
   # Required
